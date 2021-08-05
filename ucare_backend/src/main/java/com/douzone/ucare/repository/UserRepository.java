@@ -19,7 +19,6 @@ public class UserRepository {
 		return count == 1;
 	}
 
-
 	public UserVo findByEmailAndPassword(String email, String password) { 
 		Map<String, String> map = new HashMap<>();
 		map.put("e", email);
@@ -39,11 +38,9 @@ public class UserRepository {
 		sqlSession.update("user.update", userVo);
 	}
 
-
-	public void addUser(UserVo user) {
-		sqlSession.insert("user.insertTest", user);
+	public Boolean addUser(UserVo user) {
+		int count = sqlSession.insert("user.insertTest", user);
+		return count == 1;
 	}
 
-
-	
 }

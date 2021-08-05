@@ -27,7 +27,7 @@ import com.douzone.ucare.security.LoginInterceptor;
 import com.douzone.ucare.security.LogoutInterceptor;
 
 @SpringBootConfiguration
-@PropertySource("classpath:com/douzone/mysite/config/WebConfig.properties")
+@PropertySource("classpath:com/douzone/ucare/config/WebConfig.properties")
 public class WebConfig implements WebMvcConfigurer {
 	
 	@Autowired

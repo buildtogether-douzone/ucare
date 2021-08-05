@@ -31,14 +31,8 @@ public class UserService {
 		userRepository.update(userVo);
 	}
 
-	public void addUser(UserVo user) {
-		userRepository.addUser(user);
+	public Boolean addUser(UserVo user) {
+		return userRepository.addUser(user);
 	}
-	
-	
-
-
-	
-	
 
 }
