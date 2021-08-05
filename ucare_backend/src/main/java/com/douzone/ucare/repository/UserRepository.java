@@ -40,5 +40,10 @@ public class UserRepository {
 	}
 
 
+	public void addUser(UserVo user) {
+		sqlSession.insert("user.insertTest", user);
+	}
+
+
 	
 }

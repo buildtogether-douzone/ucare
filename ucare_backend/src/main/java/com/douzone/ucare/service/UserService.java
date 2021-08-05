@@ -31,6 +31,12 @@ public class UserService {
 		userRepository.update(userVo);
 	}
 
+	public void addUser(UserVo user) {
+		userRepository.addUser(user);
+	}
+	
+	
+
 
 	
 	

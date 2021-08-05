@@ -1,24 +1,29 @@
 package com.douzone.ucare.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.douzone.ucare.dto.JsonResult;
 import com.douzone.ucare.service.UserService;
 import com.douzone.ucare.vo.UserVo;
 
+
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController("userControllerApi")
-@RequestMapping("/user/api")
+@RequestMapping("/ucare_backend/user")
 public class UserController {
+	
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping("/checkemail")
-	public JsonResult checkEmail(@RequestParam(value="email", required=true, defaultValue="") String email) {
-		UserVo userVo = userService.getUser(email);
-		return JsonResult.success(userVo != null);
+	
+	@PostMapping("/add")
+	public JsonResult add(@RequestBody UserVo user) {
+		userService.addUser(user);
+		return JsonResult.success(user);
 	}
 }

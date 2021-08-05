@@ -1,45 +1,37 @@
 package com.douzone.ucare.vo;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-
-import org.hibernate.validator.constraints.Length;
-
 public class UserVo {
 
-	private Long no;
-	
-	@NotEmpty
-	@Length(min = 2, max = 8)
-	private String name;
-	
-	@NotEmpty
-	@Email
-	private String email;
-	
-	@NotEmpty
-	@Length(min = 4, max = 16)
+	private int id;
+	private int age;
+	private int salary;
+	private String username;
 	private String password;
-	
-	private String gender;
-	private String role;
-	public Long getNo() {
-		return no;
+	private String firstName;
+	private String lastName;
+	public int getId() {
+		return id;
 	}
-	public void setNo(Long no) {
-		this.no = no;
+	public void setId(int id) {
+		this.id = id;
 	}
-	public String getName() {
-		return name;
+	public int getAge() {
+		return age;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setAge(int age) {
+		this.age = age;
 	}
-	public String getEmail() {
-		return email;
+	public int getSalary() {
+		return salary;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	public void setSalary(int salary) {
+		this.salary = salary;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	public String getPassword() {
 		return password;
@@ -47,23 +39,19 @@ public class UserVo {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getGender() {
-		return gender;
+	public String getFirstName() {
+		return firstName;
 	}
-	public void setGender(String gender) {
-		this.gender = gender;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-		this.role = role;
-	}
-	@Override
-	public String toString() {
-		return "UserVo [no=" + no + ", name=" + name + ", email=" + email + ", password=" + password + ", gender="
-				+ gender + ", role=" + role + "]";
-	}
+	
 	
 }
