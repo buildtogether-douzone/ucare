@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="admin">
+	<update id="update" parameterType="sitevo">
+		<choose>
+			<when test="profileURL == null or profileURL == ''">
+				<![CDATA[
+					update site set title=#{title }, welcome=#{welcomeMessage }, description=#{description }
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+					update site set title=#{title }, welcome=#{welcomeMessage }, description=#{description }, profile=#{profileURL }
+				]]>
+			</otherwise>
+		</choose>
+	</update>
+	
+	<select id="findAll" resultType="sitevo" >
+		<![CDATA[
+			select title, welcome as welcomeMessage, profile as profileURL, description from site
+		]]>
+	</select>
+</mapper>
