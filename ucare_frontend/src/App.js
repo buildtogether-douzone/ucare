@@ -1,9 +1,9 @@
 import React from 'react';
-import Routes from './Routes';
+import User from './route/user';
 
 export default function App() {
 
     return (
-        <Routes />
+        <User />
     );
 }

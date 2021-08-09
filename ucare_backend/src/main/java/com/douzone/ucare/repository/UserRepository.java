@@ -39,7 +39,7 @@ public class UserRepository {
 	}
 
 	public Boolean addUser(UserVo user) {
-		int count = sqlSession.insert("user.insertTest", user);
+		int count = sqlSession.insert("user.insert", user);
 		return count == 1;
 	}
 

@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="user">	
-	<insert id="insertTest" parameterType="uservo">
+	<insert id="insert" parameterType="uservo">
 		INSERT
-			INTO test
+			INTO user(id, password, name, gender, ssn, address, tel_no, role, remark)
 		VALUES(
-			#{username },
+			#{id },
 			#{password },
-			#{firstName },
-			#{lastName },
-			#{age },
-			#{salary }
+			#{name },
+			#{gender },
+			#{ssn },
+			#{address },
+			#{telNo },
+			#{role },
+			#{remark }
 		)
 	</insert>
 </mapper>
