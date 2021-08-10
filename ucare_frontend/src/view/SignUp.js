@@ -7,26 +7,13 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { FormControl, FormLabel, Radio, RadioGroup } from '@material-ui/core';
 import userService from '../service/userService';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import Footter from '../include/Footer';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -53,14 +40,14 @@ export default function SignUp() {
   const [id, setId] = useState('');
   const [gender, setValue] = React.useState('female');
   const [state, setState] = useState({
-    id: '',
-    password: '',
-    name: '',
-    ssn: '',
-    address: '',
-    telNo: '',
-    role: '',
-    remark: ''
+    id: null,
+    password: null,
+    name: null,
+    ssn: null,
+    address: null,
+    telNo: null,
+    role: null,
+    remark: null
   });
 
   const handleChange = (e) => {
@@ -137,7 +124,7 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                value={state.password}
+                value={state.password || ''}
                 onChange={handleChange}
               />
             </Grid>
@@ -150,7 +137,7 @@ export default function SignUp() {
                 label="Name"
                 name="name"
                 autoComplete="name"
-                value={state.name}
+                value={state.name || ''}
                 onChange={handleChange}
               />
             </Grid>
@@ -171,7 +158,7 @@ export default function SignUp() {
                 id="ssn"
                 label="주민등록번호"
                 name="ssn"
-                value={state.ssn}
+                value={state.ssn || ''}
                 onChange={handleChange}
               />
             </Grid>
@@ -184,7 +171,7 @@ export default function SignUp() {
                 label="주소"
                 name="address"
                 autoComplete="address"
-                value={state.address}
+                value={state.address || ''}
                 onChange={handleChange}
               />
             </Grid>
@@ -196,7 +183,7 @@ export default function SignUp() {
                 id="telNo"
                 label="연락처"
                 name="telNo"
-                value={state.telNo}
+                value={state.telNo || ''}
                 onChange={handleChange}
               />
             </Grid>
@@ -208,7 +195,7 @@ export default function SignUp() {
                 id="role"
                 label="역할"
                 name="role"
-                value={state.role}
+                value={state.role || ''}
                 onChange={handleChange}
               />
             </Grid>
@@ -238,9 +225,7 @@ export default function SignUp() {
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
+      <Footter />
     </Container>
   );
 }
