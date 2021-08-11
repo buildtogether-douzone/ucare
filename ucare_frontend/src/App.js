@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import User from './route/user';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 export default function App() {
 
     return (
-        <User />
+        <Fragment>
+            <CssBaseline />
+            <User />
+        </Fragment>
     );
 }
