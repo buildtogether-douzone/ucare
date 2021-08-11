@@ -6,7 +6,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
-import { mainListItems, secondaryListItems } from './listItems';
+import { mainListItems } from './listItems';
 
 const drawerWidth = 240;
 
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Navigation(props, { open }) {
+export default function Navigation( { open, handleDrawer }) {
     const classes = useStyles();
     return (
         <Drawer
@@ -51,14 +51,12 @@ export default function Navigation(props, { open }) {
             open={open}
         >
             <div className={classes.toolbarIcon}>
-                <IconButton onClick={props.handleDrawerClose()}>
+                <IconButton onClick={() => {handleDrawer.close()}}>
                     <ChevronLeftIcon />
                 </IconButton>
             </div>
             <Divider />
             <List>{mainListItems}</List>
-            <Divider />
-            <List>{secondaryListItems}</List>
         </Drawer>
     );
 }

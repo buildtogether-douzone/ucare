@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-export default function Header(props, { open }) {
+export default function Header({ open, handleDrawer }) {
     const classes = useStyles();
     return (
         <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
@@ -50,7 +50,7 @@ export default function Header(props, { open }) {
                     edge="start"
                     color="inherit"
                     aria-label="open drawer"
-                    onClick={props.handleDrawerOpen()}
+                    onClick={() => {handleDrawer.open()}}
                     className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
                 >
                     <MenuIcon />
