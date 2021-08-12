@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'left',
   },
   paper: {
-    margin: theme.spacing(8, 4),
+    margin: theme.spacing(25, 10, 8, 8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -102,7 +102,7 @@ export default function SignInSide() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2" style={{ fontSize: 15 }}>
+                <Link href="/SignUp" variant="body2" style={{ fontSize: 15 }}>
                   {"회원가입"}
                 </Link>
               </Grid>
