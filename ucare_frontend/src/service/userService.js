@@ -2,26 +2,28 @@ import axios from 'axios';
 
 const USER_API_BASE_URL = "http://localhost:8080/ucare_backend";
 
-export default function userService() {
+class userService {
 
-  function fetchUsers(){
+  fetchUsers(){
     return axios.get(USER_API_BASE_URL);
   }
 
-  function fetchUserByID(userID){
+  fetchUserByID(userID){
     return axios.get(USER_API_BASE_URL + '/' + userID);
   }
 
-  function deleteUser(userID){
+  deleteUser(userID){
     return axios.delete(USER_API_BASE_URL + '/' + userID);
   }
   
-  function addUser(user){
+  addUser(user){
     return axios.post(USER_API_BASE_URL + '/add', user);
   }
 
-  function editUser(user){
+  editUser(user){
     return axios.put(USER_API_BASE_URL + '/' + user.id, user)
   }
 
 }
+
+export default new userService();
