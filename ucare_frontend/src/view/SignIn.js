@@ -28,13 +28,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    backgroundColor: "#F3F3F3"
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '80%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -49,7 +50,7 @@ export default function SignInSide() {
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Grid item xs={12} sm={6} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square style={{ backgroundColor: '#F3F3F3'}}>
         <div className={classes.paper}>
             <Typography component="h1" variant="h3">
                 U-Care
