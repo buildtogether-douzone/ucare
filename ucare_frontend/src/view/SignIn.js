@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import userService from '../service/userService';
 import Footer from '../include/Footer';
 
 const useStyles = makeStyles((theme) => ({
@@ -43,8 +44,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignInSide() {
+export default function SignInSide({ history }) {
   const classes = useStyles();
+  const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
+
+  const idChange = (e) => {
+    setId(e.target.value)
+  }
+
+  const passwordChange = (e) => {
+    setPassword(e.target.value)
+  }
+
+  const login = (e) => {
+    e.preventDefault();
+
+    let user = {
+      id: id,
+      password: password
+    }
+
+    userService.login(user)
+    .then( res => {
+      if(res.data.data) {
+        console.log(user.id + '님이 성공적으로 로그인하였습니다.');
+        history.push('/home');
+      } else {
+        console.log('로그인 정보가 없습니다.');
+      }
+    })
+    .catch( err => {
+      console.log('login() 에러', err);
+    });
+  }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -65,11 +98,13 @@ export default function SignInSide() {
               margin="normal"
               required
               fullWidth
-              id="email"
+              id="id"
               label="id"
-              name="email"
-              autoComplete="email"
+              name="id"
+              autoComplete="id"
               autoFocus
+              value={ id }
+              onChange={ idChange }
             />
             <TextField
               variant="outlined"
@@ -81,24 +116,25 @@ export default function SignInSide() {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={ password }
+              onChange={ passwordChange }
             />
             {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
-            <Link href="/_Home">
-                <Button
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                >
-                로그인 하기
-                </Button>
-            </Link>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={ login }
+            >
+              로그인 하기
+            </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="/_Home" variant="body2">
+                <Link href="/Home" variant="body2">
                   비밀번호 찾기
                 </Link>
               </Grid>

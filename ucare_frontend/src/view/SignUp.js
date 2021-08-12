@@ -35,54 +35,69 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+export default function SignUp({ history }) {
   const classes = useStyles();
   const [id, setId] = useState('');
-  const [gender, setValue] = React.useState('female');
-  const [state, setState] = useState({
-    id: null,
-    password: null,
-    name: null,
-    ssn: null,
-    address: null,
-    telNo: null,
-    role: null,
-    remark: null
-  });
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [gender, setGender] = useState('female');
+  const [ssn, setSsn] = useState('');
+  const [address, setAddress] = useState('');
+  const [telNo, setTelNo] = useState('');
+  const [role, setRole] = useState('');
+  const [remark, setRemark] = useState('');
 
-  const handleChange = (e) => {
-    setState({
-      [e.target.name] : e.target.value
-    })
+  const idChange = (e) => {
+    setId(e.target.value)
   }
 
-  const onChange = (event) => {
-    setValue(event.target.value);
-  };
+  const passwordChange = (e) => {
+    setPassword(e.target.value)
+  }
 
-  const test = (e) => {
-    setId(event.target.value);
-  };
+  const nameChange = (e) => {
+    setName(e.target.value)
+  }
+
+  const genderChange = (e) => {
+    setGender(e.target.value)
+  }
+
+  const ssnChange = (e) => {
+    setSsn(e.target.value)
+  }
+
+  const addressChange = (e) => {
+    setAddress(e.target.value)
+  }
+
+  const telNoChange = (e) => {
+    setTelNo(e.target.value)
+  }
+
+  const roleChange = (e) => {
+    setRole(e.target.value)
+  }
 
   const saveUser = (e) => {
     e.preventDefault();
 
     let user = {
-      id: state.id,
-      password: state.password,
-      name: state.name,
-      gender: value,
-      ssn: state.ssn,
-      address: state.address,
-      telNo: state.telNo,
-      role: state.role,
-      remark: state.remark
+      id: id,
+      password: password,
+      name: name,
+      gender: gender,
+      ssn: ssn,
+      address: address,
+      telNo: telNo,
+      role: role,
+      remark: remark
     }
 
     userService.addUser(user)
     .then( res => {
-        console.log(user.username + '님이 성공적으로 등록되었습니다.');
-        // props.history.push('/users');
+        console.log(user.name + '님이 성공적으로 등록되었습니다.');
+        history.push('/');
     })
     .catch( err => {
       console.log('saveUser() 에러', err);
@@ -110,8 +125,8 @@ export default function SignUp() {
                 label="ID"
                 name="id"
                 autoComplete="id"
-                value={id}
-                onChange={test}
+                value={ id }
+                onChange={ idChange }
               />
             </Grid>
             <Grid item xs={12}>
@@ -124,8 +139,8 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                value={state.password || ''}
-                onChange={handleChange}
+                value={ password }
+                onChange={ passwordChange }
               />
             </Grid>
             <Grid item xs={12}>
@@ -137,14 +152,14 @@ export default function SignUp() {
                 label="Name"
                 name="name"
                 autoComplete="name"
-                value={state.name || ''}
-                onChange={handleChange}
+                value={ name }
+                onChange={ nameChange }
               />
             </Grid>
             <Grid item xs={12}>
             <FormControl component="fieldset">
             <FormLabel component="legend">Gender</FormLabel>
-            <RadioGroup row aria-label="gender" name="gender1" value={gender} onChange={onChange} >
+            <RadioGroup row aria-label="gender" name="gender1" value={ gender } onChange={ genderChange } >
                 <FormControlLabel value="female" control={<Radio />} label="Female" />
                 <FormControlLabel value="male" control={<Radio />} label="Male" />
             </RadioGroup>
@@ -158,8 +173,8 @@ export default function SignUp() {
                 id="ssn"
                 label="주민등록번호"
                 name="ssn"
-                value={state.ssn || ''}
-                onChange={handleChange}
+                value={ ssn }
+                onChange={ ssnChange }
               />
             </Grid>
             <Grid item xs={12}>
@@ -171,8 +186,8 @@ export default function SignUp() {
                 label="주소"
                 name="address"
                 autoComplete="address"
-                value={state.address || ''}
-                onChange={handleChange}
+                value={ address }
+                onChange={ addressChange }
               />
             </Grid>
             <Grid item xs={12}>
@@ -183,8 +198,8 @@ export default function SignUp() {
                 id="telNo"
                 label="연락처"
                 name="telNo"
-                value={state.telNo || ''}
-                onChange={handleChange}
+                value={ telNo }
+                onChange={ telNoChange }
               />
             </Grid>
             <Grid item xs={12}>
@@ -195,8 +210,8 @@ export default function SignUp() {
                 id="role"
                 label="역할"
                 name="role"
-                value={state.role || ''}
-                onChange={handleChange}
+                value={ role }
+                onChange={ roleChange }
               />
             </Grid>
             <Grid item xs={12}>
@@ -212,14 +227,13 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            // onClick={saveUser}
-            href="/"
+            onClick={ saveUser }
           >
             확인
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>

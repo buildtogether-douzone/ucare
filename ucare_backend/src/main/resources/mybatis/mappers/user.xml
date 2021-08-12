@@ -3,7 +3,7 @@
 <mapper namespace="user">	
 	<insert id="insert" parameterType="uservo">
 		INSERT
-			INTO user(id, password, name, gender, ssn, address, tel_no, role, remark)
+			INTO ucare.user(id, password, name, gender, ssn, address, tel_no, role, remark)
 		VALUES(
 			#{id },
 			#{password },
@@ -16,4 +16,12 @@
 			#{remark }
 		)
 	</insert>
+	
+	<select id="findUser" parameterType="uservo" resultType="uservo">
+		SELECT id,
+			   name
+		FROM ucare.user
+		WHERE id = #{id }
+		  AND password = #{password }
+	</select>
 </mapper>

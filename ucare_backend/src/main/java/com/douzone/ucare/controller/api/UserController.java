@@ -17,6 +17,12 @@ public class UserController {
 	private UserService userService;
 	
 	@CrossOrigin(origins = "*")
+	@PostMapping("/login")
+	public JsonResult login(@RequestBody UserVo user) {
+		return JsonResult.success(userService.login(user));
+	}
+	
+	@CrossOrigin(origins = "*")
 	@PostMapping("/add")
 	public JsonResult add(@RequestBody UserVo user) {
 		return JsonResult.success(userService.addUser(user));

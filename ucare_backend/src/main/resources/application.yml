@@ -50,7 +50,7 @@ spring:
 
    datasource:
       driver-class-name: org.postgresql.Driver
-      url: jdbc:postgresql://localhost:5432/ucare?characterEncoding=utf8
+      url: jdbc:postgresql://localhost:5432/postgres?characterEncoding=utf8
       username: postgres
       password: 102938
       initialSize: 10
@@ -63,7 +63,7 @@ spring:
 
    datasource:
       driver-class-name: org.postgresql.Driver
-      url: jdbc:postgresql://localhost:5432/ucare?characterEncoding=utf8
+      url: jdbc:postgresql://localhost:5432/postgres?characterEncoding=utf8
       username: postgres
       password: 102938
       initialSize: 10
