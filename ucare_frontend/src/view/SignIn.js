@@ -103,7 +103,7 @@ export default function SignInSide() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="#" variant="body2" style={{ fontSize: 15 }}>
                   {"회원가입"}
                 </Link>
               </Grid>
