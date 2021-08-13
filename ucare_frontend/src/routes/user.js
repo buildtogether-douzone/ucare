@@ -1,15 +1,16 @@
 import React from 'react';
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import SignIn from '../view/SignIn';
 import Home from '../view/Home';
 import SignUp from '../view/SignUp';
 
 export default function Routes() {
     return (
-        <main>
+        <Switch>
             <Route exact path="/" component={SignIn} />
             <Route exact path="/Home" component={Home} />
             <Route exact path="/signUp" component={SignUp} />
-        </main>
+            <Route exact component={SignIn} />
+        </Switch>
     );
 }
