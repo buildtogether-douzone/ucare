@@ -134,7 +134,7 @@ export default function SignInSide({ history }) {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="/Home" variant="body2">
+                <Link href="/setting" variant="body2">
                   비밀번호 찾기
                 </Link>
               </Grid>
