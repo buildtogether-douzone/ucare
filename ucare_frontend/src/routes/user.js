@@ -5,6 +5,7 @@ import Home from '../view/Home';
 import SignUp from '../view/SignUp';
 import Profile from '../view/Profile';
 import NewPatient from '../view/NewPatient';
+import DD from '../view/DD';
 
 export default function Routes() {
     return (
@@ -14,6 +15,7 @@ export default function Routes() {
             <Route exact path="/signUp" component={SignUp} />
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/patient" component={NewPatient} />
+            <Route exact path="/dd" component={DD} />        
             <Route exact component={SignIn} />
         </Switch>
     );
