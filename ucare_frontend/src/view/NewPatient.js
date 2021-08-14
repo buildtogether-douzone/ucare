@@ -5,20 +5,9 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
 import SearchIcon from '@material-ui/icons/Search';
-import { withStyles } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
-import FormGroup from '@material-ui/core/FormGroup';
-import Checkbox from '@material-ui/core/Checkbox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -42,18 +31,11 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     marginTop: theme.spacing(3),
   },
-  input: {
-    width: '30%'
-  },
   font: {
     fontWeight: 'bold',
     marginBottom: theme.spacing(1),
     marginTop: theme.spacing(1)
-  },
-  white: {
-    width: '100%',
-    backgroundColor: '#FFFFFF'
-}
+  }
 
 
 }));
@@ -91,7 +73,6 @@ export default function NewPatient() {
           id="outlined-name"
           name="name"
           autoComplete="name"
-          value={''}
         /> 
         </Grid>
         <Grid item xs={12}>
@@ -104,7 +85,6 @@ export default function NewPatient() {
           id="outlined-ssn"
           name="ssn"
           autoComplete="ssn"
-          value={''}
         /> 
         </Grid>
 
@@ -118,7 +98,6 @@ export default function NewPatient() {
           id="outlined-age"
           name="age"
           autoComplete="age"
-          value=''
         /> 
         <Typography className={classes.font} style={{padding: '2%', float: 'left',}} variant="body1">세</Typography>
       </Grid>
@@ -153,7 +132,6 @@ export default function NewPatient() {
           id="outlined-tel"
           name="tel"
           autoComplete="tel"
-          value={''}
         /> 
       </Grid>
 
@@ -167,7 +145,6 @@ export default function NewPatient() {
           id="outlined-address"
           name="address"
           autoComplete="address"
-          value={''}
         /> 
         <SearchIcon style={{float: 'left', fontSize: '45', width: '15%' }} />
       </Grid>
@@ -182,7 +159,6 @@ export default function NewPatient() {
           id="outlined-address"
           name="address"
           autoComplete="address"
-          value={''}
         /> 
       <Typography className={classes.font} style={{width: '10%', float: 'left', padding: '2%', textAlign: 'center'}} variant="body1">@</Typography>
         <FormControl variant="outlined" style={{width: '45%', float: 'left', backgroundColor: '#FFFFFF'}}>
