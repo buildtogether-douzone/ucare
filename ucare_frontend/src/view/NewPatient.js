@@ -20,22 +20,40 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+
+
+
 
 
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    margin: theme.spacing(8),
+  paper: {
+    marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    },
-  input: {
-    width: '30%',
-    fontSize: '16px',
-    fontWeight: '600',
   },
+  form: {
+    width: '100%',
+    marginTop: theme.spacing(3),
+  },
+  input: {
+    width: '30%'
+  },
+  font: {
+    fontWeight: 'bold',
+    marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(1)
+  },
+  white: {
+    width: '100%',
+    backgroundColor: '#FFFFFF'
+}
 
 
 }));
@@ -58,22 +76,55 @@ export default function NewPatient() {
     
 
     return(
-        <div className={classes.root} >
-        <div className={classes.input} >
-        <p style={{marginBottom: '2px'}}>이름</p>
-        <TextField style={{width: '100%', backgroundColor: '#FFFFFF'}} id="outlined-name" variant="outlined" />
-        </div>
-        <div className={classes.input} >
-        <p style={{marginBottom: '2px', marginTop: '20px'}}>주민등록번호</p>
-        <TextField style={{width: '100%', backgroundColor: '#FFFFFF'}} id="outlined-ssn" variant="outlined" />
-        </div>
-        <div className={classes.input} >
-        <p style={{marginBottom: '2px', marginTop: '20px'}}>나이</p>
-        <TextField style={{width: '30%', float: 'left', textAlignLast: 'right', backgroundColor: '#FFFFFF'}} id="outlined-age" variant="outlined" />
-        <p style={{float: 'left', marginLeft:'10px'}}>세</p>
-        </div>
-        <div className={classes.input}>
-        <p style={{marginBottom: '2px', marginTop: '20px'}}>성별</p>
+      <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+      <form className={classes.form} noValidate>
+      <Grid container spacing={2}> 
+      <Grid item xs={12}>
+        <Typography className={classes.font} variant="body1">이름</Typography>
+        <TextField 
+          style={{backgroundColor: '#FFFFFF'}}
+          variant="outlined"
+          required
+          fullWidth
+          id="outlined-name"
+          name="name"
+          autoComplete="name"
+          value={''}
+        /> 
+        </Grid>
+        <Grid item xs={12}>
+        <Typography className={classes.font} variant="body1">주민등록번호</Typography>
+        <TextField
+          style={{backgroundColor: '#FFFFFF'}} 
+          variant="outlined"
+          required
+          fullWidth
+          id="outlined-ssn"
+          name="ssn"
+          autoComplete="ssn"
+          value={''}
+        /> 
+        </Grid>
+
+      <Grid item xs={12}>
+        <Typography className={classes.font} variant="body1">나이</Typography>
+        <TextField
+          style={{width: '30%', float: 'left', textAlignLast: 'right', backgroundColor: '#FFFFFF'}} 
+          variant="outlined"
+          required
+          fullWidth
+          id="outlined-age"
+          name="age"
+          autoComplete="age"
+          value=''
+        /> 
+        <Typography className={classes.font} style={{padding: '2%', float: 'left',}} variant="body1">세</Typography>
+      </Grid>
+
+      <Grid item xs={12}>
+        <Typography className={classes.font} variant="body1">성별</Typography>
         <FormControl component="fieldset">
         <RadioGroup row aria-label="position" name="position" defaultValue="top" value={value} onChange={handleChange}>
         <FormControlLabel
@@ -90,21 +141,51 @@ export default function NewPatient() {
         />
       </RadioGroup>
     </FormControl>
-        </div>
-        <div className={classes.input} >
-        <p style={{marginBottom: '2px', marginTop: '20px'}}>전화번호</p>
-        <TextField style={{width: '100%', backgroundColor: '#FFFFFF'}} id="outlined-tel" variant="outlined" />
-        </div>
-        <div className={classes.input} >
-        <p style={{marginBottom: '2px', marginTop: '20px'}}>주소</p>
-        <TextField style={{float: 'left', width: '85%', backgroundColor: '#FFFFFF'}} id="outlined-address" variant="outlined" />
-        <SearchIcon style={{float: 'left', width: '15%', fontSize: '45'}} />
-        </div>
-        <div className={classes.input} >
-        <p style={{marginBottom: '2px', marginTop: '20px'}}>이메일</p>
-        <TextField style={{width: '50%', float: 'left', backgroundColor: '#FFFFFF'}} id="outlined-email" variant="outlined" />
-        <p style={{float: 'left', width: '10%', textAlign: 'center'}}>@</p>
-        <FormControl variant="outlined" style={{width: '40%', float: 'left', backgroundColor: '#FFFFFF'}}>
+      </Grid>
+
+      <Grid item xs={12}>
+      <Typography className={classes.font} variant="body1">전화번호</Typography>
+        <TextField
+          style={{backgroundColor: '#FFFFFF'}} 
+          variant="outlined"
+          required
+          fullWidth
+          id="outlined-tel"
+          name="tel"
+          autoComplete="tel"
+          value={''}
+        /> 
+      </Grid>
+
+      <Grid item xs={12}>
+      <Typography className={classes.font} variant="body1">주소</Typography>
+        <TextField
+          style={{width: '85%', float: 'left', backgroundColor: '#FFFFFF'}} 
+          variant="outlined"
+          required
+          fullWidth
+          id="outlined-address"
+          name="address"
+          autoComplete="address"
+          value={''}
+        /> 
+        <SearchIcon style={{float: 'left', fontSize: '45', width: '15%' }} />
+      </Grid>
+
+      <Grid item xs={12}>
+      <Typography className={classes.font} variant="body1">이메일</Typography>
+        <TextField
+          style={{width: '45%', float: 'left', backgroundColor: '#FFFFFF'}} 
+          variant="outlined"
+          required
+          fullWidth
+          id="outlined-address"
+          name="address"
+          autoComplete="address"
+          value={''}
+        /> 
+      <Typography className={classes.font} style={{width: '10%', float: 'left', padding: '2%', textAlign: 'center'}} variant="body1">@</Typography>
+        <FormControl variant="outlined" style={{width: '45%', float: 'left', backgroundColor: '#FFFFFF'}}>
         <Select
           labelId="demo-simple-select-outlined-label"
           id="demo-simple-select-outlined"
@@ -118,9 +199,10 @@ export default function NewPatient() {
           <MenuItem value={30}>Thirty</MenuItem>
         </Select>
       </FormControl>
-        </div>
-        <div className={classes.input}>
-        <p style={{marginBottom: '2px', marginTop: '20px'}}>보험 여부</p>
+      </Grid>
+
+      <Grid item xs={12}>
+        <Typography className={classes.font} variant="body1">보험 여부</Typography>
         <FormControl component="fieldset">
         <RadioGroup row aria-label="position" name="position" defaultValue="top" value={value} onChange={handleChange}>
         <FormControlLabel
@@ -137,9 +219,10 @@ export default function NewPatient() {
         />
       </RadioGroup>
     </FormControl>
-        </div>
-        <div className={classes.input}>
-        <p style={{marginBottom: '2px', marginTop: '20px'}}>진료 구분</p>
+      </Grid>
+ 
+      <Grid item xs={12}>
+        <Typography className={classes.font} variant="body1">진료 구분</Typography>
         <FormControl component="fieldset">
         <RadioGroup row aria-label="position" name="position" defaultValue="top" value={value} onChange={handleChange}>
         <FormControlLabel
@@ -156,11 +239,10 @@ export default function NewPatient() {
         />
       </RadioGroup>
     </FormControl>
-        </div>
+      </Grid>
 
-        <div className={classes.input}>
-        <p style={{marginBottom: '5px', marginTop: '20px'}}>최초 내원일</p>
-        <form noValidate>
+      <Grid item xs={12}>
+      <Typography className={classes.font} variant="body1">최초 내원일</Typography>
       <TextField
         style={{width: '100%'}}
         id="date"
@@ -170,24 +252,25 @@ export default function NewPatient() {
           shrink: true,
         }}
       />
-    </form>
-        </div>
-        <div className={classes.input} >
-        <p style={{marginBottom: '2px', marginTop: '20px'}}>비고</p>
+      </Grid>
+
+      <Grid item xs={12}>
+      <Typography className={classes.font} variant="body1">비고</Typography>
         <TextField
-          style={{width: '100%', backgroundColor: '#FFFFFF'}}
-          id="outlined-multiline-static"
+          style={{width: '100%', backgroundColor: '#FFFFFF'}} 
           multiline
           rows={4}
           defaultValue=""
-          variant="outlined" />
-        </div>
-        <div className={classes.input} >
-        <Button style={{width: '100%', marginTop: '20px'}} variant="contained" color="primary" disableElevation>
+          variant="outlined" 
+        />
+      </Grid>
+
+        <Button style={{width: '100%', marginTop: '5%'}} variant="contained" color="primary" disableElevation>
       등록하기
     </Button>
-        </div>
-
+    </Grid>
+        </form>
       </div>
+    </Container>
     );
 }
