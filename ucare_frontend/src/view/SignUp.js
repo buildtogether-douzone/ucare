@@ -39,6 +39,7 @@ export default function SignUp({ history }) {
   const classes = useStyles();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
   const [gender, setGender] = useState('female');
   const [ssn, setSsn] = useState('');
@@ -54,6 +55,16 @@ export default function SignUp({ history }) {
   const passwordChange = (e) => {
     setPassword(e.target.value)
   }
+
+  const confirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value)
+  }
+
+  const hasError = passwordEntered =>
+    password.length < 5 ? true : false;
+
+  const hasNotSameError = passwordEntered =>
+    password != confirmPassword ? true : false; 
 
   const nameChange = (e) => {
     setName(e.target.value)
@@ -80,7 +91,11 @@ export default function SignUp({ history }) {
   }
 
   const saveUser = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // 아무 동작 안하고 버튼만 눌러도 리프레시 되는 것을 막는다.
+
+    if(password !== confirmPassword){
+      return alert('비밀번호와 비밀번호 확인은 같아야 합니다.');
+    }
 
     let user = {
       id: id,
@@ -135,12 +150,31 @@ export default function SignUp({ history }) {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                error={hasError('password')} // 해당 텍스트필드에 error 핸들러 추가
+                label="비밀번호(5자 이상)"
                 type="password"
                 id="password"
                 autoComplete="current-password"
                 value={ password }
                 onChange={ passwordChange }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="confirmPassword"
+                error={hasNotSameError('confirmPassword')} // 해당 텍스트필드에 error 핸들러 추가
+                helperText={
+                  hasNotSameError('confirmPassword') ? "입력한 비밀번호와 일치하지 않습니다." : null
+                } // 에러일 경우에만 안내 문구 표시
+                label="비밀번호 확인"
+                type="password"
+                id="confirmPassword"
+                autoComplete="current-password"
+                value={ confirmPassword }
+                onChange={ confirmPasswordChange }
               />
             </Grid>
             <Grid item xs={12}>
