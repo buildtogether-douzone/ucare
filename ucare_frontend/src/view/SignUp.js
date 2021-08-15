@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,8 +10,8 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import { FormControl, FormLabel, Radio, RadioGroup } from '@material-ui/core';
+import { FormControl, FormLabel, Radio, RadioGroup, Container } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import userService from '../service/userService';
 import Footter from '../include/Footer';
 
@@ -42,11 +42,27 @@ export default function SignUp({ history }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
   const [gender, setGender] = useState('female');
-  const [ssn, setSsn] = useState('');
+  const [ssn, setSSN] = useState('');
   const [address, setAddress] = useState('');
   const [telNo, setTelNo] = useState('');
   const [role, setRole] = useState('');
   const [remark, setRemark] = useState('');
+
+  const options = ['의사', '간호사'];
+  const [value, setValue] = useState(options[0]);
+  const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    if (telNo.length === 10) {
+      setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
+    }
+    if (telNo.length === 13) {
+      setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+    }
+    if (ssn.length === 13) {
+      setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
+    }
+  }, [ssn, telNo]);
 
   const idChange = (e) => {
     setId(e.target.value)
@@ -75,7 +91,10 @@ export default function SignUp({ history }) {
   }
 
   const ssnChange = (e) => {
-    setSsn(e.target.value)
+    const regex = /^[0-9\b -]{0,13}$/;
+    if (regex.test(e.target.value)) {
+      setSSN(e.target.value);
+    }
   }
 
   const addressChange = (e) => {
@@ -83,7 +102,10 @@ export default function SignUp({ history }) {
   }
 
   const telNoChange = (e) => {
-    setTelNo(e.target.value)
+    const regex = /^[0-9\b -]{0,13}$/;
+    if (regex.test(e.target.value)) {
+      setTelNo(e.target.value);
+    }
   }
 
   const roleChange = (e) => {
@@ -183,7 +205,7 @@ export default function SignUp({ history }) {
                 required
                 fullWidth
                 id="name"
-                label="Name"
+                label="이름"
                 name="name"
                 autoComplete="name"
                 value={ name }
@@ -237,15 +259,19 @@ export default function SignUp({ history }) {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="role"
-                label="역할"
-                name="role"
+              <Autocomplete
                 value={ role }
-                onChange={ roleChange }
+                onChange={(event, newValue) => {
+                  setRole(newValue);
+                }}
+                inputValue={inputValue}
+                onInputChange={(event, newInputValue) => {
+                  setInputValue(newInputValue);
+                }}
+                id="role"
+                options={options}
+                style={{ width: 300 }}
+                renderInput={(params) => <TextField {...params} label="역할" variant="outlined" />}
               />
             </Grid>
             <Grid item xs={12}>
