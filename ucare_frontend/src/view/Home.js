@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Footer from '../include/Footer';
 import Header from '../include/Header';
 import Navigation from '../include/Navigation';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,6 +32,11 @@ export default function Dashboard() {
     close: () => setOpen(false)
   }
 
+  const logout = (e) => {
+    window.sessionStorage.removeItem('user');
+    window.sessionStorage.clear();
+  }
+
   return (
     <div className={classes.root}>
       <Header handleDrawer={ handleDrawer }  open={ open }/>
@@ -39,6 +45,9 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
+            <Button href="/" onClick={logout}>
+               logout!
+            </Button>
           </Grid>
           <Footer />
         </Container>
