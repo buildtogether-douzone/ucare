@@ -27,4 +27,10 @@ public class UserController {
 	public JsonResult add(@RequestBody UserVo user) {
 		return JsonResult.success(userService.addUser(user));
 	}
+
+	@CrossOrigin(origins = "*")
+	@PostMapping("/update")
+	public JsonResult update(@RequestBody UserVo user) {
+		return JsonResult.success(userService.updateUser(user));
+	}
 }

@@ -27,16 +27,16 @@ public class UserService {
 		return userRepository.findByEmail(email);
 	}
 
-	public void updateUser(UserVo userVo) {
-		userRepository.update(userVo);
-	}
-
 	public Boolean addUser(UserVo user) {
 		return userRepository.addUser(user);
 	}
 
 	public UserVo login(UserVo user) {
 		return userRepository.findUser(user);
+	}
+
+	public Object updateUser(UserVo user) {
+		return userRepository.updateUser(user);
 	}
 
 }

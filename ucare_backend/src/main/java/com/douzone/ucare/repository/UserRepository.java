@@ -33,10 +33,6 @@ public class UserRepository {
 	public UserVo findByEmail(String email) {
 		return sqlSession.selectOne("user.findByEmail", email);
 	}	
-	
-	public void update(UserVo userVo) {
-		sqlSession.update("user.update", userVo);
-	}
 
 	public Boolean addUser(UserVo user) {
 		int count = sqlSession.insert("user.insert", user);
@@ -45,6 +41,10 @@ public class UserRepository {
 
 	public UserVo findUser(UserVo user) {
 		return sqlSession.selectOne("user.findUser", user);
+	}
+
+	public Object updateUser(UserVo user) {
+		return sqlSession.update("user.updateUser", user);
 	}
 
 }
