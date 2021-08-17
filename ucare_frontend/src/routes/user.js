@@ -6,16 +6,18 @@ import SignUp from '../view/SignUp';
 import Profile from '../view/Profile';
 import NewPatient from '../view/NewPatient';
 import PrivateRoute from './PrivateRoute';
-import PublicRoute from './PublicRoute';   
+import PublicRoute from './PublicRoute';
+import Reservation from '../view/Reservation';
 
 export default function Routes() {
     return (
         <Switch>
             <PublicRoute exact path="/" component={SignIn} />
-            <Route exact path="/Home" component={Home} />
-            <Route exact path="/signUp" component={SignUp} />
-            <Route exact path="/profile" component={Profile} />
-            <Route exact path="/patient" component={NewPatient} />     
+            <PrivateRoute exact path="/Home" component={Home} />
+            <PublicRoute exact path="/signUp" component={SignUp} />
+            <PrivateRoute exact path="/profile" component={Profile} />
+            <PrivateRoute exact path="/patient" component={NewPatient} />
+            <PrivateRoute exact path="/reservation" component={Reservation} />
             <PublicRoute exact component={SignIn} />
         </Switch>
     );
