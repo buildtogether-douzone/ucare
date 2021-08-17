@@ -8,6 +8,7 @@ import NewPatient from '../view/NewPatient';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 import Reservation from '../view/Reservation';
+import AdminSetting from '../view/AdminSetting';
 
 export default function Routes() {
     return (
@@ -18,6 +19,7 @@ export default function Routes() {
             <PrivateRoute exact path="/profile" component={Profile} />
             <PrivateRoute exact path="/patient" component={NewPatient} />
             <PrivateRoute exact path="/reservation" component={Reservation} />
+            <PublicRoute exact path="/adminSetting" component={AdminSetting} />
             <PublicRoute exact component={SignIn} />
         </Switch>
     );
