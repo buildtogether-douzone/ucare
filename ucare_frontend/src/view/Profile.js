@@ -1,19 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import userService from '../service/userService';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -53,21 +49,71 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function NewPatient() {
+export default function Profile() {
   const classes = useStyles();
-  const [value, setValue] = React.useState('top');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [telNo, setTelNo] = useState('');
+  const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
+  const [birth, setBirth] = useState('');
+  
+  
+  useEffect(() => {
+    const newDate = new Date()
+    const date = ('0'+ newDate.getDate()).slice(-2);
+    const month = ('0'+( newDate.getMonth() + 1)).slice(-2);
+    const year = newDate.getFullYear();
+    setBirth(`${year}-${month}-${date}`);
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
-
-  const [age, setAge] = React.useState('');
-
-  const handleChangeEmail = (event) => {
-    setAge(event.target.value);
-  };
+    if (telNo.length === 10) {
+      setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
+    }
+    if (telNo.length === 13) {
+      setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+    }
+  }, [telNo]);
 
 
+  const hasError = passwordEntered =>
+  password.length < 5 ? true : false;
+
+  const hasNotSameError = passwordEntered =>
+  password != confirmPassword ? true : false; 
+
+  const telNoChange = (e) => {
+    const regex = /^[0-9\b -]{0,13}$/;
+    if (regex.test(e.target.value)) {
+      setTelNo(e.target.value);
+    }
+  }
+
+  const saveUpdate = (e) => {
+
+    e.preventDefault();
+    if(password !== confirmPassword) {
+      return alert('비밀번호와 비밀번호 확인은 같아야 합니다.');
+    };
+
+  let user = {
+    name: name,
+    password: password,
+    telNo: telNo,
+    email: email,
+    address: address,
+    birth: birth
+  }
+
+  userService.updateUser(user)
+  .then( res => {
+    console.log(user.name + '님의 정보가 성공적으로 수정되었습니다.');
+    history.push('/update');
+  })
+  .catch( err => {
+    console.log('updateUser() 에러', err);
+  });
+};
 
   return (
 
@@ -101,9 +147,11 @@ export default function NewPatient() {
                   variant="outlined"
                   required
                   fullWidth
-                  id="outlined-name"
+                  id="name"
                   name="name"
                   autoComplete="name"
+                  value={ name }
+                  onChange={ (e) => { setName(e.target.value)} }
                 />
               </Grid>
               <Grid item xs={12}>
@@ -114,9 +162,13 @@ export default function NewPatient() {
                   required
                   fullWidth
                   type="password"
-                  id="outlined-password"
+                  id="password"
                   name="password"
                   autoComplete="password"
+                  label="비밀번호(5자 이상)"
+                  error={ hasError('password') }
+                  value={ password }
+                  onChange={ (e) => { setPassword(e.targe.value)} }
                 />
               </Grid>
 
@@ -128,9 +180,16 @@ export default function NewPatient() {
                   required
                   fullWidth
                   type="password"
-                  id="outlined-password1"
-                  name="password1"
-                  autoComplete="password1"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  autoComplete="confirmPassword"
+                  label="비밀번호 확인"
+                  error={ hasNotSameError('confirmPassword')}
+                  helperText={
+                    hasNotSameError('confirmPassword') ? "입력한 비밀번호와 일치하지 않습니다." : null
+                  }
+                  value={ confirmPassword }
+                  onChange={ (e) => { setConfirmPassword(e.target.value)} }
                 />
               </Grid>
 
@@ -141,9 +200,11 @@ export default function NewPatient() {
                   variant="outlined"
                   required
                   fullWidth
-                  id="outlined-tel"
-                  name="tel"
-                  autoComplete="tel"
+                  id="telNo"
+                  name="telNo"
+                  autoComplete="telNo"
+                  value={ telNo }
+                  onChange={ telNoChange }
                 />
               </Grid>
 
@@ -154,17 +215,19 @@ export default function NewPatient() {
                   variant="outlined"
                   required
                   fullWidth
-                  id="outlined-email"
+                  id="email"
                   name="email"
                   autoComplete="email"
+                  value={ email }
+                  onChange={ (e) => { setEmail(e.target.value)} }
                 />
                 <Typography className={classes.font} style={{ width: '10%', float: 'left', padding: '2%', textAlign: 'center' }} variant="body1">@</Typography>
                 <FormControl variant="outlined" style={{ width: '45%', float: 'left', backgroundColor: '#FFFFFF' }}>
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
-                    value={age}
-                    onChange={handleChangeEmail}>
+                    value={name}
+                    onChange={setName}>
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
@@ -182,9 +245,11 @@ export default function NewPatient() {
                   variant="outlined"
                   required
                   fullWidth
-                  id="outlined-address"
+                  id="address"
                   name="address"
                   autoComplete="address"
+                  value={ address }
+                  onChange={ (e) => { setAddress(e.target.value)} }
                 />
                 <SearchIcon style={{ float: 'left', fontSize: '45', width: '15%' }} />
               </Grid>
@@ -196,14 +261,23 @@ export default function NewPatient() {
                   style={{ width: '100%' }}
                   id="date"
                   type="date"
-                  defaultValue="2021-08-14"
+                  value={ birth }
+                  onChange={ (e) => { setBirth(e.targer.value)} }
                   InputLabelProps={{
                     shrink: true,
                   }}
                 />
               </Grid>
 
-              <Button style={{ width: '100%', marginTop: '5%' }} variant="contained" color="primary" disableElevation>
+              <Button 
+                  style={{ width: '100%', marginTop: '5%' }} 
+                  variant="contained" 
+                  color="primary" 
+                  href="/Home"
+                  type="submit"
+                  onClick={ saveUpdate }
+                  disableElevation
+                >
                 등록하기
               </Button>
             </Grid>

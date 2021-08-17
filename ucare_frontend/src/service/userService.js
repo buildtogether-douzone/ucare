@@ -20,8 +20,8 @@ class userService {
     return axios.post(USER_API_BASE_URL + '/add', user);
   }
 
-  editUser(user){
-    return axios.put(USER_API_BASE_URL + '/' + user.id, user)
+  updateUser(user){
+    return axios.put(USER_API_BASE_URL + '/update' + user.id, user)
   }
 
 }

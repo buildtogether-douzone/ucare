@@ -24,4 +24,33 @@
 		WHERE id = #{id }
 		  AND password = #{password }
 	</select>
+	
+	
+	<update id="update" parameterType="uservo">
+		<choose>
+			<when test='password == ""'>
+			<![CDATA[
+			UPDATE ucare.user
+			   SET  
+			   		name = #{name },
+			   		tel_no = #{telNo },
+			   		email = #{email },
+			   		address = #{address },
+			 WHERE id = #{id }
+			]]>
+			</when>
+			<otherwise>
+			<![CDATA[
+			UPDATE  ucare.user
+			   SET 
+			   		name = #{name },
+			   		password = #{password },
+			   		tel_no = #{telNo },
+			   		email = #{email },
+			   		address = #{address },
+			WHERE id = #{id }
+			]]>
+			</otherwise>
+		</choose>
+	</update>
 </mapper>

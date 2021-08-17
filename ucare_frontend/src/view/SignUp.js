@@ -255,6 +255,7 @@ export default function SignUp({ history }) {
                 label="연락처"
                 name="telNo"
                 value={ telNo }
+           
                 onChange={ telNoChange }
               />
             </Grid>
