@@ -21,4 +21,8 @@
 			select title, welcome as welcomeMessage, profile as profileURL, description from site
 		]]>
 	</select>
+	
+	<select id="findUserList" resultType="uservo" >
+		SELECT * FROM ucare.user
+	</select>
 </mapper>

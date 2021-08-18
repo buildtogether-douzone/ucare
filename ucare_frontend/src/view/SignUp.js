@@ -43,6 +43,7 @@ export default function SignUp({ history }) {
   const [name, setName] = useState('');
   const [gender, setGender] = useState('female');
   const [ssn, setSSN] = useState('');
+  const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [telNo, setTelNo] = useState('');
   const [role, setRole] = useState('');
@@ -86,6 +87,10 @@ export default function SignUp({ history }) {
     setName(e.target.value)
   }
 
+  const emailChange = (e) => {
+    setEmail(e.target.value)
+  }
+
   const genderChange = (e) => {
     setGender(e.target.value)
   }
@@ -125,6 +130,7 @@ export default function SignUp({ history }) {
       name: name,
       gender: gender,
       ssn: ssn,
+      email: email,
       address: address,
       telNo: telNo,
       role: role,
@@ -231,6 +237,18 @@ export default function SignUp({ history }) {
                 name="ssn"
                 value={ ssn }
                 onChange={ ssnChange }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                name="email"
+                value={ email }
+                onChange={ emailChange }
               />
             </Grid>
             <Grid item xs={12}>

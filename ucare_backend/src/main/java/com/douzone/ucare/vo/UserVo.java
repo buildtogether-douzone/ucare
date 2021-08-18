@@ -1,16 +1,17 @@
 package com.douzone.ucare.vo;
 
 public class UserVo {
-
 	private int userNo;
 	private String id;
 	private String password;
 	private String name;
 	private String gender;
 	private String ssn;
+	private String email;
 	private String address;
 	private String telNo;
 	private String role;
+	private String status;
 	private String remark;
 	private String birth;
 	
@@ -50,6 +51,12 @@ public class UserVo {
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
 	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public String getAddress() {
 		return address;
 	}
@@ -68,6 +75,12 @@ public class UserVo {
 	public void setRole(String role) {
 		this.role = role;
 	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public String getRemark() {
 		return remark;
 	}
@@ -80,6 +93,5 @@ public class UserVo {
 	public void setBirth(String birth) {
 		this.birth = birth;
 	}
-	
 	
 }

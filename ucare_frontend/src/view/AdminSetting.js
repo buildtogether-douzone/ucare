@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import userService from '../service/userService';
+import adminService from '../service/adminService';
 
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -10,20 +10,22 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import CreateIcon from '@material-ui/icons/Create'
 import DeleteIcon from '@material-ui/icons/Delete'
+import SiteLayout from '../layout/SiteLayout'
 
 export default function AdminSetting () {
     const [users, setUsers] = useState([]);
     const [message, setMessage] = useState('');
 
   useEffect(() => {
-    // loadUserList();
+    loadUserList();
   }, []);
 
   const loadUserList = (e) => {
-    e.preventDefault(); // 아무 동작 안하고 버튼만 눌러도 리프레시 되는 것을 막는다.
-    userService.loadUsers()
+    adminService.loadUsers()
       .then( res => {
-        setUsers(res.data);
+        console.log('success!!');
+        console.log(res.data);
+        setUsers(res.data.data);
       })
       .catch(err => {
         console.log('reloadUserList() Error!', err);
@@ -36,7 +38,8 @@ export default function AdminSetting () {
   }
 
     return(
-      <div>
+      <SiteLayout >
+      <div style={{ width: '100%'}}>
         <Typography variant="h4" style={style}>사용자 직책 및 권한관리</Typography>
         <Button variant="contained" color="primary"> 수정 </Button>
         <Table>
@@ -50,13 +53,14 @@ export default function AdminSetting () {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map( user => 
-              <TableRow key={user.no}>
-                <TableCell component="th" scope="user">{user.id}</TableCell>
-                <TableCell align="right">{user.name}</TableCell>
-                <TableCell align="right">{user.role}</TableCell>
-                <TableCell align="right">{user.status}</TableCell>
-                <TableCell align="right" onClick={()=> editUser(user.id)}>
+            {users.map( (user, index) => 
+              <TableRow key={index}>
+                <TableCell>{index}</TableCell>
+                <TableCell>{user.id}</TableCell>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.role}</TableCell>
+                <TableCell>{user.status}</TableCell>
+                <TableCell onClick={()=> editUser(user.id)}>
                   <CreateIcon />
                 </TableCell>
               </TableRow>
@@ -64,6 +68,7 @@ export default function AdminSetting () {
           </TableBody>
         </Table>
       </div>
+      </SiteLayout>
     );
 };
 

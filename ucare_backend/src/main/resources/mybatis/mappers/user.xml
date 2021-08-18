@@ -3,17 +3,20 @@
 <mapper namespace="user">	
 	<insert id="insert" parameterType="uservo">
 		INSERT
-			INTO ucare.user(id, password, name, gender, ssn, address, tel_no, role, remark)
+			INTO ucare.user(id, password, name, gender, ssn, email, address, tel_no, role, status, remark, birth)
 		VALUES(
 			#{id },
 			#{password },
 			#{name },
 			#{gender },
 			#{ssn },
+			#{email },
 			#{address },
 			#{telNo },
 			#{role },
-			#{remark }
+			'true',
+			#{remark },
+			null
 		)
 	</insert>
 	
