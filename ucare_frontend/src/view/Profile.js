@@ -17,13 +17,12 @@ const useStyles = makeStyles((theme) => ({
 
   root: {
     flexGrow: 1,
-    margin: theme.spacing(10),
-
+    margin: theme.spacing(5),
+    width: '50% '
   },
   paper: {
-    width: '50%',
-    display: 'flex',
-    flexDirection: 'column',
+    width: '30%',
+    float: 'left',
     alignItems: 'center',
   },
   font: {
@@ -80,7 +79,6 @@ export default function Profile() {
       setAddress(res.data.data.address);
       setEmailId(res.data.data.emailId);
       setEmail(res.data.data.email);
-      console.log(res.data.data.email);
       res.data.data.birth ? setBirth(res.data.data.birth) : setBirth(`${year}-${month}-${date}`);
     })
     .catch( err => {
@@ -146,11 +144,8 @@ export default function Profile() {
 
   return (
     <SiteLayout >
-    <div className={classes.root}>
-      <Grid container spacing={10}>
 
-        <Grid style={{ position: 'relative' }} item xs={12} sm={5}> 
-          <div style={{ display: 'block', position: 'absolute', top: 80, right: 80 }} >
+          <div style={{ display: 'block', top: 80, right: 80, float:'left', marginTop:'40px', marginRight:'80px' }} >
             <div className={classes.profile} />
             <Button
               className={classes.button}
@@ -164,9 +159,6 @@ export default function Profile() {
 
             </Button>
           </div>
-        </Grid>
-
-        <Grid item xs={12} sm={7}>
           <form className={classes.paper} noValidate>
             <Grid container spacing={1}>
               <Grid item xs={12}>
@@ -239,7 +231,7 @@ export default function Profile() {
               <Grid item xs={12}>
                 <Typography className={classes.font} variant="body1">이메일</Typography>
                 <TextField
-                  style={{ width: '45%', float: 'left', backgroundColor: '#FFFFFF' }}
+                  style={{float:'left', width: '45%', backgroundColor: '#FFFFFF' }}
                   variant="outlined"
                   required
                   fullWidth
@@ -249,8 +241,8 @@ export default function Profile() {
                   value={ emailId }
                   onChange={ (e) => {setEmailId(e.target.value)}}
                 />
-                <Typography className={classes.font} style={{ width: '10%', float: 'left', padding: '2%', textAlign: 'center' }} variant="body1">@</Typography>
-                <FormControl variant="outlined" style={{ width: '45%', float: 'left', backgroundColor: '#FFFFFF' }}>
+                <Typography className={classes.font} style={{ float:'left' ,width: '10%', padding: '2%', textAlign: 'center' }} variant="body1">@</Typography>
+                <FormControl variant="outlined" style={{ float:'left', width: '45%', backgroundColor: '#FFFFFF' }}>
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="email"
@@ -269,7 +261,7 @@ export default function Profile() {
               <Grid item xs={12}>
                 <Typography className={classes.font} variant="body1">주소</Typography>
                 <TextField
-                  style={{ width: '85%', float: 'left', backgroundColor: '#FFFFFF' }}
+                  style={{ width: '85%', backgroundColor: '#FFFFFF' }}
                   variant="outlined"
                   required
                   fullWidth
@@ -279,14 +271,14 @@ export default function Profile() {
                   value={ address }
                   onChange={ (e) => { setAddress(e.target.value)} }
                 />
-                <SearchIcon style={{ float: 'left', fontSize: '45', width: '15%' }} />
+                <SearchIcon style={{ fontSize: '45', width: '15%' }} />
               </Grid>
 
 
               <Grid item xs={12}>
                 <Typography className={classes.font} variant="body1">생년월일</Typography>
                 <TextField
-                  style={{ width: '100%' }}
+                  fullWidth
                   id="date"
                   type="date"
                   value={ birth }
@@ -310,9 +302,6 @@ export default function Profile() {
               </Button>
             </Grid>
           </form>
-        </Grid>
-      </Grid>
-    </div>
     </SiteLayout>
   );
 }
