@@ -31,11 +31,6 @@ export default function Dashboard({ children }) {
     close: () => setOpen(false)
   }
 
-  const logout = (e) => {
-    window.sessionStorage.removeItem('user');
-    window.sessionStorage.clear();
-  }
-
   return (
     <div className={classes.root}>
       <Header handleDrawer={ handleDrawer }  open={ open }/>

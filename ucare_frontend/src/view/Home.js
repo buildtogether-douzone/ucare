@@ -45,9 +45,6 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            <Button href="/" onClick={logout}>
-               logout!
-            </Button>
           </Grid>
           <Footer />
         </Container>
