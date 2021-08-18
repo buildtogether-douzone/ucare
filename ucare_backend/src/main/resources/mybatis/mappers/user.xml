@@ -25,8 +25,18 @@
 		  AND password = #{password }
 	</select>
 	
+	<select id="findByID" parameterType="uservo" resultType="uservo">
+		SELECT name,
+			   password,
+			   tel_no AS telNo,
+			   email,
+			   address,
+			   birth
+		FROM ucare.user
+		WHERE id = #{id }
+	</select>
 	
-	<update id="update" parameterType="uservo">
+	<update id="updateUser" parameterType="uservo">
 		<choose>
 			<when test='password == ""'>
 			<![CDATA[
@@ -53,4 +63,5 @@
 			</otherwise>
 		</choose>
 	</update>
+
 </mapper>

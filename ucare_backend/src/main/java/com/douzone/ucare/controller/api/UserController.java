@@ -2,8 +2,11 @@ package com.douzone.ucare.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.douzone.ucare.dto.JsonResult;
@@ -27,9 +30,15 @@ public class UserController {
 	public JsonResult add(@RequestBody UserVo user) {
 		return JsonResult.success(userService.addUser(user));
 	}
+	
+	@CrossOrigin(origins = "*")
+	@PostMapping("/fetchUser")
+	public JsonResult fetchUser(@RequestBody UserVo user) {
+		return JsonResult.success(userService.fetchUser(user));
+	}
 
 	@CrossOrigin(origins = "*")
-	@PostMapping("/update")
+	@PutMapping("/update")
 	public JsonResult update(@RequestBody UserVo user) {
 		return JsonResult.success(userService.updateUser(user));
 	}

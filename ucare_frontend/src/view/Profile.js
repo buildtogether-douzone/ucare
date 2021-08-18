@@ -56,39 +56,63 @@ export default function Profile() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [telNo, setTelNo] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState({ fristEmail: '', LastEmail: ''});
   const [address, setAddress] = useState('');
   const [birth, setBirth] = useState('');
-  
-  
-  useEffect(() => {
-    const newDate = new Date()
+
+  const fetchUpdate = (e) => {
+    let user = { 
+      id: window.sessionStorage.getItem('user')
+    };
+
+    const newDate = new Date();
     const date = ('0'+ newDate.getDate()).slice(-2);
     const month = ('0'+( newDate.getMonth() + 1)).slice(-2);
     const year = newDate.getFullYear();
-    setBirth(`${year}-${month}-${date}`);
 
+    userService.fetchUserByID(user)
+    .then( res => {
+      setName(res.data.data.name);
+      setPassword(res.data.data.password);
+      setConfirmPassword(res.data.data.password);
+      setTelNo(res.data.data.telNo);
+      setAddress(res.data.data.address);
+      res.data.data.birth ? setBirth(res.data.data.birth) : setBirth(`${year}-${month}-${date}`);
+    })
+    .catch( err => {
+      console.log('updateUser() 에러', err);
+    });
+  };
+
+  
+  useEffect(() => {
+    fetchUpdate();
+  }, []);
+  
+  useEffect(() => {
     if (telNo.length === 10) {
       setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
     }
     if (telNo.length === 13) {
       setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
     }
-  }, [telNo]);
-
-
-  const hasError = passwordEntered =>
-  password.length < 5 ? true : false;
-
-  const hasNotSameError = passwordEntered =>
-  password != confirmPassword ? true : false; 
-
+  }, [telNo])
+  
   const telNoChange = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
     if (regex.test(e.target.value)) {
       setTelNo(e.target.value);
     }
   }
+  
+  const hasError = passwordEntered =>
+  password.length < 5 ? true : false;
+
+  const hasNotSameError = passwordEntered =>
+  password != confirmPassword ? true : false; 
+
+
+
 
   const saveUpdate = (e) => {
 
@@ -98,6 +122,7 @@ export default function Profile() {
     };
 
   let user = {
+    id: window.sessionStorage.getItem('user'),
     name: name,
     password: password,
     telNo: telNo,
@@ -109,7 +134,6 @@ export default function Profile() {
   userService.updateUser(user)
   .then( res => {
     console.log(user.name + '님의 정보가 성공적으로 수정되었습니다.');
-    history.push('/update');
   })
   .catch( err => {
     console.log('updateUser() 에러', err);
@@ -121,7 +145,7 @@ export default function Profile() {
     <div className={classes.root}>
       <Grid container spacing={10}>
 
-        <Grid style={{ position: 'relative' }} item xs={12} sm={5}>
+        <Grid style={{ position: 'relative' }} item xs={12} sm={5}> 
           <div style={{ display: 'block', position: 'absolute', top: 80, right: 80 }} >
             <div className={classes.profile} />
             <Button
@@ -165,11 +189,11 @@ export default function Profile() {
                   type="password"
                   id="password"
                   name="password"
-                  autoComplete="password"
+                  autoComplete="current-password"
                   label="비밀번호(5자 이상)"
                   error={ hasError('password') }
                   value={ password }
-                  onChange={ (e) => { setPassword(e.targe.value)} }
+                  onChange={ (e) => { setPassword(e.target.value)} }
                 />
               </Grid>
 
@@ -183,7 +207,7 @@ export default function Profile() {
                   type="password"
                   id="confirmPassword"
                   name="confirmPassword"
-                  autoComplete="confirmPassword"
+                  autoComplete="current-password"
                   label="비밀번호 확인"
                   error={ hasNotSameError('confirmPassword')}
                   helperText={
@@ -203,7 +227,6 @@ export default function Profile() {
                   fullWidth
                   id="telNo"
                   name="telNo"
-                  autoComplete="telNo"
                   value={ telNo }
                   onChange={ telNoChange }
                 />
@@ -219,22 +242,20 @@ export default function Profile() {
                   id="email"
                   name="email"
                   autoComplete="email"
-                  value={ email }
-                  onChange={ (e) => { setEmail(e.target.value)} }
+                  value={ email.firstEmail }
                 />
                 <Typography className={classes.font} style={{ width: '10%', float: 'left', padding: '2%', textAlign: 'center' }} variant="body1">@</Typography>
                 <FormControl variant="outlined" style={{ width: '45%', float: 'left', backgroundColor: '#FFFFFF' }}>
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
-                    value={name}
-                    onChange={setName}>
+                    value={ email.LastEmail }>
                     <MenuItem value="">
-                      <em>None</em>
+                      <em></em>
                     </MenuItem>
                     <MenuItem value={'@google.com'}>google.com</MenuItem>
-                    <MenuItem value={20}>naver.com</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    <MenuItem value={'@naver.com'}>naver.com</MenuItem>
+                    <MenuItem value={'@daum.net'}>daum.net</MenuItem>
                   </Select>
                 </FormControl>
 
@@ -263,7 +284,7 @@ export default function Profile() {
                   id="date"
                   type="date"
                   value={ birth }
-                  onChange={ (e) => { setBirth(e.targer.value)} }
+                  onChange={ (e) => { setBirth(e.target.value)} }
                   InputLabelProps={{
                     shrink: true,
                   }}
