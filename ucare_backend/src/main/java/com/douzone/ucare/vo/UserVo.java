@@ -100,5 +100,6 @@ public class UserVo {
 	public void setBirth(String birth) {
 		this.birth = birth;
 	}
+
 	
 }

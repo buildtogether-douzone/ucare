@@ -41,31 +41,17 @@
 	</select>
 	
 	<update id="updateUser" parameterType="uservo">
-		<choose>
-			<when test='password == ""'>
-			<![CDATA[
-			UPDATE ucare.user
-			   SET  
-			   		name = #{name },
-			   		tel_no = #{telNo },
-			   		email = #{email },
-			   		address = #{address },
-			 WHERE id = #{id }
-			]]>
-			</when>
-			<otherwise>
-			<![CDATA[
 			UPDATE  ucare.user
 			   SET 
 			   		name = #{name },
+			   		<if test="password != null and password != '' ">
 			   		password = #{password },
+			   		</if>
 			   		tel_no = #{telNo },
 			   		email = #{email },
 			   		address = #{address },
+			   		birth = TO_DATE(#{birth },'YYYY-MM-DD')
 			WHERE id = #{id }
-			]]>
-			</otherwise>
-		</choose>
 	</update>
 
 </mapper>
