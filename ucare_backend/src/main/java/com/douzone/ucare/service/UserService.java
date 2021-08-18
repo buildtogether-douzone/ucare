@@ -35,8 +35,11 @@ public class UserService {
 		return userRepository.findUser(user);
 	}
 
-	public Object updateUser(UserVo user) {
+	public int updateUser(UserVo user) {
 		return userRepository.updateUser(user);
 	}
-
+	
+	public UserVo fetchUser(UserVo user) {
+		return userRepository.fetchUser(user);
+	}
 }

@@ -8,8 +8,8 @@ class userService {
     return axios.post(USER_API_BASE_URL + '/login', user);
   }
 
-  fetchUserByID(userID){
-    return axios.get(USER_API_BASE_URL + '/' + userID);
+  fetchUserByID(user){
+    return axios.post(USER_API_BASE_URL + '/fetchUser', user);
   }
 
   deleteUser(userID){
@@ -21,7 +21,7 @@ class userService {
   }
 
   updateUser(user){
-    return axios.put(USER_API_BASE_URL + '/update' + user.id, user)
+    return axios.put(USER_API_BASE_URL + '/update', user)
   }
 
 }

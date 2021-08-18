@@ -43,8 +43,14 @@ public class UserRepository {
 		return sqlSession.selectOne("user.findUser", user);
 	}
 
-	public Object updateUser(UserVo user) {
+	
+	public int updateUser(UserVo user) {
 		return sqlSession.update("user.updateUser", user);
 	}
+
+	public UserVo fetchUser(UserVo user) {
+		return sqlSession.selectOne("user.findByID", user);
+	}
+
 
 }

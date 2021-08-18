@@ -12,6 +12,7 @@ public class UserVo {
 	private String telNo;
 	private String role;
 	private String remark;
+	private String birth;
 	
 	public int getUserNo() {
 		return userNo;
@@ -73,5 +74,12 @@ public class UserVo {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+	public String getBirth() {
+		return birth;
+	}
+	public void setBirth(String birth) {
+		this.birth = birth;
+	}
+	
 	
 }
