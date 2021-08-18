@@ -32,7 +32,8 @@
 		SELECT name,
 			   password,
 			   tel_no AS telNo,
-			   email,
+			   split_part(email, '@', 1) as emailId,
+			   split_part(email, '@', 2) as email,
 			   address,
 			   birth
 		FROM ucare.user

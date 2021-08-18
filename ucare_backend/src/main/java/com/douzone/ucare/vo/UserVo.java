@@ -7,6 +7,7 @@ public class UserVo {
 	private String name;
 	private String gender;
 	private String ssn;
+	private String emailId;
 	private String email;
 	private String address;
 	private String telNo;
@@ -50,6 +51,12 @@ public class UserVo {
 	}
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
+	}
+	public String getEmailId() {
+		return emailId;
+	}
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
 	}
 	public String getEmail() {
 		return email;

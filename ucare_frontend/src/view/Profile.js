@@ -56,7 +56,8 @@ export default function Profile() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [telNo, setTelNo] = useState('');
-  const [email, setEmail] = useState({ fristEmail: '', LastEmail: ''});
+  const [emailId, setEmailId] = useState('');
+  const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [birth, setBirth] = useState('');
 
@@ -77,6 +78,9 @@ export default function Profile() {
       setConfirmPassword(res.data.data.password);
       setTelNo(res.data.data.telNo);
       setAddress(res.data.data.address);
+      setEmailId(res.data.data.emailId);
+      setEmail(res.data.data.email);
+      console.log(res.data.data.email);
       res.data.data.birth ? setBirth(res.data.data.birth) : setBirth(`${year}-${month}-${date}`);
     })
     .catch( err => {
@@ -126,7 +130,7 @@ export default function Profile() {
     name: name,
     password: password,
     telNo: telNo,
-    email: email,
+    email: (emailId + '@' + email ),
     address: address,
     birth: birth
   }
@@ -239,23 +243,25 @@ export default function Profile() {
                   variant="outlined"
                   required
                   fullWidth
-                  id="email"
-                  name="email"
+                  id="emailId"
+                  name="emailId"
                   autoComplete="email"
-                  value={ email.firstEmail }
+                  value={ emailId }
+                  onChange={ (e) => {setEmailId(e.target.value)}}
                 />
                 <Typography className={classes.font} style={{ width: '10%', float: 'left', padding: '2%', textAlign: 'center' }} variant="body1">@</Typography>
                 <FormControl variant="outlined" style={{ width: '45%', float: 'left', backgroundColor: '#FFFFFF' }}>
                   <Select
                     labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    value={ email.LastEmail }>
-                    <MenuItem value="">
-                      <em></em>
-                    </MenuItem>
-                    <MenuItem value={'@google.com'}>google.com</MenuItem>
-                    <MenuItem value={'@naver.com'}>naver.com</MenuItem>
-                    <MenuItem value={'@daum.net'}>daum.net</MenuItem>
+                    id="email"
+                    value={ email }
+                    onChange={ (e) => {setEmail(e.target.value)}}
+                    >
+                    <MenuItem value=""></MenuItem>
+                    <MenuItem value={'google.com'}>google.com</MenuItem>
+                    <MenuItem value={'naver.com'}>naver.com</MenuItem>
+                    <MenuItem value={'daum.net'}>daum.net</MenuItem>
+                    <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
                   </Select>
                 </FormControl>
 
