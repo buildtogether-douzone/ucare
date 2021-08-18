@@ -15,6 +15,7 @@ public class UserVo {
 	private String status;
 	private String remark;
 	private String birth;
+	private String image;
 	
 	public int getUserNo() {
 		return userNo;
@@ -100,6 +101,13 @@ public class UserVo {
 	public void setBirth(String birth) {
 		this.birth = birth;
 	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
 
 	
 }

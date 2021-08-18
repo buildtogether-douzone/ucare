@@ -3,7 +3,7 @@
 <mapper namespace="user">	
 	<insert id="insert" parameterType="uservo">
 		INSERT
-			INTO ucare.user(id, password, name, gender, ssn, email, address, tel_no, role, status, remark, birth)
+			INTO ucare.user(id, password, name, gender, ssn, email, address, tel_no, role, status, remark, birth, image)
 		VALUES(
 			#{id },
 			#{password },
@@ -16,6 +16,7 @@
 			#{role },
 			'true',
 			#{remark },
+			null,
 			null
 		)
 	</insert>
@@ -50,7 +51,8 @@
 			   		tel_no = #{telNo },
 			   		email = #{email },
 			   		address = #{address },
-			   		birth = TO_DATE(#{birth },'YYYY-MM-DD')
+			   		birth = TO_DATE(#{birth },'YYYY-MM-DD'),
+			   		image = #{image }
 			WHERE id = #{id }
 	</update>
 
