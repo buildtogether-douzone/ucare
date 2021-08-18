@@ -5,7 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import Footer from '../layout/Footer';
 import Header from '../layout/Header';
 import Navigation from '../layout/Navigation';
-import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,11 +29,6 @@ export default function Dashboard() {
   const handleDrawer = {
     open: () => setOpen(true),
     close: () => setOpen(false)
-  }
-
-  const logout = (e) => {
-    window.sessionStorage.removeItem('user');
-    window.sessionStorage.clear();
   }
 
   return (
