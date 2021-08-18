@@ -144,7 +144,6 @@ export default function Profile() {
 
   return (
     <SiteLayout >
-
           <div style={{ display: 'block', top: 80, right: 80, float:'left', marginTop:'40px', marginRight:'80px' }} >
             <div className={classes.profile} />
             <Button
