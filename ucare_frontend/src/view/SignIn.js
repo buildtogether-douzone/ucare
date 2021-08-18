@@ -10,7 +10,7 @@ import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import userService from '../service/userService';
-import Footer from '../include/Footer';
+import Footer from '../layout/Footer';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {

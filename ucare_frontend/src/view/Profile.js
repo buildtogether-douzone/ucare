@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import userService from '../service/userService';
+import SiteLayout from '../layout/SiteLayout';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -116,7 +117,7 @@ export default function Profile() {
 };
 
   return (
-
+    <SiteLayout >
     <div className={classes.root}>
       <Grid container spacing={10}>
 
@@ -285,6 +286,6 @@ export default function Profile() {
         </Grid>
       </Grid>
     </div>
-
+    </SiteLayout>
   );
 }

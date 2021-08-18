@@ -2,10 +2,9 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Footer from '../layout/Footer';
-import Header from '../layout/Header';
-import Navigation from '../layout/Navigation';
-import { Button } from '@material-ui/core';
+import Footer from './Footer';
+import Header from './Header';
+import Navigation from './Navigation';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Dashboard() {
+export default function Dashboard({ children }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -45,9 +44,7 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            <Button href="/" onClick={logout}>
-               logout!
-            </Button>
+            { children }
           </Grid>
           <Footer />
         </Container>
