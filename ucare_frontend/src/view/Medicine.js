@@ -99,6 +99,7 @@ export default function Medicine() {
                         value={maker}
                         onChange={(e) => { setMaker(e.target.value) }}
                     />
+                    
                     <Button
                         href="/medicine"
                         type="submit"

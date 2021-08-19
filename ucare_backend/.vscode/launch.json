@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-UcareApplication<ucare_backend>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.douzone.ucare.UcareApplication",
+            "projectName": "ucare_backend",
+            "args": ""
+        }
+    ]
+}
