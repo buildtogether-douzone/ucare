@@ -62,9 +62,11 @@ export default function Header({ open, handleDrawer }) {
         >
           <MenuIcon />
         </IconButton>
+        <div>
         <Button
           href="/Home"
-          style={{ padding: '0px', fontSize: '25px', color:'#FFFFFF' }} >U-Care</Button>
+          style={{ padding: '0px', width:'100px', fontSize: '20px', color:'#FFFFFF' }} >U-Care</Button>
+        </div>
         <Button
           href="/"
           onClick={logout}
