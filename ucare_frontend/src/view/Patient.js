@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Radio from '@material-ui/core/Radio';
@@ -13,11 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-
-
-
-
-
+import patientService from '../service/patientService';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,27 +32,75 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
     marginTop: theme.spacing(1)
   }
-
-
 }));
 
-
-export default function NewPatient() {
+export default function Patient() {
     const classes = useStyles();
-    const [value, setValue] = React.useState('top');
+    const [name, setName] = useState('');
+    const [ssn, setSSN] = useState('');
+    const [age, setAge] = useState('');
+    const [gender, setGender] = useState('female');
+    const [telNo, setTelNo] = useState('');
+    const [address, setAddress] = useState('');
+    const [emailId, setEmailId] = useState('');
+    const [email, setEmail] = useState('');
+    const [insurance, setInsurance] = useState('Y');
+    const [diagType, setDiagType] = useState('초진');
+    const [visitDate, setVisitDate] = useState('');
+    const [remark, setRemark] = useState('');
+      
+    useEffect(() => {
+      const newDate = new Date();
+      const date = ('0'+ newDate.getDate()).slice(-2);
+      const month = ('0'+( newDate.getMonth() + 1)).slice(-2);
+      const year = newDate.getFullYear();
+      setVisitDate(`${year}-${month}-${date}`);
 
-    const handleChange = (event) => {
-      setValue(event.target.value);
-    };
-
-    const [age, setAge] = React.useState('');
-
-    const handleChangeEmail = (event) => {
-      setAge(event.target.value);
-    };
-
+      if (telNo.length === 10) {
+        setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
+      }
+      if (telNo.length === 13) {
+        setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+      }
+      if (ssn.length === 13) {
+        setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
+      }
+    }, [ssn, telNo])
     
-
+    const telNoChange = (e) => {
+      const regex = /^[0-9\b -]{0,13}$/;
+      if (regex.test(e.target.value)) {
+        setTelNo(e.target.value);
+      }
+    }
+  
+    const addPatient = (e) => {
+      e.preventDefault();
+  
+    let patient = {
+      name: name,
+      ssn: ssn,
+      age: age,
+      gender: gender,
+      telNo: telNo,
+      address: address,
+      email: (emailId + '@' + email ),
+      insurance: insurance,
+      diagnosis: diagType,
+      visitDate: visitDate,
+      remark: remark,
+      userId: window.sessionStorage.getItem('user')
+    }
+  
+    patientService.addPatient(patient)
+    .then( res => {
+      console.log(patient.name + '님의 정보가 성공적으로 등록되었습니다.');
+    })
+    .catch( err => {
+      console.log('addPatient() 에러', err);
+    });
+  };
+  
     return(
       <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -73,6 +117,8 @@ export default function NewPatient() {
           id="outlined-name"
           name="name"
           autoComplete="name"
+          value={ name }
+          onChange={ (e) => { setName(e.target.value) }}
         /> 
         </Grid>
         <Grid item xs={12}>
@@ -85,6 +131,8 @@ export default function NewPatient() {
           id="outlined-ssn"
           name="ssn"
           autoComplete="ssn"
+          value={ ssn }
+          onChange={ (e) => { setSSN(e.target.value) }}
         /> 
         </Grid>
 
@@ -98,6 +146,8 @@ export default function NewPatient() {
           id="outlined-age"
           name="age"
           autoComplete="age"
+          value={ age }
+          onChange = { (e) => { setAge(e.target.value) }}
         /> 
         <Typography className={classes.font} style={{padding: '2%', float: 'left',}} variant="body1">세</Typography>
       </Grid>
@@ -105,18 +155,18 @@ export default function NewPatient() {
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">성별</Typography>
         <FormControl component="fieldset">
-        <RadioGroup row aria-label="position" name="position" defaultValue="top" value={value} onChange={handleChange}>
+        <RadioGroup row aria-label="gender" name="gender" value={ gender } onChange={ (e) => { setGender(e.target.value) }} >
         <FormControlLabel
-          value="top"
           control={<Radio color="primary" />}
           label="여자"
           labelPlacement="end"
+          value="female"
         />
         <FormControlLabel
-          value="start"
           control={<Radio color="primary" />}
           label="남자"
           labelPlacement="end"
+          value="male"
         />
       </RadioGroup>
     </FormControl>
@@ -129,9 +179,10 @@ export default function NewPatient() {
           variant="outlined"
           required
           fullWidth
-          id="outlined-tel"
-          name="tel"
-          autoComplete="tel"
+          id="telNo"
+          name="telNo"
+          value={ telNo }
+          onChange={ telNoChange }
         /> 
       </Grid>
 
@@ -142,53 +193,56 @@ export default function NewPatient() {
           variant="outlined"
           required
           fullWidth
-          id="outlined-address"
+          id="address"
           name="address"
           autoComplete="address"
+          value={ address }
+          onChange={ (e) => { setAddress(e.target.value) }}
         /> 
         <SearchIcon style={{float: 'left', fontSize: '45', width: '15%' }} />
       </Grid>
 
       <Grid item xs={12}>
-      <Typography className={classes.font} variant="body1">이메일</Typography>
-        <TextField
-          style={{width: '45%', float: 'left', backgroundColor: '#FFFFFF'}} 
-          variant="outlined"
-          required
-          fullWidth
-          id="outlined-address"
-          name="address"
-          autoComplete="address"
-        /> 
-      <Typography className={classes.font} style={{width: '10%', float: 'left', padding: '2%', textAlign: 'center'}} variant="body1">@</Typography>
-        <FormControl variant="outlined" style={{width: '45%', float: 'left', backgroundColor: '#FFFFFF'}}>
-        <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={age}
-          onChange={handleChangeEmail}>
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={'@google.com'}>google.com</MenuItem>
-          <MenuItem value={20}>naver.com</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl>
+                <Typography className={classes.font} variant="body1">이메일</Typography>
+                <TextField
+                  style={{float:'left', width: '45%', backgroundColor: '#FFFFFF' }}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="emailId"
+                  name="emailId"
+                  autoComplete="emai"
+                  value={ emailId }
+                  onChange={ (e) => {setEmailId(e.target.value)}}
+                />
+                <Typography className={classes.font} style={{ float:'left' ,width: '10%', padding: '2%', textAlign: 'center' }} variant="body1">@</Typography>
+                <FormControl variant="outlined" style={{ float:'left', width: '45%', backgroundColor: '#FFFFFF' }}>
+                  <Select
+                    labelId="demo-simple-select-outlined-label"
+                    id="email"
+                    value={ email }
+                    onChange={ (e) => {setEmail(e.target.value)}}
+                    >
+                    <MenuItem value=""></MenuItem>
+                    <MenuItem value={'naver.com'}>naver.com</MenuItem>
+                    <MenuItem value={'daum.net'}>daum.net</MenuItem>
+                    <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
+                  </Select>
+                </FormControl>
       </Grid>
 
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">보험 여부</Typography>
         <FormControl component="fieldset">
-        <RadioGroup row aria-label="position" name="position" defaultValue="top" value={value} onChange={handleChange}>
+        <RadioGroup row aria-label="insurance" name="insurance" value={ insurance } onChange={ (e) => { setInsurance(e.target.value) }} >
         <FormControlLabel
-          value="top"
+          value="Y"
           control={<Radio color="primary" />}
           label="있음"
           labelPlacement="end"
         />
         <FormControlLabel
-          value="start"
+          value="N"
           control={<Radio color="primary" />}
           label="없음"
           labelPlacement="end"
@@ -200,15 +254,15 @@ export default function NewPatient() {
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">진료 구분</Typography>
         <FormControl component="fieldset">
-        <RadioGroup row aria-label="position" name="position" defaultValue="top" value={value} onChange={handleChange}>
+        <RadioGroup row aria-label="diagnosis" name="diagnosis" value={ diagType } onChange={ (e) => { setDiagType(e.target.value) }} >
         <FormControlLabel
-          value="top"
+          value="초진"
           control={<Radio color="primary" />}
           label="초진"
           labelPlacement="end"
         />
         <FormControlLabel
-          value="start"
+          value="재진"
           control={<Radio color="primary" />}
           label="재진"
           labelPlacement="end"
@@ -221,9 +275,10 @@ export default function NewPatient() {
       <Typography className={classes.font} variant="body1">최초 내원일</Typography>
       <TextField
         style={{width: '100%'}}
-        id="date"
+        id="visitDate"
         type="date"
-        defaultValue="2021-08-14"
+        value={ visitDate }
+        onChange={ (e) => { setVisitDate(e.target.value) }}
         InputLabelProps={{
           shrink: true,
         }}
@@ -236,12 +291,20 @@ export default function NewPatient() {
           style={{width: '100%', backgroundColor: '#FFFFFF'}} 
           multiline
           rows={4}
-          defaultValue=""
           variant="outlined" 
+          value={ remark }
+          onChange={ (e) => { setRemark(e.target.value) }}
         />
       </Grid>
 
-        <Button style={{width: '100%', marginTop: '5%'}} variant="contained" color="primary" disableElevation>
+        <Button 
+          style={{width: '100%', marginTop: '5%'}} 
+          variant="contained" 
+          color="primary"
+          href="/Home"
+          type="submit"
+          onClick={ addPatient} 
+          disableElevation>
       등록하기
     </Button>
     </Grid>

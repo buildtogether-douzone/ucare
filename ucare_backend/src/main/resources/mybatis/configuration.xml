@@ -4,9 +4,11 @@
 	<typeAliases>
 		<typeAlias type="com.douzone.ucare.vo.UserVo" alias="uservo"/>
 		<typeAlias type="com.douzone.ucare.vo.SiteVo" alias="sitevo"/>
+		<typeAlias type="com.douzone.ucare.vo.PatientVo" alias="patientvo"/>
     </typeAliases>	
 	<mappers>
 		<mapper resource="mybatis/mappers/user.xml" />
 		<mapper resource="mybatis/mappers/admin.xml" />
+		<mapper resource="mybatis/mappers/patient.xml" />
 	</mappers>
 </configuration>
