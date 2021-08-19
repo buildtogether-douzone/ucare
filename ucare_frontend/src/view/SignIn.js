@@ -83,11 +83,19 @@ export default function SignInSide({ history }) {
         console.log('get Role 에러', err);
       })
 
+    userService.fetchUserByID(user)
+    .then( res => {
+      sessionStorage.setItem('role', res.data.data.role);
+    })
+    .catch( err => {
+      console.log('get Role 에러', err);
+    });
+
     userService.login(user)
     .then( res => {
       if(res.data.data) {
         console.log(user.id + '님이 성공적으로 로그인하였습니다.');
-        window.sessionStorage.setItem('user', id);
+        sessionStorage.setItem('user', id);
         history.push('/home');
       } else {
         console.log('로그인 정보가 없습니다.');

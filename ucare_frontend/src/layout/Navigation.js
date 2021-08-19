@@ -6,7 +6,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
-import { mainListItems } from './listItems';
+import { nurseListItems, doctorListItems, adminListItems } from './listItems';
 
 const drawerWidth = 240;
 
@@ -56,7 +56,7 @@ export default function Navigation( { open, handleDrawer }) {
                 </IconButton>
             </div>
             <Divider />
-            <List>{mainListItems}</List>
+            <List >{sessionStorage.getItem('role') == '간호사' ? nurseListItems : sessionStorage.getItem('role') == '의사' ? doctorListItems : adminListItems }</List>
         </Drawer>
     );
 }

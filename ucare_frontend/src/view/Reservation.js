@@ -3,6 +3,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import userService from '../service/userService';
+import SiteLayout from '../layout/SiteLayout';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -59,6 +60,7 @@ export default function Reservation( ){
     }
 
     return(
+        <SiteLayout >
         <div className={classes.root} >
             <div className={classes.input} >
                 <p style={{marginTop:'10px', marginBottom:'8px', marginLeft:'10px'}}>이름</p>
@@ -149,5 +151,6 @@ export default function Reservation( ){
                 </Button>
             </div>
         </div>
+        </SiteLayout>
     );
 }

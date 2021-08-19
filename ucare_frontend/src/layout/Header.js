@@ -2,9 +2,9 @@ import React from 'react';
 import clsx from 'clsx';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 
@@ -62,13 +62,17 @@ export default function Header({ open, handleDrawer }) {
         >
           <MenuIcon />
         </IconButton>
-        <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-          Dashboard
-        </Typography>
+        <div>
         <Button
           href="/Home"
+          style={{ padding: '0px', width:'100px', fontSize: '20px', color:'#FFFFFF' }} >U-Care</Button>
+        </div>
+        <Button
+          href="/"
           onClick={logout}
-          style={{ padding: '0px', fontSize: '16px', marginRight: '10px', color:'#FFFFFF' }} >로그아웃</Button>
+          style={{ padding: '0px', fontSize: '16px', marginLeft: '89%', color:'#FFFFFF' }} >
+            <ExitToAppIcon style={{ fontSize: '35px' }}/>
+          </Button>
       </Toolbar>
     </AppBar>
   );
