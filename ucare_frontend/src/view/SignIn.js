@@ -75,6 +75,13 @@ export default function SignInSide({ history }) {
       id: id,
       password: password
     }
+    userService.fetchUserByID(user)
+      .then( res => {
+        sessionStorage.setItem('role', res.data.data.role);
+      })
+      .catch( err => {
+        console.log('get Role 에러', err);
+      })
 
     userService.fetchUserByID(user)
     .then( res => {
