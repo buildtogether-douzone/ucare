@@ -2,9 +2,9 @@ const path = require('path');
 
 module.exports = (env) => ({
     mode: "none",
-    entry: path.resolve('src/index.js'),
+    entry: path.resolve('ucare_frontend/src/index.js'),
     output: {
-        path: path.resolve('public'),
+        path: path.resolve('ucare_frontend/public'),
         filename: 'bundle.js',
         assetModuleFilename: 'assets/images/[hash][ext]'
     },
@@ -24,13 +24,13 @@ module.exports = (env) => ({
             exclude: /node_modules/,
             loader: 'babel-loader',
             options: {
-                configFile: path.resolve('config/babel.config.json')
+                configFile: path.resolve('ucare_frontend/config/babel.config.json')
             }
         }]
     },
     devtool: "eval-source-map",
     devServer: {
-        contentBase: path.resolve('public'),
+        contentBase: path.resolve('ucare_frontend/public'),
         watchContentBase: true,
         host: "0.0.0.0",
         port: 9999,
@@ -44,4 +44,3 @@ module.exports = (env) => ({
         historyApiFallback: true
     }
 });
-

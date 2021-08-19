@@ -9,7 +9,7 @@ import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 import Reservation from '../view/Reservation';
 import AdminSetting from '../view/AdminSetting';
-import Medicine from '../view/medicine';
+import Medicine from '../view/Medicine';
 import Receipt from '../view/Receipt';
 
 export default function Routes() {
@@ -22,7 +22,7 @@ export default function Routes() {
             <PrivateRoute exact path="/patient" component={Patient} />
             <PrivateRoute exact path="/reservation" component={Reservation} />
             <PublicRoute exact path="/adminSetting" component={AdminSetting} />
-            <PrivateRoute exact path="/medicine" component={Medicine}/>
+            <PublicRoute exact path="/medicine" component={Medicine}/>
             <PrivateRoute exact path="/receipt" component={Receipt}/>
             <PublicRoute exact component={SignIn} />
         </Switch>

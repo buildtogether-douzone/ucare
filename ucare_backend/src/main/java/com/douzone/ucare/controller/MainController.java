@@ -20,6 +20,7 @@ public class MainController {
 	
 	@RequestMapping("")
 	public String index(Model model) {
+		System.out.print("!");
 		SiteVo vo = adminService.viewPage();
 		model.addAttribute("vo", vo);
 		application.setAttribute("title", vo.getTitle());
