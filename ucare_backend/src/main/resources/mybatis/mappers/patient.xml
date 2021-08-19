@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="patient">	
+	<insert id="insert" parameterType="patientvo">
+		INSERT
+			INTO ucare.patient(name, ssn, age, gender, tel_no, address, email, insurance_yn, diagnosis_type, visit_date, remark, ins_dt, user_no)
+		VALUES(
+			#{name },
+			#{ssn },
+			#{age },
+			#{gender },
+			#{telNo },
+			#{address },
+			#{email },
+			#{insurance },
+			#{diagnosis },
+			TO_DATE(#{visitDate },'YYYY-MM-DD'),
+			#{remark },
+			TO_DATE(#{visitDate },'YYYY-MM-DD'),
+			(SELECT user_no FROM ucare.user WHERE id = #{userId } )
+		)
+	</insert>
+	
+	<select id="findUser" parameterType="patientvo" resultType="patientvo">
+		SELECT id,
+			   name
+		FROM ucare.user
+		WHERE id = #{id }
+		  AND password = #{password }
+	</select>
+	
+	<select id="findByID" parameterType="patientvo" resultType="patientvo">
+		SELECT name,
+			   password,
+			   tel_no AS telNo,
+			   split_part(email, '@', 1) as emailId,
+			   split_part(email, '@', 2) as email,
+			   address,
+			   birth
+		FROM ucare.user
+		WHERE id = #{id }
+	</select>
+	
+	<update id="updateUser" parameterType="uservo">
+			UPDATE  ucare.user
+			   SET 
+			   		name = #{name },
+			   		<if test="password != null and password != '' ">
+			   		password = #{password },
+			   		</if>
+			   		tel_no = #{telNo },
+			   		email = #{email },
+			   		address = #{address },
+			   		birth = TO_DATE(#{birth },'YYYY-MM-DD'),
+			   		image = #{image }
+			WHERE id = #{id }
+	</update>
+
+</mapper>

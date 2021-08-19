@@ -249,7 +249,6 @@ export default function Profile() {
                     onChange={ (e) => {setEmail(e.target.value)}}
                     >
                     <MenuItem value=""></MenuItem>
-                    <MenuItem value={'google.com'}>google.com</MenuItem>
                     <MenuItem value={'naver.com'}>naver.com</MenuItem>
                     <MenuItem value={'daum.net'}>daum.net</MenuItem>
                     <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
