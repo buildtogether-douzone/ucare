@@ -10,6 +10,7 @@ import PublicRoute from './PublicRoute';
 import Reservation from '../view/Reservation';
 import AdminSetting from '../view/AdminSetting';
 import Medicine from '../view/Medicine';
+import Disease from '../view/Disease';
 import Receipt from '../view/Receipt';
 import SearchPatient from '../view/SearchPatient';
 
@@ -24,6 +25,7 @@ export default function Routes() {
             <PrivateRoute exact path="/reservation" component={Reservation} />
             <PublicRoute exact path="/adminSetting" component={AdminSetting} />
             <PublicRoute exact path="/medicine" component={Medicine}/>
+            <PublicRoute exact path="/disease" component={Disease}/>
             <PrivateRoute exact path="/receipt" component={Receipt}/>
             <PrivateRoute exact path="/search" component={SearchPatient}/>
             <PublicRoute exact component={SignIn} />
