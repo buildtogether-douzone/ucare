@@ -62,7 +62,7 @@ export default function Profile() {
 
   const fetchUpdate = (e) => {
     let user = { 
-      id: window.sessionStorage.getItem('user')
+      id: sessionStorage.getItem('user')
     };
 
     const newDate = new Date();

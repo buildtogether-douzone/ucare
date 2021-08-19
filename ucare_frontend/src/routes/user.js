@@ -11,6 +11,7 @@ import Reservation from '../view/Reservation';
 import AdminSetting from '../view/AdminSetting';
 import Medicine from '../view/Medicine';
 import Receipt from '../view/Receipt';
+import SearchPatient from '../view/SearchPatient';
 
 export default function Routes() {
     return (
@@ -19,11 +20,12 @@ export default function Routes() {
             <PrivateRoute exact path="/Home" component={Home} />
             <PublicRoute exact path="/signUp" component={SignUp} />
             <PrivateRoute exact path="/profile" component={Profile} />
-            <PrivateRoute exact path="/patient/add" component={NewPatient} />
+            <PrivateRoute exact path="/patient" component={NewPatient} />
             <PrivateRoute exact path="/reservation" component={Reservation} />
             <PublicRoute exact path="/adminSetting" component={AdminSetting} />
             <PublicRoute exact path="/medicine" component={Medicine}/>
             <PrivateRoute exact path="/receipt" component={Receipt}/>
+            <PrivateRoute exact path="/search" component={SearchPatient}/>
             <PublicRoute exact component={SignIn} />
         </Switch>
     );

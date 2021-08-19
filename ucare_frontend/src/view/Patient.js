@@ -74,7 +74,7 @@ export default function Patient() {
       }
     }
   
-    const addPatient = (e) => {
+    const fetchPatient = (e) => {
       e.preventDefault();
   
     let patient = {
