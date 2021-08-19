@@ -45,8 +45,9 @@ export default function Header({ open, handleDrawer }) {
   const classes = useStyles();
 
   const logout = (e) => {
-    window.sessionStorage.removeItem('user');
-    window.sessionStorage.clear();
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('role');
+    sessionStorage.clear();
   }
 
   return (
