@@ -52,11 +52,11 @@ export default function AdminSetting() {
 
   var columns = [
     {title: "UserNo", field: "userNo", hidden: true},
-    {title: "No.", field: "rowNo"},
-    {title: "ID", field: "id"},
-    {title: "이름", field: "name"},
+    {title: "No.", field: "rowNo", editable: 'never'},
+    {title: "ID", field: "id", editable: 'never'},
+    {title: "이름", field: "name", editable: 'never'},
     {title: "직책", field: "role", lookup: { 의사: '의사', 간호사: '간호사' }},
-    {title: "상태", field: "status", lookup: { true: '사용중', false: '미사용' }}
+    {title: "상태", field: "status", lookup: { true: '사용', false: '미사용' }}
   ]
   const [data, setData] = useState([]); //table data
 
