@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 24, // keep right padding when drawer closed
   },
   appBar: {
+    display: 'flex',
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   appBarShift: {
+    display: 'flex',
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
@@ -43,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Header = ({ open, drawerManage}) => {
+const Header = ({ open, drawerManage }) => {
   const classes = useStyles();
 
   const logout = (e) => {
@@ -64,31 +66,31 @@ const Header = ({ open, drawerManage}) => {
         >
           <MenuIcon />
         </IconButton>
-        <div>
-        <Button
-          href="/Home"
-          style={{ padding: '0px', width:'100px', fontSize: '20px', color:'#FFFFFF' }} >U-Care</Button>
+        <div style={{ flexGrow:1 }}>
+          <Button
+            href="/Home"
+            style={{ padding: '0px', width: '100px', fontSize: '20px', color: '#FFFFFF' }} >U-Care</Button>
         </div>
         <Button
           href="/"
           onClick={logout}
-          style={{ padding: '0px', fontSize: '16px', marginLeft: '89%', color:'#FFFFFF' }} >
-            <ExitToAppIcon style={{ fontSize: '35px' }}/>
-          </Button>
+          style={{ padding: '0px', fontSize: '16px', color: '#FFFFFF' }} >
+          <ExitToAppIcon style={{ fontSize: '35px' }} />
+        </Button>
       </Toolbar>
     </AppBar>
   );
 }
 
-const mapStateToProps = (state)=>{
-  return{
+const mapStateToProps = (state) => {
+  return {
     open: state.drawerManageReducer.open
   }
 }
 
 // //object(es6 면 property와 value 값이 같으면 생략가능)
 const mapDispatchToProps = {
-    drawerManage
+  drawerManage
 }
 
 // function
