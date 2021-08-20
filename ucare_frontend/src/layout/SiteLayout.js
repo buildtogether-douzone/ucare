@@ -24,17 +24,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard({ children }) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-
-  const handleDrawer = {
-    open: () => setOpen(true),
-    close: () => setOpen(false)
-  }
 
   return (
     <div className={classes.root}>
-      <Header handleDrawer={ handleDrawer }  open={ open }/>
-      <Navigation handleDrawer={ handleDrawer } open={ open }/>
+      <Header />
+      <Navigation />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>

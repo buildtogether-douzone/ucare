@@ -7,6 +7,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { drawerManage } from '../redux/drawerManagement/actions';
 
 const drawerWidth = 240;
 
@@ -41,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Header({ open, handleDrawer }) {
+const Header = ({ open, drawerManage}) => {
   const classes = useStyles();
 
   const logout = (e) => {
@@ -57,7 +59,7 @@ export default function Header({ open, handleDrawer }) {
           edge="start"
           color="inherit"
           aria-label="open drawer"
-          onClick={() => { handleDrawer.open() }}
+          onClick={() => { drawerManage() }}
           className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
         >
           <MenuIcon />
@@ -77,3 +79,22 @@ export default function Header({ open, handleDrawer }) {
     </AppBar>
   );
 }
+
+const mapStateToProps = (state)=>{
+  return{
+    open: state.open
+  }
+}
+
+//object(es6 면 property와 value 값이 같으면 생략가능)
+const mapDispatchToProps = {
+    drawerManage
+}
+// function
+// const mapDispatchToProps = (dispatch) => {
+//   return{
+//     drawerManage: () => dispatch(drawerManage)
+//   }
+// }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

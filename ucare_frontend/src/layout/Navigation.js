@@ -7,6 +7,8 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import { nurseListItems, doctorListItems, adminListItems } from './listItems';
+import { connect } from 'react-redux';
+import { drawerManage } from '../redux/drawerManagement/actions';
 
 const drawerWidth = 240;
 
@@ -40,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Navigation( { open, handleDrawer }) {
+const Navigation = ( { open, drawerManage }) => {
     const classes = useStyles();
     return (
         <Drawer
@@ -51,7 +53,7 @@ export default function Navigation( { open, handleDrawer }) {
             open={open}
         >
             <div className={classes.toolbarIcon}>
-                <IconButton onClick={() => {handleDrawer.close()}}>
+                <IconButton onClick={() => { drawerManage() }}>
                     <ChevronLeftIcon />
                 </IconButton>
             </div>
@@ -60,3 +62,17 @@ export default function Navigation( { open, handleDrawer }) {
         </Drawer>
     );
 }
+
+const mapStateToProps = (state)=>{
+  console.log(state);
+  return{
+    open: state.open
+  }
+}
+
+//object(es6 면 property와 value 값이 같으면 생략가능)
+const mapDispatchToProps = {
+    drawerManage
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navigation);
