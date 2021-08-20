@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="admin">
-	<update id="update" parameterType="sitevo">
-		<choose>
-			<when test="profileURL == null or profileURL == ''">
-				<![CDATA[
-					update site set title=#{title }, welcome=#{welcomeMessage }, description=#{description }
-				]]>
-			</when>
-			<otherwise>
-				<![CDATA[
-					update site set title=#{title }, welcome=#{welcomeMessage }, description=#{description }, profile=#{profileURL }
-				]]>
-			</otherwise>
-		</choose>
-	</update>
 	
 	<select id="findAll" resultType="sitevo" >
 		<![CDATA[
@@ -22,7 +8,32 @@
 		]]>
 	</select>
 	
-	<select id="findUserList" resultType="uservo" >
-		SELECT * FROM ucare.user
+	<select id="retrieveAll" resultType="uservo" >
+		SELECT 
+			(row_number() over()) AS rowNo,
+			user_no AS userNo,
+			id,
+			password,
+			name,
+			gender,
+			ssn,
+			email,
+			address,
+			tel_no AS telNo,
+			role,
+			status,
+			remark,
+			birth,
+			image
+		 FROM ucare.user
 	</select>
+	
+	<update id="update" parameterType="uservo">
+			UPDATE  ucare.user
+			   SET 
+			   		role = #{role },
+			   		status = #{status }
+			WHERE user_no = #{userNo }
+	</update>
+	
 </mapper>

@@ -14,16 +14,16 @@ public class AdminService {
 	@Autowired
 	private AdminRepository adminRepository;
 	
-	public void update(SiteVo vo) {
-		adminRepository.update(vo);
-	}
-	
 	public SiteVo viewPage() {
 		SiteVo vo = adminRepository.findAll();
 		return vo;
 	}
 	
-	public List<UserVo> fetchUserList() {
-		return adminRepository.fetchUserList();
+	public List<UserVo> retrieveAll() {
+		return adminRepository.retrieveAll();
+	}
+
+	public int update(UserVo data) {
+		return adminRepository.update(data);
 	}
 }

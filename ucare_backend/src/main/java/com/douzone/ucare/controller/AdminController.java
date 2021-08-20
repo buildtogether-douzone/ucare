@@ -44,14 +44,5 @@ public class AdminController {
 	public String user() {
 		return "admin/user";
 	}
-	
-	@RequestMapping(value="/main/update", method=RequestMethod.POST)
-	public String updateMain(
-			SiteVo vo,
-			@RequestParam("file1") MultipartFile file1) {
-		String url = fileUploadService.restore(file1);
-		vo.setprofileURL(url);
-		adminService.update(vo);
-		return "redirect:/admin";
-	}
+
 }

@@ -1,6 +1,7 @@
 package com.douzone.ucare.vo;
 
 public class UserVo {
+	private int rowNo;
 	private int userNo;
 	private String id;
 	private String password;
@@ -17,6 +18,12 @@ public class UserVo {
 	private String birth;
 	private String image;
 	
+	public int getRowNo() {
+		return rowNo;
+	}
+	public void setRowNo(int rowNo) {
+		this.rowNo = rowNo;
+	}
 	public int getUserNo() {
 		return userNo;
 	}

@@ -13,18 +13,17 @@ import com.douzone.ucare.vo.UserVo;
 public class AdminRepository {
 	@Autowired
 	private SqlSession sqlSession;
-	
-	public boolean update(SiteVo vo) {
-		int count = sqlSession.update("admin.update", vo);
-		return count == 1;
-	}
 
 	public SiteVo findAll() {
 		return sqlSession.selectOne("admin.findAll");
 	}
 
-	public List<UserVo> fetchUserList() {
-		return sqlSession.selectList("admin.findUserList");
+	public List<UserVo> retrieveAll() {
+		return sqlSession.selectList("admin.retrieveAll");
+	}
+
+	public int update(UserVo data) {
+		return sqlSession.update("admin.update", data);
 	}
 	
 }
