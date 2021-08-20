@@ -82,14 +82,15 @@ const Header = ({ open, drawerManage}) => {
 
 const mapStateToProps = (state)=>{
   return{
-    open: state.open
+    open: state.drawerManageReducer.open
   }
 }
 
-//object(es6 면 property와 value 값이 같으면 생략가능)
+// //object(es6 면 property와 value 값이 같으면 생략가능)
 const mapDispatchToProps = {
     drawerManage
 }
+
 // function
 // const mapDispatchToProps = (dispatch) => {
 //   return{

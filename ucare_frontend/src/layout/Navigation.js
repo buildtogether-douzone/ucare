@@ -64,9 +64,8 @@ const Navigation = ( { open, drawerManage }) => {
 }
 
 const mapStateToProps = (state)=>{
-  console.log(state);
   return{
-    open: state.open
+    open: state.drawerManageReducer.open
   }
 }
 

@@ -1,6 +1,17 @@
 import { createStore } from 'redux';
-import drawerManageReducer from './drawerManagement/reducer';
+import rootReducer from './drawerManagement';
+import { persistStore, persistReducer } from 'redux-persist';
+import storageSession from 'redux-persist/lib/storage/session';
 
-const store = createStore(drawerManageReducer);
+const persistConfig = {
+    key: 'root',
+    storage: storageSession
+};
 
-export default store;
+const enhancedReducer = persistReducer(persistConfig, rootReducer);
+
+export default function configureStore(){
+    const store = createStore(enhancedReducer);
+    const persist = persistStore(store);
+    return {store, persist};
+}
