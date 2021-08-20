@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="patient">	
-	<insert id="insert" parameterType="patientvo">
+	<insert id="create" parameterType="patientvo">
 		INSERT
 			INTO ucare.patient(name, ssn, age, gender, tel_no, address, email, insurance_yn, diagnosis_type, visit_date, remark, ins_dt, user_no)
 		VALUES(
@@ -20,6 +20,12 @@
 			(SELECT user_no FROM ucare.user WHERE id = #{userId } )
 		)
 	</insert>
+	
+	<select id="retrieveAll" resultType="patientvo" >
+		SELECT 
+			patient_no AS patientNo, name, (gender||'/'||age) AS gender, ssn, tel_no AS telNo, address
+		FROM ucare.patient
+	</select>
 	
 	<select id="findUser" parameterType="patientvo" resultType="patientvo">
 		SELECT id,
@@ -55,5 +61,19 @@
 			   		image = #{image }
 			WHERE id = #{id }
 	</update>
+	
+	<update id="update" parameterType="diseasevo">
+			UPDATE  ucare.disease
+			   SET 
+			   		disease_nm = #{diseaseNm },
+			   		symptom = #{symptom }
+			WHERE disease_no = #{diseaseNo }
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE
+		  FROM ucare.disease
+		 WHERE disease_no = #{diseaseNo }
+	</delete>
 
 </mapper>

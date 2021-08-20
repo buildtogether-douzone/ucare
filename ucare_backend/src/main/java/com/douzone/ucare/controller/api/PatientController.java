@@ -2,6 +2,7 @@ package com.douzone.ucare.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +20,14 @@ public class PatientController {
 	private PatientService patientService;
 	
 	@CrossOrigin(origins = "*")
-	@PostMapping("/add")
+	@PostMapping("/create")
 	public JsonResult addPatient(@RequestBody PatientVo patient) {
-		return JsonResult.success(patientService.addPatient(patient));
+		return JsonResult.success(patientService.create(patient));
 	}
 	
+	@CrossOrigin(origins = "*")
+	@GetMapping("/retrieveAll")
+	public JsonResult retrieveAll() {
+		return JsonResult.success(patientService.retrieveAll());
+	}
 }

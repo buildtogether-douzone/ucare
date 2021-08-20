@@ -4,8 +4,12 @@ const PATIENT_API_BASE_URL = "http://localhost:8080/ucare_backend/api/patient";
 
 class patientService {
   
-  addPatient(patient){
-    return axios.post(PATIENT_API_BASE_URL + '/add', patient);
+  create(data){
+    return axios.post(PATIENT_API_BASE_URL + '/create', data);
+  }
+
+  retrieveAll(){
+    return axios.get(PATIENT_API_BASE_URL + '/retrieveAll');
   }
 }
 

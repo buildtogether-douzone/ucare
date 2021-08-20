@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { forwardRef } from 'react';
-import Avatar from 'react-avatar';
 import Grid from '@material-ui/core/Grid'
-
 import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -19,8 +17,9 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import axios from 'axios'
 import Alert from '@material-ui/lab/Alert';
+import SiteLayout from '../layout/SiteLayout';
+import patientService from '../service/patientService';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -42,56 +41,56 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const api = axios.create({
-  baseURL: `https://reqres.in/api`
-})
-
-
 function validateEmail(email){
   const re = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
   return re.test(String(email).toLowerCase());
 }
 
-function App() {
+export default function SearchPatient() {
 
   var columns = [
-    {title: "id", field: "id", hidden: true},
-    {title: "Avatar", render: rowData => <Avatar maxInitials={1} size={40} round={true} name={rowData === undefined ? " " : rowData.first_name} />  },
-    {title: "First name", field: "first_name"},
-    {title: "Last name", field: "last_name"},
-    {title: "email", field: "email"}
+    {title: "patient_no", field: "patientNo", hidden: true},
+    {title: "이름", field: "name"},
+    {title: "성별/나이", field: "gender"},
+    {title: "주민등록번호", field: "ssn"},
+    {title: "전화번호", field: "telNo"},
+    {title: "주소", field: "address"}
   ]
   const [data, setData] = useState([]); //table data
 
   //for error handling
-  const [iserror, setIserror] = useState(false)
-  const [errorMessages, setErrorMessages] = useState([])
+  // const [iserror, setIserror] = useState(false)
+  // const [errorMessages, setErrorMessages] = useState([])
 
   useEffect(() => { 
-    api.get("/users")
-        .then(res => {               
-            setData(res.data.data)
-         })
-         .catch(error=>{
-             console.log("Error")
-         })
+    retrievePatient();
   }, [])
 
+  const retrievePatient = (e) => {
+    patientService.retrieveAll()
+      .then( res => {
+        console.log('success!!');
+        console.log(res.data.data);
+        setData(res.data.data);
+    })
+      .catch(err => {
+        console.log('retrievePatient() Error!', err);
+    });
+  }
+
+  /*
   const handleRowUpdate = (newData, oldData, resolve) => {
     //validation
     let errorList = []
-    if(newData.first_name === ""){
-      errorList.push("Please enter first name")
+    if(newData.diseaseNm === ""){
+      errorList.push("Please enter disease name")
     }
-    if(newData.last_name === ""){
-      errorList.push("Please enter last name")
-    }
-    if(newData.email === "" || validateEmail(newData.email) === false){
-      errorList.push("Please enter a valid email")
+    if(newData.symptom === ""){
+      errorList.push("Please enter symptom")
     }
 
     if(errorList.length < 1){
-      api.patch("/users/"+newData.id, newData)
+      diseaseService.update(newData)
       .then(res => {
         const dataUpdate = [...data];
         const index = oldData.tableData.id;
@@ -115,22 +114,21 @@ function App() {
     }
     
   }
+  */
 
+  /*
   const handleRowAdd = (newData, resolve) => {
     //validation
     let errorList = []
-    if(newData.first_name === undefined){
-      errorList.push("Please enter first name")
+    if(newData.diseaseNm === undefined){
+      errorList.push("Please enter disease name")
     }
-    if(newData.last_name === undefined){
-      errorList.push("Please enter last name")
-    }
-    if(newData.email === undefined || validateEmail(newData.email) === false){
-      errorList.push("Please enter a valid email")
+    if(newData.symptom === undefined){
+      errorList.push("Please enter symptom")
     }
 
     if(errorList.length < 1){ //no error
-      api.post("/users", newData)
+      diseaseService.create(newData)
       .then(res => {
         let dataToAdd = [...data];
         dataToAdd.push(newData);
@@ -149,13 +147,12 @@ function App() {
       setIserror(true)
       resolve()
     }
-
-    
   }
+  */
 
+  /*
   const handleRowDelete = (oldData, resolve) => {
-    
-    api.delete("/users/"+oldData.id)
+    diseaseService.delete(oldData.diseaseNo)
       .then(res => {
         const dataDelete = [...data];
         const index = oldData.tableData.id;
@@ -168,30 +165,27 @@ function App() {
         setIserror(true)
         resolve()
       })
-  }
+  }*/
 
 
   return (
-    <div>
-      
-      <Grid container spacing={1}>
-          <Grid item xs={3}></Grid>
-          <Grid item xs={6}>
+      <SiteLayout>
+          <Grid item xs={12}>
           <div>
-            {iserror && 
+            {/*iserror && 
               <Alert severity="error">
                   {errorMessages.map((msg, i) => {
                       return <div key={i}>{msg}</div>
                   })}
               </Alert>
-            }       
+                */}       
           </div>
             <MaterialTable
               title="User data from remote source"
               columns={columns}
               data={data}
               icons={tableIcons}
-              editable={{
+              /*editable={{
                 onRowUpdate: (newData, oldData) =>
                   new Promise((resolve) => {
                       handleRowUpdate(newData, oldData, resolve);
@@ -205,13 +199,9 @@ function App() {
                   new Promise((resolve) => {
                     handleRowDelete(oldData, resolve)
                   }),
-              }}
+              }}*/
             />
           </Grid>
-          <Grid item xs={3}></Grid>
-        </Grid>
-    </div>
+    </SiteLayout>
   );
 }
-
-export default App;
