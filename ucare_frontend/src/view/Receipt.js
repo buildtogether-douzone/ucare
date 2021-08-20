@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import InputBase from '@material-ui/core/InputBase';
+import SiteLayout from '../layout/SiteLayout';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -56,6 +57,7 @@ export default function NewPatient() {
     
 
     return(
+      <SiteLayout>
       <div className={classes.paper}>
       <form className={classes.form} noValidate>
           <Grid item xs={6} container spacing={1} style={{ display: 'flex',    justifyContent: 'center'}}> 
@@ -146,5 +148,6 @@ export default function NewPatient() {
     </Grid>
         </form>
       </div>
+      </SiteLayout>
     );
 }

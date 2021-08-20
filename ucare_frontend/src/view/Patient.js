@@ -15,6 +15,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import patientService from '../service/patientService';
 import SiteLayout from '../layout/SiteLayout';
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -74,7 +75,7 @@ export default function Patient() {
       }
     }
   
-    const fetchPatient = (e) => {
+    const create = (e) => {
       e.preventDefault();
   
     let patient = {
@@ -92,12 +93,12 @@ export default function Patient() {
       userId: window.sessionStorage.getItem('user')
     }
   
-    patientService.addPatient(patient)
+    patientService.create(patient)
     .then( res => {
       console.log(patient.name + '님의 정보가 성공적으로 등록되었습니다.');
     })
     .catch( err => {
-      console.log('addPatient() 에러', err);
+      console.log('create() 에러', err);
     });
   };
   
@@ -304,7 +305,7 @@ export default function Patient() {
           color="primary"
           href="/Home"
           type="submit"
-          onClick={ addPatient} 
+          onClick={ create } 
           disableElevation>
       등록하기
     </Button>

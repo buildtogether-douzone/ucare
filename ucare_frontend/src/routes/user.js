@@ -13,6 +13,7 @@ import Medicine from '../view/Medicine';
 import Disease from '../view/Disease';
 import Receipt from '../view/Receipt';
 import SearchPatient from '../view/SearchPatient';
+import PatientList from '../view/PatientList';
 
 export default function Routes() {
     return (
@@ -28,6 +29,7 @@ export default function Routes() {
             <PublicRoute exact path="/disease" component={Disease}/>
             <PrivateRoute exact path="/receipt" component={Receipt}/>
             <PrivateRoute exact path="/search" component={SearchPatient}/>
+            <PrivateRoute exact path="/patientList" component={PatientList}/>
             <PublicRoute exact component={SignIn} />
         </Switch>
     );
