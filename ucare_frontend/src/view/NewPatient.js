@@ -39,7 +39,7 @@ export default function Patient() {
     const [name, setName] = useState('');
     const [ssn, setSSN] = useState('');
     const [age, setAge] = useState('');
-    const [gender, setGender] = useState('female');
+    const [gender, setGender] = useState('여');
     const [telNo, setTelNo] = useState('');
     const [address, setAddress] = useState('');
     const [emailId, setEmailId] = useState('');
@@ -161,13 +161,13 @@ export default function Patient() {
           control={<Radio color="primary" />}
           label="여자"
           labelPlacement="end"
-          value="female"
+          value="여"
         />
         <FormControlLabel
           control={<Radio color="primary" />}
           label="남자"
           labelPlacement="end"
-          value="male"
+          value="남"
         />
       </RadioGroup>
     </FormControl>
