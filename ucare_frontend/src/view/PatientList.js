@@ -15,6 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import patientService from '../service/patientService';
+import receiptService from '../service/receiptService';
 
 const useRowStyles = makeStyles({
   root: {
@@ -28,7 +29,23 @@ function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
-
+  const [receipt, setReceipt] = useState([]);
+ 
+  const fetchReceipt =  () => {
+   receiptService.retrieveAll()
+   .then( res => {
+     console.log(res.data.data);
+     setReceipt(res.data.data);
+   })
+   .catch( err => {
+     console.log('updateUser() 에러', err);
+   });
+ };
+ 
+  useEffect(() => {
+    fetchReceipt();
+  }, []);
+  
   return (
     <React.Fragment>
       <TableRow className={classes.root}>
@@ -56,23 +73,19 @@ function Row(props) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Customer</TableCell>
-                    <TableCell align="right">Amount</TableCell>
-                    <TableCell align="right">Total price ($)</TableCell>
+                    <TableCell>No</TableCell>
+                    <TableCell>접수 번호</TableCell>
+                    <TableCell>접수 날짜</TableCell>
+                    <TableCell>접수 메모</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history&&row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align="right">{historyRow.amount}</TableCell>
-                      <TableCell align="right">
-                        {Math.round(historyRow.amount * row.price * 100) / 100}
-                      </TableCell>
+                  {receipt&&receipt.map((receiptList) => (
+                    <TableRow key={receiptList.patientNo}>
+                      <TableCell component="th" scope="row">{receiptList.name}</TableCell>
+                      <TableCell>{receiptList.receiptNo}</TableCell>
+                      <TableCell>{receiptList.receiptDt}</TableCell>
+                      <TableCell>{receiptList.remark}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -91,7 +104,6 @@ export default function PatientList() {
  const fetchPatient =  () => {
   patientService.retrieveAll()
   .then( res => {
-    console.log(res.data.data);
     setPatient(res.data.data);
   })
   .catch( err => {
@@ -119,8 +131,8 @@ export default function PatientList() {
       </TableRow>
     </TableHead>
     <TableBody>
-      {patient&&patient.map((list) => (
-        <Row key={list.patientNo} row={list} />
+      {patient&&patient.map((patientList) => (
+        <Row key={patientList.patientNo} row={patientList} />
       ))}
     </TableBody>
   </Table>
