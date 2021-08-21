@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -24,46 +24,6 @@ const useRowStyles = makeStyles({
   },
 });
 
-const fetchUpdate = (e) => {
-  let user = { 
-    id: sessionStorage.getItem('user')
-  };
-
-  const newDate = new Date();
-  const date = ('0'+ newDate.getDate()).slice(-2);
-  const month = ('0'+( newDate.getMonth() + 1)).slice(-2);
-  const year = newDate.getFullYear();
-
-  userService.fetchUserByID(user)
-  .then( res => {
-    setName(res.data.data.name);
-    setPassword(res.data.data.password);
-    setConfirmPassword(res.data.data.password);
-    setTelNo(res.data.data.telNo);
-    setAddress(res.data.data.address);
-    setEmailId(res.data.data.emailId);
-    setEmail(res.data.data.email);
-    res.data.data.birth ? setBirth(res.data.data.birth) : setBirth(`${year}-${month}-${date}`);
-  })
-  .catch( err => {
-    console.log('updateUser() 에러', err);
-  });
-};
-
-function createData(patientNo, name, gender, ssn, telNo, address) {
-  return {
-    name,
-    gender,
-    ssn,
-    telNo,
-    address,
-    history: [
-      { date: '2020-01-05', customerId: '11091700', amount: 3 },
-      { date: '2020-01-02', customerId: 'Anonymous', amount: 1 },
-    ],
-  };
-}
-
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
@@ -78,8 +38,9 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.name}
+          {row.patientNo}
         </TableCell>
+        <TableCell>{row.name}</TableCell>
         <TableCell>{row.gender}</TableCell>
         <TableCell>{row.ssn}</TableCell>
         <TableCell>{row.telNo}</TableCell>
@@ -102,7 +63,7 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
+                  {row.history&&row.history.map((historyRow) => (
                     <TableRow key={historyRow.date}>
                       <TableCell component="th" scope="row">
                         {historyRow.date}
@@ -124,47 +85,56 @@ function Row(props) {
   );
 }
 
-Row.propTypes = {
-  row: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    gender: PropTypes.string.isRequired,
-    ssn: PropTypes.string.isRequired,
-    telNo: PropTypes.string.isRequired,
-    address: PropTypes.string.isRequired,
-    history: PropTypes.arrayOf(
-      PropTypes.shape({
-        amount: PropTypes.number.isRequired,
-        customerId: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-  }).isRequired,
+export default function PatientList() {
+ const [patient, setPatient] = useState([]);
+ 
+ const fetchPatient =  () => {
+  patientService.retrieveAll()
+  .then( res => {
+    console.log(res.data.data);
+    setPatient(res.data.data);
+  })
+  .catch( err => {
+    console.log('updateUser() 에러', err);
+  });
 };
 
-const rows = [
-  createData('Frozen yoghurt', 'a','a','a','a','a')
-];
 
-export default function CollapsibleTable() {
-  return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>이름</TableCell>
-            <TableCell>성별/나이</TableCell>
-            <TableCell>주민등록번호</TableCell>
-            <TableCell>전화번호</TableCell>
-            <TableCell>주소</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <Row key={row.name} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+ useEffect(() => {
+  fetchPatient();
+ }, []);
+
+ return (
+  <TableContainer component={Paper}>
+  <Table aria-label="collapsible table">
+    <TableHead>
+      <TableRow>
+        <TableCell />
+        <TableCell>No</TableCell>
+        <TableCell>이름</TableCell>
+        <TableCell>성별/나이</TableCell>
+        <TableCell>주민등록번호</TableCell>
+        <TableCell>전화번호</TableCell>
+        <TableCell>주소</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {patient&&patient.map((row) => (
+        <Row key={row.patientNo} row={row} />
+      ))}
+    </TableBody>
+  </Table>
+</TableContainer>
+
+ 
+ );
 }
+
+
+{/* <ul>
+{patient&&patient.map(user => (
+  <li key={user.patientNo}>
+    {user.name}
+  </li>
+))}
+</ul> */}
