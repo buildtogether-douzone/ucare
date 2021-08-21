@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -26,6 +26,7 @@ export default function Dashboard({ children }) {
   const classes = useStyles();
 
   return (
+    <Fragment>
     <div className={classes.root}>
       <Header />
       <Navigation />
@@ -35,9 +36,10 @@ export default function Dashboard({ children }) {
           <Grid container spacing={3}>
             { children }
           </Grid>
-          <Footer />
         </Container>
       </main>
     </div>
+    <Footer/>
+    </Fragment>
   );
 }
