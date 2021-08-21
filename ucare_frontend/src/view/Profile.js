@@ -158,7 +158,7 @@ const handleFileOnChange = (e) => {
     <SiteLayout >
           <div style={{ display: 'block', top: 80, right: 80, float:'left', marginTop:'40px', marginRight:'80px' }} >
             <div className={classes.profile} 
-            style={file=='' ? {backgroundImage: `url(${require("../assets/image/profile.jpg")})`} : {backgroundImage: `url(${previewURL})`}} />
+            style={previewURL=='' ? {backgroundImage: `url(${require("../assets/image/profile.jpg")})`} : {backgroundImage: `url(${previewURL})`}} />
             <Button
               className={classes.button}
               variant="contained"
