@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
     width: '200px',
     height: '230px',
     border: '1px solid #AAAAAA',
-    backgroundImage: `url(${require("../assets/image/profile.jpg")})`,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     overflow: 'hidden',
@@ -59,6 +58,8 @@ export default function Profile() {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [birth, setBirth] = useState('');
+  const [file, setFile] = useState('');
+  const [previewURL, setPreviewURL] = useState('');
 
   const fetchUpdate = (e) => {
     let user = { 
@@ -142,20 +143,33 @@ export default function Profile() {
   });
 };
 
+const handleFileOnChange = (e) => {
+  e.preventDefault();
+  let reader = new FileReader();
+  let file = e.target.files[0];
+  reader.onloadend = () => {
+    setFile(file);
+    setPreviewURL(reader.result);
+  }
+  reader.readAsDataURL(file);
+}
+
   return (
     <SiteLayout >
           <div style={{ display: 'block', top: 80, right: 80, float:'left', marginTop:'40px', marginRight:'80px' }} >
-            <div className={classes.profile} />
+            <div className={classes.profile} 
+            style={file=='' ? {backgroundImage: `url(${require("../assets/image/profile.jpg")})`} : {backgroundImage: `url(${previewURL})`}} />
             <Button
               className={classes.button}
               variant="contained"
               color="default"
+              component="label"
               startIcon={
                 <span>
                   <CloudUploadIcon style={{ padding: '5px 0 0 0' }} /><span style={{ padding: '0 0 0px 2px' }}>Upload</span>
                 </span>
               }>
-
+              <input id={"file-input"} style={{ display: 'none' }} type="file" name="imageFile"  onChange={handleFileOnChange}/>
             </Button>
           </div>
           <form className={classes.paper} noValidate>
