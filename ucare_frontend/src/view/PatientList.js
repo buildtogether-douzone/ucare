@@ -119,8 +119,8 @@ export default function PatientList() {
       </TableRow>
     </TableHead>
     <TableBody>
-      {patient&&patient.map((row) => (
-        <Row key={row.patientNo} row={row} />
+      {patient&&patient.map((list) => (
+        <Row key={list.patientNo} row={list} />
       ))}
     </TableBody>
   </Table>
