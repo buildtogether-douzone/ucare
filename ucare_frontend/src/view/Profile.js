@@ -80,6 +80,7 @@ export default function Profile() {
       setAddress(res.data.data.address);
       setEmailId(res.data.data.emailId);
       setEmail(res.data.data.email);
+      setPreviewURL(res.data.data.image);
       res.data.data.birth ? setBirth(res.data.data.birth) : setBirth(`${year}-${month}-${date}`);
     })
     .catch( err => {
@@ -158,7 +159,7 @@ const handleFileOnChange = (e) => {
     <SiteLayout >
           <div style={{ display: 'block', top: 80, right: 80, float:'left', marginTop:'40px', marginRight:'80px' }} >
             <div className={classes.profile} 
-            style={previewURL=='' ? {backgroundImage: `url(${require("../assets/image/profile.jpg")})`} : {backgroundImage: `url(${previewURL})`}} />
+            style={previewURL==null ? {backgroundImage: `url(${require("../assets/image/profile.jpg")})`} : {backgroundImage: `url(${previewURL})`}} />
             <Button
               className={classes.button}
               variant="contained"
