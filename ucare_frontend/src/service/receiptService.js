@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Receipt_API_BASE_URL } from './urlConfig';
+import { RECEIPT_API_BASE_URL } from './urlConfig';
 
 class receiptService {
   
@@ -8,7 +8,7 @@ class receiptService {
   // }
 
   retrieveAll(){
-    return axios.get(Receipt_API_BASE_URL + '/retrieveAll');
+    return axios.get(RECEIPT_API_BASE_URL + '/retrieveAll');
   }
 }
 
