@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     height: '230px',
     border: '1px solid #AAAAAA',
     backgroundRepeat: 'no-repeat',
+    backgroundSize: '100%, 100%',
     backgroundPosition: 'center',
     overflow: 'hidden',
   },
