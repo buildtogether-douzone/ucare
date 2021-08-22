@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const ADMIN_API_BASE_URL = "http://localhost:8080/ucare_backend/api/admin";
+import { ADMIN_API_BASE_URL } from './urlConfig'
 
 class adminService {
   retrieveAll(){

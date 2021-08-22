@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const INFO_API_BASE_URL = "http://localhost:8080/ucare_backend/api/disease";
+import { INFO_API_BASE_URL } from './urlConfig'
 
 class diseaseService {
   create(data){

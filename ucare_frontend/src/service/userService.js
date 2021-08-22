@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const USER_API_BASE_URL = "http://localhost:8080/ucare_backend";
+import { USER_API_BASE_URL } from './urlConfig';
 
 class userService {
 

@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const Receipt_API_BASE_URL = "http://localhost:8080/ucare_backend/api/receipt";
+import { Receipt_API_BASE_URL } from './urlConfig';
 
 class receiptService {
   
