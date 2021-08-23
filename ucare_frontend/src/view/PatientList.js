@@ -186,8 +186,8 @@ const useStyles2 = makeStyles({
 export default function PatientList() {
  const classes = useStyles2();
  const [patient, setPatient] = useState([]);
- const [page, setPage] = React.useState(0);
- const [rowsPerPage, setRowsPerPage] = React.useState(5);
+ const [page, setPage] = useState(0);
+ const [rowsPerPage, setRowsPerPage] = useState(5);
 
  const emptyRows = rowsPerPage - Math.min(rowsPerPage, patient.length - page * rowsPerPage);
 
@@ -206,7 +206,7 @@ export default function PatientList() {
     setPatient(res.data.data);
   })
   .catch( err => {
-    console.log('updateUser() 에러', err);
+    console.log('retrieveAll() 에러', err);
   });
 };
 
@@ -247,12 +247,12 @@ export default function PatientList() {
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={3}
+              colSpan={8}
               count={patient.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
-                inputProps: { 'aria-label': 'patient per page' },
+                inputProps: { 'aria-label': 'rows per page' },
                 native: true,
               }}
               onPageChange={handleChangePage}
