@@ -4,7 +4,7 @@ module.exports = (env) => ({
     mode: "none",
     entry: path.resolve('ucare_frontend/src/index.js'),
     output: {
-        path: path.resolve('ucare_frontend/public'),
+        path: path.resolve('ucare_backend/src/main/webapp/public'),
         filename: 'bundle.js',
         assetModuleFilename: 'assets/images/[hash][ext]'
     },
@@ -35,7 +35,8 @@ module.exports = (env) => ({
         host: "0.0.0.0",
         port: 9999,
         proxy: {
-            '/api': 'http://localhost:8080/'
+            '/api': 'http://localhost:8080/',
+            '/assets/uploads-images': 'http://localhost:8080'
         },
         inline: true,
         liveReload: true,

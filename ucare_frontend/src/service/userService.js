@@ -19,8 +19,8 @@ class userService {
     return axios.post(USER_API_BASE_URL + '/add', user);
   }
 
-  updateUser(user){
-    return axios.put(USER_API_BASE_URL + '/update', user)
+  updateUser(formData){
+    return axios.put(USER_API_BASE_URL + '/update', formData)
   }
 
 }

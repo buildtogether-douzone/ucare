@@ -1,5 +1,6 @@
 package com.douzone.ucare.service;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileUploadService {
-	private static final String SAVE_PATH = "/uploads-ucare/";
+	private static final String SAVE_PATH = new File("src\\main\\webapp\\public\\assets\\uploads-images").getAbsolutePath();
 	private static final String URL_BASE = "/images"; 
 	
 	public String restore(MultipartFile file) {

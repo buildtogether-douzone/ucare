@@ -37,7 +37,8 @@
 			   split_part(email, '@', 2) as email,
 			   address,
 			   birth,
-			   role
+			   role,
+			   image
 		FROM ucare.user
 		WHERE id = #{id }
 	</select>
