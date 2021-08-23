@@ -6,6 +6,9 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => createStyles({
     foot: { 
+        position: 'fixed',
+        bottom: '0',
+        width: '100%',
         paddingTop: '6px',
         backgroundColor: '#F2F2F2',
         height: '30px'
@@ -15,7 +18,7 @@ const useStyles = makeStyles((theme) => createStyles({
 export default function Footer(){
     const classes = useStyles();
     return(
-        <Box >
+        <Box>
             <Typography variant="body2" color="initial" align="center" className={classes.foot}>
                 {'Copyright © '}
                 <Link color="inherit" href="/">

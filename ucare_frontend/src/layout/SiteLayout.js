@@ -9,6 +9,10 @@ import Navigation from './Navigation';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    msOverflowStyle:"none",
+    "&::-webkit-scrollbar": {
+      display:"none !important"
+    }
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
@@ -27,19 +31,19 @@ export default function Dashboard({ children }) {
 
   return (
     <Fragment>
-    <div className={classes.root}>
-      <Header />
-      <Navigation />
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            { children }
-          </Grid>
-        </Container>
-      </main>
-    </div>
-    <Footer/>
+        <div className={classes.root}>
+          <Header />
+          <Navigation />
+          <main className={classes.content}>
+            <div className={classes.appBarSpacer} />
+            <Container maxWidth="lg" className={classes.container}>
+              <Grid container spacing={3}>
+                {children}
+              </Grid>
+            </Container>
+          </main>
+        </div>
+        <Footer />
     </Fragment>
   );
 }
