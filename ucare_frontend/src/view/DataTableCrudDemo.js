@@ -15,6 +15,7 @@ import { InputText } from 'primereact/inputtext';
 import './DataTableDemo.scss';
 import data from './products.json';
 import SiteLayout from '../layout/SiteLayout';
+import  {  saveAs  }  from  'file-saver' ;
 
 export default function DataTableCrudDemo() {
 
@@ -135,7 +136,24 @@ export default function DataTableCrudDemo() {
     }
 
     const exportCSV = () => {
-        dt.current.exportXLSX();
+        // dt.current.exportCSV();
+        import('xlsx').then(xlsx => {
+            const worksheet = xlsx.utils.json_to_sheet(products);
+            const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+            const excelBuffer = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+            saveAsExcelFile(excelBuffer, 'products');
+        });
+    }
+
+    const saveAsExcelFile = (buffer, fileName) => {
+        import('file-saver').then(FileSaver => {
+            let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+            let EXCEL_EXTENSION = '.xlsx';
+            const data = new Blob([buffer], {
+                type: EXCEL_TYPE
+            });
+            FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+        });
     }
 
     const confirmDeleteSelected = () => {
