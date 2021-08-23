@@ -23,6 +23,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import SearchBar from "material-ui-search-bar";
 
 
 const useStyles1 = makeStyles((theme) => ({
@@ -217,7 +218,16 @@ export default function PatientList() {
 
  return (
   <SiteLayout>
+      <SearchBar
+      onChange={() => console.log('onChange')}
+      onRequestSearch={() => console.log('onRequestSearch')}
+      style={{
+        margin: '0 0 10px auto',
+        maxWidth: 800,
+      }}
+    />
   <TableContainer component={Paper}>
+
   <Table className={classes.table} aria-label="collapsible table">
     <TableHead>
       <TableRow>
