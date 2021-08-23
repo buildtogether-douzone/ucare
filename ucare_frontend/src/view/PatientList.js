@@ -26,7 +26,14 @@ export default function PatientList() {
  const [patient, setPatient] = useState([]);
  const [page, setPage] = useState(0);
  const [rowsPerPage, setRowsPerPage] = useState(5);
- const [search, setSearch] = useState();
+ const [search, setSearch] = useState('');
+ const searchableKeys = ['name', 'ssn', 'gender', 'telNo', 'address'];
+
+ const filteredResults = patient.filter((item) =>
+ searchableKeys.some((key) =>
+   item[key].toLowerCase().includes(search.toLowerCase())
+ )
+);
 
  const emptyRows = rowsPerPage - Math.min(rowsPerPage, patient.length - page * rowsPerPage);
 
@@ -57,15 +64,15 @@ export default function PatientList() {
  return (
   <SiteLayout>
       <SearchBar
-      onChange={() => console.log('onChange')}
-      onRequestSearch={() => console.log('onRequestSearch')}
+      value={search}
+      onChange={(value) => setSearch(value)}
+      onCancelSearch={() => setSearch('')}
       style={{
         margin: '0 0 10px auto',
         maxWidth: 800,
       }}
     />
   <TableContainer component={Paper}>
-
   <Table className={classes.table} aria-label="collapsible table">
     <TableHead>
       <TableRow>
@@ -80,8 +87,8 @@ export default function PatientList() {
     </TableHead>
     <TableBody>
     {(rowsPerPage > 0
-            ? patient.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : patient
+            ? filteredResults.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : filteredResults
             ).map((patientList) => (
         <Row key={patientList.patientNo} row={patientList}/>
       ))}
@@ -116,12 +123,3 @@ export default function PatientList() {
  
  );
 }
-
-
-{/* <ul>
-{patient&&patient.map(user => (
-  <li key={user.patientNo}>
-    {user.name}
-  </li>
-))}
-</ul> */}
