@@ -15,6 +15,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
+import { Tab } from '@material-ui/core';
 
 ReactModal.setAppElement('body');
 
@@ -98,16 +99,18 @@ export default function Row(props) {
                 <Table size="small" aria-label="purchases">
                   <TableHead>
                     <TableRow>
+                      <TableCell style={{width: '3%'}}/>
                       <TableCell style={{width: '10%', textAlign: 'center'}}>No</TableCell>
                       <TableCell style={{width: '12%', textAlign: 'center'}}>접수 번호</TableCell>
-                      <TableCell style={{width: '20%', textAlign: 'center'}}>접수 날짜</TableCell>
-                      <TableCell style={{width: '20%', textAlign: 'center'}}>접수 시간</TableCell>
-                      <TableCell style={{width: '48%'}}>접수 메모</TableCell>
+                      <TableCell style={{width: '17%', textAlign: 'center'}}>접수 날짜</TableCell>
+                      <TableCell style={{width: '17%', textAlign: 'center'}}>접수 시간</TableCell>
+                      <TableCell style={{width: '41%'}}>접수 메모</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {receipt.map((receiptList) => (
                       <TableRow key={receiptList.receiptNo} onClick={ () => setModal02IsOpen(true) }>
+                        <TableCell />
                         <TableCell style={{ textAlign: 'center'}} component="th" scope="row">{receiptList.no}</TableCell>
                         <TableCell style={{ textAlign: 'center'}}>{receiptList.receiptNo}</TableCell>
                         <TableCell style={{ textAlign: 'center'}}>{receiptList.receiptDt}</TableCell>
