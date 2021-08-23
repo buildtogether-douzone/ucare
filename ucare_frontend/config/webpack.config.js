@@ -36,7 +36,7 @@ module.exports = (env) => ({
         port: 9999,
         proxy: {
             '/api': 'http://localhost:8080/',
-            '/assets/uploads-images': 'http://localhost:8080'
+            '/ucare_backend/assets/uploads-images': 'http://localhost:8080/'
         },
         inline: true,
         liveReload: true,

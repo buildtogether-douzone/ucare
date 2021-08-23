@@ -80,11 +80,6 @@ export default function Profile() {
     const month = ('0' + (newDate.getMonth() + 1)).slice(-2);
     const year = newDate.getFullYear();
 
-    const path = function getContextPath() {
-      var hostIndex = location.href.indexOf( location.host ) + location.host.length;
-      return location.href.substring( hostIndex, location.href.indexOf('/', hostIndex + 1) );
-    };
-
     userService.fetchUserByID(user)
       .then(res => {
         setName(res.data.data.name);
@@ -94,7 +89,7 @@ export default function Profile() {
         setAddress(res.data.data.address);
         setEmailId(res.data.data.emailId);
         setEmail(res.data.data.email);
-        setPreviewURL(path() + res.data.data.image);
+        setPreviewURL(res.data.data.image);
         res.data.data.birth ? setBirth(res.data.data.birth) : setBirth(`${year}-${month}-${date}`);
       })
       .catch(err => {
