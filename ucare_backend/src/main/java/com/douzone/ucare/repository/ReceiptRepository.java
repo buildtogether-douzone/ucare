@@ -18,8 +18,8 @@ public class ReceiptRepository {
 //		return sqlSession.insert("patient.create", patient);
 //	}
 
-	public List<ReceiptVo> retrieveAll() {
-		return sqlSession.selectList("receipt.retrieveAll");
+	public List<ReceiptVo> retrieveAll(Long patientNo) {
+		return sqlSession.selectList("receipt.retrieveAll", patientNo);
 	}
 
 }

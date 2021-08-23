@@ -14,7 +14,14 @@ public class ReceiptVo {
 	private Long patientNo;
 	private String userId;
 	private String name;
+	private Long no;
 
+	public Long getNo() {
+		return no;
+	}
+	public void setNo(Long no) {
+		this.no = no;
+	}
 	public String getName() {
 		return name;
 	}

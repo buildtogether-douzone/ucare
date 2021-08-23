@@ -21,7 +21,7 @@
 		)
 	</insert>
 	
-	<select id="retrieveAll" resultType="receiptvo" >
+	<select id="retrieveAll" parameterType="Long" resultType="receiptvo" >
 			SELECT
 				A.receipt_no AS receiptNo,
 				B.name AS name,
@@ -33,11 +33,13 @@
 				B.patient_no AS patientNo,
 				A.receipt_dt AS receiptDt,
 				TO_CHAR(receipt_time, 'HH24:MI:SS') as receiptTime,
-				A.remark AS remark
+				A.remark AS remark,
+				(ROW_NUMBER() OVER()) as no
 			FROM
 				ucare.receipt A
 			INNER JOIN ucare.patient B ON
 				A.patient_no = B.patient_no
+			WHERE A.patient_no = #{patientNo }
 			ORDER BY receipt_no DESC
 	</select>
 	

@@ -83,7 +83,7 @@ export default function PatientList() {
             ? patient.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : patient
             ).map((patientList) => (
-        <Row key={patientList.patientNo} row={patientList} no={patientList.patientNo} />
+        <Row key={patientList.patientNo} row={patientList}/>
       ))}
                 {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>

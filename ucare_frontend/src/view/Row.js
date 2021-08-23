@@ -27,10 +27,9 @@ export default function Row(props) {
     const [open, setOpen] = useState(false);
     const classes = useRowStyles();
     const [receipt, setReceipt] = useState([]);
-    let count = 0;
     
     const fetchReceipt =  () => {
-     receiptService.retrieveAll()
+     receiptService.retrieveAll(row.patientNo)
      .then( res => {
        setReceipt(res.data.data);
      })
@@ -40,7 +39,6 @@ export default function Row(props) {
    };
    
     useEffect(() => {
-        console.log(props.no);
       fetchReceipt();
     }, []);
     
@@ -81,15 +79,13 @@ export default function Row(props) {
                   </TableHead>
                   <TableBody>
                     {receipt.map((receiptList) => (
-                        row.patientNo === receiptList.patientNo ? 
                       <TableRow key={receiptList.receiptNo}>
-                        <TableCell component="th" scope="row"></TableCell>
+                        <TableCell component="th" scope="row">{receiptList.no}</TableCell>
                         <TableCell>{receiptList.receiptNo}</TableCell>
                         <TableCell>{receiptList.receiptDt}</TableCell>
                         <TableCell>{receiptList.receiptTime}</TableCell>
                         <TableCell>{receiptList.remark}</TableCell>
                       </TableRow>
-                        : null
                     ))}
                   </TableBody>
                 </Table>

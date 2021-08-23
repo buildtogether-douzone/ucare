@@ -7,8 +7,8 @@ class receiptService {
   //   return axios.post(PATIENT_API_BASE_URL + '/create', data);
   // }
 
-  retrieveAll(){
-    return axios.get(RECEIPT_API_BASE_URL + '/retrieveAll');
+  retrieveAll(patientNo){
+    return axios.get(RECEIPT_API_BASE_URL + '/retrieveAll/' + patientNo);
   }
 }
 

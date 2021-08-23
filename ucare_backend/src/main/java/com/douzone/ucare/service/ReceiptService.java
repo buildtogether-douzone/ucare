@@ -18,7 +18,7 @@ public class ReceiptService {
 //		return PatientRepository.create(patient);
 //	}
 
-	public List<ReceiptVo> retrieveAll() {
-		return ReceiptRepository.retrieveAll();
+	public List<ReceiptVo> retrieveAll(Long patientNo) {
+		return ReceiptRepository.retrieveAll(patientNo);
 	}
 }

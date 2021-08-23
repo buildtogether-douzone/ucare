@@ -27,8 +27,8 @@ public class ReceiptController {
 //	}
 	
 	@CrossOrigin(origins = "*")
-	@GetMapping("/retrieveAll")
-	public JsonResult retrieveAll() {
-		return JsonResult.success(receiptService.retrieveAll());
+	@GetMapping("/retrieveAll/{patientNo}")
+	public JsonResult retrieveAll(@PathVariable Long patientNo) {
+		return JsonResult.success(receiptService.retrieveAll(patientNo));
 	}
 }
