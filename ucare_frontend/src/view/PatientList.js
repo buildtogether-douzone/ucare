@@ -16,13 +16,14 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import patientService from '../service/patientService';
 import receiptService from '../service/receiptService';
+import SiteLayout from '../layout/SiteLayout';
 
 const useRowStyles = makeStyles({
   root: {
     '& > *': {
       borderBottom: 'unset',
     },
-  },
+  }
 });
 
 function Row(props) {
@@ -47,6 +48,7 @@ function Row(props) {
   }, []);
   
   return (
+
     <React.Fragment>
       <TableRow className={classes.root}>
         <TableCell>
@@ -76,17 +78,21 @@ function Row(props) {
                     <TableCell>No</TableCell>
                     <TableCell>접수 번호</TableCell>
                     <TableCell>접수 날짜</TableCell>
+                    <TableCell>접수 시간</TableCell>
                     <TableCell>접수 메모</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {receipt&&receipt.map((receiptList) => (
-                    <TableRow key={receiptList.patientNo}>
-                      <TableCell component="th" scope="row">{receiptList.name}</TableCell>
+                  {receipt&&receipt.map((receiptList, index) => (
+                      row.patientNo === receiptList.patientNo ? 
+                    <TableRow key={receiptList.receiptNo}>
+                      <TableCell component="th" scope="row"></TableCell>
                       <TableCell>{receiptList.receiptNo}</TableCell>
                       <TableCell>{receiptList.receiptDt}</TableCell>
+                      <TableCell>{receiptList.receiptTime}</TableCell>
                       <TableCell>{receiptList.remark}</TableCell>
                     </TableRow>
+                      : null
                   ))}
                 </TableBody>
               </Table>
@@ -95,6 +101,7 @@ function Row(props) {
         </TableCell>
       </TableRow>
     </React.Fragment>
+
   );
 }
 
@@ -117,12 +124,13 @@ export default function PatientList() {
  }, []);
 
  return (
+  <SiteLayout>
   <TableContainer component={Paper}>
   <Table aria-label="collapsible table">
     <TableHead>
       <TableRow>
         <TableCell />
-        <TableCell>No</TableCell>
+        <TableCell>환자 번호</TableCell>
         <TableCell>이름</TableCell>
         <TableCell>성별/나이</TableCell>
         <TableCell>주민등록번호</TableCell>
@@ -137,6 +145,7 @@ export default function PatientList() {
     </TableBody>
   </Table>
 </TableContainer>
+</SiteLayout>
 
  
  );
