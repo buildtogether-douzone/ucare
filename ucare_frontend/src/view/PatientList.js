@@ -27,9 +27,10 @@ export default function PatientList() {
  const [page, setPage] = useState(0);
  const [rowsPerPage, setRowsPerPage] = useState(5);
  const [search, setSearch] = useState('');
+
  const searchableKeys = ['name', 'ssn', 'gender', 'telNo', 'address'];
 
- const filteredResults = patient.filter((item) =>
+ const filteredPatients = patient.filter((item) =>
  searchableKeys.some((key) =>
    item[key].toLowerCase().includes(search.toLowerCase())
  )
@@ -76,25 +77,25 @@ export default function PatientList() {
   <Table className={classes.table} aria-label="collapsible table">
     <TableHead>
       <TableRow>
-        <TableCell />
-        <TableCell>환자 번호</TableCell>
-        <TableCell>이름</TableCell>
-        <TableCell>성별/나이</TableCell>
-        <TableCell>주민등록번호</TableCell>
-        <TableCell>전화번호</TableCell>
+        <TableCell style={{width: '6%'}}/>
+        <TableCell style={{width: '8%', textAlign: 'center'}}>환자 번호</TableCell>
+        <TableCell style={{width: '12%', textAlign: 'center'}}>이름</TableCell>
+        <TableCell style={{width: '12%', textAlign: 'center'}}>성별/나이</TableCell>
+        <TableCell style={{width: '12%', textAlign: 'center'}}>주민등록번호</TableCell>
+        <TableCell style={{width: '20%', textAlign: 'center'}}>전화번호</TableCell>
         <TableCell>주소</TableCell>
       </TableRow>
     </TableHead>
     <TableBody>
     {(rowsPerPage > 0
-            ? filteredResults.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : filteredResults
+            ? filteredPatients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : filteredPatients
             ).map((patientList) => (
         <Row key={patientList.patientNo} row={patientList}/>
       ))}
                 {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
+              <TableCell colSpan={8} />
             </TableRow>
           )}
     </TableBody>
