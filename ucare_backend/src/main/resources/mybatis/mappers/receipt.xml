@@ -32,11 +32,13 @@
 				B.diagnosis_type AS diagnosis,
 				B.patient_no AS patientNo,
 				A.receipt_dt AS receiptDt,
+				TO_CHAR(receipt_time, 'HH24:MI:SS') as receiptTime,
 				A.remark AS remark
 			FROM
 				ucare.receipt A
 			INNER JOIN ucare.patient B ON
-				A.patient_no = B.patient_no;
+				A.patient_no = B.patient_no
+			ORDER BY receipt_no DESC
 	</select>
 	
 	<select id="findUser" parameterType="patientvo" resultType="patientvo">

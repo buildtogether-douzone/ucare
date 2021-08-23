@@ -23,8 +23,13 @@
 	
 	<select id="retrieveAll" resultType="patientvo" >
 		SELECT 
-			patient_no AS patientNo, name, (gender||'/'||age) AS gender, ssn, tel_no AS telNo, address
+			patient_no AS patientNo, 
+			name, (gender||'/'||age) AS gender,
+			SUBSTR(ssn, 1, 8) AS ssn,
+			tel_no AS telNo,
+			SUBSTR(address, 1, 13) AS address
 		FROM ucare.patient
+		ORDER BY patient_no DESC
 	</select>
 	
 	<select id="findUser" parameterType="patientvo" resultType="patientvo">
