@@ -93,8 +93,6 @@ public class ReceiptVo {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
-	
 
 	
 }
