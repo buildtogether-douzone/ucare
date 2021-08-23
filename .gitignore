@@ -3,8 +3,8 @@
 **/.settings/
 **/target/
 **/build/
-**/webapp/assets/uploads-images/
-**/webapp/public
+**/webapp/assets/uploads-images/**
+**/webapp/public/**
 
 **/node_modules
 **/public/assets
