@@ -14,6 +14,7 @@ import Disease from '../view/Disease';
 import Receipt from '../view/Receipt';
 import SearchPatient from '../view/SearchPatient';
 import PatientList from '../view/PatientList';
+import Prime from '../view/DataTableCrudDemo';
 
 export default function Routes() {
     return (
@@ -27,6 +28,7 @@ export default function Routes() {
             <PublicRoute exact path="/adminSetting" component={AdminSetting} />
             <PublicRoute exact path="/medicine" component={Medicine}/>
             <PublicRoute exact path="/disease" component={Disease}/>
+            <PublicRoute exact path="/prime" component={Prime} />
             <PrivateRoute exact path="/receipt" component={Receipt}/>
             <PrivateRoute exact path="/search" component={SearchPatient}/>
             <PrivateRoute exact path="/patientList" component={PatientList}/>
