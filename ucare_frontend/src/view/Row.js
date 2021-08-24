@@ -15,7 +15,13 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
-import { Tab } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 ReactModal.setAppElement('body');
 
@@ -35,7 +41,15 @@ export default function Row(props) {
     const [receipt, setReceipt] = useState([]);
     const [modal01IsOpen, setModal01IsOpen] = useState(false);
     const [modal02IsOpen, setModal02IsOpen] = useState(false);
-    
+    const [DialogOpen, setDialogOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+      setDialogOpen(true);
+    };
+  
+    const handleClose = () => {
+      setDialogOpen(false);
+    };    
     const fetchReceipt =  () => {
      receiptService.retrieveAll(row.patientNo)
      .then( res => {
@@ -59,36 +73,18 @@ export default function Row(props) {
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
           </TableCell>
-          <TableCell component="th" scope="row" onClick={ () => setModal01IsOpen(true) } style={{ textAlign: 'center'}}>
+          <TableCell component="th" scope="row" style={{ textAlign: 'center'}}>
             {row.patientNo}
           </TableCell>
-          <TableCell style={{ textAlign: 'center'}} onClick={ () => setModal01IsOpen(true) } >{row.name}</TableCell>
-          <TableCell style={{ textAlign: 'center'}} onClick={ () => setModal01IsOpen(true) }>{row.gender}</TableCell>
-          <TableCell style={{ textAlign: 'center'}} onClick={ () => setModal01IsOpen(true) }>{row.ssn}</TableCell>
-          <TableCell style={{ textAlign: 'center'}} onClick={ () => setModal01IsOpen(true) }>{row.telNo}</TableCell>
-          <TableCell onClick={ () => setModal01IsOpen(true) }>{row.address}</TableCell>
+          <TableCell style={{ textAlign: 'center'}}>{row.name}</TableCell>
+          <TableCell style={{ textAlign: 'center'}}>{row.gender}</TableCell>
+          <TableCell style={{ textAlign: 'center'}}>{row.ssn}</TableCell>
+          <TableCell style={{ textAlign: 'center'}}>{row.telNo}</TableCell>
+          <TableCell>{row.address}</TableCell>
+          <TableCell style={{ textAlign: 'center'}}>        <Button variant="outlined" size="small" color="primary" className={classes.margin}>
+          접수
+        </Button></TableCell>
         </TableRow>
-        <Modal
-                isOpen={modal01IsOpen}
-                onRequestClose={ () => setModal01IsOpen(false) }
-                shouldCloseOnOverlayClick={ true }
-                className={ styles.Modal }
-                overlayClassName={ styles.Overlay }
-                style={ {content: {width: 350}} }
-                contentLabel="patient">
-                <h1>비밀번호입력</h1>
-                <div>
-
-                        <label>작성시 입력했던 비밀번호를 입력하세요.</label>
-                        <br/><br/>
-                        <input type='text' />
-                </div>
-                <div className={ styles['modal-dialog-buttons'] }>
-                    <button>확인</button>
-                    <button onClick={ () => setModal01IsOpen(false) }>취소</button>
-                </div>
-            </Modal>
-
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
             <Collapse in={open} timeout="auto" unmountOnExit>
@@ -109,7 +105,7 @@ export default function Row(props) {
                   </TableHead>
                   <TableBody>
                     {receipt.map((receiptList) => (
-                      <TableRow key={receiptList.receiptNo} onClick={ () => setModal02IsOpen(true) }>
+                      <TableRow key={receiptList.receiptNo} onClick={ handleClickOpen }>
                         <TableCell />
                         <TableCell style={{ textAlign: 'center'}} component="th" scope="row">{receiptList.no}</TableCell>
                         <TableCell style={{ textAlign: 'center'}}>{receiptList.receiptNo}</TableCell>
@@ -118,26 +114,31 @@ export default function Row(props) {
                         <TableCell>{receiptList.remark}</TableCell>
                       </TableRow>
                     ))}
-                            <Modal
-                isOpen={modal02IsOpen}
-                onRequestClose={ () => setModal02IsOpen(false) }
-                shouldCloseOnOverlayClick={ true }
-                className={ styles.Modal }
-                overlayClassName={ styles.Overlay }
-                style={ {content: {width: 350}} }
-                contentLabel="patient">
-                <h1>비밀번호입력</h1>
-                <div>
-
-                        <label>작성시 입력했던 비밀번호를 입력하세요.</label>
-                        <br/><br/>
-                        <input type='text' />
-                </div>
-                <div className={ styles['modal-dialog-buttons'] }>
-                    <button>확인</button>
-                    <button onClick={ () => setModal02IsOpen(false) }>취소</button>
-                </div>
-            </Modal>
+      <Dialog open={DialogOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To subscribe to this website, please enter your email address here. We will send updates
+            occasionally.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Email Address"
+            type="email"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleClose} color="primary">
+            Subscribe
+          </Button>
+        </DialogActions>
+      </Dialog>
                   </TableBody>
                 </Table>
               </Box>
