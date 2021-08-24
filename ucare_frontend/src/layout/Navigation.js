@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    backgroundColor: '#F5F5F5'
   },
   drawerPaperClose: {
     overflowX: 'hidden',
@@ -39,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       width: theme.spacing(9),
     },
+    backgroundColor: '#F5F5F5'
   }
 }));
 

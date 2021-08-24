@@ -81,5 +81,11 @@ export const adminListItems = (
       </ListItemIcon>
       <ListItemText primary="권한 관리" />
     </ListItem>
+    <ListItem button>
+      <ListItemIcon>
+        <ShoppingCartIcon />
+      </ListItemIcon>
+      <ListItemText primary="병원 정보" />
+    </ListItem>
   </div>
 );

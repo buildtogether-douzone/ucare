@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    backgroundColor: "#1C91FB"
   },
   appBarShift: {
     display: 'flex',
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    backgroundColor: "#1C91FB"
   },
   menuButton: {
     marginRight: 36,
