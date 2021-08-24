@@ -25,7 +25,7 @@ export default function PatientList() {
  const classes = useStyles2();
  const [patient, setPatient] = useState([]);
  const [page, setPage] = useState(0);
- const [rowsPerPage, setRowsPerPage] = useState(5);
+ const [rowsPerPage, setRowsPerPage] = useState(10);
  const [search, setSearch] = useState('');
 
  const searchableKeys = ['name', 'ssn', 'gender', 'telNo', 'address'];
@@ -82,8 +82,9 @@ export default function PatientList() {
         <TableCell style={{width: '12%', textAlign: 'center'}}>이름</TableCell>
         <TableCell style={{width: '12%', textAlign: 'center'}}>성별/나이</TableCell>
         <TableCell style={{width: '12%', textAlign: 'center'}}>주민등록번호</TableCell>
-        <TableCell style={{width: '20%', textAlign: 'center'}}>전화번호</TableCell>
-        <TableCell style={{width: '30%'}}>주소</TableCell>
+        <TableCell style={{width: '17%', textAlign: 'center'}}>전화번호</TableCell>
+        <TableCell style={{width: '27%'}}>주소</TableCell>
+        <TableCell style={{width: '6%', textAlign: 'center'}}>접수</TableCell>
       </TableRow>
     </TableHead>
     <TableBody>
