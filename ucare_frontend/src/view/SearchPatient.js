@@ -70,8 +70,8 @@ export default function SearchPatient() {
     patientService.retrieveAll()
       .then( res => {
         console.log('success!!');
-        console.log(res.data.data);
-        setData(res.data.data);
+        console.log(res.data);
+        setData(res.data);
     })
       .catch(err => {
         console.log('retrievePatient() Error!', err);

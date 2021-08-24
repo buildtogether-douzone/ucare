@@ -1,6 +1,8 @@
 package com.douzone.ucare.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -8,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.douzone.ucare.dto.JsonResult;
 import com.douzone.ucare.service.AdminService;
 import com.douzone.ucare.vo.UserVo;
 
@@ -21,13 +22,13 @@ public class UcareAdminController {
 	
 	@CrossOrigin(origins = "*")
 	@GetMapping("/retrieveAll")
-	public JsonResult retrieveAll() {
-		return JsonResult.success(adminService.retrieveAll());
+	public ResponseEntity<?> retrieveAll() {
+		return new ResponseEntity<>(adminService.retrieveAll(), HttpStatus.OK);
 	}
 	
 	@CrossOrigin(origins = "*")
 	@PutMapping("/update")
-	public JsonResult update(@RequestBody UserVo data) {
-		return JsonResult.success(adminService.update(data));
+	public ResponseEntity<?> update(@RequestBody UserVo data) {
+		return new ResponseEntity<>(adminService.update(data), HttpStatus.OK);
 	}
 }

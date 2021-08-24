@@ -1,6 +1,8 @@
 package com.douzone.ucare.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.douzone.ucare.dto.JsonResult;
 import com.douzone.ucare.service.DiseaseService;
 import com.douzone.ucare.service.FileUploadService;
 import com.douzone.ucare.vo.DiseaseVo;
@@ -28,25 +29,25 @@ public class DiseaseController {
 	
 	@CrossOrigin(origins = "*")
 	@PostMapping("/create")
-	public JsonResult addPatient(@RequestBody DiseaseVo data) {
-		return JsonResult.success(diseaseService.create(data));
+	public ResponseEntity<?> addPatient(@RequestBody DiseaseVo data) {
+		return new ResponseEntity<>(diseaseService.create(data), HttpStatus.OK);
 	}
 	
 	@CrossOrigin(origins = "*")
 	@GetMapping("/retrieveAll")
-	public JsonResult retrieveAll() {
-		return JsonResult.success(diseaseService.retrieveAll());
+	public ResponseEntity<?> retrieveAll() {
+		return new ResponseEntity<>(diseaseService.retrieveAll(), HttpStatus.OK);
 	}
 	
 	@CrossOrigin(origins = "*")
 	@PutMapping("/update")
-	public JsonResult update(@RequestBody DiseaseVo data) {
-		return JsonResult.success(diseaseService.update(data));
+	public ResponseEntity<?> update(@RequestBody DiseaseVo data) {
+		return new ResponseEntity<>(diseaseService.update(data), HttpStatus.OK);
 	}
 	
 	@CrossOrigin(origins = "*")
 	@DeleteMapping("/delete/{diseaseNo}")
-	public JsonResult delete(@PathVariable int diseaseNo) {
-		return JsonResult.success(diseaseService.delete(diseaseNo));
+	public ResponseEntity<?> delete(@PathVariable int diseaseNo) {
+		return new ResponseEntity<>(diseaseService.delete(diseaseNo), HttpStatus.OK);
 	}
 }

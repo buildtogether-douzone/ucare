@@ -50,7 +50,7 @@ export default function PatientList() {
  const fetchPatient =  () => {
   patientService.retrieveAll()
   .then( res => {
-    setPatient(res.data.data);
+    setPatient(res.data);
   })
   .catch( err => {
     console.log('retrieveAll() 에러', err);

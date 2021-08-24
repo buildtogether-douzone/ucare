@@ -39,7 +39,7 @@ export default function Row(props) {
     const fetchReceipt =  () => {
      receiptService.retrieveAll(row.patientNo)
      .then( res => {
-       setReceipt(res.data.data);
+       setReceipt(res.data);
      })
      .catch( err => {
        console.log('retrieveAll() 에러', err);

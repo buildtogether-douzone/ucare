@@ -72,7 +72,7 @@ export default function AdminSetting() {
     adminService.retrieveAll()
       .then( res => {
         console.log('success!!');
-        setData(res.data.data);
+        setData(res.data);
       })
       .catch(err => {
         console.log('retrieveAll() Error!', err);

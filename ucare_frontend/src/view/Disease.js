@@ -68,7 +68,7 @@ export default function Disease() {
     diseaseService.retrieveAll()
       .then( res => {
         console.log('success!!');
-        setData(res.data.data);
+        setData(res.data);
     })
       .catch(err => {
         console.log('retrieveDisease() Error!', err);

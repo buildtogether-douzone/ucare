@@ -82,15 +82,15 @@ export default function Profile() {
 
     userService.fetchUserByID(user)
       .then(res => {
-        setName(res.data.data.name);
-        setPassword(res.data.data.password);
-        setConfirmPassword(res.data.data.password);
-        setTelNo(res.data.data.telNo);
-        setAddress(res.data.data.address);
-        setEmailId(res.data.data.emailId);
-        setEmail(res.data.data.email);
-        setPreviewURL(res.data.data.image);
-        res.data.data.birth ? setBirth(res.data.data.birth) : setBirth(`${year}-${month}-${date}`);
+        setName(res.data.name);
+        setPassword(res.data.password);
+        setConfirmPassword(res.data.password);
+        setTelNo(res.data.telNo);
+        setAddress(res.data.address);
+        setEmailId(res.data.emailId);
+        setEmail(res.data.email);
+        setPreviewURL(res.data.image);
+        res.data.birth ? setBirth(res.data.birth) : setBirth(`${year}-${month}-${date}`);
       })
       .catch(err => {
         console.log('updateUser() 에러', err);

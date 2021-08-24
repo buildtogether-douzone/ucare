@@ -75,17 +75,10 @@ export default function SignInSide({ history }) {
       id: id,
       password: password
     }
-    userService.fetchUserByID(user)
-      .then( res => {
-        sessionStorage.setItem('role', res.data.data.role);
-      })
-      .catch( err => {
-        console.log('get Role 에러', err);
-      })
 
     userService.fetchUserByID(user)
     .then( res => {
-      sessionStorage.setItem('role', res.data.data.role);
+      sessionStorage.setItem('role', res.data.role);
     })
     .catch( err => {
       console.log('get Role 에러', err);
@@ -93,7 +86,7 @@ export default function SignInSide({ history }) {
 
     userService.login(user)
     .then( res => {
-      if(res.data.data) {
+      if(res.data) {
         console.log(user.id + '님이 성공적으로 로그인하였습니다.');
         sessionStorage.setItem('user', id);
         history.push('/home');

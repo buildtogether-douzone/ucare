@@ -1,6 +1,8 @@
 package com.douzone.ucare.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,13 +24,13 @@ public class ReceiptController {
 	
 //	@CrossOrigin(origins = "*")
 //	@PostMapping("/create")
-//	public JsonResult addPatient(@RequestBody PatientVo patient) {
-//		return JsonResult.success(patientService.create(patient));
+//	public ResponseEntity<?> addPatient(@RequestBody PatientVo patient) {
+//		return new ResponseEntity<>(patientService.create(patient), HttpStatus.OK);
 //	}
 	
 	@CrossOrigin(origins = "*")
 	@GetMapping("/retrieveAll/{patientNo}")
-	public JsonResult retrieveAll(@PathVariable Long patientNo) {
-		return JsonResult.success(receiptService.retrieveAll(patientNo));
+	public ResponseEntity<?> retrieveAll(@PathVariable Long patientNo) {
+		return new ResponseEntity<>(receiptService.retrieveAll(patientNo), HttpStatus.OK);
 	}
 }
