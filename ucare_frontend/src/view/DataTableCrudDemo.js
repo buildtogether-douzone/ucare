@@ -12,14 +12,13 @@ import { RadioButton } from 'primereact/radiobutton';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
-import './DataTableDemo.scss';
+import '../assets/scss/DataTableDemo.scss';
 import data from './products.json';
 import SiteLayout from '../layout/SiteLayout';
-import  {  saveAs  }  from  'file-saver' ;
 
 export default function DataTableCrudDemo() {
 
-    let emptyProduct = {
+    let emptyItem = {
         id: null,
         name: '',
         image: null,
@@ -31,12 +30,12 @@ export default function DataTableCrudDemo() {
         inventoryStatus: 'INSTOCK'
     };
 
-    const [products, setProducts] = useState(null);
-    const [productDialog, setProductDialog] = useState(false);
-    const [deleteProductDialog, setDeleteProductDialog] = useState(false);
-    const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
-    const [product, setProduct] = useState(emptyProduct);
-    const [selectedProducts, setSelectedProducts] = useState(null);
+    const [items, setItems] = useState(null);
+    const [itemDialog, setItemDialog] = useState(false);
+    const [deleteItemDialog, setDeleteItemDialog] = useState(false);
+    const [deleteItemsDialog, setDeleteItemsDialog] = useState(false);
+    const [item, setItem] = useState(emptyItem);
+    const [selectedItems, setSelectedItems] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
     const toast = useRef(null);
@@ -45,79 +44,79 @@ export default function DataTableCrudDemo() {
 
     useEffect(() => {
         // productService.getProducts().then(data => setProducts(data));
-        setProducts(data.data);
+        setItems(data.data);
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const formatCurrency = (value) => {
-        return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        return value.toLocaleString('en-US', { style: 'currency', currency: 'WON' });
     }
 
     const openNew = () => {
-        setProduct(emptyProduct);
+        setItem(emptyItem);
         setSubmitted(false);
-        setProductDialog(true);
+        setItemDialog(true);
     }
 
     const hideDialog = () => {
         setSubmitted(false);
-        setProductDialog(false);
+        setItemDialog(false);
     }
 
-    const hideDeleteProductDialog = () => {
-        setDeleteProductDialog(false);
+    const hideDeleteItemDialog = () => {
+        setDeleteItemDialog(false);
     }
 
-    const hideDeleteProductsDialog = () => {
-        setDeleteProductsDialog(false);
+    const hideDeleteItemsDialog = () => {
+        setDeleteItemsDialog(false);
     }
 
-    const saveProduct = () => {
+    const saveItem = () => {
         setSubmitted(true);
 
-        if (product.name.trim()) {
-            let _products = [...products];
-            let _product = {...product};
-            if (product.id) {
-                const index = findIndexById(product.id);
+        if (item.name.trim()) {
+            let _items = [...items];
+            let _item = {...item};
+            if (item.id) {
+                const index = findIndexById(item.id);
 
-                _products[index] = _product;
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+                _items[index] = _item;
+                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Updated', life: 3000 });
             }
             else {
-                _product.id = createId();
-                _product.image = 'product-placeholder.svg';
-                _products.push(_product);
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+                _items.id = createId();
+                _items.image = 'item-placeholder.svg';
+                _items.push(_items);
+                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Created', life: 3000 });
             }
 
-            setProducts(_products);
-            setProductDialog(false);
-            setProduct(emptyProduct);
+            setItems(_items);
+            setItemDialog(false);
+            setItem(emptyItem);
         }
     }
 
-    const editProduct = (product) => {
-        setProduct({...product});
-        setProductDialog(true);
+    const editItem = (item) => {
+        setItem({...item});
+        setItemDialog(true);
     }
 
-    const confirmDeleteProduct = (product) => {
-        setProduct(product);
-        setDeleteProductDialog(true);
+    const confirmDeleteItem = (item) => {
+        setItem(item);
+        setDeleteItemDialog(true);
     }
 
-    const deleteProduct = () => {
-        let _products = products.filter(val => val.id !== product.id);
-        setProduct(_products);
-        setDeleteProductDialog(false);
-        setProduct(emptyProduct);
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+    const deleteItem = () => {
+        let _items = items.filter(val => val.id !== item.id);
+        setItem(_items);
+        setDeleteItemDialog(false);
+        setItem(emptyItem);
+        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
     }
 
     const findIndexById = (id) => {
         let index = -1;
-        for (let i = 0; i < products.length; i++) {
-            if (products[i].id === id) {
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].id === id) {
                 index = i;
                 break;
             }
@@ -138,10 +137,10 @@ export default function DataTableCrudDemo() {
     const exportCSV = () => {
         // dt.current.exportCSV();
         import('xlsx').then(xlsx => {
-            const worksheet = xlsx.utils.json_to_sheet(products);
+            const worksheet = xlsx.utils.json_to_sheet(items);
             const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
             const excelBuffer = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-            saveAsExcelFile(excelBuffer, 'products');
+            saveAsExcelFile(excelBuffer, 'items');
         });
     }
 
@@ -157,44 +156,44 @@ export default function DataTableCrudDemo() {
     }
 
     const confirmDeleteSelected = () => {
-        setDeleteProductsDialog(true);
+        setDeleteItemsDialog(true);
     }
 
-    const deleteSelectedProducts = () => {
-        let _products = products.filter(val => !selectedProducts.includes(val));
-        setProducts(_products);
-        setDeleteProductsDialog(false);
-        setSelectedProducts(null);
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
+    const deleteSelectedItems = () => {
+        let _items = items.filter(val => !selectedItems.includes(val));
+        setItems(_items);
+        setDeleteItemsDialog(false);
+        selectedItems(null);
+        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
     }
 
     const onCategoryChange = (e) => {
-        let _product = {...product};
-        _product['category'] = e.value;
-        setProduct(_product);
+        let _item = {...item};
+        _item['category'] = e.value;
+        setItem(_item);
     }
 
     const onInputChange = (e, name) => {
         const val = (e.target && e.target.value) || '';
-        let _product = {...product};
-        _product[`${name}`] = val;
+        let _item = {...item};
+        _item[`${name}`] = val;
 
-        setProduct(_product);
+        setItem(_item);
     }
 
     const onInputNumberChange = (e, name) => {
         const val = e.value || 0;
-        let _product = {...product};
-        _product[`${name}`] = val;
+        let _item = {...item};
+        _item[`${name}`] = val;
 
-        setProduct(_product);
+        setItem(_item);
     }
 
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
                 <Button label="New" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={openNew} />
-                <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} />
+                <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedItems || !selectedItems.length} />
             </React.Fragment>
         )
     }
@@ -209,7 +208,7 @@ export default function DataTableCrudDemo() {
     }
 
     const imageBodyTemplate = (rowData) => {
-        return <img src={`showcase/demo/images/product/${rowData.image}`} onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={rowData.image} className="product-image" />
+        return <img src={``} onError={(e) => e.target.src=''} alt={rowData.image} className="product-image" />
     }
 
     const priceBodyTemplate = (rowData) => {
@@ -221,43 +220,43 @@ export default function DataTableCrudDemo() {
     }
 
     const statusBodyTemplate = (rowData) => {
-        return <span className={`product-badge status-${rowData.inventoryStatus.toLowerCase()}`}>{rowData.inventoryStatus}</span>;
+        return <span className={`item-badge status-${rowData.inventoryStatus.toLowerCase()}`}>{rowData.inventoryStatus}</span>;
     }
 
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" onClick={() => editProduct(rowData)} />
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteProduct(rowData)} />
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" onClick={() => editItem(rowData)} />
+                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteItem(rowData)} />
             </React.Fragment>
         );
     }
 
     const header = (
         <div className="table-header">
-            <h5 className="p-m-0">Manage Products</h5>
+            <h5 className="p-m-0">Manage Items</h5>
             <span className="p-input-icon-left">
                 <i className="pi pi-search" />
                 <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
             </span>
         </div>
     );
-    const productDialogFooter = (
+    const itemDialogFooter = (
         <React.Fragment>
             <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveProduct} />
+            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveItem} />
         </React.Fragment>
     );
-    const deleteProductDialogFooter = (
+    const deleteItemDialogFooter = (
         <React.Fragment>
-            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProductDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteProduct} />
+            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
+            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteItem} />
         </React.Fragment>
     );
-    const deleteProductsDialogFooter = (
+    const deleteItemsDialogFooter = (
         <React.Fragment>
-            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProductsDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedProducts} />
+            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemsDialog} />
+            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedItems} />
         </React.Fragment>
     );
 
@@ -269,54 +268,52 @@ export default function DataTableCrudDemo() {
             <div className="card">
                 <Toolbar className="p-mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
 
-                <DataTable ref={dt} value={products} selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)}
+                <DataTable ref={dt} value={items} selection={selectedItems} onSelectionChange={(e) => setSelectedItems(e.value)}
                     dataKey="id" paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
                     globalFilter={globalFilter}
                     header={header}>
 
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column field="code" header="Code" sortable></Column>
-                    <Column field="name" header="Name" sortable></Column>
-                    <Column header="Image" body={imageBodyTemplate}></Column>
-                    <Column field="price" header="Price" body={priceBodyTemplate} sortable></Column>
-                    <Column field="category" header="Category" sortable></Column>
-                    <Column field="rating" header="Reviews" body={ratingBodyTemplate} sortable></Column>
-                    <Column field="inventoryStatus" header="Status" body={statusBodyTemplate} sortable></Column>
+                    <Column field="code" header="약품명" sortable></Column>
+                    <Column field="name" header="임상증상" sortable></Column>
+                    <Column field="price" header="Generic" body={priceBodyTemplate} sortable></Column>
+                    <Column field="category" header="가격" sortable></Column>
+                    <Column field="rating" header="제조사" body={ratingBodyTemplate} sortable></Column>
                     <Column body={actionBodyTemplate}></Column>
                 </DataTable>
             </div>
 
-            <Dialog visible={productDialog} style={{ width: '450px' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-                {product.image && <img src={`showcase/demo/images/product/${product.image}`} onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={product.image} className="product-image" />}
+            <Dialog visible={itemDialog} style={{ width: '450px' }} header="Item Details" modal className="p-fluid" footer={itemDialogFooter} onHide={hideDialog}>
+                {item.image && <img src={`showcase/demo/images/product/${item.image}`} onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={product.image} className="product-image" />}
                 <div className="p-field">
                     <label htmlFor="name">Name</label>
-                    <InputText id="name" value={product.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
-                    {submitted && !product.name && <small className="p-error">Name is required.</small>}
+                    <InputText id="name" value={item.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !item.name })} />
+                    {submitted && !item.name && <small className="p-error">Name is required.</small>}
                 </div>
                 <div className="p-field">
                     <label htmlFor="description">Description</label>
-                    <InputTextarea id="description" value={product.description} onChange={(e) => onInputChange(e, 'description')} required rows={3} cols={20} />
+                    <InputTextarea id="description" value={item.description} onChange={(e) => onInputChange(e, 'description')} required rows={3} cols={20} />
                 </div>
 
                 <div className="p-field">
                     <label className="p-mb-3">Category</label>
                     <div className="p-formgrid p-grid">
                         <div className="p-field-radiobutton p-col-6">
-                            <RadioButton inputId="category1" name="category" value="Accessories" onChange={onCategoryChange} checked={product.category === 'Accessories'} />
+                            <RadioButton inputId="category1" name="category" value="Accessories" onChange={onCategoryChange} checked={item.category === 'Accessories'} />
                             <label htmlFor="category1">Accessories</label>
                         </div>
                         <div className="p-field-radiobutton p-col-6">
-                            <RadioButton inputId="category2" name="category" value="Clothing" onChange={onCategoryChange} checked={product.category === 'Clothing'} />
+                            <RadioButton inputId="category2" name="category" value="Clothing" onChange={onCategoryChange} checked={item.category === 'Clothing'} />
                             <label htmlFor="category2">Clothing</label>
                         </div>
                         <div className="p-field-radiobutton p-col-6">
-                            <RadioButton inputId="category3" name="category" value="Electronics" onChange={onCategoryChange} checked={product.category === 'Electronics'} />
+                            <RadioButton inputId="category3" name="category" value="Electronics" onChange={onCategoryChange} checked={item.category === 'Electronics'} />
                             <label htmlFor="category3">Electronics</label>
                         </div>
                         <div className="p-field-radiobutton p-col-6">
-                            <RadioButton inputId="category4" name="category" value="Fitness" onChange={onCategoryChange} checked={product.category === 'Fitness'} />
+                            <RadioButton inputId="category4" name="category" value="Fitness" onChange={onCategoryChange} checked={item.category === 'Fitness'} />
                             <label htmlFor="category4">Fitness</label>
                         </div>
                     </div>
@@ -325,26 +322,26 @@ export default function DataTableCrudDemo() {
                 <div className="p-formgrid p-grid">
                     <div className="p-field p-col">
                         <label htmlFor="price">Price</label>
-                        <InputNumber id="price" value={product.price} onValueChange={(e) => onInputNumberChange(e, 'price')} mode="currency" currency="USD" locale="en-US" />
+                        <InputNumber id="price" value={item.price} onValueChange={(e) => onInputNumberChange(e, 'price')} mode="currency" currency="USD" locale="en-US" />
                     </div>
                     <div className="p-field p-col">
                         <label htmlFor="quantity">Quantity</label>
-                        <InputNumber id="quantity" value={product.quantity} onValueChange={(e) => onInputNumberChange(e, 'quantity')} integeronly />
+                        <InputNumber id="quantity" value={item.quantity} onValueChange={(e) => onInputNumberChange(e, 'quantity')} integeronly />
                     </div>
                 </div>
             </Dialog>
 
-            <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
+            <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {product && <span>Are you sure you want to delete <b>{product.name}</b>?</span>}
+                    {item && <span>Are you sure you want to delete <b>{item.name}</b>?</span>}
                 </div>
             </Dialog>
 
-            <Dialog visible={deleteProductsDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>
+            <Dialog visible={deleteItemsDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemsDialogFooter} onHide={hideDeleteItemsDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {product && <span>Are you sure you want to delete the selected products?</span>}
+                    {item && <span>Are you sure you want to delete the selected items?</span>}
                 </div>
             </Dialog>
         </div>
