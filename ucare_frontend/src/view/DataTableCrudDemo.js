@@ -5,7 +5,6 @@ import { Column } from 'primereact/column';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
 import { FileUpload } from 'primereact/fileupload';
-import { Rating } from 'primereact/rating';
 import { Toolbar } from 'primereact/toolbar';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { RadioButton } from 'primereact/radiobutton';
@@ -19,15 +18,12 @@ import SiteLayout from '../layout/SiteLayout';
 export default function DataTableCrudDemo() {
 
     let emptyItem = {
-        id: null,
+        no: null,
         name: '',
-        image: null,
-        description: '',
-        category: null,
+        symptom: '',
+        generic: '',
         price: 0,
-        quantity: 0,
-        rating: 0,
-        inventoryStatus: 'INSTOCK'
+        maker: ''
     };
 
     const [items, setItems] = useState(null);
@@ -48,7 +44,7 @@ export default function DataTableCrudDemo() {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const formatCurrency = (value) => {
-        return value.toLocaleString('en-US', { style: 'currency', currency: 'WON' });
+        return value.toLocaleString("ko-KR", { style: 'currency', currency: 'KRW'}); 
     }
 
     const openNew = () => {
@@ -76,14 +72,14 @@ export default function DataTableCrudDemo() {
         if (item.name.trim()) {
             let _items = [...items];
             let _item = {...item};
-            if (item.id) {
-                const index = findIndexById(item.id);
+            if (item.no) {
+                const index = findIndexByNo(item.no);
 
                 _items[index] = _item;
                 toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Updated', life: 3000 });
             }
             else {
-                _items.id = createId();
+                _items.no = createId();
                 _items.image = 'item-placeholder.svg';
                 _items.push(_items);
                 toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Created', life: 3000 });
@@ -113,10 +109,10 @@ export default function DataTableCrudDemo() {
         toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
     }
 
-    const findIndexById = (id) => {
+    const findIndexByNo = (no) => {
         let index = -1;
         for (let i = 0; i < items.length; i++) {
-            if (items[i].id === id) {
+            if (items[i].no === no) {
                 index = i;
                 break;
             }
@@ -134,8 +130,38 @@ export default function DataTableCrudDemo() {
         return id;
     }
 
-    const exportCSV = () => {
-        // dt.current.exportCSV();
+    const importExcel = (e) => {
+        const file = e.files[0];
+
+        import('xlsx').then(xlsx => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const wb = xlsx.read(e.target.result, { type: 'array' });
+                const wsname = wb.SheetNames[0];
+                const ws = wb.Sheets[wsname];
+                const data = xlsx.utils.sheet_to_json(ws, { header: 1 });
+
+                // Prepare DataTable
+                const cols = data[0];
+                data.shift();
+
+                let _importedCols = cols.map(col => ({ field: col, header: toCapitalize(col) }));
+                let _importedData = data.map(d => {
+                    return cols.reduce((obj, c, i) => {
+                        obj[c] = d[i];
+                        return obj;
+                    }, {});
+                });
+
+                setImportedCols(_importedCols);
+                setImportedData(_importedData);
+            };
+
+            reader.readAsArrayBuffer(file);
+        });
+    }
+
+    const exportExcel = () => {
         import('xlsx').then(xlsx => {
             const worksheet = xlsx.utils.json_to_sheet(items);
             const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
@@ -167,12 +193,6 @@ export default function DataTableCrudDemo() {
         toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
     }
 
-    const onCategoryChange = (e) => {
-        let _item = {...item};
-        _item['category'] = e.value;
-        setItem(_item);
-    }
-
     const onInputChange = (e, name) => {
         const val = (e.target && e.target.value) || '';
         let _item = {...item};
@@ -192,8 +212,8 @@ export default function DataTableCrudDemo() {
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
-                <Button label="New" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={openNew} />
-                <Button label="Delete" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedItems || !selectedItems.length} />
+                <Button label="입력" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={openNew} />
+                <Button label="삭제" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedItems || !selectedItems.length} />
             </React.Fragment>
         )
     }
@@ -201,26 +221,14 @@ export default function DataTableCrudDemo() {
     const rightToolbarTemplate = () => {
         return (
             <React.Fragment>
-                <FileUpload mode="basic" accept="image/*" maxFileSize={1000000} label="Import" chooseLabel="Import" className="p-mr-2 p-d-inline-block" />
-                <Button label="Export" icon="pi pi-upload" className="p-button-help" onClick={exportCSV} />
+                <FileUpload mode="basic" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" label="Import" chooseLabel="엑셀 Import" className="p-mr-2 p-d-inline-block" onUpload={importExcel} />
+                <Button label="엑셀 Export" icon="pi pi-upload" className="p-button-help" onClick={exportExcel} />
             </React.Fragment>
         )
     }
 
-    const imageBodyTemplate = (rowData) => {
-        return <img src={``} onError={(e) => e.target.src=''} alt={rowData.image} className="product-image" />
-    }
-
     const priceBodyTemplate = (rowData) => {
         return formatCurrency(rowData.price);
-    }
-
-    const ratingBodyTemplate = (rowData) => {
-        return <Rating value={rowData.rating} readOnly cancel={false} />;
-    }
-
-    const statusBodyTemplate = (rowData) => {
-        return <span className={`item-badge status-${rowData.inventoryStatus.toLowerCase()}`}>{rowData.inventoryStatus}</span>;
     }
 
     const actionBodyTemplate = (rowData) => {
@@ -243,20 +251,20 @@ export default function DataTableCrudDemo() {
     );
     const itemDialogFooter = (
         <React.Fragment>
-            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveItem} />
+            <Button label="취소" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+            <Button label="저장" icon="pi pi-check" className="p-button-text" onClick={saveItem} />
         </React.Fragment>
     );
     const deleteItemDialogFooter = (
         <React.Fragment>
-            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteItem} />
+            <Button label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
+            <Button label="예" icon="pi pi-check" className="p-button-text" onClick={deleteItem} />
         </React.Fragment>
     );
     const deleteItemsDialogFooter = (
         <React.Fragment>
-            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemsDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedItems} />
+            <Button label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemsDialog} />
+            <Button label="예" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedItems} />
         </React.Fragment>
     );
 
@@ -269,64 +277,41 @@ export default function DataTableCrudDemo() {
                 <Toolbar className="p-mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
 
                 <DataTable ref={dt} value={items} selection={selectedItems} onSelectionChange={(e) => setSelectedItems(e.value)}
-                    dataKey="id" paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
+                    dataKey="no" paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
                     globalFilter={globalFilter}
                     header={header}>
 
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column field="code" header="약품명" sortable></Column>
-                    <Column field="name" header="임상증상" sortable></Column>
-                    <Column field="price" header="Generic" body={priceBodyTemplate} sortable></Column>
-                    <Column field="category" header="가격" sortable></Column>
-                    <Column field="rating" header="제조사" body={ratingBodyTemplate} sortable></Column>
+                    <Column field="name" header="약품명" sortable></Column>
+                    <Column field="symptom" header="임상증상" sortable></Column>
+                    <Column field="generic" header="Generic" sortable></Column>
+                    <Column field="price" header="가격" body={priceBodyTemplate} sortable></Column>
+                    <Column field="maker" header="제조사" sortable></Column>
                     <Column body={actionBodyTemplate}></Column>
                 </DataTable>
             </div>
 
-            <Dialog visible={itemDialog} style={{ width: '450px' }} header="Item Details" modal className="p-fluid" footer={itemDialogFooter} onHide={hideDialog}>
-                {item.image && <img src={`showcase/demo/images/product/${item.image}`} onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={product.image} className="product-image" />}
+            <Dialog visible={itemDialog} style={{ width: '450px' }} header="약품 등록" modal className="p-fluid" footer={itemDialogFooter} onHide={hideDialog}>
                 <div className="p-field">
-                    <label htmlFor="name">Name</label>
+                    <label htmlFor="name">약품명</label>
                     <InputText id="name" value={item.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !item.name })} />
                     {submitted && !item.name && <small className="p-error">Name is required.</small>}
                 </div>
                 <div className="p-field">
-                    <label htmlFor="description">Description</label>
-                    <InputTextarea id="description" value={item.description} onChange={(e) => onInputChange(e, 'description')} required rows={3} cols={20} />
-                </div>
-
-                <div className="p-field">
-                    <label className="p-mb-3">Category</label>
-                    <div className="p-formgrid p-grid">
-                        <div className="p-field-radiobutton p-col-6">
-                            <RadioButton inputId="category1" name="category" value="Accessories" onChange={onCategoryChange} checked={item.category === 'Accessories'} />
-                            <label htmlFor="category1">Accessories</label>
-                        </div>
-                        <div className="p-field-radiobutton p-col-6">
-                            <RadioButton inputId="category2" name="category" value="Clothing" onChange={onCategoryChange} checked={item.category === 'Clothing'} />
-                            <label htmlFor="category2">Clothing</label>
-                        </div>
-                        <div className="p-field-radiobutton p-col-6">
-                            <RadioButton inputId="category3" name="category" value="Electronics" onChange={onCategoryChange} checked={item.category === 'Electronics'} />
-                            <label htmlFor="category3">Electronics</label>
-                        </div>
-                        <div className="p-field-radiobutton p-col-6">
-                            <RadioButton inputId="category4" name="category" value="Fitness" onChange={onCategoryChange} checked={item.category === 'Fitness'} />
-                            <label htmlFor="category4">Fitness</label>
-                        </div>
-                    </div>
+                    <label htmlFor="symptom">임상증상</label>
+                    <InputTextarea id="symptom" value={item.description} onChange={(e) => onInputChange(e, 'symptom')} required rows={3} cols={20} />
                 </div>
 
                 <div className="p-formgrid p-grid">
                     <div className="p-field p-col">
-                        <label htmlFor="price">Price</label>
-                        <InputNumber id="price" value={item.price} onValueChange={(e) => onInputNumberChange(e, 'price')} mode="currency" currency="USD" locale="en-US" />
+                        <label htmlFor="price">가격</label>
+                        <InputNumber id="price" value={item.price} onValueChange={(e) => onInputNumberChange(e, 'price')} mode="currency" currency="KRW" locale="ko-KR" />
                     </div>
                     <div className="p-field p-col">
-                        <label htmlFor="quantity">Quantity</label>
-                        <InputNumber id="quantity" value={item.quantity} onValueChange={(e) => onInputNumberChange(e, 'quantity')} integeronly />
+                        <label htmlFor="maker">제조사</label>
+                        <InputText id="maker" value={item.maker} onChange={(e) => onInputChange(e, 'maker')} />
                     </div>
                 </div>
             </Dialog>
