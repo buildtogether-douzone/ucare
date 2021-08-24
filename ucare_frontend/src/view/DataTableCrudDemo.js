@@ -12,7 +12,6 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import '../assets/scss/DataTableDemo.scss';
-import data from './products.json';
 import SiteLayout from '../layout/SiteLayout';
 import medicineService from '../service/medicineService';
 
@@ -37,7 +36,6 @@ export default function DataTableCrudDemo() {
     const [globalFilter, setGlobalFilter] = useState(null);
     const toast = useRef(null);
     const dt = useRef(null);
-    // const productService = new ProductService();
 
     const retrieveMedicine = (e) => {
         medicineService.retrieveAll()
@@ -125,7 +123,8 @@ export default function DataTableCrudDemo() {
 
     const deleteItem = () => {
         let _items = items.filter(val => val.medicineNo !== item.medicineNo);
-        setItem(_items);
+        console.log(_items);
+        setItems(_items);
         setDeleteItemDialog(false);
         setItem(emptyItem);
         toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
@@ -141,15 +140,6 @@ export default function DataTableCrudDemo() {
         }
 
         return index;
-    }
-
-    const createId = () => {
-        let id = '';
-        let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (let i = 0; i < 5; i++) {
-            id += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return id;
     }
 
     const importExcel = (e) => {
