@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="medicine">
+
+	<insert id="create" parameterType="medicinevo">
+		INSERT
+			INTO ucare.medicine(medicine_nm, symptom, generic, price, maker)
+		VALUES(
+			#{medicineNm },
+			#{symptom },
+			#{generic },
+			#{price },
+			#{maker }
+			)
+	</insert>
+
+	<select id="retrieveAll" resultType="medicinevo" >
+		SELECT 
+			medicine_no AS medicineNo,
+			medicine_nm AS medicineNm,
+			symptom,
+			generic,
+			price,
+			maker
+		FROM ucare.medicine
+	</select>
+	
+	<update id="update" parameterType="medicinevo">
+			UPDATE  ucare.medicine
+			   SET 
+			   		medicine_nm = #{medicineNm },
+			   		symptom = #{symptom },
+			   		generic = #{generic },
+			   		price = #{price },
+			   		maker = #{maker }
+			WHERE medicine_no = #{medicineNo }
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE
+		  FROM ucare.medicine
+		 WHERE medicine_no = #{medicineNo }
+	</delete>
+	
+</mapper>

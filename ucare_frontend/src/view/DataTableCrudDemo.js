@@ -14,12 +14,13 @@ import { InputText } from 'primereact/inputtext';
 import '../assets/scss/DataTableDemo.scss';
 import data from './products.json';
 import SiteLayout from '../layout/SiteLayout';
+import medicineService from '../service/medicineService';
 
 export default function DataTableCrudDemo() {
 
     let emptyItem = {
-        no: null,
-        name: '',
+        medicineNo: null,
+        medicineNm: '',
         symptom: '',
         generic: '',
         price: 0,
@@ -38,10 +39,20 @@ export default function DataTableCrudDemo() {
     const dt = useRef(null);
     // const productService = new ProductService();
 
+    const retrieveMedicine = (e) => {
+        medicineService.retrieveAll()
+          .then( res => {
+            console.log('success!!');
+            setItems(res.data);
+        })
+          .catch(err => {
+            console.log('retrieveMedicine() Error!', err);
+        });
+    }
+
     useEffect(() => {
-        // productService.getProducts().then(data => setProducts(data));
-        setItems(data.data);
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+        retrieveMedicine();
+    }, []);
 
     const formatCurrency = (value) => {
         return value.toLocaleString("ko-KR", { style: 'currency', currency: 'KRW'}); 
@@ -69,20 +80,31 @@ export default function DataTableCrudDemo() {
     const saveItem = () => {
         setSubmitted(true);
 
-        if (item.name.trim()) {
+        if (item.medicineNm.trim()) {
             let _items = [...items];
             let _item = {...item};
-            if (item.no) {
-                const index = findIndexByNo(item.no);
+            if (item.medicineNo) {
+                medicineService.update(_item)
+                .then(res => {
+                    const index = findIndexByNo(item.medicineNo);
 
-                _items[index] = _item;
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Updated', life: 3000 });
+                    _items[index] = _item;
+                    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Updated', life: 3000 });
+                })
+                .catch(err => {
+                    console.log('update() Error!', err);
+                })
             }
             else {
-                _items.no = createId();
-                _items.image = 'item-placeholder.svg';
-                _items.push(_items);
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Created', life: 3000 });
+                medicineService.create(_item)
+                .then(res => {
+                    console.log('success!!');
+                    _items.push(_item);
+                    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Created', life: 3000 });
+                })
+                .catch(err => {
+                    console.log('create() Error!', err);
+                })
             }
 
             setItems(_items);
@@ -102,17 +124,17 @@ export default function DataTableCrudDemo() {
     }
 
     const deleteItem = () => {
-        let _items = items.filter(val => val.id !== item.id);
+        let _items = items.filter(val => val.medicineNo !== item.medicineNo);
         setItem(_items);
         setDeleteItemDialog(false);
         setItem(emptyItem);
         toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
     }
 
-    const findIndexByNo = (no) => {
+    const findIndexByNo = (medicineNo) => {
         let index = -1;
         for (let i = 0; i < items.length; i++) {
-            if (items[i].no === no) {
+            if (items[i].medicineNo === medicineNo) {
                 index = i;
                 break;
             }
@@ -189,7 +211,7 @@ export default function DataTableCrudDemo() {
         let _items = items.filter(val => !selectedItems.includes(val));
         setItems(_items);
         setDeleteItemsDialog(false);
-        selectedItems(null);
+        setSelectedItems(null);
         toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
     }
 
@@ -277,14 +299,14 @@ export default function DataTableCrudDemo() {
                 <Toolbar className="p-mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
 
                 <DataTable ref={dt} value={items} selection={selectedItems} onSelectionChange={(e) => setSelectedItems(e.value)}
-                    dataKey="no" paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
+                    dataKey="medicineNo" paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
                     globalFilter={globalFilter}
                     header={header}>
 
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column field="name" header="약품명" sortable></Column>
+                    <Column field="medicineNm" header="약품명" sortable></Column>
                     <Column field="symptom" header="임상증상" sortable></Column>
                     <Column field="generic" header="Generic" sortable></Column>
                     <Column field="price" header="가격" body={priceBodyTemplate} sortable></Column>
@@ -295,13 +317,18 @@ export default function DataTableCrudDemo() {
 
             <Dialog visible={itemDialog} style={{ width: '450px' }} header="약품 등록" modal className="p-fluid" footer={itemDialogFooter} onHide={hideDialog}>
                 <div className="p-field">
-                    <label htmlFor="name">약품명</label>
-                    <InputText id="name" value={item.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !item.name })} />
-                    {submitted && !item.name && <small className="p-error">Name is required.</small>}
+                    <label htmlFor="medicineNm">약품명</label>
+                    <InputText id="medicineNm" value={item.medicineNm} onChange={(e) => onInputChange(e, 'medicineNm')} required autoFocus className={classNames({ 'p-invalid': submitted && !item.medicineNm })} />
+                    {submitted && !item.medicineNm && <small className="p-error">Name is required.</small>}
                 </div>
                 <div className="p-field">
                     <label htmlFor="symptom">임상증상</label>
-                    <InputTextarea id="symptom" value={item.description} onChange={(e) => onInputChange(e, 'symptom')} required rows={3} cols={20} />
+                    <InputTextarea id="symptom" value={item.symptom} onChange={(e) => onInputChange(e, 'symptom')} required rows={3} cols={20} />
+                </div>
+                <div className="p-field">
+                    <label htmlFor="generic">약품명</label>
+                    <InputText id="generic" value={item.generic} onChange={(e) => onInputChange(e, 'generic')} required autoFocus className={classNames({ 'p-invalid': submitted && !item.generic })} />
+                    {submitted && !item.generic && <small className="p-error">Name is required.</small>}
                 </div>
 
                 <div className="p-formgrid p-grid">
@@ -319,7 +346,7 @@ export default function DataTableCrudDemo() {
             <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {item && <span>Are you sure you want to delete <b>{item.name}</b>?</span>}
+                    {item && <span>Are you sure you want to delete <b>{item.medicineNm}</b>?</span>}
                 </div>
             </Dialog>
 

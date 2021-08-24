@@ -28,7 +28,7 @@ public class ReceiptController {
 //	}
 	
 	@GetMapping("/retrieveAll/{patientNo}")
-	public ResponseEntity<?> retrieveAll(@PathVariable Long patientNo) {
+	public ResponseEntity<?> retrieveAll(@PathVariable("patientNo") Long patientNo) {
 		return new ResponseEntity<>(receiptService.retrieveAll(patientNo), HttpStatus.OK);
 	}
 }
