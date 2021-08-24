@@ -24,6 +24,8 @@
 	<select id="retrieveAll" parameterType="Long" resultType="receiptvo" >
 			SELECT
 				A.receipt_no AS receiptNo,
+				A.bp AS bp,
+				A.bs AS bs,
 				B.name AS name,
 				B.gender AS gender,
 				B.age AS age,

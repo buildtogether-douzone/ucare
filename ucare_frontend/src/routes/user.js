@@ -15,7 +15,6 @@ import Receipt from '../view/Receipt';
 import SearchPatient from '../view/SearchPatient';
 import PatientList from '../view/PatientList';
 import Prime from '../view/DataTableCrudDemo';
-import Modal from '../view/Modal';
 import Hospital from '../view/Hospital';
 
 export default function Routes() {
@@ -34,7 +33,6 @@ export default function Routes() {
             <PrivateRoute exact path="/receipt" component={Receipt}/>
             <PrivateRoute exact path="/search" component={SearchPatient}/>
             <PrivateRoute exact path="/patientList" component={PatientList}/>
-            <PrivateRoute exact path="/modal" component={Modal}/>
             <PublicRoute exact path="/hospital" component={Hospital}/>
             <PublicRoute exact component={SignIn} />
         </Switch>
