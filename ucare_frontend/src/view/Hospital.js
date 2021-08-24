@@ -146,6 +146,7 @@ export default function Hospital() {
                     </div>
                 </div>
                 <div >
+                    
                     <h2>병원장 인사말</h2>
                     <InputTextarea value={value2} onChange={(e) => setValue2(e.target.value)} rows={5} cols={80} autoResize />
                 </div>
