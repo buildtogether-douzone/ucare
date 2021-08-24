@@ -27,25 +27,21 @@ public class DiseaseController {
 	@Autowired
 	private FileUploadService fileUploadService;
 	
-	@CrossOrigin(origins = "*")
 	@PostMapping("/create")
 	public ResponseEntity<?> addPatient(@RequestBody DiseaseVo data) {
 		return new ResponseEntity<>(diseaseService.create(data), HttpStatus.OK);
 	}
 	
-	@CrossOrigin(origins = "*")
 	@GetMapping("/retrieveAll")
 	public ResponseEntity<?> retrieveAll() {
 		return new ResponseEntity<>(diseaseService.retrieveAll(), HttpStatus.OK);
 	}
 	
-	@CrossOrigin(origins = "*")
 	@PutMapping("/update")
 	public ResponseEntity<?> update(@RequestBody DiseaseVo data) {
 		return new ResponseEntity<>(diseaseService.update(data), HttpStatus.OK);
 	}
 	
-	@CrossOrigin(origins = "*")
 	@DeleteMapping("/delete/{diseaseNo}")
 	public ResponseEntity<?> delete(@PathVariable int diseaseNo) {
 		return new ResponseEntity<>(diseaseService.delete(diseaseNo), HttpStatus.OK);

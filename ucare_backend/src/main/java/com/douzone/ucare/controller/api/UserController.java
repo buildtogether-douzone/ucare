@@ -24,25 +24,21 @@ public class UserController {
 	@Autowired
 	private FileUploadService fileUploadService;
 	
-	@CrossOrigin(origins = "*")
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody UserVo user) {
 		return new ResponseEntity<>(userService.login(user), HttpStatus.OK);
 	}
 	
-	@CrossOrigin(origins = "*")
 	@PostMapping("/add")
 	public ResponseEntity<?> add(@RequestBody UserVo user) {
 		return new ResponseEntity<>(userService.addUser(user), HttpStatus.OK);
 	}
 	
-	@CrossOrigin(origins = "*")
 	@PostMapping("/fetchUser")
 	public ResponseEntity<?> fetchUser(@RequestBody UserVo user) {
 		return new ResponseEntity<>(userService.fetchUser(user), HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "*")
 	@PutMapping("/update")
 	public ResponseEntity<?> update(@RequestPart("user") UserVo user, @RequestPart("file") MultipartFile file) {
 		user.setImage(fileUploadService.restore(file));

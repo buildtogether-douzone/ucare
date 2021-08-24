@@ -20,13 +20,11 @@ public class UcareAdminController {
 	@Autowired
 	private AdminService adminService;
 	
-	@CrossOrigin(origins = "*")
 	@GetMapping("/retrieveAll")
 	public ResponseEntity<?> retrieveAll() {
 		return new ResponseEntity<>(adminService.retrieveAll(), HttpStatus.OK);
 	}
 	
-	@CrossOrigin(origins = "*")
 	@PutMapping("/update")
 	public ResponseEntity<?> update(@RequestBody UserVo data) {
 		return new ResponseEntity<>(adminService.update(data), HttpStatus.OK);

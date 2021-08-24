@@ -22,13 +22,11 @@ public class ReceiptController {
 	@Autowired
 	private ReceiptService receiptService;
 	
-//	@CrossOrigin(origins = "*")
 //	@PostMapping("/create")
 //	public ResponseEntity<?> addPatient(@RequestBody PatientVo patient) {
 //		return new ResponseEntity<>(patientService.create(patient), HttpStatus.OK);
 //	}
 	
-	@CrossOrigin(origins = "*")
 	@GetMapping("/retrieveAll/{patientNo}")
 	public ResponseEntity<?> retrieveAll(@PathVariable Long patientNo) {
 		return new ResponseEntity<>(receiptService.retrieveAll(patientNo), HttpStatus.OK);

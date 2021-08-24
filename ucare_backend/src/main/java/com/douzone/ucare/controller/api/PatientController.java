@@ -20,13 +20,11 @@ public class PatientController {
 	@Autowired
 	private PatientService patientService;
 	
-	@CrossOrigin(origins = "*")
 	@PostMapping("/create")
 	public ResponseEntity<?> addPatient(@RequestBody PatientVo patient) {
 		return new ResponseEntity<>(patientService.create(patient), HttpStatus.OK);
 	}
 	
-	@CrossOrigin(origins = "*")
 	@GetMapping("/retrieveAll")
 	public ResponseEntity<?> retrieveAll() {
 		return new ResponseEntity<>(patientService.retrieveAll(), HttpStatus.OK);
