@@ -4,7 +4,8 @@
 **/target/
 **/build/
 **/webapp/assets/uploads-images/**
-**/webapp/public/**
+**/webapp/assets/images/**
+**/webapp/assets/js/**
 
 **/node_modules
 **/public/assets

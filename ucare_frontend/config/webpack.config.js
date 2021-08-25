@@ -4,9 +4,9 @@ module.exports = (env) => ({
     mode: "none",
     entry: path.resolve('ucare_frontend/src/index.js'),
     output: {
-        path: path.resolve('ucare_backend/src/main/webapp/public'),
-        filename: 'bundle.js',
-        assetModuleFilename: 'assets/images/[hash][ext]'
+        path: path.resolve('ucare_backend/src/main/webapp/assets'),
+        filename: 'js/main.js',
+        assetModuleFilename: 'images/[hash][ext]'
     },
     module: {
         rules: [{
