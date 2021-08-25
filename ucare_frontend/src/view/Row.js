@@ -87,7 +87,7 @@ export default function Row(props) {
               name: row.name,
               gender: row.gender,
               emailId: row.emailId,
-              email: row.eamil,
+              email: row.email,
               ssn: row.ssn,
               age: row.age,
               address: row.address,

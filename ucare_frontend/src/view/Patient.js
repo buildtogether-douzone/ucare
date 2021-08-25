@@ -37,96 +37,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Patient(props) {
     const classes = useStyles();
-    const [name, setName] = useState('');
-    const [ssn, setSSN] = useState('');
-    const [age, setAge] = useState('');
-    const [gender, setGender] = useState('female');
-    const [telNo, setTelNo] = useState('');
-    const [address, setAddress] = useState('');
-    const [emailId, setEmailId] = useState('');
-    const [email, setEmail] = useState('');
-    const [insurance, setInsurance] = useState('Y');
-    const [diagType, setDiagType] = useState('초진');
-    const [visitDate, setVisitDate] = useState('');
-    const [remark, setRemark] = useState('');
-  
+    const [name, setName] = useState(props.location.state.name);
+    const [ssn, setSSN] = useState(props.location.state.ssn);
+    const [age, setAge] = useState(props.location.state.age);
+    const [gender, setGender] = useState(props.location.state.gender);
+    const [telNo, setTelNo] = useState(props.location.state.telNo);
+    const [address, setAddress] = useState(props.location.state.age);
+    const [emailId, setEmailId] = useState(props.location.state.emailId);
+    const [email, setEmail] = useState(props.location.state.email);
+    const [insurance, setInsurance] = useState(props.location.state.insurance);
+    const [diagType, setDiagType] = useState(props.location.state.diagnosis);
+    const [remark, setRemark] = useState(props.location.state.remark);
 
-  //   useEffect(() => {
-  //     const newDate = new Date();
-  //     const date = ('0'+ newDate.getDate()).slice(-2);
-  //     const month = ('0'+( newDate.getMonth() + 1)).slice(-2);
-  //     const year = newDate.getFullYear();
-  //     setVisitDate(`${year}-${month}-${date}`);
-  
-  //     const genGender = ssn.substr(8, 1)
-      
-  //     if (genGender % 2 == 1) {
-  //       gender = "남"
-  //     } else {
-  //       gender = "여"
-  //     }
-      
-  //     const yy = newDate.getFullYear();
-      
-  //     if (genGender <= 2) {
-  //       age = "19"
-  //     } else {
-  //       age = "20"
-  //     }
-  //     const ageNum = age.concat(ssn.substr(0, 2))
-      
-  //     const mm = newDate.getMonth() + 1;
-  //     if (mm < 10) { mm = '0' + mm };
-  //     const monthDay = mm + date;
-  //     age = monthDay < ssn.substr(2, 4) ? year - ageNum - 1 : year - ageNum; 
- 
-  //     setAge(age);
-      
-  //     if (telNo.length === 10) {
-  //       setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
-  //     }
-  //     if (telNo.length === 13) {
-  //       setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
-  //     }
-  //     if (ssn.length === 13) {
-  //       setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
-  //     }
-  //   }, [ssn, telNo])
-    
-  //   const telNoChange = (e) => {
-  //     const regex = /^[0-9\b -]{0,13}$/;
-  //     if (regex.test(e.target.value)) {
-  //       setTelNo(e.target.value);
-  //     }
-  //   }
-  
-  //   const create = (e) => {
-  //     e.preventDefault();
-  
-  //   let patient = {
-  //     name: name,
-  //     ssn: ssn,
-  //     age: age,
-  //     gender: gender,
-  //     telNo: telNo,
-  //     address: address,
-  //     email: (emailId + '@' + email ),
-  //     insurance: insurance,
-  //     diagnosis: diagType,
-  //     visitDate: visitDate,
-  //     remark: remark,
-  //     userId: window.sessionStorage.getItem('user')
-  //   }
-  
-  //   patientService.create(patient)
-  //   .then( res => {
-  //     console.log(patient.name + '님의 정보가 성공적으로 등록되었습니다.');
-  //   })
-  //   .catch( err => {
-  //     console.log('create() 에러', err);
-  //   });
-  // };
-  
+
+
     return(
       <SiteLayout>
       <Container component="main" maxWidth="xs">
@@ -144,7 +68,7 @@ export default function Patient(props) {
           id="outlined-name"
           name="name"
           autoComplete="name"
-          value={props.location.state.name}
+          value={name}
           onChange={ (e) => { setName(e.target.value) }}
         /> 
         </Grid>
@@ -158,7 +82,7 @@ export default function Patient(props) {
           id="outlined-ssn"
           name="ssn"
           autoComplete="ssn"
-          value={props.location.state.ssn}
+          value={ssn}
           onChange={ (e) => { setSSN(e.target.value) }}
         /> 
         </Grid>
@@ -173,7 +97,7 @@ export default function Patient(props) {
           id="outlined-age"
           name="age"
           autoComplete="age"
-          value={props.location.state.age}
+          value={age}
           onChange = { (e) => { setAge(e.target.value) }}
         /> 
         <Typography className={classes.font} style={{padding: '2%', float: 'left',}} variant="body1">세</Typography>
@@ -182,7 +106,7 @@ export default function Patient(props) {
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">성별</Typography>
         <FormControl component="fieldset">
-        <RadioGroup row aria-label="gender" name="gender" value={props.location.state.gender} onChange={ (e) => { setGender(e.target.value) }} >
+        <RadioGroup row aria-label="gender" name="gender" value={ gender } onChange={ (e) => { setGender(e.target.value) }} >
         <FormControlLabel
           control={<Radio color="primary" />}
           label="여자"
@@ -208,7 +132,8 @@ export default function Patient(props) {
           fullWidth
           id="telNo"
           name="telNo"
-          value={props.location.state.telNo}
+          value={telNo}
+          onChange={(e) => setTelNo(e.target.value)}
         /> 
       </Grid>
 
@@ -222,7 +147,7 @@ export default function Patient(props) {
           id="address"
           name="address"
           autoComplete="address"
-          value={props.location.state.address}
+          value={address}
           onChange={ (e) => { setAddress(e.target.value) }}
         /> 
         <SearchIcon style={{float: 'left', fontSize: '45', width: '15%' }} />
@@ -238,7 +163,7 @@ export default function Patient(props) {
                   id="emailId"
                   name="emailId"
                   autoComplete="emai"
-                  value={props.location.state.emailId}
+                  value={emailId}
                   onChange={ (e) => {setEmailId(e.target.value)}}
                 />
                 <Typography className={classes.font} style={{ float:'left' ,width: '10%', padding: '2%', textAlign: 'center' }} variant="body1">@</Typography>
@@ -246,7 +171,7 @@ export default function Patient(props) {
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="email"
-                    value={props.location.state.email}
+                    value={email}
                     onChange={ (e) => {setEmail(e.target.value)}}
                     >
                     <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
@@ -267,7 +192,7 @@ export default function Patient(props) {
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">보험 여부</Typography>
         <FormControl component="fieldset">
-        <RadioGroup row aria-label="insurance" name="insurance" value={props.location.state.insurance} onChange={ (e) => { setInsurance(e.target.value) }} >
+        <RadioGroup row aria-label="insurance" name="insurance" value={insurance} onChange={ (e) => { setInsurance(e.target.value) }} >
         <FormControlLabel
           value="Y"
           control={<Radio color="primary" />}
@@ -287,7 +212,7 @@ export default function Patient(props) {
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">진료 구분</Typography>
         <FormControl component="fieldset">
-        <RadioGroup row aria-label="diagnosis" name="diagnosis" value={props.location.state.diagType} onChange={ (e) => { setDiagType(e.target.value) }} >
+        <RadioGroup row aria-label="diagnosis" name="diagnosis" value={diagType} onChange={ (e) => { setDiagType(e.target.value) }} >
         <FormControlLabel
           value="초진"
           control={<Radio color="primary" />}
@@ -311,7 +236,6 @@ export default function Patient(props) {
         id="visitDate"
         type="date"
         value={props.location.state.insDt}
-        onChange={ (e) => { setVisitDate(e.target.value) }}
         InputLabelProps={{
           shrink: true,
         }}
@@ -325,7 +249,7 @@ export default function Patient(props) {
           multiline
           rows={4}
           variant="outlined" 
-          value={props.location.state.remark}
+          value={remark}
           onChange={ (e) => { setRemark(e.target.value) }}
         />
       </Grid>
