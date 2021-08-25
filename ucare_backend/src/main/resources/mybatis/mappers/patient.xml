@@ -11,7 +11,7 @@
 			#{gender },
 			#{telNo },
 			#{address },
-			#{email },
+			#{domain },
 			#{insurance },
 			#{diagnosis },
 			TO_DATE(#{visitDate },'YYYY-MM-DD'),
@@ -24,12 +24,21 @@
 	<select id="retrieveAll" resultType="patientvo" >
 		SELECT 
 			patient_no AS patientNo, 
-			name, (gender||'/'||age) AS gender,
-			SUBSTR(ssn, 1, 8) AS ssn,
+			name,
+			(gender||'/'||age) AS ageGender,
+			age AS age,
+			gender AS gender,
+			CONCAT(SUBSTR(ssn, 1, 8), '******') AS ssn,
 			tel_no AS telNo,
-			SUBSTR(address, 1, 13) AS address
+			SUBSTR(address, 1, 13) AS address,
+			insurance_yn AS insurance,
+			diagnosis_type AS diagnosis,
+			ins_dt AS insDt,
+		   split_part(email, '@', 1) as emailId,
+		   split_part(email, '@', 2) as email,
+		   remark AS remark
 		FROM ucare.patient
-		ORDER BY patient_no DESC
+		ORDER BY patient_no desc
 	</select>
 	
 	<select id="findUser" parameterType="patientvo" resultType="patientvo">

@@ -75,12 +75,40 @@ export default function Row(props) {
           {row.patientNo}
         </TableCell>
         <TableCell style={{ textAlign: 'center' }}>{row.name}</TableCell>
-        <TableCell style={{ textAlign: 'center' }}>{row.gender}</TableCell>
+        <TableCell style={{ textAlign: 'center' }}>{row.ageGender}</TableCell>
         <TableCell style={{ textAlign: 'center' }}>{row.ssn}</TableCell>
         <TableCell style={{ textAlign: 'center' }}>{row.telNo}</TableCell>
         <TableCell>{row.address}</TableCell>
         <TableCell style={{ textAlign: 'center' }}>
-          <Link to="/receipt"><Button variant="outlined" size="small" color="primary">접수</Button></Link>
+        <Link to={{
+            pathname: `/patient/${row.patientNo}`,
+            state: {
+              patientNo: row.patientNo,
+              name: row.name,
+              gender: row.gender,
+              emailId: row.emailId,
+              email: row.eamil,
+              ssn: row.ssn,
+              age: row.age,
+              address: row.address,
+              telNo: row.telNo,
+              diagnosis: row.diagnosis,
+              insurance: row.insurance,
+              insDt: row.insDt,
+              remark: row.remark
+            }
+          }}><Button variant="outlined" size="small" color="primary">환자정보</Button></Link>
+        </TableCell>
+        <TableCell style={{ textAlign: 'center' }}>
+        <Link to={{
+            pathname: `/receipt/${row.patientNo}`,
+            state: {
+              patientNo: row.patientNo,
+              name: row.name,
+              ageGender: row.ageGender,
+              insurance: row.insurance
+            }
+          }}><Button variant="outlined" size="small" color="primary">접수</Button></Link>
         </TableCell>
       </TableRow>
       <TableRow>

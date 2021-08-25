@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
 export default function Patient() {
     const classes = useStyles();
     const [name, setName] = useState('');
@@ -48,13 +49,34 @@ export default function Patient() {
     const [diagType, setDiagType] = useState('초진');
     const [visitDate, setVisitDate] = useState('');
     const [remark, setRemark] = useState('');
-      
+
+
     useEffect(() => {
       const newDate = new Date();
       const date = ('0'+ newDate.getDate()).slice(-2);
       const month = ('0'+( newDate.getMonth() + 1)).slice(-2);
       const year = newDate.getFullYear();
       setVisitDate(`${year}-${month}-${date}`);
+  
+      const getGender = ssn.substr(7, 1)
+
+      if (getGender % 2 == 1) {
+        setGender('남');
+      } else {
+        setGender('여');
+      };
+    
+      let ageYear = 0;
+      
+      if (getGender <= 2) {
+        ageYear = "19"
+      } else {
+        ageYear = "20"
+      };
+
+      const ageNum = ageYear.concat(ssn.substr(0, 2));
+      const monthDay = month + date;
+      setAge(monthDay < ssn.substr(2, 4) ? year - ageNum - 1 : year - ageNum); 
 
       if (telNo.length === 10) {
         setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
@@ -65,7 +87,7 @@ export default function Patient() {
       if (ssn.length === 13) {
         setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
       }
-    }, [ssn, telNo])
+    }, [ssn, telNo, gender, age])
     
     const telNoChange = (e) => {
       const regex = /^[0-9\b -]{0,13}$/;
@@ -84,7 +106,7 @@ export default function Patient() {
       gender: gender,
       telNo: telNo,
       address: address,
-      email: (emailId + '@' + email ),
+      domain: (emailId + '@' + email ),
       insurance: insurance,
       diagnosis: diagType,
       visitDate: visitDate,
@@ -136,22 +158,6 @@ export default function Patient() {
           onChange={ (e) => { setSSN(e.target.value) }}
         /> 
         </Grid>
-
-      <Grid item xs={12}>
-        <Typography className={classes.font} variant="body1">나이</Typography>
-        <TextField
-          style={{width: '30%', float: 'left', textAlignLast: 'right', backgroundColor: '#FFFFFF'}} 
-          variant="outlined"
-          required
-          fullWidth
-          id="outlined-age"
-          name="age"
-          autoComplete="age"
-          value={ age }
-          onChange = { (e) => { setAge(e.target.value) }}
-        /> 
-        <Typography className={classes.font} style={{padding: '2%', float: 'left',}} variant="body1">세</Typography>
-      </Grid>
 
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">성별</Typography>
@@ -224,10 +230,18 @@ export default function Patient() {
                     value={ email }
                     onChange={ (e) => {setEmail(e.target.value)}}
                     >
-                    <MenuItem value=""></MenuItem>
+                    <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
                     <MenuItem value={'naver.com'}>naver.com</MenuItem>
                     <MenuItem value={'daum.net'}>daum.net</MenuItem>
-                    <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
+                    <MenuItem value={'yahoo.co.kr'}>yahoo.co.kr</MenuItem>
+                    <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
+                    <MenuItem value={'nate.com'}>nate.com</MenuItem>
+                    <MenuItem value={'empas.com'}>empas.com</MenuItem>
+                    <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
+                    <MenuItem value={'weppy.com'}>weppy.com</MenuItem>
+                    <MenuItem value={'korea.com'}>korea.com</MenuItem>
+                    <MenuItem value={'mail.co.kr'}>hotmail.com</MenuItem>
+
                   </Select>
                 </FormControl>
       </Grid>

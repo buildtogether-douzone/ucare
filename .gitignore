@@ -4,6 +4,7 @@
 **/target/
 **/build/
 **/webapp/assets/uploads-images/**
+!**/webapp/assets/uploads-images/dummy
 **/webapp/assets/images/**
 **/webapp/assets/js/**
 

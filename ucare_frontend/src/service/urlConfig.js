@@ -4,3 +4,4 @@ export const PATIENT_API_BASE_URL = "http://localhost:8080/ucare_backend/api/pat
 export const DISEASE_API_BASE_URL = "http://localhost:8080/ucare_backend/api/disease";
 export const MEDICINE_API_BASE_URL = "http://localhost:8080/ucare_backend/api/medicine";
 export const ADMIN_API_BASE_URL = "http://localhost:8080/ucare_backend/api/admin";
+export const HOSPITAL_API_BASE_URL = "http://localhost:8080/ucare_backend/api/hospital";
