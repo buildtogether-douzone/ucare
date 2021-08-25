@@ -12,6 +12,9 @@
 			#{price },
 			#{maker }
 			)
+		<selectKey keyProperty="medicineNo" resultType="int" order="AFTER">
+		  		SELECT LASTVAL()
+	  	</selectKey>
 	</insert>
 
 	<select id="retrieveAll" resultType="medicinevo" >

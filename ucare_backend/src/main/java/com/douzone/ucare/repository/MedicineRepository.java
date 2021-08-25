@@ -14,7 +14,9 @@ public class MedicineRepository {
 	private SqlSession sqlSession;
 	
 	public int create(MedicineVo data) {
-		return sqlSession.insert("medicine.create", data);
+		sqlSession.insert("medicine.create", data);
+		
+		return data.getMedicineNo();
 	}
 
 	public List<MedicineVo> retrieveAll() {

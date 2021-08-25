@@ -97,6 +97,7 @@ export default function DataTableCrudDemo() {
                 medicineService.create(_item)
                 .then(res => {
                     console.log('success!!');
+                    _item.medicineNo = res.data;
                     _items.push(_item);
                     toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Created', life: 3000 });
                 })
@@ -254,7 +255,6 @@ export default function DataTableCrudDemo() {
 
     const header = (
         <div className="table-header">
-            <h5 className="p-m-0">Manage Items</h5>
             <span className="p-input-icon-left">
                 <i className="pi pi-search" />
                 <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
@@ -316,8 +316,8 @@ export default function DataTableCrudDemo() {
                     <InputTextarea id="symptom" value={item.symptom} onChange={(e) => onInputChange(e, 'symptom')} required rows={3} cols={20} />
                 </div>
                 <div className="p-field">
-                    <label htmlFor="generic">약품명</label>
-                    <InputText id="generic" value={item.generic} onChange={(e) => onInputChange(e, 'generic')} required autoFocus className={classNames({ 'p-invalid': submitted && !item.generic })} />
+                    <label htmlFor="generic">Generic</label>
+                    <InputText id="generic" value={item.generic} onChange={(e) => onInputChange(e, 'generic')} className={classNames({ 'p-invalid': submitted && !item.generic })} />
                     {submitted && !item.generic && <small className="p-error">Name is required.</small>}
                 </div>
 
