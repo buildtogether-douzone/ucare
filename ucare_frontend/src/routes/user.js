@@ -33,12 +33,9 @@ export default function Routes() {
             <PublicRoute exact path="/medicine" component={Medicine}/>
             <PublicRoute exact path="/disease" component={Disease}/>
             <PublicRoute exact path="/prime" component={Prime} />
-<<<<<<< HEAD
             <PublicRoute exact path="/excel" component={Excel} />
             <PrivateRoute exact path="/receipt" component={Receipt}/>
-=======
             <PrivateRoute exact path="/receipt/:patientNo" component={Receipt}/>
->>>>>>> 3cf772586e9d45c8e0461181c36c17f0b5936dda
             <PrivateRoute exact path="/search" component={SearchPatient}/>
             <PrivateRoute exact path="/patientList" component={PatientList}/>
             <PublicRoute exact path="/hospital" component={Hospital}/>
