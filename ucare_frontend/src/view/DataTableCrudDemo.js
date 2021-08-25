@@ -95,8 +95,7 @@ export default function DataTableCrudDemo() {
                 .catch(err => {
                     console.log('update() Error!', err);
                 })
-            }
-            
+            }    
             else {
                 medicineService.create(_item)
                 .then(res => {
