@@ -41,47 +41,22 @@
 		ORDER BY patient_no desc
 	</select>
 	
-	<select id="findUser" parameterType="patientvo" resultType="patientvo">
-		SELECT id,
-			   name
-		FROM ucare.user
-		WHERE id = #{id }
-		  AND password = #{password }
-	</select>
 	
-	<select id="findByID" parameterType="patientvo" resultType="patientvo">
-		SELECT name,
-			   password,
-			   tel_no AS telNo,
-			   split_part(email, '@', 1) as emailId,
-			   split_part(email, '@', 2) as email,
-			   address,
-			   birth
-		FROM ucare.user
-		WHERE id = #{id }
-	</select>
-	
-	<update id="updateUser" parameterType="uservo">
-			UPDATE  ucare.user
+	<update id="update" parameterType="patientvo">
+			UPDATE  ucare.patient
 			   SET 
-			   		name = #{name },
-			   		<if test="password != null and password != '' ">
-			   		password = #{password },
-			   		</if>
-			   		tel_no = #{telNo },
-			   		email = #{email },
-			   		address = #{address },
-			   		birth = TO_DATE(#{birth },'YYYY-MM-DD'),
-			   		image = #{image }
-			WHERE id = #{id }
-	</update>
-	
-	<update id="update" parameterType="diseasevo">
-			UPDATE  ucare.disease
-			   SET 
-			   		disease_nm = #{diseaseNm },
-			   		symptom = #{symptom }
-			WHERE disease_no = #{diseaseNo }
+		   		name = #{name },
+		   		ssn = #{ssn },
+		   		age = #{age },
+		   		gender = #{gender },
+		   		tel_no = #{telNo },
+		   		address = #{address },
+		   		email = #{domain },
+		   		insurance_yn = #{insurance },
+		   		remark = #{remark },
+		   		upt_no = #{uptNo },
+		   		upt_dt = now()
+			WHERE patient_no = #{patientNo }
 	</update>
 	
 	<delete id="delete" parameterType="int">

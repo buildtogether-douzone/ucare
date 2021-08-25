@@ -22,4 +22,8 @@ public class PatientService {
 	public List<PatientVo> retrieveAll() {
 		return PatientRepository.retrieveAll();
 	}
+	
+	public int update(PatientVo patient) {
+		return PatientRepository.update(patient);
+	}
 }

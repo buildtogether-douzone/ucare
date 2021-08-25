@@ -35,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
+
 export default function Patient(props) {
     const classes = useStyles();
     const [name, setName] = useState(props.location.state.name);
@@ -46,10 +48,81 @@ export default function Patient(props) {
     const [emailId, setEmailId] = useState(props.location.state.emailId);
     const [email, setEmail] = useState(props.location.state.email);
     const [insurance, setInsurance] = useState(props.location.state.insurance);
-    const [diagType, setDiagType] = useState(props.location.state.diagnosis);
+    const [diagnosis, setDiagnosis] = useState(props.location.state.diagnosis);
+    const [insDt, setInsDt] = useState(props.location.state.insDt);
     const [remark, setRemark] = useState(props.location.state.remark);
 
+    useEffect(() => {
 
+      const newDate = new Date();
+      const date = ('0'+ newDate.getDate()).slice(-2);
+      const month = ('0'+( newDate.getMonth() + 1)).slice(-2);
+      const year = newDate.getFullYear();
+  
+      const getGender = ssn.substr(7, 1)
+
+      if (getGender % 2 == 1) {
+        setGender('남');
+      } else {
+        setGender('여');
+      };
+    
+      let ageYear = 0;
+      
+      if (getGender <= 2) {
+        ageYear = "19"
+      } else {
+        ageYear = "20"
+      };
+
+      const ageNum = ageYear.concat(ssn.substr(0, 2));
+      const monthDay = month + date;
+      setAge(monthDay < ssn.substr(2, 4) ? year - ageNum - 1 : year - ageNum); 
+      
+      if (telNo.length === 10) {
+        setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
+      }
+      if (telNo.length === 13) {
+        setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+      }
+      if (ssn.length === 13) {
+        setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
+      }
+    }, [ssn, telNo, gender, age]);
+  
+    const telNoChange = (e) => {
+      const regex = /^[0-9\b -]{0,13}$/;
+      if (regex.test(e.target.value)) {
+        setTelNo(e.target.value);
+      }
+    }
+
+    const update = (e) => {
+      e.preventDefault();
+  
+      let patient = {
+        name: name,
+        ssn: ssn,
+        age: age,
+        gender: gender,
+        telNo: telNo,
+        address: address,
+        domain: (emailId + '@' + email ),
+        insurance: insurance,
+        remark: remark,
+        patientNo: props.location.state.patientNo,
+        uptNo: window.sessionStorage.getItem('user')
+      }
+  
+      patientService.update(patient)
+        .then(res => {
+          console.log(patient.name + '님의 정보가 성공적으로 수정되었습니다.');
+        })
+        .catch(err => {
+          console.log('updatePatient() 에러', err);
+        });
+    };
+  
 
     return(
       <SiteLayout>
@@ -68,7 +141,7 @@ export default function Patient(props) {
           id="outlined-name"
           name="name"
           autoComplete="name"
-          value={name}
+          value={ name }
           onChange={ (e) => { setName(e.target.value) }}
         /> 
         </Grid>
@@ -82,26 +155,10 @@ export default function Patient(props) {
           id="outlined-ssn"
           name="ssn"
           autoComplete="ssn"
-          value={ssn}
+          value={ ssn }
           onChange={ (e) => { setSSN(e.target.value) }}
         /> 
         </Grid>
-
-      <Grid item xs={12}>
-        <Typography className={classes.font} variant="body1">나이</Typography>
-        <TextField
-          style={{width: '30%', float: 'left', textAlignLast: 'right', backgroundColor: '#FFFFFF'}} 
-          variant="outlined"
-          required
-          fullWidth
-          id="outlined-age"
-          name="age"
-          autoComplete="age"
-          value={age}
-          onChange = { (e) => { setAge(e.target.value) }}
-        /> 
-        <Typography className={classes.font} style={{padding: '2%', float: 'left',}} variant="body1">세</Typography>
-      </Grid>
 
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">성별</Typography>
@@ -132,8 +189,8 @@ export default function Patient(props) {
           fullWidth
           id="telNo"
           name="telNo"
-          value={telNo}
-          onChange={(e) => setTelNo(e.target.value)}
+          value={ telNo }
+          onChange={ telNoChange }
         /> 
       </Grid>
 
@@ -147,7 +204,7 @@ export default function Patient(props) {
           id="address"
           name="address"
           autoComplete="address"
-          value={address}
+          value={ address }
           onChange={ (e) => { setAddress(e.target.value) }}
         /> 
         <SearchIcon style={{float: 'left', fontSize: '45', width: '15%' }} />
@@ -163,16 +220,16 @@ export default function Patient(props) {
                   id="emailId"
                   name="emailId"
                   autoComplete="emai"
-                  value={emailId}
-                  onChange={ (e) => {setEmailId(e.target.value)}}
+                  value={ emailId }
+                  onChange={ (e) => { setEmailId(e.target.value) }}
                 />
                 <Typography className={classes.font} style={{ float:'left' ,width: '10%', padding: '2%', textAlign: 'center' }} variant="body1">@</Typography>
                 <FormControl variant="outlined" style={{ float:'left', width: '45%', backgroundColor: '#FFFFFF' }}>
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="email"
-                    value={email}
-                    onChange={ (e) => {setEmail(e.target.value)}}
+                    value={ email }
+                    onChange={ (e) => { setEmail(e.target.value) }}
                     >
                     <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
                     <MenuItem value={'naver.com'}>naver.com</MenuItem>
@@ -192,7 +249,7 @@ export default function Patient(props) {
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">보험 여부</Typography>
         <FormControl component="fieldset">
-        <RadioGroup row aria-label="insurance" name="insurance" value={insurance} onChange={ (e) => { setInsurance(e.target.value) }} >
+        <RadioGroup row aria-label="insurance" name="insurance" value={ insurance } onChange={ (e) => { setInsurance(e.target.value) }} >
         <FormControlLabel
           value="Y"
           control={<Radio color="primary" />}
@@ -212,7 +269,7 @@ export default function Patient(props) {
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">진료 구분</Typography>
         <FormControl component="fieldset">
-        <RadioGroup row aria-label="diagnosis" name="diagnosis" value={diagType} onChange={ (e) => { setDiagType(e.target.value) }} >
+        <RadioGroup row aria-label="diagnosis" name="diagnosis" value={ diagnosis } onChange={ (e) => { setDiagnosis(e.target.value) }} >
         <FormControlLabel
           value="초진"
           control={<Radio color="primary" />}
@@ -232,12 +289,12 @@ export default function Patient(props) {
       <Grid item xs={12}>
       <Typography className={classes.font} variant="body1">최초 내원일</Typography>
       <TextField
-        style={{width: '100%'}}
-        id="visitDate"
-        type="date"
-        value={props.location.state.insDt}
-        InputLabelProps={{
-          shrink: true,
+        fullWidth
+        id="insDt"
+        variant="outlined"
+        defaultValue={ insDt }
+        InputProps={{
+          readOnly: true,
         }}
       />
       </Grid>
@@ -249,7 +306,7 @@ export default function Patient(props) {
           multiline
           rows={4}
           variant="outlined" 
-          value={remark}
+          value={ remark }
           onChange={ (e) => { setRemark(e.target.value) }}
         />
       </Grid>
@@ -260,6 +317,7 @@ export default function Patient(props) {
           color="primary"
           href="/Home"
           type="submit"
+          onClick={ update }
           disableElevation>
       수정하기
     </Button>

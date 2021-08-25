@@ -22,6 +22,7 @@ public class PatientVo {
 	private String uptNo;
 	private String uptDt;
 	private String userId;
+	
 	public Long getPatientNo() {
 		return patientNo;
 	}

@@ -6,11 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.douzone.ucare.service.PatientService;
+import com.douzone.ucare.vo.DiseaseVo;
 import com.douzone.ucare.vo.PatientVo;
 
 @RestController
@@ -28,5 +30,10 @@ public class PatientController {
 	@GetMapping("/retrieveAll")
 	public ResponseEntity<?> retrieveAll() {
 		return new ResponseEntity<>(patientService.retrieveAll(), HttpStatus.OK);
+	}
+	
+	@PutMapping("/update")
+	public ResponseEntity<?> update(@RequestBody PatientVo patient) {
+		return new ResponseEntity<>(patientService.update(patient), HttpStatus.OK);
 	}
 }

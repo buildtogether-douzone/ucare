@@ -10,6 +10,10 @@ class patientService {
   retrieveAll(){
     return axios.get(PATIENT_API_BASE_URL + '/retrieveAll');
   }
+
+  update(data){
+    return axios.put(PATIENT_API_BASE_URL + '/update', data);
+  }
 }
 
 export default new patientService();
