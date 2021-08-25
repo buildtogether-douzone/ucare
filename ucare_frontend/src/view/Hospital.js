@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import SiteLayout from '../layout/SiteLayout';
+import React, { useEffect, useState } from 'react';
 import HomeIcon from '@material-ui/icons/Home';
 import BusinessIcon from '@material-ui/icons/Business';
 import PersonIcon from '@material-ui/icons/Person';
@@ -9,10 +8,11 @@ import LanguageIcon from '@material-ui/icons/Language';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import PrintIcon from '@material-ui/icons/Print';
-import Button from '@material-ui/core/Button';
+import { Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { InputText } from "primereact/inputtext";
-import { InputTextarea } from 'primereact/inputtextarea';
+import SiteLayout from '../layout/SiteLayout';
+import hospitalService from '../service/hospitalService';
 
 const useStyles = makeStyles({
     textStyle: {
@@ -49,14 +49,52 @@ const useStyles = makeStyles({
         backgroundSize: '100%, 100%',
         backgroundPosition: 'center',
         overflow: 'hidden',
+    },
+    textfiled: {
+        width: '150%'
     }
 })
 
 export default function Hospital() {
     const classes = useStyles();
-    const [value2, setValue2] = useState('');
+    const [hospitalName, setHospitalName] = useState('');
+    const [headName, setHeadName] = useState('');
+    const [address, setAddress] = useState('');
+    const [telNo, setTelNo] = useState('');
+    const [basicPrice, setBasicPrice] = useState('');
+    const [siteAddress, setSiteAddress] = useState('');
+    const [email, setEmail] = useState('');
+    const [faxNo, setFaxNo] = useState('');
+    const [headSpeak, setHeadSpeak] = useState('');
     const [previewURL, setPreviewURL] = useState('');
     const [file, setFile] = useState('');
+
+    useEffect(() => {
+        hospitalService.fetchHospitalInfo()
+            .then(res => {
+                setHospitalName(res.data.hospitalName);
+                setHeadName(res.data.headName);
+                setAddress(res.data.address);
+                setTelNo(res.data.telNo);
+                setBasicPrice(res.data.basicPrice);
+                setSiteAddress(res.data.siteAddress);
+                setEmail(res.data.email);
+                setFaxNo(res.data.faxNo);
+                setHeadSpeak(res.data.headSpeak);
+                setPreviewURL(res.data.image);
+            }).catch(err => {
+                console.log('fetchHospitalInfo error', err);
+            });
+    }, []);
+
+    useEffect(() => {
+        if (telNo.length === 10) {
+          setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
+        }
+        if (telNo.length === 13) {
+          setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+        }
+    }, [telNo])
 
     const handleFileOnChange = (e) => {
         e.preventDefault();
@@ -69,61 +107,129 @@ export default function Hospital() {
         reader.readAsDataURL(file);
     }
 
+    const saveInfo = (e) => {
+        e.preventDefault();
+        let data = {
+            hospitalName: hospitalName,
+            headName: headName,
+            address: address,
+            telNo: telNo,
+            basicPrice: basicPrice,
+            siteAddress: siteAddress,
+            email: email,
+            faxNo: faxNo,
+            headSpeak: headSpeak
+        }
+
+        const formData = new FormData();
+        formData.append('data', new Blob([JSON.stringify(data)], {type: "application/json"}));
+        formData.append('file', file);
+
+        hospitalService.updateData(formData)
+        .then(res => {
+          console.log('정보가 성공적으로 전송 되었습니다.');
+        })
+        .catch(err => {
+          console.log('save hospital data() 에러', err);
+        });
+    };
+
     return (
         <SiteLayout>
-            <div style={{ marginTop: '100px'}} >
+            <div style={{ marginTop: '100px' }} >
                 <h2>병원 정보</h2>
                 <div>
                     <div className={classes.addon}>
                         <BusinessIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
-                    <InputText placeholder="병원명" className={classes.textStyle} />
+                    <InputText 
+                        placeholder="병원명" 
+                        className={classes.textStyle} 
+                        value={hospitalName || ''} 
+                        onChange={(e) => setHospitalName(e.target.value)}  />
                 </div>
                 <div>
                     <div className={classes.addon}>
                         <PersonIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
-                    <InputText placeholder="병원장명" className={classes.textStyle} />
+                    <InputText 
+                        placeholder="병원장명" 
+                        className={classes.textStyle} 
+                        value={headName || ''}
+                        onChange={(e) => setHeadName(e.target.value)}/>
                 </div>
                 <div>
                     <div className={classes.addon}>
                         <HomeIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
-                    <InputText placeholder="병원 주소" className={classes.textStyle} />
+                    <InputText 
+                        placeholder="병원 주소" 
+                        className={classes.textStyle} 
+                        value={address || ''}
+                        onChange={(e) => setAddress(e.target.value)}/>
                 </div>
                 <div>
                     <div className={classes.addon}>
                         <PhoneIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
-                    <InputText placeholder="병원 전화번호" className={classes.textStyle} />
+                    <InputText 
+                        placeholder="병원 전화번호" 
+                        className={classes.textStyle}
+                        value={telNo || ''} 
+                        onChange={(e) => setTelNo(e.target.value)}/>
                 </div>
                 <div>
                     <div className={classes.addon}>
                         <AttachMoneyIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
-                    <InputText placeholder="기본 진료비" className={classes.textStyle} />
+                    <InputText 
+                        placeholder="기본 진료비" 
+                        className={classes.textStyle} 
+                        value={ basicPrice || '' }
+                        onChange={(e) => setBasicPrice(e.target.value)}/>
                 </div>
                 <div>
                     <div className={classes.addon}>
                         <LanguageIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
-                    <InputText placeholder="사이트 주소" className={classes.textStyle} />
+                    <InputText 
+                        placeholder="사이트 주소" 
+                        className={classes.textStyle} 
+                        value={ siteAddress || '' }
+                        onChange={(e) => setSiteAddress(e.target.value)}/>
                 </div>
                 <div>
                     <div className={classes.addon}>
                         <AlternateEmailIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
-                    <InputText placeholder="이메일 주소" className={classes.textStyle} />
+                    <InputText 
+                        placeholder="이메일 주소" 
+                        className={classes.textStyle} 
+                        value={ email || '' }
+                        onChange={(e) => setEmail(e.target.value)}/>
                 </div>
                 <div>
                     <div className={classes.addon}>
                         <PrintIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
-                    <InputText placeholder="팩스 번호" className={classes.textStyle} />
+                    <InputText 
+                        placeholder="팩스 번호" 
+                        className={classes.textStyle} 
+                        value={ faxNo || '' }
+                        onChange={(e) => setFaxNo(e.target.value)}/>
                 </div>
+                <Button
+                    style={{ width:'100%', backgroundColor:'#616161' }}
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    onClick={saveInfo}
+                >
+                    등록하기
+                </Button>
             </div>
-            <div style={{ marginTop: '100px', marginLeft: '40px'}}>
-                <div style={{overflow:'hidden'}}>
+            <div style={{ marginTop: '100px', marginLeft: '40px' }}>
+                <div style={{ overflow: 'hidden' }}>
                     <h2>병원장 사진</h2>
                     <div className={classes.image} >
                         <div className={classes.profile}
@@ -147,7 +253,14 @@ export default function Hospital() {
                 </div>
                 <div >
                     <h2>병원장 인사말</h2>
-                    <InputTextarea value={value2} onChange={(e) => setValue2(e.target.value)} rows={5} cols={80} autoResize />
+                    <TextField
+                        className={classes.textfiled}
+                        label="내용"
+                        variant="outlined"
+                        multiline
+                        rows={7}
+                        value={headSpeak || ''}
+                        onChange={(e) => setHeadSpeak(e.target.value)} />
                 </div>
             </div>
         </SiteLayout>

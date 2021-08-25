@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hospital">
+	
+	<select id="findAll" resultType="hospitalvo" >
+		<![CDATA[
+			SELECT
+				hospital_no AS hospitalNo,
+				hospital_nm AS hospitalName,
+				head_nm AS headName,
+				address,
+				tel_no AS telNo,
+				basic_price AS basicPrice,
+				image,
+				site_add AS siteAddress,
+				email,
+				fax_no AS faxNo,
+				hd_speak AS headSpeak	
+			 From ucare.hospital
+		]]>
+	</select>
+	
+	<update id="update" parameterType="hospitalvo">
+			WITH upsert AS 
+				(
+				   UPDATE ucare.hospital SET 
+				      hospital_nm = #{hospitalName},
+				      head_nm = #{headName},
+				      address = #{address},
+				      tel_no = #{telNo},
+				      basic_price = #{basicPrice},
+				      image = #{image},
+				      site_add = #{siteAddress},
+				      email = #{email},
+				      fax_no = #{faxNo},
+				      hd_speak = #{headSpeak}
+				   WHERE 
+				       (SELECT hospital_no FROM ucare.hospital) IS NOT NULL
+				   returning *
+				)			
+			INSERT INTO ucare.hospital
+				(
+				   hospital_nm,
+				   head_nm,
+				   address,
+				   tel_no,
+				   basic_price,
+				   image,
+				   site_add,
+				   email,
+				   fax_no,
+				   hd_speak
+				)
+			SELECT 
+			   #{hospitalName},
+			   #{headName},
+			   #{address},
+			   #{telNo},
+			   #{basicPrice},
+			   #{image},
+			   #{siteAddress},
+			   #{email},
+			   #{faxNo},
+			   #{headSpeak}
+			WHERE NOT EXISTS(SELECT * FROM upsert);
+	</update>
+</mapper>
