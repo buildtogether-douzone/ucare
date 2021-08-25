@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import InputBase from '@material-ui/core/InputBase';
@@ -13,141 +14,105 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
-},
-form: {
+  },
+  form: {
     marginTop: theme.spacing(3),
   },
   font: {
     width: '35%',
-    float: 'left', 
-    padding: '6px 0 7px', 
-    fontSize: '20px',
+    float: 'left',
+    padding: '6px 0 7px',
     textAlign: 'right'
   },
   input: {
     width: '50%',
-    float:'left',  
+    float: 'left',
     fontSize: '20px',
+    backgroundColor: '#FFFFFF',
     marginLeft: '40px'
   },
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: '200',
     display: 'inline-block',
     float: 'right'
   }
 }));
 
 
-export default function NewPatient() {
-    const classes = useStyles();
-    const [value, setValue] = React.useState('top');
+export default function Receipt(props) {
+  const classes = useStyles();
+  const [value, setValue] = React.useState('top');
+  
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
 
-    const handleChange = (event) => {
-      setValue(event.target.value);
-    };
-
-    const [age, setAge] = React.useState('');
-
-    const handleChangeEmail = (event) => {
-      setAge(event.target.value);
-    };
-
-    
-
-    return(
-      <SiteLayout>
+  return (
+    <SiteLayout>
       <div className={classes.paper}>
-      <form className={classes.form} noValidate>
-          <Grid item xs={6} container spacing={1} style={{ display: 'flex',    justifyContent: 'center'}}> 
-      <Grid item xs={12}>
-      <TextField
-        id="datetime-local"
-        type="datetime-local"
-        defaultValue="2017-05-24T10:30"
-        className={classes.textField}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-      </Grid>
+        <form className={classes.form} noValidate>
+          <Grid item xs={6} container spacing={1} style={{ display: 'flex', justifyContent: 'center' }}>
+            <Grid item xs={12}>
+              <Typography className={classes.font} variant="body1" gutterBottom>환자번호</Typography>
+              <TextField
+                className={classes.input}
+                fullWidth
+                id="filled-read-only-input1"
+                defaultValue={props.location.state.patientNo}
+                size="small"
+                variant="outlined"
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography className={classes.font} variant="body1" gutterBottom>이름</Typography>
+              <TextField
+                className={classes.input}
+                fullWidth
+                id="filled-read-only-input2"
+                defaultValue={props.location.state.name}
+                size="small"
+                variant="outlined"
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography className={classes.font} variant="body1" gutterBottom>보험 여부</Typography>
+              <TextField
+                className={classes.input}
+                fullWidth
+                id="filled-read-only-input1"
+                defaultValue={props.location.state.insurance}
+                size="small"
+                variant="outlined"
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </Grid>
 
-      <Grid item xs={12}>
-        <span className={classes.font}>차트번호</span>
-        <InputBase
-        className={classes.input}
-        defaultValue="1234567"
-        inputProps={{ 'aria-label': 'naked' }}
-      />
-      </Grid>
-      <Grid item xs={12}>
-        <span className={classes.font}>이름</span>
-        <InputBase
-        className={classes.input}
-        defaultValue="둘리"
-        inputProps={{ 'aria-label': 'naked' }}
-      />
-        </Grid>
-      <Grid item xs={12}>
-        <span className={classes.font}>나이</span>
-        <InputBase
-        className={classes.input}
-        defaultValue="26"
-        inputProps={{ 'aria-label': 'naked' }}
-      />
-        </Grid>
-      <Grid item xs={12}>
-        <span className={classes.font}>주소</span>
-        <InputBase
-        className={classes.input}
-        defaultValue="부산시 남구"
-        inputProps={{ 'aria-label': 'naked' }}
-      />
-        </Grid>
-      <Grid item xs={12}>
-      <span className={classes.font}>보험 여부</span>
-      <InputBase
-        className={classes.input}
-        defaultValue="O"
-        inputProps={{ 'aria-label': 'naked' }}
-      />
-      </Grid>
-      <Grid item xs={12}>
-      <span className={classes.font}>진료 구분</span>
-      <InputBase
-        className={classes.input}
-        defaultValue="초진"
-        inputProps={{ 'aria-label': 'naked' }}
-      />
-      </Grid>
-      <Grid item xs={12}>
-      <span className={classes.font}>최근 내원일</span>
-      <InputBase
-        className={classes.input}
-        defaultValue="2021-08-19"
-        inputProps={{ 'aria-label': 'naked' }}
-      />
-      </Grid>
+            <Grid item xs={12}>
+              <div style={{width: '69%', marginLeft: '140px'}}>
+              <TextField
+              className={classes.textField}
+                style={{ backgroundColor: '#FFFFFF'}}
+                multiline
+                fullWidth
+                label="접수 메모"
+                rows={4}
+                defaultValue=""
+                variant="outlined"
+              />
+              </div>
+            </Grid>
 
-      <Grid item xs={12}>
-        <TextField
-          style={{backgroundColor: '#FFFFFF'}} 
-          multiline
-          fullWidth
-          label="접수 메모"
-          rows={4}
-          defaultValue=""
-          variant="outlined" 
-        />
-      </Grid>
-
-        <Button style={{width: '100%', marginTop: '5%'}} variant="contained" color="primary" disableElevation>
-      등록하기
-    </Button>
-    </Grid>
+            <Button style={{marginTop: '10px'}} variant="outlined" size="small" color="primary">접수</Button>
+          </Grid>
         </form>
       </div>
-      </SiteLayout>
-    );
+    </SiteLayout>
+  );
 }

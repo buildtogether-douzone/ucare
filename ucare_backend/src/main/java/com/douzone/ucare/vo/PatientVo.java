@@ -5,6 +5,7 @@ public class PatientVo {
 	private String name;
 	private String gender;
 	private int age;
+	private String ageGender;
 	private String ssn;
 	private String insurance;
 	private String telNo;
@@ -141,6 +142,13 @@ public class PatientVo {
 	public void setAge(int age) {
 		this.age = age;
 	}
+	public String getAgeGender() {
+		return ageGender;
+	}
+	public void setAgeGender(String ageGender) {
+		this.ageGender = ageGender;
+	}
+	
 	
 	
 	

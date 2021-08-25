@@ -84,7 +84,7 @@ export default function Patient() {
       gender: gender,
       telNo: telNo,
       address: address,
-      email: (emailId + '@' + email ),
+      domain: (emailId + '@' + email ),
       insurance: insurance,
       diagnosis: diagType,
       visitDate: visitDate,

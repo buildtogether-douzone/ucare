@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Patient() {
+export default function Patient(props) {
     const classes = useStyles();
     const [name, setName] = useState('');
     const [ssn, setSSN] = useState('');
@@ -49,58 +49,83 @@ export default function Patient() {
     const [diagType, setDiagType] = useState('초진');
     const [visitDate, setVisitDate] = useState('');
     const [remark, setRemark] = useState('');
-      
-    useEffect(() => {
-      const newDate = new Date();
-      const date = ('0'+ newDate.getDate()).slice(-2);
-      const month = ('0'+( newDate.getMonth() + 1)).slice(-2);
-      const year = newDate.getFullYear();
-      setVisitDate(`${year}-${month}-${date}`);
+  
 
-      if (telNo.length === 10) {
-        setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
-      }
-      if (telNo.length === 13) {
-        setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
-      }
-      if (ssn.length === 13) {
-        setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
-      }
-    }, [ssn, telNo])
+  //   useEffect(() => {
+  //     const newDate = new Date();
+  //     const date = ('0'+ newDate.getDate()).slice(-2);
+  //     const month = ('0'+( newDate.getMonth() + 1)).slice(-2);
+  //     const year = newDate.getFullYear();
+  //     setVisitDate(`${year}-${month}-${date}`);
+  
+  //     const genGender = ssn.substr(8, 1)
+      
+  //     if (genGender % 2 == 1) {
+  //       gender = "남"
+  //     } else {
+  //       gender = "여"
+  //     }
+      
+  //     const yy = newDate.getFullYear();
+      
+  //     if (genGender <= 2) {
+  //       age = "19"
+  //     } else {
+  //       age = "20"
+  //     }
+  //     const ageNum = age.concat(ssn.substr(0, 2))
+      
+  //     const mm = newDate.getMonth() + 1;
+  //     if (mm < 10) { mm = '0' + mm };
+  //     const monthDay = mm + date;
+  //     age = monthDay < ssn.substr(2, 4) ? year - ageNum - 1 : year - ageNum; 
+ 
+  //     setAge(age);
+      
+  //     if (telNo.length === 10) {
+  //       setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
+  //     }
+  //     if (telNo.length === 13) {
+  //       setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+  //     }
+  //     if (ssn.length === 13) {
+  //       setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
+  //     }
+  //   }, [ssn, telNo])
     
-    const telNoChange = (e) => {
-      const regex = /^[0-9\b -]{0,13}$/;
-      if (regex.test(e.target.value)) {
-        setTelNo(e.target.value);
-      }
-    }
+  //   const telNoChange = (e) => {
+  //     const regex = /^[0-9\b -]{0,13}$/;
+  //     if (regex.test(e.target.value)) {
+  //       setTelNo(e.target.value);
+  //     }
+  //   }
   
-    const create = (e) => {
-      e.preventDefault();
+  //   const create = (e) => {
+  //     e.preventDefault();
   
-    let patient = {
-      name: name,
-      ssn: ssn,
-      age: age,
-      gender: gender,
-      telNo: telNo,
-      address: address,
-      email: (emailId + '@' + email ),
-      insurance: insurance,
-      diagnosis: diagType,
-      visitDate: visitDate,
-      remark: remark,
-      userId: window.sessionStorage.getItem('user')
-    }
+  //   let patient = {
+  //     name: name,
+  //     ssn: ssn,
+  //     age: age,
+  //     gender: gender,
+  //     telNo: telNo,
+  //     address: address,
+  //     email: (emailId + '@' + email ),
+  //     insurance: insurance,
+  //     diagnosis: diagType,
+  //     visitDate: visitDate,
+  //     remark: remark,
+  //     userId: window.sessionStorage.getItem('user')
+  //   }
   
-    patientService.create(patient)
-    .then( res => {
-      console.log(patient.name + '님의 정보가 성공적으로 등록되었습니다.');
-    })
-    .catch( err => {
-      console.log('create() 에러', err);
-    });
-  };
+  //   patientService.create(patient)
+  //   .then( res => {
+  //     console.log(patient.name + '님의 정보가 성공적으로 등록되었습니다.');
+  //   })
+  //   .catch( err => {
+  //     console.log('create() 에러', err);
+  //   });
+  // };
   
     return(
       <SiteLayout>
@@ -119,7 +144,7 @@ export default function Patient() {
           id="outlined-name"
           name="name"
           autoComplete="name"
-          value={ name }
+          value={props.location.state.name}
           onChange={ (e) => { setName(e.target.value) }}
         /> 
         </Grid>
@@ -133,7 +158,7 @@ export default function Patient() {
           id="outlined-ssn"
           name="ssn"
           autoComplete="ssn"
-          value={ ssn }
+          value={props.location.state.ssn}
           onChange={ (e) => { setSSN(e.target.value) }}
         /> 
         </Grid>
@@ -148,7 +173,7 @@ export default function Patient() {
           id="outlined-age"
           name="age"
           autoComplete="age"
-          value={ age }
+          value={props.location.state.age}
           onChange = { (e) => { setAge(e.target.value) }}
         /> 
         <Typography className={classes.font} style={{padding: '2%', float: 'left',}} variant="body1">세</Typography>
@@ -157,18 +182,18 @@ export default function Patient() {
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">성별</Typography>
         <FormControl component="fieldset">
-        <RadioGroup row aria-label="gender" name="gender" value={ gender } onChange={ (e) => { setGender(e.target.value) }} >
+        <RadioGroup row aria-label="gender" name="gender" value={props.location.state.gender} onChange={ (e) => { setGender(e.target.value) }} >
         <FormControlLabel
           control={<Radio color="primary" />}
           label="여자"
           labelPlacement="end"
-          value="female"
+          value="여"
         />
         <FormControlLabel
           control={<Radio color="primary" />}
           label="남자"
           labelPlacement="end"
-          value="male"
+          value="남"
         />
       </RadioGroup>
     </FormControl>
@@ -183,8 +208,7 @@ export default function Patient() {
           fullWidth
           id="telNo"
           name="telNo"
-          value={ telNo }
-          onChange={ telNoChange }
+          value={props.location.state.telNo}
         /> 
       </Grid>
 
@@ -198,7 +222,7 @@ export default function Patient() {
           id="address"
           name="address"
           autoComplete="address"
-          value={ address }
+          value={props.location.state.address}
           onChange={ (e) => { setAddress(e.target.value) }}
         /> 
         <SearchIcon style={{float: 'left', fontSize: '45', width: '15%' }} />
@@ -214,7 +238,7 @@ export default function Patient() {
                   id="emailId"
                   name="emailId"
                   autoComplete="emai"
-                  value={ emailId }
+                  value={props.location.state.emailId}
                   onChange={ (e) => {setEmailId(e.target.value)}}
                 />
                 <Typography className={classes.font} style={{ float:'left' ,width: '10%', padding: '2%', textAlign: 'center' }} variant="body1">@</Typography>
@@ -222,7 +246,7 @@ export default function Patient() {
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="email"
-                    value={ email }
+                    value={props.location.state.email}
                     onChange={ (e) => {setEmail(e.target.value)}}
                     >
                     <MenuItem value=""></MenuItem>
@@ -279,7 +303,7 @@ export default function Patient() {
         style={{width: '100%'}}
         id="visitDate"
         type="date"
-        value={ visitDate }
+        value={props.location.state.instDt}
         onChange={ (e) => { setVisitDate(e.target.value) }}
         InputLabelProps={{
           shrink: true,
@@ -305,7 +329,6 @@ export default function Patient() {
           color="primary"
           href="/Home"
           type="submit"
-          onClick={ create } 
           disableElevation>
       등록하기
     </Button>
