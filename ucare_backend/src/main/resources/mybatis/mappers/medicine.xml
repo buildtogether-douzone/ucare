@@ -16,6 +16,36 @@
 		  		SELECT LASTVAL()
 	  	</selectKey>
 	</insert>
+	
+	<update id="createExcel" parameterType="medicinevo">
+		WITH UPSERT AS 
+		(
+			UPDATE ucare.medicine SET 
+				symptom = #{symptom },
+				generic = #{generic },
+				price = #{price },
+				maker = #{maker }
+			WHERE
+				medicine_nm = #{medicineNm }
+			RETURNING *
+		)
+		
+		INSERT INTO ucare.medicine
+		(
+			medicine_nm,
+			symptom,
+			generic,
+			price,
+			maker
+		)
+		SELECT 
+			#{medicineNm },
+			#{symptom },
+			#{generic },
+			#{price },
+			#{maker }
+		WHERE NOT EXISTS(SELECT * FROM UPSERT WHERE medicine_nm = #{medicineNm })
+	</update>
 
 	<select id="retrieveAll" resultType="medicinevo" >
 		SELECT 
@@ -26,6 +56,7 @@
 			price,
 			maker
 		FROM ucare.medicine
+		ORDER BY medicine_no DESC
 	</select>
 	
 	<update id="update" parameterType="medicinevo">

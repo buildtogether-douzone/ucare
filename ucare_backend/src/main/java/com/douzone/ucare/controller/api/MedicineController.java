@@ -31,6 +31,11 @@ public class MedicineController {
 		return new ResponseEntity<>(medicineService.create(data), HttpStatus.OK);
 	}
 	
+	@PostMapping("/excelCreate")
+	public ResponseEntity<?> excelCreate(@RequestBody MedicineVo data) {
+		return new ResponseEntity<>(medicineService.excelCreate(data), HttpStatus.OK);
+	}
+	
 	@GetMapping("/retrieveAll")
 	public ResponseEntity<?> retrieveAll() {
 		return new ResponseEntity<>(medicineService.retrieveAll(), HttpStatus.OK);

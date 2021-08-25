@@ -18,6 +18,10 @@ public class MedicineRepository {
 		
 		return data.getMedicineNo();
 	}
+	
+	public int excelCreate(MedicineVo data) {
+		return sqlSession.update("medicine.createExcel", data);
+	}
 
 	public List<MedicineVo> retrieveAll() {
 		return sqlSession.selectList("medicine.retrieveAll");

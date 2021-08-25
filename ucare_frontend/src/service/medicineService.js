@@ -5,6 +5,9 @@ class medicineService {
   create(data){
     return axios.post(MEDICINE_API_BASE_URL + '/create', data);
   }
+  excelCreate(data){
+    return axios.post(MEDICINE_API_BASE_URL + '/excelCreate', data);
+  }
   retrieveAll(){
     return axios.get(MEDICINE_API_BASE_URL + '/retrieveAll');
   }

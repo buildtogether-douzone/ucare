@@ -30,6 +30,7 @@ export default function DataTableCrudDemo() {
     const [itemDialog, setItemDialog] = useState(false);
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [deleteItemsDialog, setDeleteItemsDialog] = useState(false);
+    const [importedData, setImportedData] = useState([]);
     const [item, setItem] = useState(emptyItem);
     const [selectedItems, setSelectedItems] = useState(null);
     const [submitted, setSubmitted] = useState(false);
@@ -87,6 +88,8 @@ export default function DataTableCrudDemo() {
                     const index = findIndexByNo(item.medicineNo);
 
                     _items[index] = _item;
+                    setItems(_items);
+                    setItemDialog(false);
                     toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Updated', life: 3000 });
                 })
                 .catch(err => {
@@ -98,17 +101,16 @@ export default function DataTableCrudDemo() {
                 .then(res => {
                     console.log('success!!');
                     _item.medicineNo = res.data;
-                    _items.push(_item);
+                    _items.unshift(_item);
+                    setItems(_items);
+                    setItemDialog(false);
+                    setItem(emptyItem);
                     toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Created', life: 3000 });
                 })
                 .catch(err => {
                     console.log('create() Error!', err);
                 })
             }
-
-            setItems(_items);
-            setItemDialog(false);
-            setItem(emptyItem);
         }
     }
 
@@ -123,12 +125,17 @@ export default function DataTableCrudDemo() {
     }
 
     const deleteItem = () => {
-        let _items = items.filter(val => val.medicineNo !== item.medicineNo);
-        console.log(_items);
-        setItems(_items);
-        setDeleteItemDialog(false);
-        setItem(emptyItem);
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
+        medicineService.delete(item.medicineNo)
+        .then(res => {
+            let _items = items.filter(val => val.medicineNo !== item.medicineNo);
+            setItems(_items);
+            setDeleteItemDialog(false);
+            setItem(emptyItem);
+            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
+        })
+        .catch(err => {
+            console.log('delete() Error!', err);
+        })
     }
 
     const findIndexByNo = (medicineNo) => {
@@ -158,7 +165,6 @@ export default function DataTableCrudDemo() {
                 const cols = data[0];
                 data.shift();
 
-                let _importedCols = cols.map(col => ({ field: col, header: toCapitalize(col) }));
                 let _importedData = data.map(d => {
                     return cols.reduce((obj, c, i) => {
                         obj[c] = d[i];
@@ -166,8 +172,21 @@ export default function DataTableCrudDemo() {
                     }, {});
                 });
 
-                setImportedCols(_importedCols);
                 setImportedData(_importedData);
+                let success;
+                _importedData.map((item, index) => (
+                    medicineService.excelCreate(item)
+                    .then(res => {
+                        success = true;
+                        if((_importedData.length === (index+1)) && success === true) {
+                            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Items Created', life: 3000 });
+                        }
+                    })
+                    .catch(err => {
+                        success = false;
+                        console.log('excelCreate() Error!', err);
+                    })
+                ))
             };
 
             reader.readAsArrayBuffer(file);
@@ -199,11 +218,24 @@ export default function DataTableCrudDemo() {
     }
 
     const deleteSelectedItems = () => {
-        let _items = items.filter(val => !selectedItems.includes(val));
-        setItems(_items);
-        setDeleteItemsDialog(false);
-        setSelectedItems(null);
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
+        let success;
+        selectedItems.map((item, index) => (
+            medicineService.delete(item.medicineNo)
+            .then(res => {
+                success = true;
+                if((selectedItems.length === (index+1)) && success === true) {
+                    let _items = items.filter(val => !selectedItems.includes(val));
+                    setItems(_items);
+                    setDeleteItemsDialog(false);
+                    setSelectedItems(null);
+                    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
+                }
+            })
+            .catch(err => {
+                success = false;
+                console.log('selectedDelete() Error!', err);
+            })
+        ))
     }
 
     const onInputChange = (e, name) => {
@@ -234,8 +266,9 @@ export default function DataTableCrudDemo() {
     const rightToolbarTemplate = () => {
         return (
             <React.Fragment>
-                <FileUpload mode="basic" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" label="Import" chooseLabel="엑셀 Import" className="p-mr-2 p-d-inline-block" onUpload={importExcel} />
-                <Button label="엑셀 Export" icon="pi pi-upload" className="p-button-help" onClick={exportExcel} />
+                <FileUpload chooseOptions={{ label: 'Excel', icon: 'pi pi-file-excel', className: 'p-button-success' }} mode="basic" name="demo[]" auto url="https://primefaces.org/primereact/showcase/upload.php"
+                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" className="p-mr-2" onUpload={importExcel} />
+                <Button label="Excel Export" icon="pi pi-upload" className="p-button-help" onClick={exportExcel} />
             </React.Fragment>
         )
     }
@@ -288,7 +321,7 @@ export default function DataTableCrudDemo() {
             <div className="card">
                 <Toolbar className="p-mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
 
-                <DataTable ref={dt} value={items} selection={selectedItems} onSelectionChange={(e) => setSelectedItems(e.value)}
+                <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="No data" onSelectionChange={(e) => setSelectedItems(e.value)}
                     dataKey="medicineNo" paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
