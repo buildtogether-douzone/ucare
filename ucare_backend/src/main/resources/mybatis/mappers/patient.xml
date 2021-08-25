@@ -33,9 +33,12 @@
 			SUBSTR(address, 1, 13) AS address,
 			insurance_yn AS insurance,
 			diagnosis_type AS diagnosis,
-			ins_dt AS insDt
+			ins_dt AS insDt,
+		   split_part(email, '@', 1) as emailId,
+		   split_part(email, '@', 2) as email,
+		   remark AS remark
 		FROM ucare.patient
-		ORDER BY patient_no DESC
+		ORDER BY patient_no desc
 	</select>
 	
 	<select id="findUser" parameterType="patientvo" resultType="patientvo">

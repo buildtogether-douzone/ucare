@@ -249,10 +249,17 @@ export default function Patient(props) {
                     value={props.location.state.email}
                     onChange={ (e) => {setEmail(e.target.value)}}
                     >
-                    <MenuItem value=""></MenuItem>
+                    <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
                     <MenuItem value={'naver.com'}>naver.com</MenuItem>
                     <MenuItem value={'daum.net'}>daum.net</MenuItem>
-                    <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
+                    <MenuItem value={'yahoo.co.kr'}>yahoo.co.kr</MenuItem>
+                    <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
+                    <MenuItem value={'nate.com'}>nate.com</MenuItem>
+                    <MenuItem value={'empas.com'}>empas.com</MenuItem>
+                    <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
+                    <MenuItem value={'weppy.com'}>weppy.com</MenuItem>
+                    <MenuItem value={'korea.com'}>korea.com</MenuItem>
+                    <MenuItem value={'mail.co.kr'}>hotmail.com</MenuItem>
                   </Select>
                 </FormControl>
       </Grid>
@@ -260,7 +267,7 @@ export default function Patient(props) {
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">보험 여부</Typography>
         <FormControl component="fieldset">
-        <RadioGroup row aria-label="insurance" name="insurance" value={ insurance } onChange={ (e) => { setInsurance(e.target.value) }} >
+        <RadioGroup row aria-label="insurance" name="insurance" value={props.location.state.insurance} onChange={ (e) => { setInsurance(e.target.value) }} >
         <FormControlLabel
           value="Y"
           control={<Radio color="primary" />}
@@ -280,7 +287,7 @@ export default function Patient(props) {
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">진료 구분</Typography>
         <FormControl component="fieldset">
-        <RadioGroup row aria-label="diagnosis" name="diagnosis" value={ diagType } onChange={ (e) => { setDiagType(e.target.value) }} >
+        <RadioGroup row aria-label="diagnosis" name="diagnosis" value={props.location.state.diagType} onChange={ (e) => { setDiagType(e.target.value) }} >
         <FormControlLabel
           value="초진"
           control={<Radio color="primary" />}
@@ -303,7 +310,7 @@ export default function Patient(props) {
         style={{width: '100%'}}
         id="visitDate"
         type="date"
-        value={props.location.state.instDt}
+        value={props.location.state.insDt}
         onChange={ (e) => { setVisitDate(e.target.value) }}
         InputLabelProps={{
           shrink: true,
@@ -318,7 +325,7 @@ export default function Patient(props) {
           multiline
           rows={4}
           variant="outlined" 
-          value={ remark }
+          value={props.location.state.remark}
           onChange={ (e) => { setRemark(e.target.value) }}
         />
       </Grid>
@@ -330,7 +337,7 @@ export default function Patient(props) {
           href="/Home"
           type="submit"
           disableElevation>
-      등록하기
+      수정하기
     </Button>
     </Grid>
         </form>

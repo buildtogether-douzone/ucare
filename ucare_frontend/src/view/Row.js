@@ -86,13 +86,16 @@ export default function Row(props) {
               patientNo: row.patientNo,
               name: row.name,
               gender: row.gender,
+              emailId: row.emailId,
+              email: row.eamil,
               ssn: row.ssn,
               age: row.age,
               address: row.address,
               telNo: row.telNo,
               diagnosis: row.diagnosis,
               insurance: row.insurance,
-              insDt: row.insDt
+              insDt: row.insDt,
+              remark: row.remark
             }
           }}><Button variant="outlined" size="small" color="primary">환자정보</Button></Link>
         </TableCell>
