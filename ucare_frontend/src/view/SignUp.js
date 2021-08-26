@@ -17,10 +17,14 @@ import Footter from '../layout/Footer';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    width:'100%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    boxShadow: '0 0 5px #BABABA',
+    padding: '30px 5px 70px 5px',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: '10px'
   },
   avatar: {
     margin: theme.spacing(1),
@@ -33,6 +37,23 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  image: {
+    position: 'relative',
+    height: '100vh',
+    width: '100%',
+    overflowY: 'scroll',
+    "&::-webkit-scrollbar": {
+      display: "none"
+    },
+    "&::before":{
+      content: '""',
+      height: '100vh',
+      width: '100%',
+      backgroundSize: '100% 100%',
+      zIndex: -1,
+      position: 'fixed',
+    }
+  }
 }));
 
 export default function SignUp({ history }) {
@@ -148,6 +169,7 @@ export default function SignUp({ history }) {
   }
 
   return (
+    <div className={classes.image}>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -319,7 +341,8 @@ export default function SignUp({ history }) {
           </Grid>
         </form>
       </div>
-      <Footter />
     </Container>
+    <Footter />
+    </div>
   );
 }
