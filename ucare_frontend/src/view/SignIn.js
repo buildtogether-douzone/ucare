@@ -126,7 +126,7 @@ export default function SignInSide({ history }) {
             <TextField
               variant="outlined"
               margin="normal"
-              style={{backgroundColor: '#F2F2F2'}}
+              style={{backgroundColor: 'white'}}
               required
               fullWidth
               id="id"
@@ -140,7 +140,7 @@ export default function SignInSide({ history }) {
             <TextField
               variant="outlined"
               margin="normal"
-              style={{backgroundColor: '#F2F2F2'}}
+              style={{backgroundColor: 'white'}}
               required
               fullWidth
               name="password"
