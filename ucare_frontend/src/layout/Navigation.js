@@ -70,9 +70,7 @@ const Navigation = ( { open, drawerManage }) => {
                 </IconButton>
             </div>
             <Divider />
-            <List >{    
-                console.log(sessionStorage.getItem('role')),
-                role }</List>
+            <List >{ role }</List>
         </Drawer>
     );
 }
