@@ -15,6 +15,7 @@ public class ReceiptVo {
 	private String userId;
 	private String name;
 	private Long no;
+	private String state;
 
 	public Long getNo() {
 		return no;
@@ -100,6 +101,13 @@ public class ReceiptVo {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	
 
 	
 }

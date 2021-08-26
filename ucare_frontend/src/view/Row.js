@@ -37,6 +37,7 @@ export default function Row(props) {
   const [modalBP, setModalBP] = useState('');
   const [modalBS, setModalBS] = useState('');
   const [modalRemark, setModalRemark] = useState('');
+  const [deleteNo, setDeleteNo] = useState('');
 
   const handleClickOpen = (a, b, c) => {
     setModalBP(a);
@@ -48,6 +49,7 @@ export default function Row(props) {
   const handleClose = () => {
     setDialogOpen(false);
   };
+
   const fetchReceipt = () => {
     receiptService.retrieveAll(row.patientNo)
       .then(res => {
@@ -56,6 +58,17 @@ export default function Row(props) {
       .catch(err => {
         console.log('retrieveAll() 에러', err);
       });
+  };
+
+  const deleteReceipt = (receiptNo) => {
+    setDeleteNo(receiptNo);
+    receiptService.delete(receiptNo)
+    .then(res => {
+      console.log(receiptNo + '번 접수가 성공적으로 취소되었습니다.');
+    })
+    .catch( err => {
+      console.log('delete() 에러', err);
+    });
   };
 
   useEffect(() => {
@@ -122,22 +135,34 @@ export default function Row(props) {
                 <TableHead>
                   <TableRow>
                     <TableCell style={{ width: '3%' }} />
-                    <TableCell style={{ width: '10%', textAlign: 'center' }}>No</TableCell>
+                    <TableCell style={{ width: '6%', textAlign: 'center' }}>No</TableCell>
                     <TableCell style={{ width: '12%', textAlign: 'center' }}>접수 번호</TableCell>
                     <TableCell style={{ width: '17%', textAlign: 'center' }}>접수 날짜</TableCell>
                     <TableCell style={{ width: '17%', textAlign: 'center' }}>접수 시간</TableCell>
-                    <TableCell style={{ width: '41%' }}>접수 메모</TableCell>
+                    <TableCell style={{ width: '35%', textAlign: 'center' }}>접수 메모</TableCell>
+                    <TableCell style={{ width: '10%', textAlign: 'center' }}>접수 취소</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {receipt.map((receiptList) => (
-                    <TableRow key={receiptList.receiptNo} onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}>
+                    <TableRow key={receiptList.receiptNo} >
                       <TableCell />
                       <TableCell style={{ textAlign: 'center' }} component="th" scope="row">{receiptList.no}</TableCell>
-                      <TableCell style={{ textAlign: 'center' }}>{receiptList.receiptNo}</TableCell>
+                      <TableCell onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }} style={{ textAlign: 'center' }}>{receiptList.receiptNo}</TableCell>
                       <TableCell style={{ textAlign: 'center' }}>{receiptList.receiptDt}</TableCell>
                       <TableCell style={{ textAlign: 'center' }}>{receiptList.receiptTime}</TableCell>
                       <TableCell>{receiptList.remark}</TableCell>
+                      {receiptList.state == '완료' ?
+                      <TableCell></TableCell>
+                      : <TableCell style={{ textAlign: 'center' }}>
+                        <Button 
+                            variant="outlined" 
+                            size="small" 
+                            color="primary" 
+                            type="submit" 
+                            onClick={ () => { deleteReceipt(receiptList.receiptNo) } }>접수취소</Button>
+                        </TableCell>
+                    }
                     </TableRow>
                   ))}
                   <Dialog open={dialogOpen} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>

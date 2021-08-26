@@ -78,7 +78,7 @@ export default function PatientList() {
     <TableHead>
       <TableRow>
         <TableCell style={{width: '5%'}}/>
-        <TableCell style={{width: '8%', textAlign: 'center'}}>환자 번호</TableCell>
+        <TableCell style={{width: '5%', textAlign: 'center'}}>환자 번호</TableCell>
         <TableCell style={{width: '12%', textAlign: 'center'}}>이름</TableCell>
         <TableCell style={{width: '12%', textAlign: 'center'}}>성별/나이</TableCell>
         <TableCell style={{width: '12%', textAlign: 'center'}}>주민등록번호</TableCell>

@@ -10,6 +10,10 @@ class receiptService {
   retrieveAll(patientNo){
     return axios.get(RECEIPT_API_BASE_URL + '/retrieveAll/' + patientNo);
   }
+
+  delete(receiptNo){
+    return axios.delete(RECEIPT_API_BASE_URL + '/delete/' + receiptNo);
+  }
 }
 
 export default new receiptService();

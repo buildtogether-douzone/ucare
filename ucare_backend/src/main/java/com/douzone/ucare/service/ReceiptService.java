@@ -21,4 +21,8 @@ public class ReceiptService {
 	public List<ReceiptVo> retrieveAll(Long patientNo) {
 		return ReceiptRepository.retrieveAll(patientNo);
 	}
+	
+	public int delete(Long receiptNo) {
+		return ReceiptRepository.delete(receiptNo);
+	}
 }
