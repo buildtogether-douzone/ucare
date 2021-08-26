@@ -40,6 +40,10 @@ const useStyles = makeStyles((theme) => createStyles({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    boxShadow: '0 0 5px #BABABA',
+    padding: '30px 5px 70px 5px',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: '10px'
   },
   form: {
     width: '80%', // Fix IE 11 issue.
@@ -47,7 +51,7 @@ const useStyles = makeStyles((theme) => createStyles({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
-  },
+  }
 }));
 
 export default function SignInSide({ history }) {
