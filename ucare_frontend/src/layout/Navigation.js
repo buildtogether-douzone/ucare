@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Drawer from '@material-ui/core/Drawer';
@@ -46,6 +46,15 @@ const useStyles = makeStyles((theme) => ({
 
 const Navigation = ( { open, drawerManage }) => {
     const classes = useStyles();
+    const [role, setRole] = useState('');
+
+    useEffect(() => {
+      setRole((
+        sessionStorage.getItem('role') == '간호사' ? nurseListItems : 
+        sessionStorage.getItem('role') == '의사' ? doctorListItems : 
+        sessionStorage.getItem('role') == '관리자' && adminListItems 
+      ));
+    }, [])
 
     return (
         <Drawer
@@ -61,10 +70,9 @@ const Navigation = ( { open, drawerManage }) => {
                 </IconButton>
             </div>
             <Divider />
-            <List >{
-              sessionStorage.getItem('role') == '간호사' ? nurseListItems : 
-              sessionStorage.getItem('role') == '의사' ? doctorListItems : 
-              sessionStorage.getItem('role') == '관리자' && adminListItems }</List>
+            <List >{    
+                console.log(sessionStorage.getItem('role')),
+                role }</List>
         </Drawer>
     );
 }
