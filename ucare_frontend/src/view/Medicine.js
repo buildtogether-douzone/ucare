@@ -11,11 +11,11 @@ import { RadioButton } from 'primereact/radiobutton';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
-import '../assets/scss/DataTableDemo.scss';
+import '../assets/scss/DataTable.scss';
 import SiteLayout from '../layout/SiteLayout';
 import medicineService from '../service/medicineService';
 
-export default function DataTableCrudDemo() {
+export default function Medicine() {
 
     let emptyItem = {
         medicineNo: null,
@@ -315,7 +315,7 @@ export default function DataTableCrudDemo() {
 
     return (
         <SiteLayout>
-        <div className="datatable-crud-demo">
+        <div className="datatable-crud">
             <Toast ref={toast} />
 
             <div className="card">

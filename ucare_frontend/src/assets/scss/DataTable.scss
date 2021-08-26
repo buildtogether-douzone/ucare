@@ -1,4 +1,4 @@
-.datatable-doc-demo {
+.datatable-doc {
     .p-paginator {
         .p-paginator-current {
             margin-left: auto;
@@ -94,14 +94,14 @@
     }
 }
 
-.datatable-responsive-demo {
-    .p-datatable-responsive-demo .p-datatable-tbody > tr > td .p-column-title {
+.datatable-responsive {
+    .p-datatable-responsive .p-datatable-tbody > tr > td .p-column-title {
         display: none;
     }
 
     @media screen and (max-width: 40em) {
         .p-datatable {
-            &.p-datatable-responsive-demo {
+            &.p-datatable-responsive {
                 .p-datatable-thead > tr > th,
                 .p-datatable-tfoot > tr > td {
                     display: none !important;
@@ -132,7 +132,7 @@
     }
 }
 
-.datatable-rowexpansion-demo {
+.datatable-rowexpansion {
     .product-image {
         width: 100px;
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
@@ -143,7 +143,7 @@
     }
 }
 
-.datatable-templating-demo {
+.datatable-templating {
     .table-header {
         display: flex;
         align-items: center;
@@ -156,7 +156,7 @@
     }
 }
 
-.datatable-filter-demo {
+.datatable-filter {
     .p-paginator {
         .p-paginator-current {
             margin-left: auto;
@@ -252,7 +252,7 @@
     }
 }
 
-.datatable-scroll-demo {
+.datatable-scroll {
     .loading-text {
         display: block;
         background-color: #f1f1f1;
@@ -263,14 +263,14 @@
     }
 }
 
-.datatable-editing-demo {
+.datatable-editing {
     .editable-cells-table td.p-cell-editing {
         padding-top: 0;
         padding-bottom: 0;
     }
 }
 
-.datatable-crud-demo {
+.datatable-crud {
     .table-header {
         display: flex;
         align-items: center;
@@ -295,7 +295,7 @@
     }
 }
 
-.datatable-style-demo {
+.datatable-style {
     .outofstock {
         font-weight: 700;
         color: #FF5252;
@@ -318,7 +318,7 @@
     }
 }
 
-.datatable-rowgroup-demo {
+.datatable-rowgroup {
     .p-rowgroup-footer td {
         font-weight: 700;
     }
@@ -335,7 +335,7 @@
     }
 }
 
-.datatable-selection-demo {
+.datatable-selection {
     .card {
         h6 {
             margin-top: 2rem;
