@@ -14,9 +14,9 @@ public class ReceiptRepository {
 	@Autowired
 	private SqlSession sqlSession;
 	
-//	public int create(PatientVo patient) {
-//		return sqlSession.insert("patient.create", patient);
-//	}
+	public int create(ReceiptVo receipt) {
+		return sqlSession.insert("receipt.create", receipt);
+	}
 
 	public List<ReceiptVo> retrieveAll(Long patientNo) {
 		return sqlSession.selectList("receipt.retrieveAll", patientNo);

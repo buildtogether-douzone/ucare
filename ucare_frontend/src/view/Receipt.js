@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import InputBase from '@material-ui/core/InputBase';
 import SiteLayout from '../layout/SiteLayout';
+import receiptService from '../service/receiptService';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,14 +37,31 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
 export default function Receipt(props) {
   const classes = useStyles();
-  const [value, setValue] = React.useState('top');
+  const [bp, setBP] = useState('');
+  const [bs, setBS] = useState('');
+  const [remark, setRemark] = useState('');
   
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+  const create = (e) => {
+    e.preventDefault();
+
+  let receipt = {
+    remark: remark,
+    bp: bp,
+    bs: bs,
+    patientNo: props.location.state.patientNo,
+    userId: window.sessionStorage.getItem('user')
+  }
+
+  receiptService.create(receipt)
+  .then( res => {
+    console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
+  })
+  .catch( err => {
+    console.log('create() 에러', err);
+  });
+};
 
   return (
     <SiteLayout>
@@ -93,7 +110,30 @@ export default function Receipt(props) {
                 }}
               />
             </Grid>
-
+            <Grid item xs={12}>
+              <Typography className={classes.font} variant="body1" gutterBottom>혈압</Typography>
+              <TextField
+                className={classes.input}
+                fullWidth
+                id="filled-read-only-input3"
+                value={ bp }
+                onChange={ (e) => { setBP(e.target.value) }}
+                size="small"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography className={classes.font} variant="body1" gutterBottom>혈당</Typography>
+              <TextField
+                className={classes.input}
+                fullWidth
+                id="filled-read-only-input4"
+                value={ bs }
+                onChange={ (e) => { setBS(e.target.value) }}
+                size="small"
+                variant="outlined"
+              />
+            </Grid>
             <Grid item xs={12}>
               <div style={{width: '69%', marginLeft: '140px'}}>
               <TextField
@@ -103,13 +143,13 @@ export default function Receipt(props) {
                 fullWidth
                 label="접수 메모"
                 rows={4}
-                defaultValue=""
+                value={ remark }
+                onChange={ (e) => { setRemark(e.target.value) }}
                 variant="outlined"
               />
               </div>
             </Grid>
-
-            <Button style={{marginTop: '10px'}} variant="outlined" size="small" color="primary">접수</Button>
+            <Button style={{marginTop: '10px'}} variant="outlined" size="small" color="primary" type="submit" onClick={ create }>접수</Button>
           </Grid>
         </form>
       </div>

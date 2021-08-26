@@ -14,9 +14,9 @@ public class ReceiptService {
 	@Autowired
 	private ReceiptRepository ReceiptRepository;
 
-//	public int create(PatientVo patient) {
-//		return PatientRepository.create(patient);
-//	}
+	public int create(ReceiptVo receipt) {
+		return ReceiptRepository.create(receipt);
+	}
 
 	public List<ReceiptVo> retrieveAll(Long patientNo) {
 		return ReceiptRepository.retrieveAll(patientNo);
