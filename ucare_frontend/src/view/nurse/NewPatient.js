@@ -13,8 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import patientService from '../service/patientService';
-import SiteLayout from '../layout/SiteLayout';
+import patientService from '../../service/patientService';
+import SiteLayout from '../../layout/SiteLayout';
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),

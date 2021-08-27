@@ -4,8 +4,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import SiteLayout from '../layout/SiteLayout';
-import receiptService from '../service/receiptService';
+import SiteLayout from '../../layout/SiteLayout';
+import receiptService from '../../service/receiptService';
 
 const useStyles = makeStyles((theme) => ({
   paper: {

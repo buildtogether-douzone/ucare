@@ -68,6 +68,7 @@ spring:
       password: 102938
       initialSize: 10
       maxActive: 100
+
 ---
 # server
 server:
