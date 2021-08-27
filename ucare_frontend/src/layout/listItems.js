@@ -17,7 +17,7 @@ export const nurseListItems = (
       </ListItemIcon>
       <ListItemText primary="공지 사항" />
     </ListItem>
-    <ListItem button>
+    <ListItem button component={Link} to="/nurse/patientList">
       <ListItemIcon>
         <ShoppingCartIcon />
       </ListItemIcon>

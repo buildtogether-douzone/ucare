@@ -28,9 +28,21 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   font: {
-    fontWeight: 'bold',
-    marginBottom: theme.spacing(1),
-    marginTop: theme.spacing(1)
+    width: '35%',
+    float: 'left',
+    padding: '6px 0 7px',
+    textAlign: 'right'
+  },
+  input: {
+    width: '50%',
+    float: 'left',
+    fontSize: '20px',
+    backgroundColor: '#FFFFFF',
+    marginLeft: '40px'
+  },
+  textField: {
+    display: 'inline-block',
+    float: 'right'
   }
 }));
 
@@ -124,7 +136,6 @@ export default function Patient() {
   };
   
     return(
-      <SiteLayout>
       <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -134,6 +145,7 @@ export default function Patient() {
         <Typography className={classes.font} variant="body1">이름</Typography>
         <TextField 
           style={{backgroundColor: '#FFFFFF'}}
+          className={classes.input}
           variant="outlined"
           required
           fullWidth
@@ -147,7 +159,8 @@ export default function Patient() {
         <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">주민등록번호</Typography>
         <TextField
-          style={{backgroundColor: '#FFFFFF'}} 
+          style={{backgroundColor: '#FFFFFF'}}
+          className={classes.input} 
           variant="outlined"
           required
           fullWidth
@@ -183,6 +196,7 @@ export default function Patient() {
       <Typography className={classes.font} variant="body1">전화번호</Typography>
         <TextField
           style={{backgroundColor: '#FFFFFF'}} 
+          className={classes.input}
           variant="outlined"
           required
           fullWidth
@@ -196,7 +210,8 @@ export default function Patient() {
       <Grid item xs={12}>
       <Typography className={classes.font} variant="body1">주소</Typography>
         <TextField
-          style={{width: '85%', float: 'left', backgroundColor: '#FFFFFF'}} 
+          className={classes.input}
+          style={{backgroundColor: '#FFFFFF'}} 
           variant="outlined"
           required
           fullWidth
@@ -326,6 +341,5 @@ export default function Patient() {
         </form>
       </div>
     </Container>
-    </SiteLayout>
     );
 }

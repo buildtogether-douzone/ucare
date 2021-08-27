@@ -12,14 +12,24 @@ import Paper from '@material-ui/core/Paper';
 import patientService from '../../service/patientService';
 import SiteLayout from '../../layout/SiteLayout';
 import SearchBar from "material-ui-search-bar";
+import Grid from '@material-ui/core/Grid';
 import Row from './Row';
 import PatientPage from './PatientPage';
+import NewPatient from './NewPatient';
 
-const useStyles2 = makeStyles({
+const useStyles2 = makeStyles((theme) => ({
   table: {
     minWidth: 500,
   },
-});
+  paper: {
+    marginTop: theme.spacing(3),
+    marginRight: theme.spacing(3),
+    marginBottom: theme.spacing(5),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+}));
 
 export default function PatientList() {
  const classes = useStyles2();
@@ -64,6 +74,12 @@ export default function PatientList() {
 
  return (
   <SiteLayout>
+    <Grid container>
+      <Grid item xs={4}>
+      <NewPatient />
+      </Grid>
+      <Grid item xs={8}>
+      <div className={classes.paper}>
       <SearchBar
       value={search}
       onChange={(value) => setSearch(value)}
@@ -121,6 +137,9 @@ export default function PatientList() {
         </TableFooter>
   </Table>
 </TableContainer>
+</div>
+</Grid>
+</Grid>
 </SiteLayout>
 
  

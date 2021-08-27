@@ -16,11 +16,14 @@ const useStyles = makeStyles((theme) => ({
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
+    margin:0,
     flexGrow: 1,
     height: '100vh',
     overflow: 'auto',
   },
   container: {
+    paddingLeft: theme.spacing(0),
+    paddingRight: theme.spacing(0),
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   }
@@ -36,11 +39,7 @@ export default function Dashboard({ children }) {
           <Navigation />
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
-            <Container maxWidth="lg" className={classes.container}>
-              <Grid container spacing={3}>
                 {children}
-              </Grid>
-            </Container>
           </main>
         </div>
         <Footer />
