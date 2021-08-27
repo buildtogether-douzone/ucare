@@ -17,32 +17,48 @@ import patientService from '../../service/patientService';
 import SiteLayout from '../../layout/SiteLayout';
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(3),
     marginBottom: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    border: '1px solid white',
+    backgroundColor: '#FFFFFF'
   },
   form: {
     width: '100%',
     marginTop: theme.spacing(3),
   },
   font: {
-    width: '35%',
+    width: '25%',
     float: 'left',
     padding: '6px 0 7px',
     textAlign: 'right'
   },
   input: {
-    width: '50%',
+    width: '60%',
     float: 'left',
     fontSize: '20px',
     backgroundColor: '#FFFFFF',
     marginLeft: '40px'
   },
+  radio: {
+    width: '50%',
+    float: 'left',
+    marginLeft: '40px'
+  },
   textField: {
     display: 'inline-block',
     float: 'right'
+  },
+  title: {
+    padding: theme.spacing(1),
+    border: '1px solid #DFDFDF', 
+    width: '100%', 
+    backgroundColor: '#DFDFDF',
+    borderRadius: '10px 10px 0 0',
+    fontWeight: 550,
+    color: '#656565'
   }
 }));
 
@@ -139,8 +155,9 @@ export default function Patient() {
       <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
+      <Typography variant="h6" className={classes.title}>환자 등록</Typography>      
       <form className={classes.form} noValidate>
-      <Grid container spacing={2}> 
+      <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">이름</Typography>
         <TextField 
@@ -149,6 +166,7 @@ export default function Patient() {
           variant="outlined"
           required
           fullWidth
+          size="small"
           id="outlined-name"
           name="name"
           autoComplete="name"
@@ -164,6 +182,7 @@ export default function Patient() {
           variant="outlined"
           required
           fullWidth
+          size="small"
           id="outlined-ssn"
           name="ssn"
           autoComplete="ssn"
@@ -174,7 +193,7 @@ export default function Patient() {
 
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">성별</Typography>
-        <FormControl component="fieldset">
+        <FormControl component="fieldset" className={classes.radio}>
         <RadioGroup row aria-label="gender" name="gender" value={ gender } onChange={ (e) => { setGender(e.target.value) }} >
         <FormControlLabel
           control={<Radio color="primary" />}
@@ -200,6 +219,7 @@ export default function Patient() {
           variant="outlined"
           required
           fullWidth
+          size="small"
           id="telNo"
           name="telNo"
           value={ telNo }
@@ -211,37 +231,41 @@ export default function Patient() {
       <Typography className={classes.font} variant="body1">주소</Typography>
         <TextField
           className={classes.input}
-          style={{backgroundColor: '#FFFFFF'}} 
+          style={{backgroundColor: '#FFFFFF', width: '47%'}} 
           variant="outlined"
           required
-          fullWidth
+          size="small"
           id="address"
           name="address"
           autoComplete="address"
           value={ address }
           onChange={ (e) => { setAddress(e.target.value) }}
         /> 
-        <SearchIcon style={{float: 'left', fontSize: '45', width: '15%' }} />
+        <SearchIcon style={{float: 'left', fontSize: '30', width: '15%' }} />
       </Grid>
 
       <Grid item xs={12}>
                 <Typography className={classes.font} variant="body1">이메일</Typography>
                 <TextField
-                  style={{float:'left', width: '45%', backgroundColor: '#FFFFFF' }}
+                          className={classes.input}
+                  style={{float:'left', width: '25%', backgroundColor: '#FFFFFF'}}
                   variant="outlined"
                   required
                   fullWidth
+                  size="small"
                   id="emailId"
                   name="emailId"
                   autoComplete="emai"
                   value={ emailId }
                   onChange={ (e) => {setEmailId(e.target.value)}}
                 />
-                <Typography className={classes.font} style={{ float:'left' ,width: '10%', padding: '2%', textAlign: 'center' }} variant="body1">@</Typography>
-                <FormControl variant="outlined" style={{ float:'left', width: '45%', backgroundColor: '#FFFFFF' }}>
+                <Typography className={classes.font} style={{ float:'left' ,width: '5%', padding: '1%', textAlign: 'center' }} variant="body1">@</Typography>
+                <FormControl variant="outlined" style={{ float:'left', width: '30%', backgroundColor: '#FFFFFF', marginLeft: '3px'  }}>
                   <Select
+                  style={{height: '2.5em'}}
                     labelId="demo-simple-select-outlined-label"
                     id="email"
+                    size="small"
                     value={ email }
                     onChange={ (e) => {setEmail(e.target.value)}}
                     >
@@ -263,7 +287,7 @@ export default function Patient() {
 
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">보험 여부</Typography>
-        <FormControl component="fieldset">
+        <FormControl component="fieldset" className={classes.radio}>
         <RadioGroup row aria-label="insurance" name="insurance" value={ insurance } onChange={ (e) => { setInsurance(e.target.value) }} >
         <FormControlLabel
           value="Y"
@@ -283,7 +307,7 @@ export default function Patient() {
  
       <Grid item xs={12}>
         <Typography className={classes.font} variant="body1">진료 구분</Typography>
-        <FormControl component="fieldset">
+        <FormControl component="fieldset" className={classes.radio}>
         <RadioGroup row aria-label="diagnosis" name="diagnosis" value={ diagType } onChange={ (e) => { setDiagType(e.target.value) }} >
         <FormControlLabel
           value="초진"
@@ -302,11 +326,13 @@ export default function Patient() {
       </Grid>
 
       <Grid item xs={12}>
-      <Typography className={classes.font} variant="body1">최초 내원일</Typography>
+      <Typography className={classes.font} variant="body1">내원일</Typography>
       <TextField
-        style={{width: '100%'}}
+        className={classes.input}
         id="visitDate"
         type="date"
+        variant="outlined"
+        size="small"
         value={ visitDate }
         onChange={ (e) => { setVisitDate(e.target.value) }}
         InputLabelProps={{
@@ -318,7 +344,7 @@ export default function Patient() {
       <Grid item xs={12}>
       <Typography className={classes.font} variant="body1">비고</Typography>
         <TextField
-          style={{width: '100%', backgroundColor: '#FFFFFF'}} 
+          className={classes.input}
           multiline
           rows={4}
           variant="outlined" 
@@ -327,17 +353,18 @@ export default function Patient() {
         />
       </Grid>
 
-        <Button 
-          style={{width: '100%', marginTop: '5%'}} 
+    </Grid>
+        <Button
+          style={{ margin: '5%', backgroundColor: '#1C91FB', border: '1px solid #1C91FB', float: 'right'}} 
           variant="contained" 
           color="primary"
+          size="small"
           href="/Home"
           type="submit"
           onClick={ create } 
           disableElevation>
-      등록하기
+      등록
     </Button>
-    </Grid>
         </form>
       </div>
     </Container>

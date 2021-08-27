@@ -92,16 +92,16 @@ export default function PatientList() {
   <TableContainer component={Paper}>
   <Table className={classes.table} aria-label="collapsible table">
     <TableHead>
-      <TableRow>
-        <TableCell style={{width: '5%'}}/>
-        <TableCell style={{width: '5%', textAlign: 'center'}}>환자 번호</TableCell>
-        <TableCell style={{width: '12%', textAlign: 'center'}}>이름</TableCell>
-        <TableCell style={{width: '12%', textAlign: 'center'}}>성별/나이</TableCell>
-        <TableCell style={{width: '12%', textAlign: 'center'}}>주민등록번호</TableCell>
-        <TableCell style={{width: '15%', textAlign: 'center'}}>전화번호</TableCell>
-        <TableCell style={{width: '23%', textAlign: 'center'}}>주소</TableCell>
-        <TableCell style={{width: '9%', textAlign: 'center'}}>환자정보</TableCell>
-        <TableCell style={{width: '4%', textAlign: 'center'}}>접수</TableCell>
+      <TableRow style={{backgroundColor: '#DFDFDF'}}>
+        <TableCell style={{width: '3%', padding: '10px'}}/>
+        <TableCell style={{width: '10%', textAlign: 'center', padding: '10px'}}>환자 번호</TableCell>
+        <TableCell style={{width: '8%', textAlign: 'center', padding: '10px'}}>이름</TableCell>
+        <TableCell style={{width: '9%', textAlign: 'center', padding: '10px'}}>성별/나이</TableCell>
+        <TableCell style={{width: '15%', textAlign: 'center', padding: '10px'}}>주민등록번호</TableCell>
+        <TableCell style={{width: '15%', textAlign: 'center', padding: '10px'}}>전화번호</TableCell>
+        <TableCell style={{width: '25%', textAlign: 'center', padding: '10px'}}>주소</TableCell>
+        <TableCell style={{width: '9%', textAlign: 'center', padding: '10px'}}>환자정보</TableCell>
+        <TableCell style={{width: '6%', textAlign: 'center', padding: '10px'}}>접수</TableCell>
       </TableRow>
     </TableHead>
     <TableBody>

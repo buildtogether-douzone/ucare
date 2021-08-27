@@ -19,6 +19,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 
 const useRowStyles = makeStyles({
   rowStyle: {
@@ -79,20 +81,20 @@ export default function Row(props) {
 
     <React.Fragment>
       <TableRow className={classes.rowStyle}>
-        <TableCell >
+        <TableCell style={{ textAlign: 'center', padding: '10px' }}>
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row" style={{ textAlign: 'center' }}>
+        <TableCell component="th" scope="row" style={{ textAlign: 'center', padding: '10px' }}>
           {row.patientNo}
         </TableCell>
-        <TableCell style={{ textAlign: 'center' }}>{row.name}</TableCell>
-        <TableCell style={{ textAlign: 'center' }}>{row.ageGender}</TableCell>
-        <TableCell style={{ textAlign: 'center' }}>{row.ssn}</TableCell>
-        <TableCell style={{ textAlign: 'center' }}>{row.telNo}</TableCell>
-        <TableCell>{row.address}</TableCell>
-        <TableCell style={{ textAlign: 'center' }}>
+        <TableCell style={{ textAlign: 'center', padding: '10px' }}>{row.name}</TableCell>
+        <TableCell style={{ textAlign: 'center', padding: '10px' }}>{row.ageGender}</TableCell>
+        <TableCell style={{ textAlign: 'center', padding: '10px' }}>{row.ssn}</TableCell>
+        <TableCell style={{ textAlign: 'center', padding: '10px' }}>{row.telNo}</TableCell>
+        <TableCell style={{ padding: '10px' }}>{row.address}</TableCell>
+        <TableCell style={{ textAlign: 'center', padding: '5px' }}>
         <Link to={{
             pathname: `/nurse/patient/${row.patientNo}`,
             state: {
@@ -110,9 +112,9 @@ export default function Row(props) {
               insDt: row.insDt,
               remark: row.remark
             }
-          }}><Button variant="outlined" size="small" color="primary">환자정보</Button></Link>
+          }}><PermIdentityIcon style={{color: '#1C91FB', fontSize: '30px'}}/></Link>
         </TableCell>
-        <TableCell style={{ textAlign: 'center' }}>
+        <TableCell style={{ textAlign: 'center', padding: '5px' }}>
         <Link to={{
             pathname: `/nurse/receipt/${row.patientNo}`,
             state: {
@@ -121,7 +123,7 @@ export default function Row(props) {
               ageGender: row.ageGender,
               insurance: row.insurance
             }
-          }}><Button variant="outlined" size="small" color="primary">접수</Button></Link>
+          }}><AddBoxIcon style={{color: '#1C91FB', fontSize: '30px'}} /></Link>
         </TableCell>
       </TableRow>
       <TableRow>
