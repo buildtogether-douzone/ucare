@@ -122,7 +122,7 @@ export default function SignInSide({ history }) {
             <Typography component="h1" variant="h5">
                 Sign in
             </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} noValidate onKeyPress={(e) => { e.key === 'Enter' ? login(e) : null}}>
             <TextField
               variant="outlined"
               margin="normal"
