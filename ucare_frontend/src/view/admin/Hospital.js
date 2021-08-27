@@ -16,7 +16,6 @@ import hospitalService from '../../service/hospitalService';
 
 const useStyles = makeStyles({
     textStyle: {
-        float: 'left',
         height: '50px',
         width: '300px',
         marginBottom: '20px'
@@ -27,9 +26,7 @@ const useStyles = makeStyles({
         borderTopLeftRadius: 10,
         textAlign: 'center',
         paddingTop: '12px',
-        float: 'left',
-        width: '50px',
-        height: '50px',
+        width: '15%',
         marginBottom: '20px'
     },
     image: {
@@ -51,7 +48,11 @@ const useStyles = makeStyles({
         overflow: 'hidden',
     },
     textfiled: {
-        width: '150%'
+        width: '100%'
+    },
+    Line:{
+        display:'flex',
+        flexDirection:'row'
     }
 })
 
@@ -127,9 +128,9 @@ export default function Hospital() {
 
     return (
         <SiteLayout>
-            <div style={{ marginTop: '100px' }} >
+            <div style={{ marginLeft:'10%', marginTop: '40px', display:'flex', flexDirection:'column', float:'left'}} >
                 <h2>병원 정보</h2>
-                <div>
+                <div className={classes.Line}>
                     <div className={classes.addon}>
                         <BusinessIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
@@ -139,7 +140,7 @@ export default function Hospital() {
                         value={hospitalName || ''} 
                         onChange={(e) => setHospitalName(e.target.value)}  />
                 </div>
-                <div>
+                <div className={classes.Line}>
                     <div className={classes.addon}>
                         <PersonIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
@@ -149,7 +150,7 @@ export default function Hospital() {
                         value={headName || ''}
                         onChange={(e) => setHeadName(e.target.value)}/>
                 </div>
-                <div>
+                <div className={classes.Line}>
                     <div className={classes.addon}>
                         <HomeIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
@@ -159,7 +160,7 @@ export default function Hospital() {
                         value={address || ''}
                         onChange={(e) => setAddress(e.target.value)}/>
                 </div>
-                <div>
+                <div className={classes.Line}>
                     <div className={classes.addon}>
                         <PhoneIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
@@ -169,7 +170,7 @@ export default function Hospital() {
                         value={telNo || ''} 
                         onChange={(e) => setTelNo(e.target.value)}/>
                 </div>
-                <div>
+                <div className={classes.Line}>
                     <div className={classes.addon}>
                         <AttachMoneyIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
@@ -179,7 +180,7 @@ export default function Hospital() {
                         value={ basicPrice || '' }
                         onChange={(e) => setBasicPrice(e.target.value)}/>
                 </div>
-                <div>
+                <div className={classes.Line}>
                     <div className={classes.addon}>
                         <LanguageIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
@@ -189,7 +190,7 @@ export default function Hospital() {
                         value={ siteAddress || '' }
                         onChange={(e) => setSiteAddress(e.target.value)}/>
                 </div>
-                <div>
+                <div className={classes.Line}>
                     <div className={classes.addon}>
                         <AlternateEmailIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
@@ -199,7 +200,7 @@ export default function Hospital() {
                         value={ email || '' }
                         onChange={(e) => setEmail(e.target.value)}/>
                 </div>
-                <div>
+                <div className={classes.Line}>
                     <div className={classes.addon}>
                         <PrintIcon style={{ fontSize: "25px", color: "#616161" }} />
                     </div>
@@ -210,7 +211,7 @@ export default function Hospital() {
                         onChange={(e) => setFaxNo(e.target.value)}/>
                 </div>
                 <Button
-                    style={{ width:'100%', backgroundColor:'#616161' }}
+                    style={{backgroundColor:'#616161' }}
                     variant="contained"
                     color="primary"
                     type="submit"
@@ -219,7 +220,7 @@ export default function Hospital() {
                     등록하기
                 </Button>
             </div>
-            <div style={{ marginTop: '100px', marginLeft: '40px' }}>
+            <div style={{ marginTop: '40px', marginLeft: '40px', float:'left' }}>
                 <div style={{ overflow: 'hidden' }}>
                     <h2>병원장 사진</h2>
                     <div className={classes.image} >
