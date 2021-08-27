@@ -12,7 +12,6 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import '../../assets/scss/DataTable.scss';
-import SiteLayout from '../../layout/SiteLayout';
 import medicineService from '../../service/medicineService';
 
 export default function Medicine() {
@@ -314,7 +313,6 @@ export default function Medicine() {
     );
 
     return (
-        <SiteLayout>
         <div className="datatable-crud">
             <Toast ref={toast} />
 
@@ -380,6 +378,5 @@ export default function Medicine() {
                 </div>
             </Dialog>
         </div>
-        </SiteLayout>
     );
 }

@@ -7,6 +7,7 @@ import AdminSetting from '../view/admin/Setting';
 import Hospital from '../view/admin/Hospital';
 import Medicine from '../view/admin/Medicine';
 import Disease from '../view/admin/Disease';
+import Main from '../view/admin/AdminMain';
 
 export default function Routes() {
     return (
@@ -15,6 +16,7 @@ export default function Routes() {
             <PrivateRoute exact path="/admin/hospital" component={Hospital} />
             <PrivateRoute exact path="/admin/medicine" component={Medicine} />
             <PrivateRoute exact path="/admin/disease" component={Disease} />
+            <PrivateRoute exact path="/admin/main" component={Main} />
         </Switch>
     );
 }

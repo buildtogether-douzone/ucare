@@ -20,7 +20,6 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Alert from '@material-ui/lab/Alert';
-import SiteLayout from '../../layout/SiteLayout';
 import adminService from '../../service/adminService';
 
 const tableIcons = {
@@ -117,7 +116,6 @@ export default function Setting() {
 
 
   return (
-      <SiteLayout>
           <Grid item xs={12}>
           <div>
             {iserror && 
@@ -142,6 +140,5 @@ export default function Setting() {
               }}
             />
           </Grid>
-    </SiteLayout>
   );
 }

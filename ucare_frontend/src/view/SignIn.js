@@ -171,7 +171,7 @@ export default function SignInSide({ history }) {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/SignUp" variant="body2" style={{ fontSize: 15 }}>
+                <Link href="#/signUp" variant="body2" style={{ fontSize: 15 }}>
                   {"회원가입"}
                 </Link>
               </Grid>

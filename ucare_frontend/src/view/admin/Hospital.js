@@ -11,7 +11,6 @@ import PrintIcon from '@material-ui/icons/Print';
 import { Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { InputText } from "primereact/inputtext";
-import SiteLayout from '../../layout/SiteLayout';
 import hospitalService from '../../service/hospitalService';
 
 const useStyles = makeStyles({
@@ -127,7 +126,7 @@ export default function Hospital() {
     };
 
     return (
-        <SiteLayout>
+        <React.Fragment>
             <div style={{ marginLeft:'10%', marginTop: '40px', display:'flex', flexDirection:'column', float:'left'}} >
                 <h2>병원 정보</h2>
                 <div className={classes.Line}>
@@ -255,6 +254,6 @@ export default function Hospital() {
                         onChange={(e) => setHeadSpeak(e.target.value)} />
                 </div>
             </div>
-        </SiteLayout>
+        </React.Fragment>
     );
 }
