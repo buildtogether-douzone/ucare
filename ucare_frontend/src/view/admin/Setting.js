@@ -20,8 +20,8 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Alert from '@material-ui/lab/Alert';
-import SiteLayout from '../layout/SiteLayout';
-import adminService from '../service/adminService';
+import SiteLayout from '../../layout/SiteLayout';
+import adminService from '../../service/adminService';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -48,14 +48,14 @@ function validateEmail(email){
   return re.test(String(email).toLowerCase());
 }
 
-export default function AdminSetting() {
+export default function Setting() {
 
   var columns = [
     {title: "UserNo", field: "userNo", hidden: true},
     {title: "No.", field: "rowNo", editable: 'never'},
     {title: "ID", field: "id", editable: 'never'},
     {title: "이름", field: "name", editable: 'never'},
-    {title: "직책", field: "role", lookup: { 의사: '의사', 간호사: '간호사' }},
+    {title: "직책", field: "role", lookup: { 관리자: '관리자', 의사: '의사', 간호사: '간호사' }},
     {title: "상태", field: "status", lookup: { true: '사용', false: '미사용' }}
   ]
   const [data, setData] = useState([]); //table data

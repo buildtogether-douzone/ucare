@@ -11,9 +11,9 @@ import { RadioButton } from 'primereact/radiobutton';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
-import '../assets/scss/DataTable.scss';
-import SiteLayout from '../layout/SiteLayout';
-import medicineService from '../service/medicineService';
+import '../../assets/scss/DataTable.scss';
+import SiteLayout from '../../layout/SiteLayout';
+import medicineService from '../../service/medicineService';
 
 export default function Medicine() {
 

@@ -1,5 +1,8 @@
 import React, { Fragment } from 'react';
-import User from './routes/user';
+import Common from './routes/common';
+import Admin from './routes/admin';
+import Doctor from './routes/doctor';
+import Nurse from './routes/nurse';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -12,7 +15,10 @@ export default function App() {
             <PersistGate loading={null} persistor={persist}>
                 <Fragment>
                     <CssBaseline />
-                    <User />
+                    <Common />
+                    <Admin />
+                    <Doctor />
+                    <Nurse />
                 </Fragment>
             </PersistGate>
         </Provider>

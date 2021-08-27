@@ -11,8 +11,8 @@ import PrintIcon from '@material-ui/icons/Print';
 import { Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { InputText } from "primereact/inputtext";
-import SiteLayout from '../layout/SiteLayout';
-import hospitalService from '../service/hospitalService';
+import SiteLayout from '../../layout/SiteLayout';
+import hospitalService from '../../service/hospitalService';
 
 const useStyles = makeStyles({
     textStyle: {
@@ -225,7 +225,7 @@ export default function Hospital() {
                     <div className={classes.image} >
                         <div className={classes.profile}
                             style={previewURL == null ?
-                                { backgroundImage: `url(${require("../assets/image/profile.jpg")})` }
+                                { backgroundImage: `url(${require("../../assets/image/profile.jpg")})` }
                                 : { backgroundImage: `url(${previewURL})` }
                             } />
                         <Button

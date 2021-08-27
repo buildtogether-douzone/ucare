@@ -19,8 +19,8 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Alert from '@material-ui/lab/Alert';
-import SiteLayout from '../layout/SiteLayout';
-import diseaseService from '../service/diseaseService';
+import SiteLayout from '../../layout/SiteLayout';
+import diseaseService from '../../service/diseaseService';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
