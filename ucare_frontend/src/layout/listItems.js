@@ -75,17 +75,29 @@ export const adminListItems = (
       </ListItemIcon>
       <ListItemText primary="공지 사항" />
     </ListItem>
-    <ListItem button>
+    <ListItem button component={Link} to="/admin/setting">
       <ListItemIcon>
-        <ShoppingCartIcon />
+        <RemoveTwoToneIcon />
       </ListItemIcon>
       <ListItemText primary="권한 관리" />
     </ListItem>
-    <ListItem button>
+    <ListItem button component={Link} to="/admin/hospital">
       <ListItemIcon>
-        <ShoppingCartIcon />
+        <RemoveTwoToneIcon />
       </ListItemIcon>
       <ListItemText primary="병원 정보" />
+    </ListItem>
+    <ListItem button component={Link} to="/admin/disease">
+      <ListItemIcon>
+        <RemoveTwoToneIcon />
+      </ListItemIcon>
+      <ListItemText primary="질병 정보" />
+    </ListItem>
+    <ListItem button component={Link} to="/admin/medicine">
+      <ListItemIcon>
+        <RemoveTwoToneIcon />
+      </ListItemIcon>
+      <ListItemText primary="의약품 정보" />
     </ListItem>
   </div>
 );
