@@ -5,7 +5,7 @@ import Collapse from '@material-ui/core/Collapse';
 import Typography from '@material-ui/core/Typography';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import receiptService from '../service/receiptService';
+import receiptService from '../../service/receiptService';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -94,7 +94,7 @@ export default function Row(props) {
         <TableCell>{row.address}</TableCell>
         <TableCell style={{ textAlign: 'center' }}>
         <Link to={{
-            pathname: `/patient/${row.patientNo}`,
+            pathname: `/nurse/patient/${row.patientNo}`,
             state: {
               patientNo: row.patientNo,
               name: row.name,
@@ -114,7 +114,7 @@ export default function Row(props) {
         </TableCell>
         <TableCell style={{ textAlign: 'center' }}>
         <Link to={{
-            pathname: `/receipt/${row.patientNo}`,
+            pathname: `/nurse/receipt/${row.patientNo}`,
             state: {
               patientNo: row.patientNo,
               name: row.name,

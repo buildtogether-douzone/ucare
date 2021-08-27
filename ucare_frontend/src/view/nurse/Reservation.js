@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import userService from '../service/userService';
-import SiteLayout from '../layout/SiteLayout';
+import userService from '../../service/userService';
+import SiteLayout from '../../layout/SiteLayout';
 
 const useStyles = makeStyles((theme) => ({
     root: {
