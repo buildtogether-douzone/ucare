@@ -1,13 +1,15 @@
 import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
 import Footer from './Footer';
 import Header from './Header';
 import Navigation from './Navigation';
+import { connect } from 'react-redux';
+import { drawerManage } from '../redux/drawerManagement/actions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    height:'100vh',
+    width:'100%',
     display: 'flex',
     msOverflowStyle:"none",
     "&::-webkit-scrollbar": {
@@ -25,16 +27,39 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(0),
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
+  },
+  openState:{
+    width:'240px',
+    height:'100vh',
+    position:'relative',
+    visibility:'hidden',
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  closeState:{
+    width:'70px',
+    height:'100vh',
+    position:'relative',
+    visibility:'hidden',
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   }
 }));
 
-export default function Dashboard({ children }) {
+const Dashboard = ({open, children }) => {
   const classes = useStyles();
 
   return (
     <Fragment>
         <div className={classes.root}>
           <Header />
+          <div className={open ? classes.openState : classes.closeState}>
+            {'&&&&&&&&&&&&&&&&&&&&&&&&&'}
+          </div>
           <Navigation />
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
@@ -45,3 +70,16 @@ export default function Dashboard({ children }) {
     </Fragment>
   );
 }
+
+const mapStateToProps = (state)=>{
+  return{
+    open: state.drawerManageReducer.open
+  }
+}
+
+//object(es6 면 property와 value 값이 같으면 생략가능)
+const mapDispatchToProps = {
+    drawerManage
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

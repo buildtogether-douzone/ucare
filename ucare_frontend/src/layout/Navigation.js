@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     ...theme.mixins.toolbar,
   },
   drawerPaper: {
-    position: 'relative',
+    position: 'fixed',
     whiteSpace: 'nowrap',
     width: drawerWidth,
     transition: theme.transitions.create('width', {

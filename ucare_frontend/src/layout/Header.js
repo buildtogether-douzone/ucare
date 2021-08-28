@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 24, // keep right padding when drawer closed
   },
   appBar: {
+    position: 'fixed',
     display: 'flex',
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#1C91FB"
   },
   appBarShift: {
+    position: 'fixed',
     display: 'flex',
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
