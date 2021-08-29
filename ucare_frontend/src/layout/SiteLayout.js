@@ -64,7 +64,7 @@ const Dashboard = ({open, children }) => {
           <Navigation ref={slideRef}/>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
-                {slideRef==null ? React.cloneElement(children, { ref:slideRef }) : children }
+                {React.cloneElement(children, { ref:slideRef })}
           </main>
         </div>
         <Footer />
