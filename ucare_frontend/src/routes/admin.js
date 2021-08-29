@@ -12,7 +12,6 @@ import Main from '../view/admin/AdminMain';
 export default function Routes() {
     return (
         <Switch>
-            <PrivateRoute exact path="/admin/setting" component={AdminSetting} />
             <PrivateRoute exact path="/admin/hospital" component={Hospital} />
             <PrivateRoute exact path="/admin/medicine" component={Medicine} />
             <PrivateRoute exact path="/admin/disease" component={Disease} />

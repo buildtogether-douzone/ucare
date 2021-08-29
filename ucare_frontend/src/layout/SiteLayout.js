@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Footer from './Footer';
 import Header from './Header';
@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = ({open, children }) => {
   const classes = useStyles();
+  const slideRef = useRef();
 
   return (
     <Fragment>
@@ -60,10 +61,10 @@ const Dashboard = ({open, children }) => {
           <div className={open ? classes.openState : classes.closeState}>
             {'&&&&&&&&&&&&&&&&&&&&&&&&&'}
           </div>
-          <Navigation />
+          <Navigation ref={slideRef}/>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
-                {children}
+                {React.cloneElement(children, { ref:slideRef })}
           </main>
         </div>
         <Footer />

@@ -9,6 +9,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { nurseListItems, doctorListItems, adminListItems } from './listItems';
 import { connect } from 'react-redux';
 import { drawerManage } from '../redux/drawerManagement/actions';
+import NurseList from './listitem/NurseList';
+import DoctorList from './listitem/DoctorList';
+import AdminList from './listitem/AdminList';
 
 const drawerWidth = 240;
 
@@ -44,15 +47,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Navigation = ( { open, drawerManage }) => {
+const Navigation = React.forwardRef(( { open, drawerManage }, ref) => {
     const classes = useStyles();
     const [role, setRole] = useState('');
 
     useEffect(() => {
       setRole((
-        sessionStorage.getItem('role') == '간호사' ? nurseListItems : 
-        sessionStorage.getItem('role') == '의사' ? doctorListItems : 
-        sessionStorage.getItem('role') == '관리자' && adminListItems 
+        sessionStorage.getItem('role') == '간호사' ? 'nurse' : 
+        sessionStorage.getItem('role') == '의사' ? 'doctor' : 
+        sessionStorage.getItem('role') == '관리자' && 'admin' 
       ));
     }, [])
 
@@ -70,10 +73,12 @@ const Navigation = ( { open, drawerManage }) => {
                 </IconButton>
             </div>
             <Divider />
-            <List >{ role }</List>
+            <List >{ role == 'nurse' ? <NurseList /> : 
+                     role == 'doctor' ? <DoctorList />:
+                     role == 'admin' && <AdminList ref={ref}/>  }</List>
         </Drawer>
     );
-}
+});
 
 const mapStateToProps = (state)=>{
   return{
@@ -86,4 +91,4 @@ const mapDispatchToProps = {
     drawerManage
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navigation);
+export default connect(mapStateToProps, mapDispatchToProps, null, {forwardRef: true})(Navigation);

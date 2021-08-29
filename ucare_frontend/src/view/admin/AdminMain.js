@@ -6,10 +6,10 @@ import Hospital from './Hospital';
 import Disease from './Disease';
 import Medicine from './Medicine';
 
-export default function AdminMain() {
+const AdminMain = React.forwardRef((props, ref) => {
     return (
       <SiteLayout>
-      <FullPage controls>
+      <FullPage ref={ref}>
         <Slide>
           <Setting />
         </Slide>
@@ -25,4 +25,5 @@ export default function AdminMain() {
       </FullPage>
       </SiteLayout>
     );
-}
+});
+export default AdminMain;
