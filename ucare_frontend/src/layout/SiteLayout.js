@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = ({open, children }) => {
   const classes = useStyles();
-  const slideRef = useRef();
+  const slideRef = useRef(null);
 
   return (
     <Fragment>
@@ -64,7 +64,7 @@ const Dashboard = ({open, children }) => {
           <Navigation ref={slideRef}/>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
-                {React.cloneElement(children, { ref:slideRef })}
+                {slideRef==null ? React.cloneElement(children, { ref:slideRef }) : children }
           </main>
         </div>
         <Footer />
