@@ -93,7 +93,6 @@ export default function SignInSide({ history }) {
       if(res.data) {
         console.log(user.id + '님이 성공적으로 로그인하였습니다.');
         sessionStorage.setItem('user', id);
-        console.log(res.data);
         history.push(res.data.role=='관리자'? '/admin/main' :
                      res.data.role=='의사' ? '/doctor/main' :
                      res.data.role=='간호사' && '/nurse/main');
