@@ -64,7 +64,7 @@ const Dashboard = ({open, children }) => {
           <Navigation ref={slideRef}/>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
-                {React.cloneElement(children, { ref:slideRef })}
+                {React.isValidElement(children) ? React.cloneElement(children, { ref:slideRef }) : children}
           </main>
         </div>
         <Footer />

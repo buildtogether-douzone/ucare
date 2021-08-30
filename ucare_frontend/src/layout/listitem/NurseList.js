@@ -8,13 +8,14 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
+import EventNoteIcon from '@material-ui/icons/EventNote';
 
 const NurseList = () => {
     return (
         <div>
             <ListItem button component={Link} to="/Home">
                 <ListItemIcon>
-                    <RemoveTwoToneIcon />
+                    <EventNoteIcon />
                 </ListItemIcon>
                 <ListItemText primary="공지 사항" />
             </ListItem>
