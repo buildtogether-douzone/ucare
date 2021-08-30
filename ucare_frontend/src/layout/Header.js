@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    backgroundColor: "#1C91FB"
+    background: "linear-gradient(to right, #1C91FB, #07BDF4)"
   },
   appBarShift: {
     position: 'fixed',
@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    backgroundColor: "#1C91FB"
   },
   menuButton: {
     marginRight: 36,
