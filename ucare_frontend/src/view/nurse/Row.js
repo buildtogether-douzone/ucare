@@ -107,6 +107,7 @@ export default function Row(props) {
   const handleClose2 = () => {
     document.body.style.position = "";
     setDialogOpen2(false);
+    
   };
 
   const receiptClickOpen = (a, b, c) => {
