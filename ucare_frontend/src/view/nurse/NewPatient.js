@@ -16,6 +16,9 @@ import Grid from '@material-ui/core/Grid';
 import patientService from '../../service/patientService';
 import SiteLayout from '../../layout/SiteLayout';
 import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(3),
@@ -64,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Patient() {
+export default function NewPatient() {
     const classes = useStyles();
     const history = useHistory();
     const [name, setName] = useState('');
@@ -147,10 +150,12 @@ export default function Patient() {
     patientService.create(patient)
     .then( res => {
       console.log(patient.name + '님의 정보가 성공적으로 등록되었습니다.');
+      window.location.reload();
     })
     .catch( err => {
       console.log('create() 에러', err);
     });
+    
   };
   
     return(
@@ -356,12 +361,12 @@ export default function Patient() {
       </Grid>
 
     </Grid>
+
         <Button
           style={{ margin: '5%', backgroundColor: '#1C91FB', border: '1px solid #1C91FB', float: 'right'}} 
           variant="contained" 
           color="primary"
           size="small"
-          href="/Home"
           type="submit"
           onClick={ create } 
           disableElevation>

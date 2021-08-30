@@ -178,6 +178,7 @@ export default function Row(props) {
     receiptService.delete(receiptNo)
       .then(res => {
         console.log(receiptNo + '번 접수가 성공적으로 취소되었습니다.');
+        window.location.reload();
       })
       .catch(err => {
         console.log('delete() 에러', err);
@@ -209,6 +210,7 @@ export default function Row(props) {
     patientService.update(patient)
       .then(res => {
         console.log(patient.name + '님의 정보가 성공적으로 수정되었습니다.');
+        window.location.reload();
       })
       .catch(err => {
         console.log('updatePatient() 에러', err);
@@ -232,6 +234,7 @@ export default function Row(props) {
     receiptService.create(receipt)
       .then(res => {
         console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
+        window.location.reload();
       })
       .catch(err => {
         console.log('create() 에러', err);
