@@ -24,7 +24,8 @@
 	<select id="findUser" parameterType="uservo" resultType="uservo">
 		SELECT id,
 			   name,
-			   role
+			   role,
+			   user_no as userNo
 		FROM ucare.user
 		WHERE id = #{id }
 		  AND password = #{password }

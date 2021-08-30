@@ -18,25 +18,25 @@ const AdminList = React.forwardRef((props, ref) => {
                 </ListItemIcon>
                 <ListItemText primary="공지 사항" />
             </ListItem>
-            <ListItem button onClick={(e) => {  ref.current.scrollToSlide(0) }}>
+            <ListItem button onClick={(e) => {  location.href='/#/admin/main'; ref.current.scrollToSlide(0) }}>
                 <ListItemIcon>
                     <PersonOutlineIcon />
                 </ListItemIcon>
                 <ListItemText primary="권한 관리" />
             </ListItem>
-            <ListItem button onClick={(e) => { ref.current.scrollToSlide(1) }}>
+            <ListItem button onClick={(e) => { location.href='/#/admin/main'; ref.current.scrollToSlide(1) }}>
                 <ListItemIcon>
                     <LocalHospitalIcon />
                 </ListItemIcon>
                 <ListItemText primary="병원 정보" />
             </ListItem>
-            <ListItem button onClick={(e) => { ref.current.scrollToSlide(2) }}>
+            <ListItem button onClick={(e) => { location.href='/#/admin/main'; ref.current.scrollToSlide(2) }}>
                 <ListItemIcon>
                     <BlurOnIcon />
                 </ListItemIcon>
                 <ListItemText primary="질병 정보" />
             </ListItem>
-            <ListItem button onClick={(e) => { ref.current.scrollToSlide(3) }}>
+            <ListItem button onClick={(e) => { location.href='/#/admin/main'; ref.current.scrollToSlide(3) }}>
                 <ListItemIcon>
                     <ColorizeIcon />
                 </ListItemIcon>
