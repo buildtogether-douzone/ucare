@@ -69,6 +69,8 @@ export default function Row(props) {
   const [remark, setRemark] = useState('');
   const [bp, setBP] = useState('');
   const [bs, setBS] = useState('');
+  const [dialogOpen2, setDialogOpen2] = useState(false);
+  const [dialogOpen3, setDialogOpen3] = useState(false);
 
 
 
@@ -97,16 +99,24 @@ export default function Row(props) {
     setInsurance(k)
     setInsDt(l);
     setRemark(m);
-    setDialogOpen(true);
+    setDialogOpen2(true);
 
+  };
+
+  const handleClose2 = () => {
+    setDialogOpen2(false);
   };
 
   const receiptClickOpen = (a, b, c) => {
     setPatientNo(a);
     setName(b);
     setInsurance(c)
-    setDialogOpen(true);
+    setDialogOpen3(true);
 
+  };
+
+  const handleClose3 = () => {
+    setDialogOpen3(false);
   };
 
   useEffect(() => {
@@ -172,6 +182,7 @@ export default function Row(props) {
       .catch(err => {
         console.log('delete() 에러', err);
       });
+      alert('접수 취소 되었습니다.');
   };
 
   useEffect(() => {
@@ -203,7 +214,7 @@ export default function Row(props) {
         console.log('updatePatient() 에러', err);
       });
 
-    setDialogOpen(false);
+    setDialogOpen2(false);
   };
 
 
@@ -245,25 +256,26 @@ export default function Row(props) {
         <TableCell style={{ textAlign: 'center', padding: '10px' }}>{row.ssn}</TableCell>
         <TableCell style={{ textAlign: 'center', padding: '10px' }}>{row.telNo}</TableCell>
         <TableCell style={{ padding: '10px' }}>{row.address}</TableCell>
-        <TableCell
-          onClick={() => {
-            patientInfoClickOpen(
-              row.patientNo,
-              row.name,
-              row.gender,
-              row.emailId,
-              row.email,
-              row.ssn,
-              row.age,
-              row.address,
-              row.telNo,
-              row.diagnosis,
-              row.insurance,
-              row.insDt,
-              row.remark)
-          }} style={{ textAlign: 'center', padding: '5px' }}>
-          <PermIdentityIcon style={{ color: '#1C91FB', fontSize: '30px' }} /></TableCell>
-        <Dialog open={dialogOpen} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
+        <TableCell style={{ textAlign: 'center', padding: '5px' }}>
+          <PermIdentityIcon 
+                    onClick={() => {
+                      patientInfoClickOpen(
+                        row.patientNo,
+                        row.name,
+                        row.gender,
+                        row.emailId,
+                        row.email,
+                        row.ssn,
+                        row.age,
+                        row.address,
+                        row.telNo,
+                        row.diagnosis,
+                        row.insurance,
+                        row.insDt,
+                        row.remark)
+                    }} 
+          style={{ color: '#1C91FB', fontSize: '30px' }} /></TableCell>
+        <Dialog open={dialogOpen2} onClose={handleClose2} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
 
           <DialogTitle id="form-dialog-title">환자 정보</DialogTitle>
           <DialogContent>
@@ -436,20 +448,21 @@ export default function Row(props) {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">닫기</Button>
+            <Button onClick={handleClose2} color="primary">닫기</Button>
             <Button onClick={update} color="primary">수정</Button>
           </DialogActions>
         </Dialog>
 
-        <TableCell
-          onClick={() => {
-            receiptClickOpen(
-              row.patientNo,
-              row.name,
-              row.insurance)
-          }} style={{ textAlign: 'center', padding: '5px' }}>
-          <AddBoxIcon style={{ color: '#1C91FB', fontSize: '30px' }} /></TableCell>
-        <Dialog open={dialogOpen} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
+        <TableCell style={{ textAlign: 'center', padding: '5px' }}>
+          <AddBoxIcon
+                            onClick={() => {
+                              receiptClickOpen(
+                                row.patientNo,
+                                row.name,
+                                row.insurance)
+                            }}
+          style={{ color: '#1C91FB', fontSize: '30px' }} /></TableCell>
+        <Dialog open={dialogOpen3} onClose={handleClose3} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
 
           <DialogTitle id="form-dialog-title">접수</DialogTitle>
           <DialogContent>
@@ -527,7 +540,7 @@ export default function Row(props) {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">닫기</Button>
+            <Button onClick={handleClose3} color="primary">닫기</Button>
             <Button onClick={create} color="primary">접수</Button>
           </DialogActions>
         </Dialog>
@@ -567,9 +580,8 @@ export default function Row(props) {
                       {receiptList.state == '완료' ?
                         <TableCell></TableCell>
                         : <TableCell
-                            onClick={() => { deleteReceipt(receiptList.receiptNo) }}
                             style={{ textAlign: 'center', padding: '5px' }}>
-                              <ClearIcon style={{ color: '#1C91FB', fontSize: '30px' }}/>
+                              <ClearIcon onClick={() => { deleteReceipt(receiptList.receiptNo) }} style={{ color: '#1C91FB', fontSize: '30px' }}/>
                         </TableCell>
                       }
                     </TableRow>

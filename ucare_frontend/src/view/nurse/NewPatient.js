@@ -15,6 +15,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import patientService from '../../service/patientService';
 import SiteLayout from '../../layout/SiteLayout';
+import { useHistory } from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(3),
@@ -65,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Patient() {
     const classes = useStyles();
+    const history = useHistory();
     const [name, setName] = useState('');
     const [ssn, setSSN] = useState('');
     const [age, setAge] = useState('');

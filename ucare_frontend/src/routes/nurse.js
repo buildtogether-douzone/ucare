@@ -14,7 +14,7 @@ export default function Routes() {
             <PrivateRoute exact path="/nurse/reservation" component={Reservation} />
             <PrivateRoute exact path="/nurse/receipt" component={Receipt}/>
             <PrivateRoute exact path="/nurse/receipt/:patientNo" component={Receipt}/>
-            <PrivateRoute exact path="/nurse/patientList" component={PatientList}/>
+            <PrivateRoute exact path="/nurse/patientList" component={PatientList} />
         </Switch>
     );
 }
