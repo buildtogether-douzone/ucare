@@ -69,6 +69,7 @@ export default function Row(props) {
   const [remark, setRemark] = useState('');
   const [bp, setBP] = useState('');
   const [bs, setBS] = useState('');
+  const [receiptRemark, setReceiptRemark] = useState('');
   const [dialogOpen2, setDialogOpen2] = useState(false);
   const [dialogOpen3, setDialogOpen3] = useState(false);
 
@@ -225,7 +226,7 @@ export default function Row(props) {
     e.preventDefault();
 
     let receipt = {
-      remark: remark,
+      remark: receiptRemark,
       bp: bp,
       bs: bs,
       patientNo: row.patientNo,
@@ -539,8 +540,8 @@ export default function Row(props) {
               fullWidth
               variant="outlined"
               rows={6}
-              value={remark}
-              onChange={(e) => { setRemark(e.target.value) }}
+              value={receiptRemark}
+              onChange={(e) => { setReceiptRemark(e.target.value) }}
             />
           </DialogContent>
           <DialogActions>
@@ -561,7 +562,7 @@ export default function Row(props) {
               </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
-                  <TableRow>
+                  <TableRow style={{backgroundColor: '#DFDFDF'}}>
                     <TableCell style={{ width: '3%' }} />
                     <TableCell style={{ width: '6%', textAlign: 'center', padding: '10px' }}>No</TableCell>
                     <TableCell style={{ width: '12%', textAlign: 'center', padding: '10px' }}>접수 번호</TableCell>
@@ -575,12 +576,20 @@ export default function Row(props) {
                   {receipt.map((receiptList) => (
                     <TableRow key={receiptList.receiptNo} >
                       <TableCell />
-                      <TableCell style={{ textAlign: 'center', padding: '10px' }} component="th" scope="row">{receiptList.no}</TableCell>
+                      <TableCell 
+                      onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
+                      style={{ textAlign: 'center', padding: '10px' }} component="th" scope="row">{receiptList.no}</TableCell>
                       <TableCell onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }} 
                                 style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptNo}</TableCell>
-                      <TableCell style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptDt}</TableCell>
-                      <TableCell style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptTime}</TableCell>
-                      <TableCell style={{padding: '10px' }}>{receiptList.remark}</TableCell>
+                      <TableCell 
+                      onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
+                      style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptDt}</TableCell>
+                      <TableCell 
+                      onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
+                      style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptTime}</TableCell>
+                      <TableCell 
+                      onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
+                      style={{padding: '10px' }}>{receiptList.remark}</TableCell>
                       {receiptList.state == '완료' ?
                         <TableCell></TableCell>
                         : <TableCell

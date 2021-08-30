@@ -124,7 +124,7 @@ export default function PatientList() {
     <TableFooter>
           <TableRow>
             <TablePagination
-              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+              rowsPerPageOptions={[5, 10, 15, 25, { label: 'All', value: -1 }]}
               colSpan={8}
               count={patient.length}
               rowsPerPage={rowsPerPage}
