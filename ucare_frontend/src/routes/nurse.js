@@ -6,14 +6,12 @@ import Reservation from '../view/nurse/Reservation';
 import Receipt from '../view/nurse/Receipt';
 import SearchPatient from '../view/nurse/SearchPatient';
 import PatientList from '../view/nurse/PatientList';
-import Patient from '../view/nurse/Patient';
 import NewPatient from '../view/nurse/NewPatient';
 
 export default function Routes() {
     return (
         <Switch>
             <PrivateRoute exact path="/nurse/patient" component={NewPatient} />
-            <PrivateRoute exact path="/nurse/patient/:patientNo" component={Patient} />
             <PrivateRoute exact path="/nurse/reservation" component={Reservation} />
             <PrivateRoute exact path="/nurse/receipt" component={Receipt}/>
             <PrivateRoute exact path="/nurse/receipt/:patientNo" component={Receipt}/>
