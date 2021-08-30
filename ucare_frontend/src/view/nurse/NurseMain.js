@@ -7,7 +7,7 @@ import Reservation from './Reservation';
 const NurseMain = React.forwardRef((props, ref) => {
     return(
         <SiteLayout >
-            <FullPage ref={ref}>
+            <FullPage ref={ref} scrollMode='normal'>
                 <Slide>
                     <Reservation />
                 </Slide>
