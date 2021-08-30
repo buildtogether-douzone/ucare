@@ -69,6 +69,7 @@ export default function Row(props) {
   const [remark, setRemark] = useState('');
   const [bp, setBP] = useState('');
   const [bs, setBS] = useState('');
+  const [receiptRemark, setReceiptRemark] = useState('');
   const [dialogOpen2, setDialogOpen2] = useState(false);
   const [dialogOpen3, setDialogOpen3] = useState(false);
 
@@ -224,7 +225,7 @@ export default function Row(props) {
     e.preventDefault();
 
     let receipt = {
-      remark: remark,
+      remark: receiptRemark,
       bp: bp,
       bs: bs,
       patientNo: row.patientNo,
@@ -538,8 +539,8 @@ export default function Row(props) {
               fullWidth
               variant="outlined"
               rows={6}
-              value={remark}
-              onChange={(e) => { setRemark(e.target.value) }}
+              value={receiptRemark}
+              onChange={(e) => { setReceiptRemark(e.target.value) }}
             />
           </DialogContent>
           <DialogActions>
