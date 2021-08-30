@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     width: '50% '
   },
   paper: {
+    marginTop: '4%',
     width: '30%',
     float: 'left',
     alignItems: 'center',
@@ -35,8 +36,9 @@ const useStyles = makeStyles((theme) => ({
     top: 80,
     right: 80,
     float: 'left',
-    marginTop: '40px',
-    marginRight: '80px'
+    marginTop: '5%',
+    marginRight: '80px',
+    marginLeft: '10%'
   },
   profile: {
     display: 'block',
@@ -326,7 +328,7 @@ export default function Profile() {
             onClick={saveUpdate}
             disableElevation
           >
-            등록하기
+            변경하기
           </Button>
         </Grid>
       </form>
