@@ -592,7 +592,7 @@ export default function Row(props) {
                   <Dialog open={dialogOpen} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
                     <DialogTitle id="form-dialog-title">접수 내역</DialogTitle>
                     <DialogContent>
-                      <Typography variant="body1" gutterBottom>혈압</Typography>
+                      <Typography className={classes.font} variant="body1" gutterBottom>혈압</Typography>
                       <TextField
                         fullWidth
                         id="filled-read-only-input1"
@@ -603,7 +603,7 @@ export default function Row(props) {
                           readOnly: true,
                         }}
                       />
-                      <Typography variant="body1" gutterBottom style={{ marginTop: '12px' }}>혈당</Typography>
+                      <Typography className={classes.font} variant="body1" gutterBottom style={{ marginTop: '12px' }}>혈당</Typography>
                       <TextField
                         fullWidth
                         id="filled-read-only-input2"
@@ -614,7 +614,7 @@ export default function Row(props) {
                           readOnly: true,
                         }}
                       />
-                      <Typography variant="body1" gutterBottom style={{ marginTop: '12px' }}>접수 메모</Typography>
+                      <Typography className={classes.font} variant="body1" gutterBottom style={{ marginTop: '12px' }}>접수 메모</Typography>
                       <TextField
                         id="outlined-multiline-static"
                         multiline
