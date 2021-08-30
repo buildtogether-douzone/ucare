@@ -2,16 +2,12 @@ import React from 'react';
 import { Route, Switch } from "react-router-dom";
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
-import Reservation from '../view/nurse/Reservation';
-import PatientList from '../view/nurse/PatientList';
-import NewPatient from '../view/nurse/NewPatient';
+import NurseMain from '../view/nurse/NurseMain';
 
 export default function Routes() {
     return (
         <Switch>
-            <PrivateRoute exact path="/nurse/patient" component={NewPatient} />
-            <PrivateRoute exact path="/nurse/reservation" component={Reservation} />
-            <PrivateRoute exact path="/nurse/patientList" component={PatientList} />
+            <PrivateRoute exact path="/nurse/main" component={NurseMain} /> 
         </Switch>
     );
 }

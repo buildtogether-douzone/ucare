@@ -104,6 +104,7 @@ export default function Row(props) {
   };
 
   const handleClose2 = () => {
+    document.body.style.position = "";
     setDialogOpen2(false);
   };
 
@@ -242,8 +243,8 @@ export default function Row(props) {
 
     setDialogOpen(false);
   };
-  return (
 
+  return (
     <React.Fragment>
       <TableRow className={classes.rowStyle}>
         <TableCell style={{ textAlign: 'center', padding: '10px' }}>
@@ -262,6 +263,7 @@ export default function Row(props) {
         <TableCell style={{ textAlign: 'center', padding: '5px' }}>
           <PermIdentityIcon 
                     onClick={() => {
+                      document.body.style.position = "fixed";
                       patientInfoClickOpen(
                         row.patientNo,
                         row.name,
@@ -279,7 +281,6 @@ export default function Row(props) {
                     }} 
           style={{ color: '#1C91FB', fontSize: '30px' }} /></TableCell>
         <Dialog open={dialogOpen2} onClose={handleClose2} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
-
           <DialogTitle id="form-dialog-title">환자 정보</DialogTitle>
           <DialogContent>
             <Typography className={classes.font} variant="body1" gutterBottom>이름</Typography>
