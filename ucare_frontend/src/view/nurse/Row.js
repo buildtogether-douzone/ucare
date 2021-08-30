@@ -5,7 +5,6 @@ import Collapse from '@material-ui/core/Collapse';
 import Typography from '@material-ui/core/Typography';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import receiptService from '../../service/receiptService';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,7 +17,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { Link } from "react-router-dom";
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 import Radio from '@material-ui/core/Radio';
@@ -29,6 +27,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import SearchIcon from '@material-ui/icons/Search';
 import patientService from '../../service/patientService';
+import receiptService from '../../service/receiptService';
 
 const useRowStyles = makeStyles((theme) => ({
   rowStyle: {
@@ -67,6 +66,8 @@ export default function Row(props) {
   const [insurance, setInsurance] = useState('');
   const [insDt, setInsDt] = useState('');
   const [remark, setRemark] = useState('');
+  const [bp, setBP] = useState('');
+  const [bs, setBS] = useState('');
 
 
 
@@ -99,10 +100,18 @@ export default function Row(props) {
 
   };
 
+  const receiptClickOpen = (a, b, c) => {
+    setPatientNo(a);
+    setName(b);
+    setInsurance(c)
+    setDialogOpen(true);
+
+  };
+
   useEffect(() => {
     const newDate = new Date();
-    const date = ('0'+ newDate.getDate()).slice(-2);
-    const month = ('0'+( newDate.getMonth() + 1)).slice(-2);
+    const date = ('0' + newDate.getDate()).slice(-2);
+    const month = ('0' + (newDate.getMonth() + 1)).slice(-2);
     const year = newDate.getFullYear();
 
     const getGender = ssn.substr(7, 1)
@@ -112,9 +121,9 @@ export default function Row(props) {
     } else {
       setGender('여');
     };
-  
+
     let ageYear = 0;
-    
+
     if (getGender <= 2) {
       ageYear = "19"
     } else {
@@ -123,8 +132,8 @@ export default function Row(props) {
 
     const ageNum = ageYear.concat(ssn.substr(0, 2));
     const monthDay = month + date;
-    setAge(monthDay < ssn.substr(2, 4) ? year - ageNum - 1 : year - ageNum); 
-    
+    setAge(monthDay < ssn.substr(2, 4) ? year - ageNum - 1 : year - ageNum);
+
     if (telNo.length === 10) {
       setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
     }
@@ -178,7 +187,7 @@ export default function Row(props) {
       gender: gender,
       telNo: telNo,
       address: address,
-      domain: (emailId + '@' + email ),
+      domain: (emailId + '@' + email),
       insurance: insurance,
       remark: remark,
       patientNo: row.patientNo,
@@ -196,6 +205,28 @@ export default function Row(props) {
     setDialogOpen(false);
   };
 
+
+  const create = (e) => {
+    e.preventDefault();
+
+    let receipt = {
+      remark: remark,
+      bp: bp,
+      bs: bs,
+      patientNo: row.patientNo,
+      userId: sessionStorage.getItem('user')
+    }
+
+    receiptService.create(receipt)
+      .then(res => {
+        console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
+      })
+      .catch(err => {
+        console.log('create() 에러', err);
+      });
+
+    setDialogOpen(false);
+  };
   return (
 
     <React.Fragment>
@@ -232,7 +263,7 @@ export default function Row(props) {
           }} style={{ textAlign: 'center', padding: '5px' }}>
           <PermIdentityIcon style={{ color: '#1C91FB', fontSize: '30px' }} /></TableCell>
         <Dialog open={dialogOpen} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
-          
+
           <DialogTitle id="form-dialog-title">환자 정보</DialogTitle>
           <DialogContent>
             <Typography className={classes.font} variant="body1" gutterBottom>이름</Typography>
@@ -244,8 +275,8 @@ export default function Row(props) {
               id="outlined-name"
               name="name"
               autoComplete="name"
-              value={ name }
-              onChange={ (e) => { setName(e.target.value) }}
+              value={name}
+              onChange={(e) => { setName(e.target.value) }}
             />
             <Typography className={classes.font} variant="body1" gutterBottom>주민등록번호</Typography>
             <TextField
@@ -256,27 +287,27 @@ export default function Row(props) {
               id="outlined-ssn"
               name="ssn"
               autoComplete="ssn"
-              value={ ssn }
-              onChange={ (e) => { setSSN(e.target.value) }}
+              value={ssn}
+              onChange={(e) => { setSSN(e.target.value) }}
             />
 
             <Typography className={classes.font} variant="body1" gutterBottom>성별</Typography>
-              <FormControl component="fieldset">
-        <RadioGroup row aria-label="gender" name="gender" value={ gender } onChange={ (e) => { setGender(e.target.value) }} >
-        <FormControlLabel
-          control={<Radio color="primary" />}
-          label="여자"
-          labelPlacement="end"
-          value="여"
-        />
-        <FormControlLabel
-          control={<Radio color="primary" />}
-          label="남자"
-          labelPlacement="end"
-          value="남"
-        />
-      </RadioGroup>
-    </FormControl>
+            <FormControl component="fieldset">
+              <RadioGroup row aria-label="gender" name="gender" value={gender} onChange={(e) => { setGender(e.target.value) }} >
+                <FormControlLabel
+                  control={<Radio color="primary" />}
+                  label="여자"
+                  labelPlacement="end"
+                  value="여"
+                />
+                <FormControlLabel
+                  control={<Radio color="primary" />}
+                  label="남자"
+                  labelPlacement="end"
+                  value="남"
+                />
+              </RadioGroup>
+            </FormControl>
 
             <Typography className={classes.font} variant="body1" gutterBottom>전화번호</Typography>
             <TextField
@@ -286,100 +317,100 @@ export default function Row(props) {
               size="small"
               id="outlined-telNo"
               name="telNo"
-              value={ telNo }
-              onChange={ telNoChange }
+              value={telNo}
+              onChange={telNoChange}
             />
-            <div style={{width: '100%', overflow:'hidden'}}>
-            <Typography className={classes.font} variant="body1" gutterBottom>주소</Typography>
-            <TextField
-              style={{width: '85%', float: 'left'}} 
-              variant="outlined"
-              required
-              fullWidth
-              size="small"
-              id="outlined-address"
-              name="address"
-              autoComplete="address"
-              value={ address }
-              onChange={ (e) => { setAddress(e.target.value) }}
-            />
-             <SearchIcon style={{float: 'left', width: '15%', height: '2.5em', fontSize: '15px'}} />
-             </div>
-             <div style={{width: '100%', overflow:'hidden'}}>
-            <Typography className={classes.font} variant="body1" gutterBottom>이메일</Typography>
-            <TextField
-                  style={{float:'left', width: '45%', backgroundColor: '#FFFFFF' }}
-                  variant="outlined"
-                  required
-                  fullWidth
-                  size="small"
-                  id="emailId"
-                  name="emailId"
-                  autoComplete="emai"
-                  value={ emailId }
-                  onChange={ (e) => { setEmailId(e.target.value) }}
+            <div style={{ width: '100%', overflow: 'hidden' }}>
+              <Typography className={classes.font} variant="body1" gutterBottom>주소</Typography>
+              <TextField
+                style={{ width: '85%', float: 'left' }}
+                variant="outlined"
+                required
+                fullWidth
+                size="small"
+                id="outlined-address"
+                name="address"
+                autoComplete="address"
+                value={address}
+                onChange={(e) => { setAddress(e.target.value) }}
+              />
+              <SearchIcon style={{ float: 'left', width: '15%', height: '2.5em', fontSize: '15px' }} />
+            </div>
+            <div style={{ width: '100%', overflow: 'hidden' }}>
+              <Typography className={classes.font} variant="body1" gutterBottom>이메일</Typography>
+              <TextField
+                style={{ float: 'left', width: '45%', backgroundColor: '#FFFFFF' }}
+                variant="outlined"
+                required
+                fullWidth
+                size="small"
+                id="emailId"
+                name="emailId"
+                autoComplete="emai"
+                value={emailId}
+                onChange={(e) => { setEmailId(e.target.value) }}
+              />
+              <Typography style={{ float: 'left', width: '10%', padding: '2%', textAlign: 'center', height: '2.5em' }} variant="body1">@</Typography>
+
+              <FormControl variant="outlined" style={{ float: 'left', width: '45%' }}>
+                <Select
+                  style={{ height: '2.5em' }}
+                  labelId="demo-simple-select-outlined-label"
+                  id="email"
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value) }}
+                >
+                  <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
+                  <MenuItem value={'naver.com'}>naver.com</MenuItem>
+                  <MenuItem value={'daum.net'}>daum.net</MenuItem>
+                  <MenuItem value={'yahoo.co.kr'}>yahoo.co.kr</MenuItem>
+                  <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
+                  <MenuItem value={'nate.com'}>nate.com</MenuItem>
+                  <MenuItem value={'empas.com'}>empas.com</MenuItem>
+                  <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
+                  <MenuItem value={'weppy.com'}>weppy.com</MenuItem>
+                  <MenuItem value={'korea.com'}>korea.com</MenuItem>
+                  <MenuItem value={'mail.co.kr'}>hotmail.com</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+            <Typography className={classes.font} variant="body1" gutterBottom>보험 여부</Typography>
+            <FormControl component="fieldset">
+              <RadioGroup row aria-label="insurance" name="insurance" value={insurance} onChange={(e) => { setInsurance(e.target.value) }} >
+                <FormControlLabel
+                  value="Y"
+                  control={<Radio color="primary" />}
+                  label="있음"
+                  labelPlacement="end"
                 />
-                <Typography style={{ float:'left', width: '10%', padding: '2%', textAlign: 'center', height: '2.5em'}} variant="body1">@</Typography>
-                
-                <FormControl variant="outlined" style={{ float:'left', width: '45%'}}>
-                  <Select
-                    style={{height: '2.5em'}}
-                    labelId="demo-simple-select-outlined-label"
-                    id="email"
-                    value={ email }
-                    onChange={ (e) => { setEmail(e.target.value) }}
-                    >
-                    <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
-                    <MenuItem value={'naver.com'}>naver.com</MenuItem>
-                    <MenuItem value={'daum.net'}>daum.net</MenuItem>
-                    <MenuItem value={'yahoo.co.kr'}>yahoo.co.kr</MenuItem>
-                    <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
-                    <MenuItem value={'nate.com'}>nate.com</MenuItem>
-                    <MenuItem value={'empas.com'}>empas.com</MenuItem>
-                    <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
-                    <MenuItem value={'weppy.com'}>weppy.com</MenuItem>
-                    <MenuItem value={'korea.com'}>korea.com</MenuItem>
-                    <MenuItem value={'mail.co.kr'}>hotmail.com</MenuItem>
-                  </Select>
-                </FormControl>
-                </div>
-    <Typography className={classes.font} variant="body1" gutterBottom>보험 여부</Typography>
-                <FormControl component="fieldset">
-        <RadioGroup row aria-label="insurance" name="insurance" value={ insurance } onChange={ (e) => { setInsurance(e.target.value) }} >
-        <FormControlLabel
-          value="Y"
-          control={<Radio color="primary" />}
-          label="있음"
-          labelPlacement="end"
-        />
-        <FormControlLabel
-          value="N"
-          control={<Radio color="primary" />}
-          label="없음"
-          labelPlacement="end"
-        />
-      </RadioGroup>
-    </FormControl>
+                <FormControlLabel
+                  value="N"
+                  control={<Radio color="primary" />}
+                  label="없음"
+                  labelPlacement="end"
+                />
+              </RadioGroup>
+            </FormControl>
 
-                <Typography className={classes.font} variant="body1" gutterBottom>진료 구분</Typography>
-                <FormControl component="fieldset">
-        <RadioGroup row aria-label="diagnosis" name="diagnosis" value={ diagnosis } onChange={ (e) => { setDiagnosis(e.target.value) }} >
-        <FormControlLabel
-          value="초진"
-          control={<Radio color="primary" />}
-          label="초진"
-          labelPlacement="end"
-        />
-        <FormControlLabel
-          value="재진"
-          control={<Radio color="primary" />}
-          label="재진"
-          labelPlacement="end"
-        />
-      </RadioGroup>
-    </FormControl>
+            <Typography className={classes.font} variant="body1" gutterBottom>진료 구분</Typography>
+            <FormControl component="fieldset">
+              <RadioGroup row aria-label="diagnosis" name="diagnosis" value={diagnosis} onChange={(e) => { setDiagnosis(e.target.value) }} >
+                <FormControlLabel
+                  value="초진"
+                  control={<Radio color="primary" />}
+                  label="초진"
+                  labelPlacement="end"
+                />
+                <FormControlLabel
+                  value="재진"
+                  control={<Radio color="primary" />}
+                  label="재진"
+                  labelPlacement="end"
+                />
+              </RadioGroup>
+            </FormControl>
 
-    <Typography className={classes.font} variant="body1" gutterBottom>최초 내원일</Typography>
+            <Typography className={classes.font} variant="body1" gutterBottom>최초 내원일</Typography>
             <TextField
               variant="outlined"
               required
@@ -387,38 +418,121 @@ export default function Row(props) {
               size="small"
               id="outlined-insDt"
               name="insDt"
-              defaultValue={ insDt }
+              defaultValue={insDt}
               InputProps={{
                 readOnly: true,
               }}
             />
-                                  <Typography className={classes.font} variant="body1" gutterBottom>비고</Typography>
-                      <TextField
-                        id="outlined-multiline-static"
-                        multiline
-                        fullWidth
-                        variant="outlined"
-                        rows={6}
-                        value={ remark }
-                        onChange={ (e) => { setRemark(e.target.value) }}
-                      />
+            <Typography className={classes.font} variant="body1" gutterBottom>비고</Typography>
+            <TextField
+              id="outlined-multiline-static"
+              multiline
+              fullWidth
+              variant="outlined"
+              rows={6}
+              value={remark}
+              onChange={(e) => { setRemark(e.target.value) }}
+            />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary">닫기</Button>
-            <Button onClick={ update } color="primary">수정</Button>
+            <Button onClick={update} color="primary">수정</Button>
           </DialogActions>
         </Dialog>
-        <TableCell style={{ textAlign: 'center', padding: '5px' }}>
-          <Link to={{
-            pathname: `/nurse/receipt/${row.patientNo}`,
-            state: {
-              patientNo: row.patientNo,
-              name: row.name,
-              ageGender: row.ageGender,
-              insurance: row.insurance
-            }
-          }}><AddBoxIcon style={{ color: '#1C91FB', fontSize: '30px' }} /></Link>
-        </TableCell>
+
+        <TableCell
+          onClick={() => {
+            receiptClickOpen(
+              row.patientNo,
+              row.name,
+              row.insurance)
+          }} style={{ textAlign: 'center', padding: '5px' }}>
+          <AddBoxIcon style={{ color: '#1C91FB', fontSize: '30px' }} /></TableCell>
+        <Dialog open={dialogOpen} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
+
+          <DialogTitle id="form-dialog-title">접수</DialogTitle>
+          <DialogContent>
+            <Typography className={classes.font} variant="body1" gutterBottom>환자번호</Typography>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              size="small"
+              id="outlined-patientNo"
+              name="patientNo"
+              autoComplete="patientNo"
+              defaultValue={patientNo}
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+            <Typography className={classes.font} variant="body1" gutterBottom>이름</Typography>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              size="small"
+              id="outlined-name1"
+              name="name1"
+              autoComplete="name1"
+              defaultValue={name}
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+            <Typography className={classes.font} variant="body1" gutterBottom>보험 여부</Typography>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              size="small"
+              id="outlined-insurance"
+              name="insurance"
+              autoComplete="insurance"
+              defaultValue={insurance}
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+            <Typography className={classes.font} variant="body1" gutterBottom>혈압</Typography>
+            <TextField
+              fullWidth
+              variant="outlined"
+              size="small"
+              name="bp"
+              id="filled-read-only-bp"
+              value={bp}
+              onChange={(e) => { setBP(e.target.value) }}
+            />
+            <Typography className={classes.font} variant="body1" gutterBottom>혈당</Typography>
+            <TextField
+              fullWidth
+              variant="outlined"
+              size="small"
+              name="bs"
+              id="filled-read-only-bs"
+              value={bs}
+              onChange={(e) => { setBS(e.target.value) }}
+            />
+            <Typography className={classes.font} variant="body1" gutterBottom>접수 메모</Typography>
+            <TextField
+              id="outlined-multiline-static"
+              multiline
+              fullWidth
+              variant="outlined"
+              rows={6}
+              value={remark}
+              onChange={(e) => { setRemark(e.target.value) }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">닫기</Button>
+            <Button onClick={create} color="primary">접수</Button>
+          </DialogActions>
+        </Dialog>
+
+
+
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
