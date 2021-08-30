@@ -26,6 +26,7 @@ import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import SearchIcon from '@material-ui/icons/Search';
+import ClearIcon from '@material-ui/icons/Clear';
 import patientService from '../../service/patientService';
 import receiptService from '../../service/receiptService';
 
@@ -545,32 +546,30 @@ export default function Row(props) {
                 <TableHead>
                   <TableRow>
                     <TableCell style={{ width: '3%' }} />
-                    <TableCell style={{ width: '6%', textAlign: 'center' }}>No</TableCell>
-                    <TableCell style={{ width: '12%', textAlign: 'center' }}>접수 번호</TableCell>
-                    <TableCell style={{ width: '17%', textAlign: 'center' }}>접수 날짜</TableCell>
-                    <TableCell style={{ width: '17%', textAlign: 'center' }}>접수 시간</TableCell>
-                    <TableCell style={{ width: '35%', textAlign: 'center' }}>접수 메모</TableCell>
-                    <TableCell style={{ width: '10%', textAlign: 'center' }}>접수 취소</TableCell>
+                    <TableCell style={{ width: '6%', textAlign: 'center', padding: '10px' }}>No</TableCell>
+                    <TableCell style={{ width: '12%', textAlign: 'center', padding: '10px' }}>접수 번호</TableCell>
+                    <TableCell style={{ width: '17%', textAlign: 'center', padding: '10px' }}>접수 날짜</TableCell>
+                    <TableCell style={{ width: '17%', textAlign: 'center', padding: '10px' }}>접수 시간</TableCell>
+                    <TableCell style={{ width: '35%', textAlign: 'center', padding: '10px' }}>접수 메모</TableCell>
+                    <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }}>접수취소</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {receipt.map((receiptList) => (
                     <TableRow key={receiptList.receiptNo} >
                       <TableCell />
-                      <TableCell style={{ textAlign: 'center' }} component="th" scope="row">{receiptList.no}</TableCell>
-                      <TableCell onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }} style={{ textAlign: 'center' }}>{receiptList.receiptNo}</TableCell>
-                      <TableCell style={{ textAlign: 'center' }}>{receiptList.receiptDt}</TableCell>
-                      <TableCell style={{ textAlign: 'center' }}>{receiptList.receiptTime}</TableCell>
-                      <TableCell>{receiptList.remark}</TableCell>
+                      <TableCell style={{ textAlign: 'center', padding: '10px' }} component="th" scope="row">{receiptList.no}</TableCell>
+                      <TableCell onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }} 
+                                style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptNo}</TableCell>
+                      <TableCell style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptDt}</TableCell>
+                      <TableCell style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptTime}</TableCell>
+                      <TableCell style={{padding: '10px' }}>{receiptList.remark}</TableCell>
                       {receiptList.state == '완료' ?
                         <TableCell></TableCell>
-                        : <TableCell style={{ textAlign: 'center' }}>
-                          <Button
-                            variant="outlined"
-                            size="small"
-                            color="primary"
-                            type="submit"
-                            onClick={() => { deleteReceipt(receiptList.receiptNo) }}>접수취소</Button>
+                        : <TableCell
+                            onClick={() => { deleteReceipt(receiptList.receiptNo) }}
+                            style={{ textAlign: 'center', padding: '5px' }}>
+                              <ClearIcon style={{ color: '#1C91FB', fontSize: '30px' }}/>
                         </TableCell>
                       }
                     </TableRow>
