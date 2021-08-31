@@ -9,6 +9,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import EventNoteIcon from '@material-ui/icons/EventNote';
+import ReceiptIcon from '@material-ui/icons/Receipt';
 
 const NurseList = React.forwardRef((props, ref) => {
     return (
@@ -27,7 +28,7 @@ const NurseList = React.forwardRef((props, ref) => {
             </ListItem>
             <ListItem button onClick={(e) => {  location.href='/#/nurse/main'; ref.current.scrollToSlide(1) }}>
                 <ListItemIcon>
-                    <ShoppingCartIcon />
+                    <ReceiptIcon />
                 </ListItemIcon>
                 <ListItemText primary="예약" />
             </ListItem>
