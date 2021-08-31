@@ -15,7 +15,8 @@
 		FROM ucare.board A
 		INNER JOIN ucare.user B ON
 			A.user_no = B.user_no
-		ORDER BY board_date DESC
+		ORDER BY board_date DESC,
+				board_no DESC
 	</select>
 	
 	<select id="retrieveContents" resultType="boardvo" >
@@ -64,7 +65,7 @@
 	   		title = #{title },
 	   		contents = #{contents },
 	   		image = #{image },
-	   		upt_dt = now(),
+	   		upt_dt = now()
 		WHERE board_no = #{boardNo }
 	</update>
 

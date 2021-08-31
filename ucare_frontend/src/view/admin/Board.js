@@ -89,11 +89,10 @@ export default function Board() {
                 boardService.update(_item)
                 .then(res => {
                     const index = findIndexByNo(item.boardNo);
-
                     _items[index] = _item;
-                    setItems(_items);
                     setItemDialog(false);
-                    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Updated', life: 3000 });
+                    window.location.reload();
+                    toast.current.show({ severity: 'success', summary: 'Successful', detail: '수정 완료!', life: 3000 });
                 })
                 .catch(err => {
                     console.log('update() Error!', err);
@@ -101,16 +100,12 @@ export default function Board() {
             }    
             else {
                 _item.userNo = sessionStorage.getItem('user_no');
-
                 boardService.create(_item)
                 .then(res => {
                     console.log('success!!');
-                    _item.boardNo = res.data;
-                    _items.unshift(_item);
-                    setItems(_items);
                     setItemDialog(false);
-                    setItem(emptyItem);
-                    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Created', life: 3000 });
+                    window.location.reload();
+                    toast.current.show({ severity: 'success', summary: 'Successful', detail: '등록 완료!', life: 3000 });
                 })
                 .catch(err => {
                     console.log('create() Error!', err);
@@ -132,11 +127,9 @@ export default function Board() {
     const deleteItem = () => {
         boardService.delete(item.boardNo)
         .then(res => {
-            let _items = items.filter(val => val.boardNo !== item.boardNo);
-            setItems(_items);
             setDeleteItemDialog(false);
-            setItem(emptyItem);
-            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
+            window.location.reload();
+            toast.current.show({ severity: 'success', summary: 'Successful', detail: '삭제 완료!', life: 3000 });
         })
         .catch(err => {
             console.log('delete() Error!', err);
@@ -200,7 +193,7 @@ export default function Board() {
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
-                <Button label="입력" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={openNew} />
+                <Button label="글쓰기" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={openNew} />
                 <Button label="삭제" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedItems || !selectedItems.length} />
             </React.Fragment>
         )
@@ -250,7 +243,7 @@ export default function Board() {
                 <Toolbar className="p-mb-4" left={leftToolbarTemplate}></Toolbar>
 
                 <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="No data" onSelectionChange={(e) => setSelectedItems(e.value)}
-                    dataKey="medicineNo" paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
+                    dataKey="boardNo" paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
                     globalFilter={globalFilter}
@@ -284,14 +277,14 @@ export default function Board() {
             <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {item && <span>Are you sure you want to delete <b>{item.title}</b>?</span>}
+                    {item && <span><b>{item.title}</b>을 삭제하시겠습니까?</span>}
                 </div>
             </Dialog>
 
             <Dialog visible={deleteItemsDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemsDialogFooter} onHide={hideDeleteItemsDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {item && <span>Are you sure you want to delete the selected items?</span>}
+                    {item && <span>선택한 항목들을 삭제하시겠습니까?</span>}
                 </div>
             </Dialog>
         </div>
