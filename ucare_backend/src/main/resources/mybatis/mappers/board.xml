@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+
+	<select id="retrieveAll" resultType="boardvo" >
+		SELECT 
+			A.board_no AS boardNo,
+			A.title AS title,
+			A.contents AS contents,
+			A.hit AS hit,
+			A.image AS image,
+			TO_CHAR(A.board_date,'YYYY-MM-DD') AS boardDt,
+			TO_CHAR(A.board_time, 'HH24:MI:SS') AS boardTime,
+			B.id AS userId
+		FROM ucare.board A
+		INNER JOIN ucare.user B ON
+			A.user_no = B.user_no
+		ORDER BY board_date DESC
+	</select>
+	
+	<select id="retrieveContents" resultType="boardvo" >
+		SELECT 
+			A.board_no AS boardNo,
+			A.title AS title,
+			A.contents AS contents,
+			A.hit AS hit,
+			A.image AS image,
+			TO_CHAR(A.board_date,'YYYY-MM-DD') AS boardDt,
+			TO_CHAR(A.board_time, 'HH24:MI:SS') as boardTime,
+			B.id AS userId
+		FROM ucare.board A
+		INNER JOIN ucare.user B ON
+			A.user_no = B.user_no
+		WHERE board_no = #{boardNo }
+	</select>
+
+
+	<insert id="create" parameterType="boardvo">
+		INSERT
+			INTO ucare.board(title, contents, hit, image, board_date, board_time, ins_no, user_no)
+		VALUES(
+			#{title },
+			#{contents },
+			0,
+			#{image },
+			now(),
+			now(),
+			#{insNo },
+			#{userNo }
+			)
+	</insert>
+
+	<update id="updateHit" parameterType="long">
+		<![CDATA[
+		UPDATE ucare.board
+		   SET hit = hit + 1
+		 WHERE boardNo = #{boardNo }
+		]]>	
+	</update>
+
+	<update id="update" parameterType="boardvo">
+		UPDATE ucare.board
+		   SET 
+	   		title = #{title },
+	   		contents = #{contents },
+	   		image = #{image },
+	   		upt_dt = now(),
+		WHERE board_no = #{boardNo }
+	</update>
+
+
+	<delete id="delete" parameterType="Long">
+		DELETE
+		  FROM ucare.board
+		 WHERE board_no = #{boardNo }
+	</delete>
+
+
+	<update id="createExcel" parameterType="boardvo">
+		WITH UPSERT AS 
+		(
+			UPDATE ucare.medicine SET 
+				symptom = #{symptom },
+				generic = #{generic },
+				price = #{price },
+				maker = #{maker }
+			WHERE
+				medicine_nm = #{medicineNm }
+			RETURNING *
+		)
+		
+		INSERT INTO ucare.medicine
+		(
+			medicine_nm,
+			symptom,
+			generic,
+			price,
+			maker
+		)
+		SELECT 
+			#{medicineNm },
+			#{symptom },
+			#{generic },
+			#{price },
+			#{maker }
+		WHERE NOT EXISTS(SELECT * FROM UPSERT WHERE medicine_nm = #{medicineNm })
+	</update>
+
+	
+
+	
+</mapper>
