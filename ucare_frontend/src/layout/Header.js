@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import { connect } from 'react-redux';
@@ -74,6 +75,7 @@ const Header = ({ open, drawerManage }) => {
             href="/Home"
             style={{ padding: '0px', width: '100px', fontSize: '20px', color: '#FFFFFF' }} >U-Care</Button>
         </div>
+        <Avatar alt="Remy Sharp" onClick={()=>{console.log("!!!")}}/>
         <Button
           href="/"
           onClick={logout}
@@ -91,16 +93,8 @@ const mapStateToProps = (state) => {
   }
 }
 
-// //object(es6 면 property와 value 값이 같으면 생략가능)
 const mapDispatchToProps = {
   drawerManage
 }
-
-// function
-// const mapDispatchToProps = (dispatch) => {
-//   return{
-//     drawerManage: () => dispatch(drawerManage)
-//   }
-// }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
