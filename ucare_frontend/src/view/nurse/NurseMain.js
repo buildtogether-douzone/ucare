@@ -18,5 +18,4 @@ const NurseMain = React.forwardRef((props, ref) => {
         </SiteLayout>
     );
 });
-
 export default NurseMain;

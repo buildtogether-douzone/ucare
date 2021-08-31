@@ -10,7 +10,7 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 
-const NurseList = () => {
+const NurseList = React.forwardRef((props, ref) => {
     return (
         <div>
             <ListItem button component={Link} to="/Home">
@@ -19,32 +19,20 @@ const NurseList = () => {
                 </ListItemIcon>
                 <ListItemText primary="공지 사항" />
             </ListItem>
-            <ListItem button component={Link} to="/nurse/patientList">
+            <ListItem button onClick={(e) => {  location.href='/#/nurse/main'; ref.current.scrollToSlide(0) }}>
                 <ListItemIcon>
                     <ShoppingCartIcon />
                 </ListItemIcon>
-                <ListItemText primary="환자 검색" />
+                <ListItemText primary="예약" />
             </ListItem>
-            <ListItem button>
+            <ListItem button onClick={(e) => {  location.href='/#/nurse/main'; ref.current.scrollToSlide(1) }}>
                 <ListItemIcon>
                     <PeopleIcon />
                 </ListItemIcon>
-                <ListItemText primary="수납" />
-            </ListItem>
-            <ListItem button>
-                <ListItemIcon>
-                    <BarChartIcon />
-                </ListItemIcon>
-                <ListItemText primary="현황" />
-            </ListItem>
-            <ListItem button component={Link} to="/reservation">
-                <ListItemIcon>
-                    <LayersIcon />
-                </ListItemIcon>
-                <ListItemText primary="예약" />
+                <ListItemText primary="환자 등록/접수" />
             </ListItem>
         </div>
     );
-}
+});
 
 export default NurseList;
