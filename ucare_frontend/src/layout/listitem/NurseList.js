@@ -17,15 +17,21 @@ const NurseList = React.forwardRef((props, ref) => {
                 <ListItemIcon>
                     <EventNoteIcon />
                 </ListItemIcon>
-                <ListItemText primary="공지 사항" />
+                <ListItemText primary="공지사항" />
             </ListItem>
             <ListItem button onClick={(e) => {  location.href='/#/nurse/main'; ref.current.scrollToSlide(0) }}>
+                <ListItemIcon>
+                    <PeopleIcon />
+                </ListItemIcon>
+                <ListItemText primary="진료현황" />
+            </ListItem>
+            <ListItem button onClick={(e) => {  location.href='/#/nurse/main'; ref.current.scrollToSlide(1) }}>
                 <ListItemIcon>
                     <ShoppingCartIcon />
                 </ListItemIcon>
                 <ListItemText primary="예약" />
             </ListItem>
-            <ListItem button onClick={(e) => {  location.href='/#/nurse/main'; ref.current.scrollToSlide(1) }}>
+            <ListItem button onClick={(e) => {  location.href='/#/nurse/main'; ref.current.scrollToSlide(2) }}>
                 <ListItemIcon>
                     <PeopleIcon />
                 </ListItemIcon>

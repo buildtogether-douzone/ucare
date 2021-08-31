@@ -29,11 +29,11 @@ export const nurseListItems = (
       </ListItemIcon>
       <ListItemText primary="수납" />
     </ListItem>
-    <ListItem button>
+    <ListItem button component={Link} to="/nurse/monitorning">
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>
-      <ListItemText primary="현황" />
+      <ListItemText primary="진료현황" />
     </ListItem>
     <ListItem button component={Link} to="/reservation">
       <ListItemIcon>
