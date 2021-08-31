@@ -98,9 +98,9 @@ export default function Reservation( ){
                     style={{backgroundColor: '#F2F2F2'}}
                     required
                     fullWidth
-                    id="telNo"
+                    id="resTelNo"
                     label="전화번호"
-                    name="telNo"
+                    name="resTelNo"
                     autoComplete="telNo"
                     value={ telNo }
                     onChange={ (e) => { setTelNo(e.target.value) } }
