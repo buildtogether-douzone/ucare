@@ -107,7 +107,7 @@ export default function Row(props) {
   const handleClose2 = () => {
     document.body.style.position = "";
     setDialogOpen2(false);
-    
+
   };
 
   const receiptClickOpen = (a, b, c) => {
@@ -265,7 +265,7 @@ export default function Row(props) {
         <TableCell style={{ textAlign: 'center', padding: '5px' }}>
           <PermIdentityIcon 
                     onClick={() => {
-                      document.body.style.position = "fixed";
+                      document.body.style.position = "relative";
                       patientInfoClickOpen(
                         row.patientNo,
                         row.name,

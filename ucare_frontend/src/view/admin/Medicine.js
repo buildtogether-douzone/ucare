@@ -57,12 +57,16 @@ export default function Medicine() {
     }
 
     const openNew = () => {
+        document.body.style.position = "relative";
+        document.body.style.overflow = "hidden";
         setItem(emptyItem);
         setSubmitted(false);
         setItemDialog(true);
     }
 
     const hideDialog = () => {
+        document.body.style.position = "";
+        document.body.style.overflow = "";
         setSubmitted(false);
         setItemDialog(false);
     }

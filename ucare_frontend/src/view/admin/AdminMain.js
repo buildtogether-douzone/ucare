@@ -9,7 +9,7 @@ import Medicine from './Medicine';
 const AdminMain = React.forwardRef((props, ref) => {
     return (
       <SiteLayout>
-      <FullPage ref={ref}>
+      <FullPage ref={ref} scrollMode='normal'>
         <Slide>
           <Setting />
         </Slide>
