@@ -77,7 +77,6 @@ export default function PatientList() {
  }, []);
 
  return (
-  <SiteLayout>
     <Grid container>
       <Grid item xs={4}>
       <NewPatient />
@@ -144,8 +143,5 @@ export default function PatientList() {
 </div>
 </Grid>
 </Grid>
-</SiteLayout>
-
- 
  );
 }

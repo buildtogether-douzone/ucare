@@ -60,7 +60,6 @@ export default function Reservation( ){
     }
 
     return(
-        <SiteLayout >
         <div className={classes.root} >
             <div className={classes.input} >
                 <p style={{marginTop:'10px', marginBottom:'8px', marginLeft:'10px'}}>이름</p>
@@ -151,6 +150,5 @@ export default function Reservation( ){
                 </Button>
             </div>
         </div>
-        </SiteLayout>
     );
 }
