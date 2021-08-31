@@ -87,6 +87,7 @@ export default function SignInSide({ history }) {
         sessionStorage.setItem('user', id);
         sessionStorage.setItem('user_no', res.data.userNo);
         sessionStorage.setItem('role', res.data.role);
+        
         history.push(res.data.role=='관리자'? '/admin/main' :
                      res.data.role=='의사' ? '/doctor/main' :
                      res.data.role=='간호사' && '/nurse/main');
