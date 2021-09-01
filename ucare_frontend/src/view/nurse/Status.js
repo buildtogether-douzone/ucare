@@ -5,11 +5,12 @@ import { Rating } from 'primereact/rating';
 import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 import { Divider } from 'primereact/divider';
+import { statusService } from '../../service/statusService';
 import { ProductService } from '../../service/ProductService';
 
 import '../../assets/scss/DataScroller.scss';
 
-export default function Monitoring() {
+export default function Status() {
     const [items, setItems] = useState([]);
     const [sortKey, setSortKey] = useState('careWait');
     const [sortOrder, setSortOrder] = useState(null);
@@ -27,6 +28,16 @@ export default function Monitoring() {
     useEffect(() => {
         productService.getProducts().then(data => setItems(data));
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // yyyy-MM-dd 포맷으로 반환
+    const dateFormat = (date) => {
+        var year = date.getFullYear();              //yyyy
+        var month = (1 + date.getMonth());          //M
+        month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+        var day = date.getDate();                   //d
+        day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+        return  year + '-' + month + '-' + day;
+    }
 
     const itemTemplate = (data) => {
         return (
@@ -80,7 +91,7 @@ export default function Monitoring() {
                         <Divider layout="vertical">
                         </Divider>
                     </div>
-                    <div className="p-col-12 p-lg-2">
+                    <div className="p-col-12 p-lg-1">
                         abc
                     </div>
                 </div>
