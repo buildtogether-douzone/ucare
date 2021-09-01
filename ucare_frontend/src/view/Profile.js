@@ -21,9 +21,9 @@ const useStyles = makeStyles((theme) => ({
     width: '50% '
   },
   paper: {
-    marginTop: '4%',
     width: '30%',
     float: 'left',
+    marginTop:'1%',
     alignItems: 'center',
   },
   font: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     top: 80,
     right: 80,
     float: 'left',
-    marginTop: '5%',
+    marginTop:'1%',
     marginRight: '80px',
     marginLeft: '10%'
   },
@@ -142,7 +142,7 @@ export default function Profile() {
 
     const formData = new FormData();
     formData.append('user', new Blob([JSON.stringify(user)], {type: "application/json"}));
-    formData.append('file', file);
+    formData.append('file', file || null);
 
     userService.updateUser(formData)
       .then(res => {
@@ -166,6 +166,11 @@ export default function Profile() {
 
   return (
     <SiteLayout >
+      <div style={{marginLeft: '10%', marginTop:'2%'}}>
+        <Typography component="h1" variant="h4">
+            프로필 수정
+        </Typography>
+      </div>
       <div className={classes.image} >
         <div className={classes.profile}
           style={previewURL == null ? 
@@ -239,6 +244,7 @@ export default function Profile() {
               onChange={(e) => { setConfirmPassword(e.target.value) }}
             />
           </Grid>
+          
 
           <Grid item xs={12}>
             <Typography className={classes.font} variant="body1">전화번호</Typography>

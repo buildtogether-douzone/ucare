@@ -55,8 +55,10 @@
 			   		tel_no = #{telNo },
 			   		email = #{email },
 			   		address = #{address },
-			   		birth = TO_DATE(#{birth },'YYYY-MM-DD'),
-			   		image = #{image }
+			   		<if test="image != null and image != '' ">
+			   		image = #{image },
+			   		</if>
+			   		birth = TO_DATE(#{birth },'YYYY-MM-DD')
 			WHERE id = #{id }
 	</update>
 
