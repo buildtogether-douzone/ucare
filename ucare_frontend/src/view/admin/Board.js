@@ -11,8 +11,9 @@ import { RadioButton } from 'primereact/radiobutton';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
-import '../../assets/scss/DataTable.scss';
+import { Editor } from 'primereact/editor';
 import boardService from '../../service/boardService';
+import '../../assets/scss/BoardTable.scss';
 
 export default function Board() {
 
@@ -38,7 +39,7 @@ export default function Board() {
     const [globalFilter, setGlobalFilter] = useState(null);
     const toast = useRef(null);
     const dt = useRef(null);
-
+    
     const retrieveAll = (e) => {
         boardService.retrieveAll()
           .then( res => {
@@ -75,12 +76,12 @@ export default function Board() {
         setDeleteItemDialog(false);
     }
 
-    const hideDeleteItemsDialog = () => {
-        setDeleteItemsDialog(false);
-    }
-
     const saveItem = () => {
         setSubmitted(true);
+
+        const formData = new FormData();
+        formData.append('data', new Blob([JSON.stringify(data)], {type: "application/json"}));
+        formData.append('file', file);
 
         if (item.title.trim()) {
             let _items = [...items];
@@ -119,6 +120,11 @@ export default function Board() {
         setItemDialog(true);
     }
 
+    const readItem = (item) => {
+        setItem({...item});
+        setItemDialog(true);
+    }
+
     const confirmDeleteItem = (item) => {
         setItem(item);
         setDeleteItemDialog(true);
@@ -148,32 +154,6 @@ export default function Board() {
         return index;
     }
 
-
-    const confirmDeleteSelected = () => {
-        setDeleteItemsDialog(true);
-    }
-
-    const deleteSelectedItems = () => {
-        let success;
-        selectedItems.map((item, index) => (
-            boardService.delete(item.boardNo)
-            .then(res => {
-                success = true;
-                if((selectedItems.length === (index+1)) && success === true) {
-                    let _items = items.filter(val => !selectedItems.includes(val));
-                    setItems(_items);
-                    setDeleteItemsDialog(false);
-                    setSelectedItems(null);
-                    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
-                }
-            })
-            .catch(err => {
-                success = false;
-                console.log('selectedDelete() Error!', err);
-            })
-        ))
-    }
-
     const onInputChange = (e, name) => {
         const val = (e.target && e.target.value) || '';
         let _item = {...item};
@@ -182,19 +162,29 @@ export default function Board() {
         setItem(_item);
     }
 
-    const onInputNumberChange = (e, name) => {
-        const val = e.value || 0;
+    const onInputTextChange = (e, name) => {
+        const val = e.htmlValue || 0;
         let _item = {...item};
         _item[`${name}`] = val;
 
         setItem(_item);
     }
 
+
+    const handleFileOnChange = (e, name) => {
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        let _item = {...item};
+        _item[`${name}`] = file;
+        reader.onloadend = () => {
+        setItem(_item);
+        }
+      }
+      
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
                 <Button label="글쓰기" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={openNew} />
-                <Button label="삭제" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} disabled={!selectedItems || !selectedItems.length} />
             </React.Fragment>
         )
     }
@@ -219,19 +209,13 @@ export default function Board() {
     const itemDialogFooter = (
         <React.Fragment>
             <Button label="취소" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="저장" icon="pi pi-check" className="p-button-text" onClick={saveItem} />
+            <Button label="등록" icon="pi pi-check" className="p-button-text" onClick={saveItem} />
         </React.Fragment>
     );
     const deleteItemDialogFooter = (
         <React.Fragment>
             <Button label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
             <Button label="예" icon="pi pi-check" className="p-button-text" onClick={deleteItem} />
-        </React.Fragment>
-    );
-    const deleteItemsDialogFooter = (
-        <React.Fragment>
-            <Button label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemsDialog} />
-            <Button label="예" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedItems} />
         </React.Fragment>
     );
 
@@ -242,23 +226,23 @@ export default function Board() {
             <div className="card">
                 <Toolbar className="p-mb-4" left={leftToolbarTemplate}></Toolbar>
 
-                <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="No data" onSelectionChange={(e) => setSelectedItems(e.value)}
+                <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="No data" onRowClick={(e) => {readItem(e.data)}} onSelectionChange={(e) => setSelectedItems(e.value)}
                     dataKey="boardNo" paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
                     globalFilter={globalFilter}
                     header={header}>
 
-                    <Column field="boardNo" header="No"></Column>
-                    <Column field="title" header="제목"></Column>
-                    <Column field="userId" header="작성자"></Column>
-                    <Column field="boardDt" header="작성일"></Column>
-                    <Column field="hit" header="조회"></Column>
-                    <Column body={actionBodyTemplate}></Column>
+                    <Column style={{textAlign: 'center'}} field="boardNo" header="No"></Column>
+                    <Column style={{textAlign: 'center'}} field="title" header="제목"></Column>
+                    <Column style={{textAlign: 'center'}} field="userId" header="작성자"></Column>
+                    <Column style={{textAlign: 'center'}} field="boardDt" header="작성일"></Column>
+                    <Column style={{textAlign: 'center'}} field="hit" header="조회"></Column>
+                    <Column style={{textAlign: 'center'}} body={actionBodyTemplate}></Column>
                 </DataTable>
             </div>
 
-            <Dialog visible={itemDialog} style={{ width: '450px' }} header="공지 사항" modal className="p-fluid" footer={itemDialogFooter} onHide={hideDialog}>
+            <Dialog maximized visible={itemDialog} style={{ width: '450px' }} header="공지 사항" modal className="p-fluid" footer={itemDialogFooter} onHide={hideDialog}>
                 <div className="p-field">
                     <label htmlFor="title">제목</label>
                     <InputText id="title" value={item.title} onChange={(e) => onInputChange(e, 'title')} required autoFocus className={classNames({ 'p-invalid': submitted && !item.title })} />
@@ -266,13 +250,14 @@ export default function Board() {
                 </div>
                 <div className="p-field">
                     <label htmlFor="contents">내용</label>
-                    <InputTextarea id="contents" value={item.contents} onChange={(e) => onInputChange(e, 'contents')} required rows={6} cols={20} />
+                    <Editor style={{ height: '320px' }} value={item.contents} onTextChange={(e) => onInputTextChange(e, 'contents')} />
                 </div>
                 <div className="p-field">
                     <label htmlFor="image">파일 첨부</label>
-                    <InputText id="image" value={item.image} onChange={(e) => onInputChange(e, 'image')} className={classNames({ 'p-invalid': submitted && item.image })} />
+                    <input id={"file-input"} type="file" name="imageFile" onChange={(e) => handleFileOnChange(e, 'image')}/>
                 </div>
             </Dialog>
+
 
             <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
                 <div className="confirmation-content">
@@ -281,12 +266,6 @@ export default function Board() {
                 </div>
             </Dialog>
 
-            <Dialog visible={deleteItemsDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemsDialogFooter} onHide={hideDeleteItemsDialog}>
-                <div className="confirmation-content">
-                    <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {item && <span>선택한 항목들을 삭제하시겠습니까?</span>}
-                </div>
-            </Dialog>
         </div>
     );
 }

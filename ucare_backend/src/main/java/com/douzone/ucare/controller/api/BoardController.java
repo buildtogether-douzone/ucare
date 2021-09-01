@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.douzone.ucare.service.BoardService;
 import com.douzone.ucare.service.FileUploadService;
 import com.douzone.ucare.vo.BoardVo;
-import com.douzone.ucare.vo.MedicineVo;
 
 @RestController
 @RequestMapping("/api/board")
@@ -28,7 +29,8 @@ public class BoardController {
 	private FileUploadService fileUploadService;
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> create(@RequestBody BoardVo data) {
+	public ResponseEntity<?> create(@RequestBody BoardVo data, @RequestPart("file") MultipartFile file) {
+		data.setImage(fileUploadService.restore(file));
 		return new ResponseEntity<>(boardService.create(data), HttpStatus.OK);
 	}
 	
