@@ -7,7 +7,7 @@ import SiteLayout from '../../layout/SiteLayout';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      width: '100%',
+      width: '80%',
       margin: theme.spacing(8),
       display: 'flex',
       flexDirection: 'column',

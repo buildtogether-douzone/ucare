@@ -72,7 +72,7 @@ export default function Profile() {
   const [file, setFile] = useState('');
   const [previewURL, setPreviewURL] = useState('');
 
-  const fetchUpdate = (e) => {
+  useEffect(() => {
     let user = {
       id: sessionStorage.getItem('user')
     };
@@ -97,11 +97,6 @@ export default function Profile() {
       .catch(err => {
         console.log('updateUser() 에러', err);
       });
-  };
-
-
-  useEffect(() => {
-    fetchUpdate();
   }, []);
 
   useEffect(() => {
