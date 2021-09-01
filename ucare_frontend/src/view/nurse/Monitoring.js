@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
+import { DataScroller } from 'primereact/datascroller';
 import { Button } from 'primereact/button';
-import { Dropdown } from 'primereact/dropdown';
-import { ProductService } from '../../service/ProductService';
 import { Rating } from 'primereact/rating';
+import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
+import { Divider } from 'primereact/divider';
+import { ProductService } from '../../service/ProductService';
 
-import '../../assets/scss/DataView.scss';
+import '../../assets/scss/DataScroller.scss';
 
 export default function Monitoring() {
-    const [items, setItems] = useState(null);
-    const [sortKey, setSortKey] = useState(null);
+    const [items, setItems] = useState([]);
+    const [sortKey, setSortKey] = useState('careWait');
     const [sortOrder, setSortOrder] = useState(null);
-    const [sortField, setSortField] = useState(null);
-    const [layout, setLayout] = useState('list');
     const [date, setDate] = useState(new Date());
-    
+
     const sortOptions = [
-        {label: 'Price High to Low', value: '!price'},
-        {label: 'Price Low to High', value: 'price'},
+        {label: '진료중', value: 'care'},
+        {label: '진료대기중', value: 'careWait'},
+        {label: '수납대기중', value: 'wait'},
+        {label: '완료', value: 'finish'}
     ];
 
     const productService = new ProductService();
@@ -26,6 +27,20 @@ export default function Monitoring() {
     useEffect(() => {
         productService.getProducts().then(data => setItems(data));
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const itemTemplate = (data) => {
+        return (
+            <div className="product-item">
+                <div className="product-detail">
+                    <div className="product-name">{data.name}</div>
+                    <div className="product-description">{data.description}</div>
+                </div>
+                <div className="product-price">
+                    <Dropdown options={sortOptions} value={sortKey} optionLabel="label" />
+                </div>
+            </div>
+        );
+    }
 
     const onSortChange = (event) => {
         const value = event.value;
@@ -42,37 +57,10 @@ export default function Monitoring() {
         }
     }
 
-    const renderListItem = (data) => {
-        return (
-            <div className="p-col-7">
-                <div className="product-list-item">
-                    <div className="product-list-detail">
-                        <div className="product-name">{data.name}</div>
-                        <div className="product-description">{data.description}</div>
-                        <i className="pi pi-tag product-category-icon"></i><span className="product-category">{data.category}</span>
-                    </div>
-                    <div className="product-list-action">
-                        <span className="product-price">${data.price}</span>
-                        <Button icon="pi pi-shopping-cart" label="Add to Cart" disabled={data.inventoryStatus === 'OUTOFSTOCK'}></Button>
-                        <span className={`product-badge status-${data.inventoryStatus.toLowerCase()}`}>{data.inventoryStatus}</span>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    const itemTemplate = (item) => {
-        if (!item) {
-            return;
-        }
-        return renderListItem(item);
-    }
-
     const renderHeader = () => {
         return (
             <div className="p-grid p-nogutter">
-                <div className="p-col-6" style={{textAlign: 'left'}}>
-                    <Dropdown options={sortOptions} value={sortKey} optionLabel="label" placeholder="Sort By Price" onChange={onSortChange}/>
+                <div style={{textAlign: 'left'}}>
                     <Calendar dateFormat="yy/mm/dd" value={date} onChange={(e) => setDate(e.value)}></Calendar>
                 </div>
             </div>
@@ -82,14 +70,21 @@ export default function Monitoring() {
     const header = renderHeader();
 
     return (
-        <div className="test">
-        <div className="dataview">
+        <div className="datascroller">
             <div className="card">
-                <DataView value={items} layout={layout} header={header}
-                        itemTemplate={itemTemplate} paginator rows={9}
-                        sortOrder={sortOrder} sortField={sortField} />
+                <div className="p-grid">
+                    <div className="p-col-12 p-lg-6">
+                        <DataScroller value={items} itemTemplate={itemTemplate} rows={5} inline scrollHeight="500px" header={header} />
+                    </div>
+                     <div>
+                        <Divider layout="vertical">
+                        </Divider>
+                    </div>
+                    <div className="p-col-12 p-lg-2">
+                        abc
+                    </div>
+                </div>
             </div>
-        </div>
         </div>
     );
 }
