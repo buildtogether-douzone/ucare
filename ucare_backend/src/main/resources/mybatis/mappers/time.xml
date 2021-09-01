@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="time">
+
+	<update id="update" parameterType="string">
+			UPDATE  ucare.time
+			   SET 
+			   		status = true
+			WHERE date = TO_DATE(#{date }, 'YYYY-MM-DD')
+			  AND status = false
+			  AND time = (SELECT MIN(time) FROM ucare.time WHERE date = TO_DATE(#{date }, 'YYYY-MM-DD') AND status = false)
+	</update>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="status">		
+	<select id="retrieveAll" parameterType="string" resultType="receiptvo" >
+			SELECT
+				A.receipt_no AS receiptNo,
+				A.bp AS bp,
+				A.bs AS bs,
+				B.name AS name,
+				B.gender AS gender,
+				B.age AS age,
+				B.address as address,
+				B.insurance_yn AS insurance,
+				B.diagnosis_type AS diagnosis,
+				B.patient_no AS patientNo,
+				A.receipt_dt AS receiptDt,
+				TO_CHAR(receipt_time, 'HH24:MI:SS') as receiptTime,
+				A.remark AS remark,
+				A.state AS state,
+				(ROW_NUMBER() OVER()) as no
+			FROM
+				ucare.receipt A
+			INNER JOIN ucare.patient B ON
+				A.patient_no = B.patient_no
+			WHERE TO_CHAR(A.receipt_dt, 'YYYY-MM-DD') = #{date }
+			ORDER BY A.receipt_no DESC
+	</select>
+	
+</mapper>

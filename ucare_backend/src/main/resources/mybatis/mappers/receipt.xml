@@ -3,7 +3,19 @@
 <mapper namespace="receipt">	
 	<insert id="create" parameterType="receiptvo">
 		INSERT
-			INTO ucare.receipt(receipt_dt, receipt_time, ins_dt, remark, bp, bs, user_no, patient_no, accept_yn)
+			INTO ucare.receipt(
+				receipt_dt, 
+				receipt_time, 
+				ins_dt, 
+				remark, 
+				bp, 
+				bs, 
+				user_no, 
+				patient_no, 
+				accept_yn,
+				state,
+				diagnosis_time
+			)
 		VALUES(
 			now(),
 			now(),
@@ -13,7 +25,9 @@
 			#{bs },
 			(SELECT user_no FROM ucare.user WHERE id = #{userId } ),
 			#{patientNo },
-			'N'
+			'N',
+			'careWait',
+			(SELECT MIN(time) FROM ucare.time WHERE date = TO_DATE(TO_CHAR(now(), 'YYYY-MM-DD'), 'YYYY-MM-DD') AND status = false)
 		)
 	</insert>
 	

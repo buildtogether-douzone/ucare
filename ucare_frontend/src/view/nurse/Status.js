@@ -5,7 +5,9 @@ import { Rating } from 'primereact/rating';
 import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 import { Divider } from 'primereact/divider';
-import { statusService } from '../../service/statusService';
+
+import statusService from '../../service/statusService';
+import timeService from '../../service/timeService';
 import { ProductService } from '../../service/ProductService';
 
 import '../../assets/scss/DataScroller.scss';
@@ -26,7 +28,15 @@ export default function Status() {
     const productService = new ProductService();
 
     useEffect(() => {
-        productService.getProducts().then(data => setItems(data));
+        statusService.retrieve(dateFormat(date))
+          .then( res => {
+            console.log('success!!');
+            setItems(res.data);
+            timeService.update(dateFormat(date));
+        })
+          .catch(err => {
+            console.log('retrieve() Error!', err);
+        });
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     // yyyy-MM-dd 포맷으로 반환
@@ -83,18 +93,7 @@ export default function Status() {
     return (
         <div className="datascroller">
             <div className="card">
-                <div className="p-grid">
-                    <div className="p-col-12 p-lg-6">
-                        <DataScroller value={items} itemTemplate={itemTemplate} rows={5} inline scrollHeight="500px" header={header} />
-                    </div>
-                     <div>
-                        <Divider layout="vertical">
-                        </Divider>
-                    </div>
-                    <div className="p-col-12 p-lg-1">
-                        abc
-                    </div>
-                </div>
+                <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
             </div>
         </div>
     );

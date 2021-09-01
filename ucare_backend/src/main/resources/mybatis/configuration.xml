@@ -10,6 +10,7 @@
 		<typeAlias type="com.douzone.ucare.vo.ReceiptVo" alias="receiptvo"/>
 		<typeAlias type="com.douzone.ucare.vo.HospitalVo" alias="hospitalvo"/>
 		<typeAlias type="com.douzone.ucare.vo.BoardVo" alias="boardvo"/>
+		<typeAlias type="com.douzone.ucare.vo.TimeVo" alias="timevo"/>
     </typeAliases>	
 	<mappers>
 		<mapper resource="mybatis/mappers/user.xml" />
@@ -20,5 +21,7 @@
 		<mapper resource="mybatis/mappers/receipt.xml" />
 		<mapper resource="mybatis/mappers/hospital.xml" />
 		<mapper resource="mybatis/mappers/board.xml" />
+		<mapper resource="mybatis/mappers/status.xml" />
+		<mapper resource="mybatis/mappers/time.xml" />
 	</mappers>
 </configuration>

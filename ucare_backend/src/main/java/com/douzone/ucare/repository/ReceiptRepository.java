@@ -25,7 +25,6 @@ public class ReceiptRepository {
 	public int delete(Long receiptNo) {
 		return sqlSession.delete("receipt.delete", receiptNo);
 	}
-
 }
 
 
