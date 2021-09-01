@@ -29,8 +29,8 @@ public class BoardController {
 	private FileUploadService fileUploadService;
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> create(@RequestBody BoardVo data, @RequestPart("file") MultipartFile file) {
-		data.setImage(fileUploadService.restore(file));
+	public ResponseEntity<?> create(@RequestBody BoardVo data,  @RequestPart(value="file", required = false) MultipartFile file) {
+		if(file != null) data.setImage(fileUploadService.restore(file));
 		return new ResponseEntity<>(boardService.create(data), HttpStatus.OK);
 	}
 	

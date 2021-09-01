@@ -79,20 +79,22 @@ export default function Board() {
     const saveItem = () => {
         setSubmitted(true);
 
-        const formData = new FormData();
-        formData.append('data', new Blob([JSON.stringify(data)], {type: "application/json"}));
-        formData.append('file', file);
+        // const formData = new FormData();
+        // formData.append('data', new Blob([JSON.stringify(data)], {type: "application/json"}));
+        // formData.append('file', file);
 
         if (item.title.trim()) {
             let _items = [...items];
             let _item = {...item};
+            console.log(_item.contents);
+            console.log(_item.title);
+            console.log(_item.image);
             if (item.boardNo) {
                 boardService.update(_item)
                 .then(res => {
                     const index = findIndexByNo(item.boardNo);
                     _items[index] = _item;
                     setItemDialog(false);
-                    window.location.reload();
                     toast.current.show({ severity: 'success', summary: 'Successful', detail: '수정 완료!', life: 3000 });
                 })
                 .catch(err => {
@@ -105,7 +107,6 @@ export default function Board() {
                 .then(res => {
                     console.log('success!!');
                     setItemDialog(false);
-                    window.location.reload();
                     toast.current.show({ severity: 'success', summary: 'Successful', detail: '등록 완료!', life: 3000 });
                 })
                 .catch(err => {
