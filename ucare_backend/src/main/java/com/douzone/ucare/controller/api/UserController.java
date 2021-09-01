@@ -39,8 +39,8 @@ public class UserController {
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<?> update(@RequestPart("user") UserVo user, @RequestPart("file") MultipartFile file) {
-		user.setImage(fileUploadService.restore(file));
+	public ResponseEntity<?> update(@RequestPart("user") UserVo user, @RequestPart(value="file", required = false) MultipartFile file) {
+		if(file != null) user.setImage(fileUploadService.restore(file));
 		return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
 	}
 	
