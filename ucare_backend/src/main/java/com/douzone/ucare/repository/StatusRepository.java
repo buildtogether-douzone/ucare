@@ -21,4 +21,8 @@ public class StatusRepository {
 	public int update(ReceiptVo data) {
 		return sqlSession.update("status.update", data);
 	}
+
+	public int delete(Long receiptNo) {
+		return sqlSession.delete("status.delete", receiptNo);
+	}
 }

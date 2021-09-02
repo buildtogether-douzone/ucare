@@ -22,4 +22,8 @@ public class StatusService {
 	public int update(ReceiptVo data) {
 		return statusRepository.update(data);
 	}
+
+	public int delete(Long receiptNo) {
+		return statusRepository.delete(receiptNo);
+	}
 }

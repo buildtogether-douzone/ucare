@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DataScroller } from 'primereact/datascroller';
 import { Button } from 'primereact/button';
-import { Rating } from 'primereact/rating';
 import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 import { Divider } from 'primereact/divider';
+import { Menu } from 'primereact/menu';
 
 import statusService from '../../service/statusService';
-import { ProductService } from '../../service/ProductService';
+import timeService from '../../service/timeService';
 
 import '../../assets/scss/DataScroller.scss';
 
@@ -22,9 +22,65 @@ export default function Status() {
 
     const [items, setItems] = useState([]);
     const [item, setItem] = useState(emptyItem);
-    const [sortKey, setSortKey] = useState('careWait');
-    const [sortOrder, setSortOrder] = useState(null);
     const [date, setDate] = useState(new Date());
+
+    const menu = useRef(null);
+
+    const options = [
+        {
+            items: [
+                {
+                    label: '진료',
+                    icon: 'pi pi-refresh',
+                    command: () => {
+                        let _items = [...items];
+                        let _item = {...item};
+                        const value = 'care';
+
+                        const index = findIndexByNo(item.receiptNo);
+
+                        _items[index].state = 'care';
+                        _items[index].value = '진료중';
+                        _item = _items[index];
+
+                        statusService.update(_item)
+                        .then( res => {
+                            console.log('success!!');
+                            setItems(_items);
+                            setItem(emptyItem);
+                        })
+                        .catch(err => {
+                            console.log('update() Error!', err);
+                        });
+                    }
+                },
+                {
+                    label: '접수취소',
+                    icon: 'pi pi-times',
+                    command: () => {
+                        let _items = [...items];
+                        let _item = {...item};
+
+                        const index = findIndexByNo(item.receiptNo);
+
+                        _item = _items[index];
+
+                        statusService.delete(_item.receiptNo)
+                        .then( res => {
+                            console.log('success!!');
+                            timeService.updateByCancel(_item);
+                            let _items = items.filter(item => item.receiptNo !== _item.receiptNo);
+                            setItems(_items);
+                            setItem(emptyItem);
+                        })
+                        .catch(err => {
+                            console.log('delete() Error!', err);
+                        });
+                    }
+                }
+            ]
+        }
+    ];
 
     const selectOptions = [
         {label: '진료중', value: 'care'},
@@ -33,18 +89,28 @@ export default function Status() {
         {label: '완료', value: 'finish'}
     ];
 
-    const productService = new ProductService();
-
     useEffect(() => {
         statusService.retrieve(dateFormat(date))
           .then( res => {
             console.log('success!!');
+
+            for(var i = 0; i < res.data.length; i++) {
+                if(res.data[i].state === 'care') {
+                    res.data[i].value = '진료중';
+                } else if(res.data[i].state === 'careWait') {
+                    res.data[i].value = '진료대기중';
+                } else if(res.data[i].state === 'wait') {
+                    res.data[i].value = '수납대기중';
+                } else {
+                    res.data[i].value = '완료';
+                }
+            }
             setItems(res.data);
         })
           .catch(err => {
             console.log('retrieve() Error!', err);
         });
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, []);
 
     // yyyy-MM-dd 포맷으로 반환
     const dateFormat = (date) => {
@@ -58,13 +124,13 @@ export default function Status() {
 
     const itemTemplate = (data) => {
         return (
-            <div className="product-item">
+            <div className="product-item" onClick={(e) => menu.current.toggle(e, setItem(data))} aria-controls="popup_menu" aria-haspopup>
                 <div className="product-detail">
                     <div className="product-name">{data.name}</div>
                     <div className="product-description">{data.diagnosisTime}</div>
                 </div>
                 <div className="product-price">
-                    <Dropdown options={selectOptions} value={data.state} optionLabel="label" onChange={(e) => onSelectChange(e, data)} />
+                    <div className="product-name">{data.value}</div>
                 </div>
             </div>
         );
@@ -126,10 +192,20 @@ export default function Status() {
     const header = renderHeader();
 
     return (
-        <div className="datascroller">
-            <div className="card">
-                <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+        <div className="card">
+            <div className="p-grid">
+                <div className="p-col-6">
+                        <div className="datascroller" style={{ justifyContent:'center', padding: '50px' }}>
+                                <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                        </div>
+                </div>
+                <Divider layout="vertical">
+                </Divider>
+                <div className="p-col-5" style={{ display: 'flex', justifyContent:'center', alignItems: 'center', padding: '10px' }}>
+                        <Button label="Sign Up" icon="pi pi-user-plus" className="p-button-success"></Button>
+                </div>
             </div>
+            <Menu model={options} popup ref={menu} id="popup_menu" />
         </div>
     );
 }

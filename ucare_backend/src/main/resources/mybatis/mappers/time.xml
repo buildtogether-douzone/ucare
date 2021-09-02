@@ -10,4 +10,12 @@
 			  AND status = false
 			  AND time = (SELECT MIN(time) FROM ucare.time WHERE date = TO_DATE(#{date }, 'YYYY-MM-DD') AND status = false)
 	</update>
+	
+	<update id="updateByCancel" parameterType="receiptvo">
+			UPDATE  ucare.time
+			   SET 
+			   		status = false
+			WHERE date = TO_DATE(#{receiptDt }, 'YYYY-MM-DD')
+			  AND time = #{diagnosisTime }
+	</update>
 </mapper>

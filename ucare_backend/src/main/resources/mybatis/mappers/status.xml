@@ -34,4 +34,10 @@
 			WHERE receipt_no = #{receiptNo }
 	</update>
 	
+	<delete id="delete" parameterType="Long">
+		DELETE
+		  FROM ucare.receipt
+		 WHERE receipt_no = #{receiptNo }    
+	</delete>
+	
 </mapper>

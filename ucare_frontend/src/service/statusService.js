@@ -8,6 +8,9 @@ class statusService {
   update(data){
     return axios.put(STATUS_API_BASE_URL + '/update', data)
   }
+  delete(data){
+    return axios.delete(STATUS_API_BASE_URL + '/delete/' + data);
+  }
 }
 
 export default new statusService();
