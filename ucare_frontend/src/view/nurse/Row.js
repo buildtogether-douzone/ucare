@@ -29,6 +29,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
 import patientService from '../../service/patientService';
 import receiptService from '../../service/receiptService';
+import timeService from '../../service/timeService';
 
 const useRowStyles = makeStyles((theme) => ({
   rowStyle: {
@@ -72,8 +73,17 @@ export default function Row(props) {
   const [receiptRemark, setReceiptRemark] = useState('');
   const [dialogOpen2, setDialogOpen2] = useState(false);
   const [dialogOpen3, setDialogOpen3] = useState(false);
+  const [date, setDate] = useState(new Date());
 
-
+  // yyyy-MM-dd 포맷으로 반환
+  const dateFormat = (date) => {
+    var year = date.getFullYear();              //yyyy
+    var month = (1 + date.getMonth());          //M
+    month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+    var day = date.getDate();                   //d
+    day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+    return  year + '-' + month + '-' + day;
+  }
 
   const handleClickOpen = (a, b, c) => {
     setModalBP(a);
@@ -181,7 +191,6 @@ export default function Row(props) {
     receiptService.delete(receiptNo)
       .then(res => {
         console.log(receiptNo + '번 접수가 성공적으로 취소되었습니다.');
-        window.location.reload();
       })
       .catch(err => {
         console.log('delete() 에러', err);
@@ -237,7 +246,12 @@ export default function Row(props) {
     receiptService.create(receipt)
       .then(res => {
         console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
-        window.location.reload();
+        timeService.update(dateFormat(date)).then(res => {
+          window.location.reload();
+        })
+        .catch(err => {
+          console.log('update() 에러', err);
+        });
       })
       .catch(err => {
         console.log('create() 에러', err);

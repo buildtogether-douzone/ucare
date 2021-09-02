@@ -7,7 +7,6 @@ import { Calendar } from 'primereact/calendar';
 import { Divider } from 'primereact/divider';
 
 import statusService from '../../service/statusService';
-import timeService from '../../service/timeService';
 import { ProductService } from '../../service/ProductService';
 
 import '../../assets/scss/DataScroller.scss';
@@ -32,7 +31,6 @@ export default function Status() {
           .then( res => {
             console.log('success!!');
             setItems(res.data);
-            timeService.update(dateFormat(date));
         })
           .catch(err => {
             console.log('retrieve() Error!', err);
