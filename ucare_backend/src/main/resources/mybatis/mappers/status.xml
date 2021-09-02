@@ -17,13 +17,21 @@
 				TO_CHAR(receipt_time, 'HH24:MI:SS') as receiptTime,
 				A.remark AS remark,
 				A.state AS state,
-				(ROW_NUMBER() OVER()) as no
+				(ROW_NUMBER() OVER()) as no,
+				A.diagnosis_time as diagnosisTime
 			FROM
 				ucare.receipt A
 			INNER JOIN ucare.patient B ON
 				A.patient_no = B.patient_no
 			WHERE TO_CHAR(A.receipt_dt, 'YYYY-MM-DD') = #{date }
-			ORDER BY A.receipt_no DESC
+			ORDER BY A.receipt_no ASC
 	</select>
+	
+	<update id="update" parameterType="receiptvo">
+			UPDATE  ucare.receipt
+			   SET 
+			   		state = #{state }
+			WHERE receipt_no = #{receiptNo }
+	</update>
 	
 </mapper>
