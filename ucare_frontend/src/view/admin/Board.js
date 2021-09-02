@@ -45,7 +45,6 @@ const Board = React.forwardRef((props, ref) => {
     const retrieveAll = (e) => {
         boardService.retrieveAll()
             .then(res => {
-                console.log(res.data);
                 console.log('success!!');
                 setItems(res.data);
             })
@@ -60,16 +59,13 @@ const Board = React.forwardRef((props, ref) => {
 
 
     const openNew = () => {
-        document.body.style.position = "relative";
-        document.body.style.overflow = "hidden";
         setItem(emptyItem);
         setSubmitted(false);
         setItemDialog(true);
     }
 
     const hideDialog = () => {
-        document.body.style.position = "";
-        document.body.style.overflow = "";
+
         setSubmitted(false);
         setItemDialog(false);
     }
@@ -185,16 +181,12 @@ const Board = React.forwardRef((props, ref) => {
     }
 
     const rowColumnClick = (rowData) => {
-        document.body.style.position = "relative";
-        document.body.style.overflow = "hidden";
-        setFileName(rowData.image.split("_", 3)[2]);
+        setFileName(rowData.image && rowData.image.split("_", 3)[2]);
         setItem({ ...rowData });
         setViewDialog(true);
     }
 
     const hideViewDialog = () => {
-        document.body.style.position = "";
-        document.body.style.overflow = "";
         setViewDialog(false);
     }
 
@@ -260,7 +252,7 @@ const Board = React.forwardRef((props, ref) => {
                 <Toolbar className="p-mb-4" left={leftToolbarTemplate}></Toolbar>
 
                 <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="No data" onSelectionChange={(e) => setSelectedItems(e.value)}
-                    dataKey="boardNo" paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
+                    dataKey="boardNo" paginator rows={7}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
                     globalFilter={globalFilter}

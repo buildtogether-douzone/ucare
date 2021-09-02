@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme) => createStyles({
 export default function Footer(){
     const classes = useStyles();
     return(
-        <Box>
-            <Typography variant="body2" color="initial" align="center" className={classes.foot}>
+        <Box className={classes.foot}>
+            <Typography variant="body2" color="initial" align="center">
                 {'Copyright © '}
                 <Link color="inherit" href="/">
                     Build Together
