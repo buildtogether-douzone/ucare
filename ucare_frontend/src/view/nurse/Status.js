@@ -122,9 +122,16 @@ export default function Status() {
         return  year + '-' + month + '-' + day;
     }
 
+    const menuToggle = (e, data) => {
+        if(data.state !== 'wait')
+            menu.current.toggle(e, setItem(data))
+        else
+            alert("TEST")
+    }
+
     const itemTemplate = (data) => {
         return (
-            <div className="product-item" onClick={(e) => menu.current.toggle(e, setItem(data))} aria-controls="popup_menu" aria-haspopup>
+            <div className="product-item" onClick={(e) => menuToggle(e, data)} aria-controls="popup_menu" aria-haspopup>
                 <div className="product-detail">
                     <div className="product-name">{data.name}</div>
                     <div className="product-description">{data.diagnosisTime}</div>
