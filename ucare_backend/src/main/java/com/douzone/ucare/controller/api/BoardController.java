@@ -29,7 +29,8 @@ public class BoardController {
 	private FileUploadService fileUploadService;
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> create(@RequestBody BoardVo data,  @RequestPart(value="file", required = false) MultipartFile file) {
+	public ResponseEntity<?> create(@RequestPart("data") BoardVo data,  @RequestPart(value="file", required = false) MultipartFile file) {
+		System.out.println("file:-------------------- " + file);
 		if(file != null) data.setImage(fileUploadService.restore(file));
 		return new ResponseEntity<>(boardService.create(data), HttpStatus.OK);
 	}
@@ -52,7 +53,8 @@ public class BoardController {
 	}
 	
 	@PutMapping("/update")
-	public ResponseEntity<?> update(@RequestBody BoardVo data) {
+	public ResponseEntity<?> update(@RequestPart("data") BoardVo data, @RequestPart(value="file", required = false) MultipartFile file) {
+		if(file != null) data.setImage(fileUploadService.restore(file));
 		return new ResponseEntity<>(boardService.update(data), HttpStatus.OK);
 	}
 	

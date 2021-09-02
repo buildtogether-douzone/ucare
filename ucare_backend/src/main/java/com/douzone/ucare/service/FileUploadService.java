@@ -23,8 +23,8 @@ public class FileUploadService {
 			}
 			
 			String originFilename = file.getOriginalFilename();
-			String extName = originFilename.substring(originFilename.lastIndexOf('.')+1);
-			String saveFilename = generateSaveFilename(extName);
+//			String extName = originFilename.substring(originFilename.lastIndexOf('.')+1);
+			String saveFilename = generateSaveFilename(originFilename);
 			long fileSize = file.getSize();
 			
 			System.out.println("##########" + originFilename );

@@ -23,6 +23,7 @@ public class BoardRepository {
 	}
 
 	public int create(BoardVo data) {
+		System.out.println("file----------------------------------"+ data.getImage());
 		return sqlSession.insert("board.create", data);
 	}
 	

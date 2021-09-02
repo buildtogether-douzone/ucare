@@ -20,19 +20,22 @@ const NurseList = React.forwardRef((props, ref) => {
                 </ListItemIcon>
                 <ListItemText primary="공지사항" />
             </ListItem>
-            <ListItem button onClick={(e) => {  location.href='/#/nurse/main'; ref.current.scrollToSlide(0) }}>
+            <ListItem button onClick={(e) => {  location.href='/#/nurse/main' ;
+                                                ref.current !== null && ref.current.scrollToSlide(0); }}>
                 <ListItemIcon>
                     <PeopleIcon />
                 </ListItemIcon>
                 <ListItemText primary="진료현황" />
             </ListItem>
-            <ListItem button onClick={(e) => {  location.href='/#/nurse/main'; ref.current.scrollToSlide(1) }}>
+            <ListItem button onClick={(e) => {  location.href='/#/nurse/main'; 
+                                                ref.current !== null && ref.current.scrollToSlide(1) }}>
                 <ListItemIcon>
                     <ReceiptIcon />
                 </ListItemIcon>
                 <ListItemText primary="예약" />
             </ListItem>
-            <ListItem button onClick={(e) => {  location.href='/#/nurse/main'; ref.current.scrollToSlide(2) }}>
+            <ListItem button onClick={(e) => {  location.href='/#/nurse/main'; 
+                                                ref.current !== null && ref.current.scrollToSlide(2) }}>
                 <ListItemIcon>
                     <PeopleIcon />
                 </ListItemIcon>
