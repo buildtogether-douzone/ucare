@@ -29,6 +29,7 @@ const Board = React.forwardRef((props, ref) => {
 
     const [items, setItems] = useState(null);
     const [itemDialog, setItemDialog] = useState(false);
+    const [viewDialog, setViewDialog] = useState(false);
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [deleteItemsDialog, setDeleteItemsDialog] = useState(false);
     const [importedData, setImportedData] = useState([]);
@@ -37,6 +38,7 @@ const Board = React.forwardRef((props, ref) => {
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
     const [file, setFile] = useState(null);
+    const [filename, setFileName] = useState(null);
     const toast = useRef(null);
     const dt = useRef(null);
 
@@ -95,6 +97,7 @@ const Board = React.forwardRef((props, ref) => {
                         _items[index] = _item;
                         setItemDialog(false);
                         toast.current.show({ severity: 'success', summary: 'Successful', detail: '수정 완료!', life: 3000 });
+                        window.location.reload();
                     })
                     .catch(err => {
                         console.log('update() Error!', err);
@@ -106,6 +109,7 @@ const Board = React.forwardRef((props, ref) => {
                         console.log('success!!');
                         setItemDialog(false);
                         toast.current.show({ severity: 'success', summary: 'Successful', detail: '등록 완료!', life: 3000 });
+                        window.location.reload();
                     })
                     .catch(err => {
                         console.log('create() Error!', err);
@@ -174,6 +178,26 @@ const Board = React.forwardRef((props, ref) => {
         reader.readAsDataURL(file);
       }
 
+    const coltemplate = (rowData) => {
+        return <div>
+            <a  onClick={()=>rowColumnClick(rowData)}>{rowData.title}</a>
+        </div>;
+    }
+
+    const rowColumnClick = (rowData) => {
+        document.body.style.position = "relative";
+        document.body.style.overflow = "hidden";
+        setFileName(rowData.image.split("_", 3)[2]);
+        setItem({ ...rowData });
+        setViewDialog(true);
+    }
+
+    const hideViewDialog = () => {
+        document.body.style.position = "";
+        document.body.style.overflow = "";
+        setViewDialog(false);
+    }
+
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
@@ -205,6 +229,13 @@ const Board = React.forwardRef((props, ref) => {
             <Button label="등록" icon="pi pi-check" className="p-button-text" onClick={saveItem} />
         </React.Fragment>
     );
+
+    const checkDialogFooter = (
+        <React.Fragment>
+            <Button label="확인" className="p-button-text" onClick={hideViewDialog} />
+        </React.Fragment>
+    );
+
     const deleteItemDialogFooter = (
         <React.Fragment>
             <Button label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
@@ -212,16 +243,14 @@ const Board = React.forwardRef((props, ref) => {
         </React.Fragment>
     );
 
-    const coltemplate = (rowData) => {
-        return <div>
-            <a  onClick={()=>rowColumnClick(rowData)}>{rowData.title}</a>
-        </div>;
+    const renderHeader = () => {
+        return (
+            <span className="ql-formats">
+            </span>
+        );
     }
 
-    const rowColumnClick = (rowData) => {
-        setItem({ ...rowData });
-        setItemDialog(true);
-    }
+    const head = renderHeader();
 
     return (
         <div className="datatable-crud">
@@ -268,18 +297,18 @@ const Board = React.forwardRef((props, ref) => {
                 </div>
             </Dialog>
 
-            <Dialog baseZIndex={9999} visible={itemDialog} style={{ width: '80%' }} header="공지 사항" modal className="p-fluid" footer={itemDialogFooter} onHide={hideDialog}>
+            <Dialog baseZIndex={9999} visible={viewDialog} style={{ width: '80%' }} header="공지 사항" footer={checkDialogFooter} modal className="p-fluid" onHide={hideViewDialog}>
                 <div className="p-field">
                     <label htmlFor="title">제목</label>
-                    <InputText id="title" value={item.title} onChange={(e) => onInputChange(e, 'title')} required autoFocus className={classNames({ 'p-invalid': submitted && !item.title })} />
+                    <InputText id="title" value={item.title} onChange={(e) => onInputChange(e, 'title')} className={classNames({ 'p-invalid': submitted && !item.title })} readOnly={true} />
                     {submitted && !item.title && <small className="p-error">Name is required.</small>}
                 </div>
                 <div className="p-field">
                     <label htmlFor="contents">내용</label>
-                    <Editor style={{ height: '320px' }} value={item.contents} onTextChange={(e) => onInputTextChange(e, 'contents')} />
+                    <Editor headerTemplate={head} style={{ height: '320px' }} value={item.contents} onTextChange={(e) => onInputTextChange(e, 'contents')} readOnly={true}/>
                 </div>
                 <div className="p-field">
-                    <input id={"file-input"} type="file" name="imageFile" onChange={handleFileOnChange} />
+                    파일 다운로드: <a href={item.image} download>{filename}</a>
                 </div>
             </Dialog>
 
