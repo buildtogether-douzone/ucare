@@ -17,4 +17,8 @@ public class StatusRepository {
 	public List<ReceiptVo> retrieveStatus(String date) {
 		return sqlSession.selectList("status.retrieveAll", date);
 	}
+
+	public int update(ReceiptVo data) {
+		return sqlSession.update("status.update", data);
+	}
 }

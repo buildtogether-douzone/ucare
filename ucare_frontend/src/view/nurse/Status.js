@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataScroller } from 'primereact/datascroller';
 import { Button } from 'primereact/button';
 import { Rating } from 'primereact/rating';
@@ -25,7 +25,6 @@ export default function Status() {
     const [sortKey, setSortKey] = useState('careWait');
     const [sortOrder, setSortOrder] = useState(null);
     const [date, setDate] = useState(new Date());
-    const itemRef = useRef(null);
 
     const selectOptions = [
         {label: '진료중', value: 'care'},
@@ -40,7 +39,6 @@ export default function Status() {
         statusService.retrieve(dateFormat(date))
           .then( res => {
             console.log('success!!');
-            console.log(res.data);
             setItems(res.data);
         })
           .catch(err => {
@@ -63,10 +61,10 @@ export default function Status() {
             <div className="product-item">
                 <div className="product-detail">
                     <div className="product-name">{data.name}</div>
-                    <div className="product-description">{data.description}</div>
+                    <div className="product-description">{data.diagnosisTime}</div>
                 </div>
                 <div className="product-price">
-                    <Dropdown options={selectOptions} value={data.state} optionLabel="label" onChange={onSelectChange} />
+                    <Dropdown options={selectOptions} value={data.state} optionLabel="label" onChange={(e) => onSelectChange(e, data)} />
                 </div>
             </div>
         );
@@ -84,20 +82,42 @@ export default function Status() {
         return index;
     }
 
-    const onSelectChange = (event) => {
+    const onSelectChange = (event, data) => {
         let _items = [...items];
         let _item = {...item};
         const value = event.value;
 
-        console.log(event);
-        // const index = findIndexByNo(item.statusNo);
+        const index = findIndexByNo(data.receiptNo);
+
+        _items[index].state = event.value;
+        _item = _items[index];
+
+        statusService.update(_item)
+          .then( res => {
+            console.log('success!!');
+            setItem(emptyItem);
+        })
+          .catch(err => {
+            console.log('update() Error!', err);
+        });
+    }
+
+    const onDateChange = (event) => {
+        statusService.retrieve(dateFormat(event.value))
+          .then( res => {
+            console.log('success!!');
+            setItems(res.data);
+        })
+          .catch(err => {
+            console.log('retrieve() Error!', err);
+        });
     }
 
     const renderHeader = () => {
         return (
             <div className="p-grid p-nogutter">
                 <div style={{textAlign: 'left'}}>
-                    <Calendar dateFormat="yy/mm/dd" value={date} onChange={(e) => setDate(e.value)}></Calendar>
+                    <Calendar dateFormat="yy/mm/dd" value={date} onChange={(e) => onDateChange(e)}></Calendar>
                 </div>
             </div>
         );
@@ -108,7 +128,7 @@ export default function Status() {
     return (
         <div className="datascroller">
             <div className="card">
-                <DataScroller ref={itemRef} value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header}/>
+                <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
             </div>
         </div>
     );
