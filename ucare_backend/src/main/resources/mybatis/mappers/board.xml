@@ -64,7 +64,9 @@
 		   SET 
 	   		title = #{title },
 	   		contents = #{contents },
-	   		image = #{image },
+	   		<if test="image != null and image != '' ">
+			   	image = #{image },
+			</if>
 	   		upt_dt = now()
 		WHERE board_no = #{boardNo }
 	</update>
