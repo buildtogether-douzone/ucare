@@ -56,6 +56,12 @@ spring:
       initialSize: 10
       maxActive: 100
 
+   jpa:
+     hibernate:
+       ddl-auto: create
+       naming:
+         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+     show-sql: true
 ---
 # production profile - spring boot configuration
 spring:
@@ -69,6 +75,12 @@ spring:
       initialSize: 10
       maxActive: 100
 
+   jpa:
+     hibernate:
+       ddl-auto: create
+       naming:
+         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+     show-sql: true
 ---
 # server
 server:

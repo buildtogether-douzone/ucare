@@ -78,10 +78,10 @@ export default function PatientList() {
 
  return (
     <Grid container>
-      <Grid item xs={4}>
+      <Grid item xs={5}>
       <NewPatient />
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={7}>
       <div className={classes.paper}>
       <SearchBar
       value={search}
@@ -96,15 +96,14 @@ export default function PatientList() {
   <Table className={classes.table} aria-label="collapsible table">
     <TableHead>
       <TableRow style={{backgroundColor: '#DFDFDF'}}>
-        <TableCell style={{width: '3%', padding: '10px'}}/>
+        <TableCell style={{width: '10%', padding: '10px'}}/>
         <TableCell style={{width: '10%', textAlign: 'center', padding: '10px'}}>환자 번호</TableCell>
-        <TableCell style={{width: '8%', textAlign: 'center', padding: '10px'}}>이름</TableCell>
-        <TableCell style={{width: '9%', textAlign: 'center', padding: '10px'}}>성별/나이</TableCell>
-        <TableCell style={{width: '15%', textAlign: 'center', padding: '10px'}}>주민등록번호</TableCell>
-        <TableCell style={{width: '15%', textAlign: 'center', padding: '10px'}}>전화번호</TableCell>
-        <TableCell style={{width: '25%', textAlign: 'center', padding: '10px'}}>주소</TableCell>
-        <TableCell style={{width: '9%', textAlign: 'center', padding: '10px'}}>환자정보</TableCell>
-        <TableCell style={{width: '6%', textAlign: 'center', padding: '10px'}}>접수</TableCell>
+        <TableCell style={{width: '10%', textAlign: 'center', padding: '10px'}}>이름</TableCell>
+        <TableCell style={{width: '10%', textAlign: 'center', padding: '10px'}}>성별/나이</TableCell>
+        <TableCell style={{width: '20%', textAlign: 'center', padding: '10px'}}>주민등록번호</TableCell>
+        <TableCell style={{width: '20%', textAlign: 'center', padding: '10px'}}>전화번호</TableCell>
+        <TableCell style={{width: '10%', textAlign: 'center', padding: '10px'}}>환자정보</TableCell>
+        <TableCell style={{width: '10%', textAlign: 'center', padding: '10px'}}>접수</TableCell>
       </TableRow>
     </TableHead>
     <TableBody>

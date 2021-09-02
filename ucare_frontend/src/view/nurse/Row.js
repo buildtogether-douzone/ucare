@@ -275,7 +275,6 @@ export default function Row(props) {
         <TableCell style={{ textAlign: 'center', padding: '10px' }}>{row.ageGender}</TableCell>
         <TableCell style={{ textAlign: 'center', padding: '10px' }}>{row.ssn}</TableCell>
         <TableCell style={{ textAlign: 'center', padding: '10px' }}>{row.telNo}</TableCell>
-        <TableCell style={{ padding: '10px' }}>{row.address}</TableCell>
         <TableCell style={{ textAlign: 'center', padding: '5px' }}>
           <PermIdentityIcon 
                     onClick={() => {
@@ -584,7 +583,7 @@ export default function Row(props) {
                     <TableCell style={{ width: '17%', textAlign: 'center', padding: '10px' }}>접수 날짜</TableCell>
                     <TableCell style={{ width: '17%', textAlign: 'center', padding: '10px' }}>접수 시간</TableCell>
                     <TableCell style={{ width: '35%', textAlign: 'center', padding: '10px' }}>접수 메모</TableCell>
-                    <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }}>접수취소</TableCell>
+                    <TableCell style={{ width: '10%', textAlign: 'center', padding: '5px' }}>접수취소</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

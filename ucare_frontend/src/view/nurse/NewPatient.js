@@ -14,10 +14,13 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import patientService from '../../service/patientService';
-import SiteLayout from '../../layout/SiteLayout';
-import { useHistory } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { Redirect } from 'react-router-dom';
+import DaumPostcode from "react-daum-postcode";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,25 +34,26 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: '100%',
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
   },
   font: {
-    width: '25%',
+    width: '30%',
     float: 'left',
-    padding: '6px 0 7px',
-    textAlign: 'right'
+    height: '100%',
+    paddingTop: '12px',
+    paddingLeft: '5px',
+    backgroundColor: '#E7E7E7'
   },
   input: {
-    width: '60%',
+    width: '65%',
     float: 'left',
-    fontSize: '20px',
+    padding: '5px',
     backgroundColor: '#FFFFFF',
-    marginLeft: '40px'
   },
   radio: {
     width: '50%',
     float: 'left',
-    marginLeft: '40px'
+    paddingLeft: '8px'
   },
   textField: {
     display: 'inline-block',
@@ -69,19 +73,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NewPatient() {
     const classes = useStyles();
-    const history = useHistory();
     const [name, setName] = useState('');
     const [ssn, setSSN] = useState('');
     const [age, setAge] = useState('');
     const [gender, setGender] = useState('여');
     const [telNo, setTelNo] = useState('');
     const [address, setAddress] = useState('');
+    const [detailAddress, setDetailAddress] = useState('');
     const [emailId, setEmailId] = useState('');
     const [email, setEmail] = useState('');
     const [insurance, setInsurance] = useState('Y');
     const [diagType, setDiagType] = useState('초진');
     const [visitDate, setVisitDate] = useState('');
     const [remark, setRemark] = useState('');
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
 
 
     useEffect(() => {
@@ -138,7 +143,7 @@ export default function NewPatient() {
       age: age,
       gender: gender,
       telNo: telNo,
-      address: address,
+      address: (address + ' ' + detailAddress),
       domain: (emailId + '@' + email ),
       insurance: insurance,
       diagnosis: diagType,
@@ -157,15 +162,42 @@ export default function NewPatient() {
     });
     
   };
-  
+
+    const openPostCode = () => {
+        setIsPopupOpen(true)
+    };
+ 
+    const closePostCode = () => {
+        setIsPopupOpen(false)
+    };
+
+    const handlePostCode = (data) => {
+      let fullAddress = data.address;
+      let extraAddress = ''; 
+      
+      if (data.addressType === 'R') {
+        if (data.bname !== '') {
+          extraAddress += data.bname;
+        }
+        if (data.buildingName !== '') {
+          extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName);
+        }
+        fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
+      }
+      console.log(data)
+      console.log(fullAddress)
+      console.log(data.zonecode)
+      setAddress(fullAddress);
+  }
+
     return(
-      <Container component="main" maxWidth="xs">
+      <Container component="main">
       <CssBaseline />
       <div className={classes.paper}>
       <Typography variant="h6" className={classes.title}>환자 등록</Typography>      
       <form className={classes.form} noValidate>
-      <Grid container spacing={2}>
-      <Grid item xs={12}>
+      <Grid container>
+      <Grid item xs={12} style={{border: '1px solid #D6D6D6'}}>
         <Typography className={classes.font} variant="body1">이름</Typography>
         <TextField 
           style={{backgroundColor: '#FFFFFF'}}
@@ -181,7 +213,7 @@ export default function NewPatient() {
           onChange={ (e) => { setName(e.target.value) }}
         /> 
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{border: '1px solid #D6D6D6'}}>
         <Typography className={classes.font} variant="body1">주민등록번호</Typography>
         <TextField
           style={{backgroundColor: '#FFFFFF'}}
@@ -198,7 +230,7 @@ export default function NewPatient() {
         /> 
         </Grid>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{border: '1px solid #D6D6D6'}}>
         <Typography className={classes.font} variant="body1">성별</Typography>
         <FormControl component="fieldset" className={classes.radio}>
         <RadioGroup row aria-label="gender" name="gender" value={ gender } onChange={ (e) => { setGender(e.target.value) }} >
@@ -218,7 +250,7 @@ export default function NewPatient() {
     </FormControl>
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{border: '1px solid #D6D6D6'}}>
       <Typography className={classes.font} variant="body1">전화번호</Typography>
         <TextField
           style={{backgroundColor: '#FFFFFF'}} 
@@ -234,28 +266,60 @@ export default function NewPatient() {
         /> 
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{border: '1px solid #D6D6D6'}}>
       <Typography className={classes.font} variant="body1">주소</Typography>
         <TextField
           className={classes.input}
-          style={{backgroundColor: '#FFFFFF', width: '47%'}} 
+          style={{backgroundColor: '#FFFFFF', width: '55%'}} 
           variant="outlined"
           required
           size="small"
-          id="address"
-          name="address"
-          autoComplete="address"
+          id="firstAddress"
+          name="firstAddress"
+          autoComplete="firstAddress"
           value={ address }
           onChange={ (e) => { setAddress(e.target.value) }}
-        /> 
-        <SearchIcon style={{float: 'left', fontSize: '30', width: '15%' }} />
+        />
+      <Button variant="outlined" color="primary" onClick={openPostCode}>
+        <SearchIcon />
+      </Button>
+      <Dialog
+        open={isPopupOpen}
+        onClose={closePostCode}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">주소 찾기</DialogTitle>
+            <div>
+          {isPopupOpen &&                               
+                    <DaumPostcode
+                        onComplete={handlePostCode}
+                        autoClose
+                />}
+                </div>
+        <DialogActions>
+          <Button onClick={closePostCode} color="primary">닫기</Button>
+        </DialogActions>
+      </Dialog>
+        <TextField
+          className={classes.input}
+          style={{backgroundColor: '#FFFFFF'}} 
+          variant="outlined"
+          required
+          size="small"
+          id="addressDetail"
+          name="addressDetail"
+          autoComplete="addressDetail"
+          value={ detailAddress }
+          onChange={(e) => { setDetailAddress(e.target.value) }}
+        />
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{border: '1px solid #D6D6D6'}}>
                 <Typography className={classes.font} variant="body1">이메일</Typography>
                 <TextField
-                          className={classes.input}
-                  style={{float:'left', width: '25%', backgroundColor: '#FFFFFF'}}
+                  className={classes.input}
+                  style={{float:'left', width: '30%', backgroundColor: '#FFFFFF'}}
                   variant="outlined"
                   required
                   fullWidth
@@ -266,8 +330,8 @@ export default function NewPatient() {
                   value={ emailId }
                   onChange={ (e) => {setEmailId(e.target.value)}}
                 />
-                <Typography className={classes.font} style={{ float:'left' ,width: '5%', padding: '1%', textAlign: 'center' }} variant="body1">@</Typography>
-                <FormControl variant="outlined" style={{ float:'left', width: '30%', backgroundColor: '#FFFFFF', marginLeft: '3px'  }}>
+                <Typography className={classes.font} style={{ float:'left' ,width: '5%', padding: '5px', paddingTop: '10PX', textAlign: 'center', backgroundColor: 'white' }} variant="body1">@</Typography>
+                <FormControl variant="outlined" style={{ float:'left', width: '30%', backgroundColor: '#FFFFFF', padding: '5px'}}>
                   <Select
                   style={{height: '2.5em'}}
                     labelId="demo-simple-select-outlined-label"
@@ -292,7 +356,7 @@ export default function NewPatient() {
                 </FormControl>
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{border: '1px solid #D6D6D6'}}>
         <Typography className={classes.font} variant="body1">보험 여부</Typography>
         <FormControl component="fieldset" className={classes.radio}>
         <RadioGroup row aria-label="insurance" name="insurance" value={ insurance } onChange={ (e) => { setInsurance(e.target.value) }} >
@@ -312,7 +376,7 @@ export default function NewPatient() {
     </FormControl>
       </Grid>
  
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{border: '1px solid #D6D6D6'}}>
         <Typography className={classes.font} variant="body1">진료 구분</Typography>
         <FormControl component="fieldset" className={classes.radio}>
         <RadioGroup row aria-label="diagnosis" name="diagnosis" value={ diagType } onChange={ (e) => { setDiagType(e.target.value) }} >
@@ -332,7 +396,7 @@ export default function NewPatient() {
     </FormControl>
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{border: '1px solid #D6D6D6'}}>
       <Typography className={classes.font} variant="body1">내원일</Typography>
       <TextField
         className={classes.input}
@@ -348,7 +412,7 @@ export default function NewPatient() {
       />
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{border: '1px solid #D6D6D6'}}>
       <Typography className={classes.font} variant="body1">비고</Typography>
         <TextField
           className={classes.input}
