@@ -47,7 +47,8 @@
 				TO_CHAR(receipt_time, 'HH24:MI:SS') as receiptTime,
 				A.remark AS remark,
 				A.state AS state,
-				(ROW_NUMBER() OVER()) as no
+				(ROW_NUMBER() OVER()) as no,
+				A.diagnosis_time as diagnosisTime
 			FROM
 				ucare.receipt A
 			INNER JOIN ucare.patient B ON

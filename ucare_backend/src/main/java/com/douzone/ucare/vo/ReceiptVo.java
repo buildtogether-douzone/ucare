@@ -16,6 +16,7 @@ public class ReceiptVo {
 	private String name;
 	private Long no;
 	private String state;
+	private String diagnosisTime;
 
 	public Long getNo() {
 		return no;
@@ -107,7 +108,12 @@ public class ReceiptVo {
 	public void setState(String state) {
 		this.state = state;
 	}
-	
+	public String getDiagnosisTime() {
+		return diagnosisTime;
+	}
+	public void setDiagnosisTime(String diagnosisTime) {
+		this.diagnosisTime = diagnosisTime;
+	}
 
 	
 }

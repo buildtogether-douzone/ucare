@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DataScroller } from 'primereact/datascroller';
 import { Button } from 'primereact/button';
 import { Rating } from 'primereact/rating';
@@ -12,12 +12,22 @@ import { ProductService } from '../../service/ProductService';
 import '../../assets/scss/DataScroller.scss';
 
 export default function Status() {
+
+    let emptyItem = {
+        receiptNo: null,
+        name: '',
+        state: '',
+        diagnosisTime: ''
+    };
+
     const [items, setItems] = useState([]);
+    const [item, setItem] = useState(emptyItem);
     const [sortKey, setSortKey] = useState('careWait');
     const [sortOrder, setSortOrder] = useState(null);
     const [date, setDate] = useState(new Date());
+    const itemRef = useRef(null);
 
-    const sortOptions = [
+    const selectOptions = [
         {label: '진료중', value: 'care'},
         {label: '진료대기중', value: 'careWait'},
         {label: '수납대기중', value: 'wait'},
@@ -30,6 +40,7 @@ export default function Status() {
         statusService.retrieve(dateFormat(date))
           .then( res => {
             console.log('success!!');
+            console.log(res.data);
             setItems(res.data);
         })
           .catch(err => {
@@ -55,25 +66,31 @@ export default function Status() {
                     <div className="product-description">{data.description}</div>
                 </div>
                 <div className="product-price">
-                    <Dropdown options={sortOptions} value={sortKey} optionLabel="label" />
+                    <Dropdown options={selectOptions} value={data.state} optionLabel="label" onChange={onSelectChange} />
                 </div>
             </div>
         );
     }
 
-    const onSortChange = (event) => {
+    const findIndexByNo = (receiptNo) => {
+        let index = -1;
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].receiptNo === receiptNo) {
+                index = i;
+                break;
+            }
+        }
+
+        return index;
+    }
+
+    const onSelectChange = (event) => {
+        let _items = [...items];
+        let _item = {...item};
         const value = event.value;
 
-        if (value.indexOf('!') === 0) {
-            setSortOrder(-1);
-            setSortField(value.substring(1, value.length));
-            setSortKey(value);
-        }
-        else {
-            setSortOrder(1);
-            setSortField(value);
-            setSortKey(value);
-        }
+        console.log(event);
+        // const index = findIndexByNo(item.statusNo);
     }
 
     const renderHeader = () => {
@@ -91,7 +108,7 @@ export default function Status() {
     return (
         <div className="datascroller">
             <div className="card">
-                <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                <DataScroller ref={itemRef} value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header}/>
             </div>
         </div>
     );
