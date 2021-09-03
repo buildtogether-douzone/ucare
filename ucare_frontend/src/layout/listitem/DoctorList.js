@@ -8,7 +8,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 
-const DoctorList = () => {
+const DoctorList = React.forwardRef((props, ref) => {
     return (
         <div>
             <ListItem button component={Link} to="/Home">
@@ -17,11 +17,12 @@ const DoctorList = () => {
                 </ListItemIcon>
                 <ListItemText primary="공지 사항" />
             </ListItem>
-            <ListItem button>
+            <ListItem button onClick={(e) => {  location.href='/#/doctor/main' ;
+                                                ref.current !== null && ref.current.scrollToSlide(0); }}>
                 <ListItemIcon>
-                    <ShoppingCartIcon />
+                    <PeopleIcon />
                 </ListItemIcon>
-                <ListItemText primary="진료" />
+                <ListItemText primary="진료현황" />
             </ListItem>
             <ListItem button>
                 <ListItemIcon>
@@ -31,6 +32,6 @@ const DoctorList = () => {
             </ListItem>
         </div>
     );
-}
+});
 
 export default DoctorList;

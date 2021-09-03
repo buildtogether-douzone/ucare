@@ -29,7 +29,7 @@ export const nurseListItems = (
       </ListItemIcon>
       <ListItemText primary="수납" />
     </ListItem>
-    <ListItem button component={Link} to="/nurse/monitorning">
+    <ListItem button component={Link} to="/nurse/status">
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>
@@ -56,9 +56,9 @@ export const doctorListItems = (
       <ListItemIcon>
         <ShoppingCartIcon />
       </ListItemIcon>
-      <ListItemText primary="진료" />
+      <ListItemText primary="진료현황" />
     </ListItem>
-    <ListItem button>
+    <ListItem button component={Link} to="/doctor/status">
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
