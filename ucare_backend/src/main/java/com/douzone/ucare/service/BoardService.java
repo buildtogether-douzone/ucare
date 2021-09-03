@@ -37,11 +37,4 @@ public class BoardService {
 	return boardRepository.update(data);
 	}
 
-//	public int excelCreate(BoardVo data) {
-//		return boardRepository.excelCreate(data);
-//	}
-//
-
-
-
 }

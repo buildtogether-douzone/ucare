@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import update from 'react-addons-update';
 import { classNames } from 'primereact/utils';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
-import { FileUpload } from 'primereact/fileupload';
 import { Toolbar } from 'primereact/toolbar';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { RadioButton } from 'primereact/radiobutton';
-import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Editor } from 'primereact/editor';
@@ -181,6 +178,24 @@ const Board = React.forwardRef((props, ref) => {
     }
 
     const rowColumnClick = (rowData) => {
+        //hit update
+        boardService.updateHit(rowData.boardNo)
+            .then()
+            .catch(err => {
+                console.log('Hit update() Error!', err);
+            });
+        
+        const itemsIndex = items.findIndex((item) => item.boardNo === rowData.boardNo);
+
+        const newItems = update( items, {
+            [itemsIndex] : {
+                hit: {
+                    $set: rowData.hit + 1 
+                }
+            }
+        });
+
+        setItems(newItems);
         setFileName(rowData.image && rowData.image.split("_", 3)[2]);
         setItem({ ...rowData });
         setViewDialog(true);
@@ -193,7 +208,7 @@ const Board = React.forwardRef((props, ref) => {
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
-                <Button label="글쓰기" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={openNew} />
+                {sessionStorage.getItem('role') == '관리자' && <Button label="글쓰기" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={openNew} />}
             </React.Fragment>
         )
     }
@@ -263,7 +278,7 @@ const Board = React.forwardRef((props, ref) => {
                     <Column style={{ textAlign: 'center' }} field="userId" header="작성자"></Column>
                     <Column style={{ textAlign: 'center' }} field="boardDt" header="작성일"></Column>
                     <Column style={{ textAlign: 'center' }} field="hit" header="조회"></Column>
-                    <Column style={{ textAlign: 'center' }} body={actionBodyTemplate}></Column>
+                    {sessionStorage.getItem('role') == '관리자' && <Column style={{ textAlign: 'center' }} body={actionBodyTemplate}></Column> }
                 </DataTable>
             </div>
 

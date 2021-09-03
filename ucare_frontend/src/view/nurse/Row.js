@@ -30,6 +30,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import patientService from '../../service/patientService';
 import receiptService from '../../service/receiptService';
 import timeService from '../../service/timeService';
+import DaumPostcode from "react-daum-postcode";
 
 const useRowStyles = makeStyles((theme) => ({
   rowStyle: {
@@ -63,6 +64,7 @@ export default function Row(props) {
   const [ssn, setSSN] = useState('');
   const [age, setAge] = useState('');
   const [address, setAddress] = useState('');
+  const [detailAddress, setDetailAddress] = useState('');
   const [telNo, setTelNo] = useState('');
   const [diagnosis, setDiagnosis] = useState('');
   const [insurance, setInsurance] = useState('');
@@ -74,6 +76,7 @@ export default function Row(props) {
   const [dialogOpen2, setDialogOpen2] = useState(false);
   const [dialogOpen3, setDialogOpen3] = useState(false);
   const [date, setDate] = useState(new Date());
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   // yyyy-MM-dd 포맷으로 반환
   const dateFormat = (date) => {
@@ -96,7 +99,7 @@ export default function Row(props) {
     setDialogOpen(false);
   };
 
-  const patientInfoClickOpen = (a, b, c, d, e, f, g, h, i, j, k, l, m) => {
+  const patientInfoClickOpen = (a, b, c, d, e, f, g, h, i, j, k, l, m, n) => {
     setPatientNo(a);
     setName(b);
     setGender(c);
@@ -105,11 +108,12 @@ export default function Row(props) {
     setSSN(f);
     setAge(g);
     setAddress(h);
-    setTelNo(i);
-    setDiagnosis(j);
-    setInsurance(k)
-    setInsDt(l);
-    setRemark(m);
+    setDetailAddress(i);
+    setTelNo(j);
+    setDiagnosis(k);
+    setInsurance(l)
+    setInsDt(m);
+    setRemark(n);
     setDialogOpen2(true);
 
   };
@@ -212,6 +216,7 @@ export default function Row(props) {
       gender: gender,
       telNo: telNo,
       address: address,
+      detailAddress: detailAddress,
       domain: (emailId + '@' + email),
       insurance: insurance,
       remark: remark,
@@ -257,7 +262,43 @@ export default function Row(props) {
         console.log('create() 에러', err);
       });
 
-    setDialogOpen(false);
+    setDialogOpen3(false);
+  };
+
+  const openPostCode = () => {
+    setIsPopupOpen(true)
+  };
+
+  const closePostCode = () => {
+    setIsPopupOpen(false)
+  };
+
+  const handlePostCode = (data) => {
+    let fullAddress = data.address;
+    let extraAddress = '';
+
+    if (data.addressType === 'R') {
+      if (data.bname !== '') {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== '') {
+        extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName);
+      }
+      fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
+    }
+    console.log(data)
+    console.log(fullAddress)
+    console.log(data.zonecode)
+    setAddress(fullAddress);
+    closePostCode();
+  }
+  
+
+  const onReset = () => {
+    setBP('');
+    setBS('');
+    setReceiptRemark('');
+    handleClose3();
   };
 
   return (
@@ -288,13 +329,14 @@ export default function Row(props) {
                         row.ssn,
                         row.age,
                         row.address,
+                        row.detailAddress,
                         row.telNo,
                         row.diagnosis,
                         row.insurance,
                         row.insDt,
                         row.remark)
                     }} 
-          style={{ color: '#1C91FB', fontSize: '30px' }} /></TableCell>
+          style={{ color: '#1C91FB', fontSize: '30px', cursor: 'pointer' }} /></TableCell>
         <Dialog open={dialogOpen2} onClose={handleClose2} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
           <DialogTitle id="form-dialog-title">환자 정보</DialogTitle>
           <DialogContent>
@@ -366,7 +408,36 @@ export default function Row(props) {
                 value={address}
                 onChange={(e) => { setAddress(e.target.value) }}
               />
-              <SearchIcon style={{ float: 'left', width: '15%', height: '2.5em', fontSize: '15px' }} />
+              <SearchIcon onClick={openPostCode} style={{ float: 'left', marginLeft: '10px', fontSize: '40px', color: '#1C91FB', cursor: 'pointer' }} />
+              <Dialog
+                open={isPopupOpen}
+                onClose={closePostCode}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth
+                maxWidth={'sm'}
+              >
+                <DialogTitle id="form-dialog-title">주소 찾기</DialogTitle>
+                <DialogContent>
+                  <DaumPostcode
+                    onComplete={handlePostCode}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={closePostCode} color="primary">닫기</Button>
+                </DialogActions>
+              </Dialog>
+
+              <TextField
+          style={{backgroundColor: '#FFFFFF', marginTop: '10px'}} 
+          variant="outlined"
+          fullWidth
+          size="small"
+          id="detailAddress"
+          name="detailAddress"
+          value={ detailAddress }
+          onChange={(e) => { setDetailAddress(e.target.value) }}
+        />
             </div>
             <div style={{ width: '100%', overflow: 'hidden' }}>
               <Typography className={classes.font} variant="body1" gutterBottom>이메일</Typography>
@@ -480,7 +551,7 @@ export default function Row(props) {
                                 row.name,
                                 row.insurance)
                             }}
-          style={{ color: '#1C91FB', fontSize: '30px' }} /></TableCell>
+          style={{ color: '#1C91FB', fontSize: '30px', cursor: 'pointer' }} /></TableCell>
         <Dialog open={dialogOpen3} onClose={handleClose3} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
 
           <DialogTitle id="form-dialog-title">접수</DialogTitle>
@@ -559,7 +630,7 @@ export default function Row(props) {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose3} color="primary">닫기</Button>
+            <Button onClick={onReset} color="primary">닫기</Button>
             <Button onClick={create} color="primary">접수</Button>
           </DialogActions>
         </Dialog>
@@ -608,7 +679,7 @@ export default function Row(props) {
                         <TableCell></TableCell>
                         : <TableCell
                             style={{ textAlign: 'center', padding: '5px' }}>
-                              <ClearIcon onClick={() => { deleteReceipt(receiptList.receiptNo) }} style={{ color: '#1C91FB', fontSize: '30px' }}/>
+                              <ClearIcon onClick={() => { deleteReceipt(receiptList.receiptNo) }} style={{ color: '#1C91FB', fontSize: '30px', cursor: 'pointer' }}/>
                         </TableCell>
                       }
                     </TableRow>

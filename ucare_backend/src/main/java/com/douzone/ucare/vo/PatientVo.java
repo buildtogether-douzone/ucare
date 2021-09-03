@@ -10,6 +10,7 @@ public class PatientVo {
 	private String insurance;
 	private String telNo;
 	private String address;
+	private String detailAddress;
 	private String diagnosis;
 	private String visitDate;
 	private String height;
@@ -148,6 +149,12 @@ public class PatientVo {
 	}
 	public void setAgeGender(String ageGender) {
 		this.ageGender = ageGender;
+	}
+	public String getDetailAddress() {
+		return detailAddress;
+	}
+	public void setDetailAddress(String detailAddress) {
+		this.detailAddress = detailAddress;
 	}
 	
 	

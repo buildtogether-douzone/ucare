@@ -3,7 +3,7 @@
 <mapper namespace="patient">	
 	<insert id="create" parameterType="patientvo">
 		INSERT
-			INTO ucare.patient(name, ssn, age, gender, tel_no, address, email, insurance_yn, diagnosis_type, visit_date, remark, ins_dt, user_no)
+			INTO ucare.patient(name, ssn, age, gender, tel_no, address, detail_address, email, insurance_yn, diagnosis_type, visit_date, remark, ins_dt, user_no)
 		VALUES(
 			#{name },
 			#{ssn },
@@ -11,6 +11,7 @@
 			#{gender },
 			#{telNo },
 			#{address },
+			#{detailAddress }, 
 			#{domain },
 			#{insurance },
 			#{diagnosis },
@@ -30,7 +31,8 @@
 			gender AS gender,
 			CONCAT(SUBSTR(ssn, 1, 8), '******') AS ssn,
 			tel_no AS telNo,
-			SUBSTR(address, 1, 13) AS address,
+			address AS address,
+			detail_address AS detailAddress,
 			insurance_yn AS insurance,
 			diagnosis_type AS diagnosis,
 			ins_dt AS insDt,
@@ -72,6 +74,7 @@
 		   		gender = #{gender },
 		   		tel_no = #{telNo },
 		   		address = #{address },
+		   		detail_address = #{detailAddress }, 
 		   		email = #{domain },
 		   		insurance_yn = #{insurance },
 		   		remark = #{remark },
