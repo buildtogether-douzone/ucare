@@ -5,7 +5,7 @@ public class BoardVo {
 	private String title;
 	private String contents;
 	private Long hit;
-	private String image;
+	private String URL;
 	private String boardDt;
 	private String boardTime;
 	private Long insNo;
@@ -33,6 +33,12 @@ public class BoardVo {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	public String getURL() {
+		return URL;
+	}
+	public void setURL(String URL) {
+		this.URL = URL;
+	}
 	public String getContents() {
 		return contents;
 	}
@@ -44,12 +50,6 @@ public class BoardVo {
 	}
 	public void setHit(Long hit) {
 		this.hit = hit;
-	}
-	public String getImage() {
-		return image;
-	}
-	public void setImage(String image) {
-		this.image = image;
 	}
 	public String getBoardDt() {
 		return boardDt;

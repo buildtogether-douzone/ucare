@@ -34,8 +34,8 @@ const Board = React.forwardRef((props, ref) => {
     const [selectedItems, setSelectedItems] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
-    const [file, setFile] = useState(null);
-    const [filename, setFileName] = useState(null);
+    const [URL, setURL] = useState(null);
+    const [URLName, setURLName] = useState(null);
     const toast = useRef(null);
     const dt = useRef(null);
 
@@ -81,7 +81,9 @@ const Board = React.forwardRef((props, ref) => {
 
             const formData = new FormData();
             formData.append('data', new Blob([JSON.stringify(_item)], {type: "application/json"}));
-            formData.append('file', file);
+            formData.append('URL', URL);
+
+            console.log(formData);
 
             if (item.boardNo) {
                 boardService.update(formData)
@@ -166,7 +168,7 @@ const Board = React.forwardRef((props, ref) => {
         let reader = new FileReader();
         let file = e.target.files[0];
         reader.onloadend = () => {
-            setFile(file);
+            setURL(file);
         }
         reader.readAsDataURL(file);
       }
@@ -180,23 +182,23 @@ const Board = React.forwardRef((props, ref) => {
     const rowColumnClick = (rowData) => {
         //hit update
         boardService.updateHit(rowData.boardNo)
-            .then()
+            .then(res => {
+                const itemsIndex = items.findIndex((item) => item.boardNo === rowData.boardNo);
+
+                const newItems = update( items, {
+                    [itemsIndex] : {
+                        hit: {
+                            $set: rowData.hit + 1 
+                        }
+                    }
+                });
+                
+                setItems(newItems);
+            })
             .catch(err => {
                 console.log('Hit update() Error!', err);
             });
-        
-        const itemsIndex = items.findIndex((item) => item.boardNo === rowData.boardNo);
-
-        const newItems = update( items, {
-            [itemsIndex] : {
-                hit: {
-                    $set: rowData.hit + 1 
-                }
-            }
-        });
-
-        setItems(newItems);
-        setFileName(rowData.image && rowData.image.split("_", 3)[2]);
+        setURLName(rowData.image && rowData.image.split("_", 3)[2]);
         setItem({ ...rowData });
         setViewDialog(true);
     }
@@ -315,7 +317,7 @@ const Board = React.forwardRef((props, ref) => {
                     <Editor headerTemplate={head} style={{ height: '320px' }} value={item.contents} onTextChange={(e) => onInputTextChange(e, 'contents')} readOnly={true}/>
                 </div>
                 <div className="p-field">
-                    파일 다운로드: <a href={item.image} download>{filename}</a>
+                    파일 다운로드: <a href={item.image} download>{URLName}</a>
                 </div>
             </Dialog>
 

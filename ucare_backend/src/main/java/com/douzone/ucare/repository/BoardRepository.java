@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.douzone.ucare.vo.BoardVo;
-import com.douzone.ucare.vo.MedicineVo;
 
 @Repository
 public class BoardRepository {

@@ -8,7 +8,7 @@
 			A.title AS title,
 			A.contents AS contents,
 			A.hit AS hit,
-			A.image AS image,
+			A.URL AS URL,
 			TO_CHAR(A.board_date,'YYYY-MM-DD') AS boardDt,
 			TO_CHAR(A.board_time, 'HH24:MI:SS') AS boardTime,
 			B.id AS userId
@@ -25,7 +25,7 @@
 			A.title AS title,
 			A.contents AS contents,
 			A.hit AS hit,
-			A.image AS image,
+			A.URL AS URL,
 			TO_CHAR(A.board_date,'YYYY-MM-DD') AS boardDt,
 			TO_CHAR(A.board_time, 'HH24:MI:SS') as boardTime,
 			B.id AS userId
@@ -38,12 +38,12 @@
 
 	<insert id="create" parameterType="boardvo">
 		INSERT
-			INTO ucare.board(title, contents, hit, image, board_date, board_time, ins_no, user_no)
+			INTO ucare.board(title, contents, hit, URL, board_date, board_time, ins_no, user_no)
 		VALUES(
 			#{title },
 			#{contents },
 			0,
-			#{image },
+			#{URL },
 			now(),
 			now(),
 			#{insNo },
@@ -64,8 +64,8 @@
 		   SET 
 	   		title = #{title },
 	   		contents = #{contents },
-	   		<if test="image != null and image != '' ">
-			   	image = #{image },
+	   		<if test="URL != null and URL != '' ">
+			   	URL = #{URL },
 			</if>
 	   		upt_dt = now()
 		WHERE board_no = #{boardNo }
