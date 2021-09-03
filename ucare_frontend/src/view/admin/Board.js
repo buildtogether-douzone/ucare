@@ -83,7 +83,6 @@ const Board = React.forwardRef((props, ref) => {
             formData.append('data', new Blob([JSON.stringify(_item)], {type: "application/json"}));
             formData.append('URL', URL);
 
-            console.log(formData);
 
             if (item.boardNo) {
                 boardService.update(formData)
@@ -198,7 +197,8 @@ const Board = React.forwardRef((props, ref) => {
             .catch(err => {
                 console.log('Hit update() Error!', err);
             });
-        setURLName(rowData.image && rowData.image.split("_", 3)[2]);
+
+        setURLName(rowData.url && rowData.url.split("_", 3)[2]);
         setItem({ ...rowData });
         setViewDialog(true);
     }
@@ -317,7 +317,7 @@ const Board = React.forwardRef((props, ref) => {
                     <Editor headerTemplate={head} style={{ height: '320px' }} value={item.contents} onTextChange={(e) => onInputTextChange(e, 'contents')} readOnly={true}/>
                 </div>
                 <div className="p-field">
-                    파일 다운로드: <a href={item.image} download>{URLName}</a>
+                    파일 다운로드: <a href={item.url} download>{URLName}</a>
                 </div>
             </Dialog>
 
