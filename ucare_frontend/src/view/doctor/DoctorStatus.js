@@ -6,9 +6,12 @@ import { Calendar } from 'primereact/calendar';
 import { Divider } from 'primereact/divider';
 import { Menu } from 'primereact/menu';
 import { Dialog } from 'primereact/dialog';
+import { Panel } from 'primereact/panel';
+import { ProgressBar } from 'primereact/progressbar';
 
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
+import patientService from '../../service/patientService';
 
 import '../../assets/scss/DataScroller.scss';
 
@@ -21,8 +24,18 @@ export default function Status() {
         diagnosisTime: ''
     };
 
+    let emptyPatient = {
+        patientNo: null,
+        name: '',
+        age: '',
+        gender: '',
+        insurance_yn: '',
+        diagnosis_type: ''
+    }
+
     const [items, setItems] = useState([]);
     const [item, setItem] = useState(emptyItem);
+    const [patient, setPatient] = useState(emptyPatient);
     const [date, setDate] = useState(new Date());
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
 
@@ -134,16 +147,19 @@ export default function Status() {
         return  year + '-' + month + '-' + day;
     }
 
-    const menuToggle = (e, data) => {
-        if(data.state !== 'wait')
-            menu.current.toggle(e, setItem(data))
-        else
-            alert("TEST")
+    const menuControl = (e, data) => {
+        patientService.retrieve(data.patientNo)
+            .then( res => {
+                setPatient(res.data[0]);
+            })
+            .catch(err => {
+                console.log('retrieve() Error!', err);
+            });
     }
 
     const itemTemplate = (data) => {
         return (
-            <div className="product-item" onClick={(e) => menuToggle(e, data)} aria-controls="popup_menu" aria-haspopup>
+            <div className="product-item" onClick={(e) => menuControl(e, data)} aria-controls="popup_menu" aria-haspopup>
                 <div className="product-detail">
                     <div className="product-name">{data.name}</div>
                     <div className="product-description">{data.diagnosisTime}</div>
@@ -224,15 +240,78 @@ export default function Status() {
     return (
         <div className="card">
             <div className="p-grid">
-                <div className="p-col-6">
+                <div className="p-col-12 p-lg-3">
                         <div className="datascroller" style={{ justifyContent:'center', padding: '50px' }}>
                                 <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                         </div>
                 </div>
                 <Divider layout="vertical">
                 </Divider>
-                <div className="p-col-5" style={{ display: 'flex', justifyContent:'center', alignItems: 'center', padding: '10px' }}>
-                        <Button label="Sign Up" icon="pi pi-user-plus" className="p-button-success"></Button>
+                <div className="p-col-12 p-lg-4">
+                <Panel header="환자정보" style={{ height: '100%' }} style={{ justifyContent:'center', padding: '50px' }}>
+                    <div className="activity-header">
+                        <div className="p-grid">
+                            <div className="p-col-6">
+                                <span style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center'}}>{patient.name}{patient.name && '/'}{patient.gender}</span>
+                                <p>Updated 1 minute ago</p>
+                            </div>
+                            <div className="p-col-6" style={{ textAlign: 'right' }}>
+                                <Button label="Refresh" icon="pi pi-refresh" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul className="activity-list">
+                        <li>
+                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                <h5 className="activity p-m-0">Income</h5>
+                                <div className="count">$900</div>
+                            </div>
+                            <ProgressBar value={95} showValue={false} />
+                        </li>
+                        <li>
+                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                <h5 className="activity p-m-0">Tax</h5>
+                                <div className="count" style={{ backgroundColor: '#f9c851' }}>$250</div>
+                            </div>
+                            <ProgressBar value={24} showValue={false} />
+                        </li>
+                    </ul>
+                </Panel>
+                </div>
+                <Divider layout="vertical">
+                </Divider>
+                <div className="p-col-12 p-lg-4">
+                <Panel header="환자정보" style={{ height: '100%' }} style={{ justifyContent:'center', padding: '50px' }}>
+                    <div className="activity-header">
+                        <div className="p-grid">
+                            <div className="p-col-6">
+                                <span style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center'}}>{patient.name}{patient.name && '/'}{patient.gender}</span>
+                                <p>Updated 1 minute ago</p>
+                            </div>
+                            <div className="p-col-6" style={{ textAlign: 'right' }}>
+                                <Button label="Refresh" icon="pi pi-refresh" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul className="activity-list">
+                        <li>
+                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                <h5 className="activity p-m-0">Income</h5>
+                                <div className="count">$900</div>
+                            </div>
+                            <ProgressBar value={95} showValue={false} />
+                        </li>
+                        <li>
+                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                <h5 className="activity p-m-0">Tax</h5>
+                                <div className="count" style={{ backgroundColor: '#f9c851' }}>$250</div>
+                            </div>
+                            <ProgressBar value={24} showValue={false} />
+                        </li>
+                    </ul>
+                </Panel>
                 </div>
             </div>
             <Menu model={options} popup ref={menu} id="popup_menu" />

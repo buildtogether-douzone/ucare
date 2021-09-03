@@ -11,6 +11,10 @@ class patientService {
     return axios.get(PATIENT_API_BASE_URL + '/retrieveAll');
   }
 
+  retrieve(patientNo){
+    return axios.get(PATIENT_API_BASE_URL + '/retrieve/' + patientNo);
+  }
+
   update(data){
     return axios.put(PATIENT_API_BASE_URL + '/update', data);
   }

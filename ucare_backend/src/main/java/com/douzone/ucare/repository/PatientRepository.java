@@ -6,8 +6,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.douzone.ucare.vo.DiseaseVo;
 import com.douzone.ucare.vo.PatientVo;
+import com.douzone.ucare.vo.ReceiptVo;
 
 @Repository
 public class PatientRepository {
@@ -21,6 +21,10 @@ public class PatientRepository {
 
 	public List<PatientVo> retrieveAll() {
 		return sqlSession.selectList("patient.retrieveAll");
+	}
+	
+	public List<ReceiptVo> retrieve(Long patientNo) {
+		return sqlSession.selectList("patient.retrieve", patientNo);
 	}
 
 	public int update(PatientVo patient) {
