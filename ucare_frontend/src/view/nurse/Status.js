@@ -5,6 +5,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 import { Divider } from 'primereact/divider';
 import { Menu } from 'primereact/menu';
+import { Dialog } from 'primereact/dialog';
 
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
@@ -23,6 +24,7 @@ export default function Status() {
     const [items, setItems] = useState([]);
     const [item, setItem] = useState(emptyItem);
     const [date, setDate] = useState(new Date());
+    const [deleteItemDialog, setDeleteItemDialog] = useState(false);
 
     const menu = useRef(null);
 
@@ -58,35 +60,11 @@ export default function Status() {
                     label: '접수취소',
                     icon: 'pi pi-times',
                     command: () => {
-                        let _items = [...items];
-                        let _item = {...item};
-
-                        const index = findIndexByNo(item.receiptNo);
-
-                        _item = _items[index];
-
-                        statusService.delete(_item.receiptNo)
-                        .then( res => {
-                            console.log('success!!');
-                            timeService.updateByCancel(_item);
-                            let _items = items.filter(item => item.receiptNo !== _item.receiptNo);
-                            setItems(_items);
-                            setItem(emptyItem);
-                        })
-                        .catch(err => {
-                            console.log('delete() Error!', err);
-                        });
+                        confirmDeleteItem(item);
                     }
                 }
             ]
         }
-    ];
-
-    const selectOptions = [
-        {label: '진료중', value: 'care'},
-        {label: '진료대기중', value: 'careWait'},
-        {label: '수납대기중', value: 'wait'},
-        {label: '완료', value: 'finish'}
     ];
 
     useEffect(() => {
@@ -111,6 +89,40 @@ export default function Status() {
             console.log('retrieve() Error!', err);
         });
     }, []);
+
+    const deleteItem = () => {
+        let _items = [...items];
+        let _item = {...item};
+
+        const index = findIndexByNo(item.receiptNo);
+
+        _item = _items[index];
+
+        statusService.delete(_item.receiptNo)
+            .then( res => {
+                console.log('success!!');
+                timeService.updateByCancel(_item);
+                let _items = items.filter(item => item.receiptNo !== _item.receiptNo);
+                setItems(_items);
+                setItem(emptyItem);
+                setDeleteItemDialog(false);
+            })
+            .catch(err => {
+                console.log('delete() Error!', err);
+            });
+    }
+
+    const confirmDeleteItem = (item) => {
+        setItem(item);
+        setDeleteItemDialog(true);
+    }
+
+    const selectOptions = [
+        {label: '진료중', value: 'care'},
+        {label: '진료대기중', value: 'careWait'},
+        {label: '수납대기중', value: 'wait'},
+        {label: '완료', value: 'finish'}
+    ];
 
     // yyyy-MM-dd 포맷으로 반환
     const dateFormat = (date) => {
@@ -186,6 +198,17 @@ export default function Status() {
         });
     }
 
+    const hideDeleteItemDialog = () => {
+        setDeleteItemDialog(false);
+    }
+
+    const deleteItemDialogFooter = (
+        <React.Fragment>
+            <Button label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
+            <Button label="예" icon="pi pi-check" className="p-button-text" onClick={deleteItem} />
+        </React.Fragment>
+    );
+
     const renderHeader = () => {
         return (
             <div className="p-grid p-nogutter">
@@ -213,6 +236,13 @@ export default function Status() {
                 </div>
             </div>
             <Menu model={options} popup ref={menu} id="popup_menu" />
+
+            <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
+                <div className="confirmation-content">
+                    <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
+                    {item && <span><b>접수를 취소하시겠습니까?</b></span>}
+                </div>
+            </Dialog>
         </div>
     );
 }
