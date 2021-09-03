@@ -55,7 +55,7 @@
 		<![CDATA[
 		UPDATE ucare.board
 		   SET hit = hit + 1
-		 WHERE boardNo = #{boardNo }
+		 WHERE board_no = #{boardNo }
 		]]>	
 	</update>
 
