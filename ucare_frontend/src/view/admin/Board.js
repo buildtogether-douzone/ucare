@@ -208,7 +208,7 @@ const Board = React.forwardRef((props, ref) => {
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
-                <Button label="글쓰기" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={openNew} />
+                {sessionStorage.getItem('role') == '관리자' && <Button label="글쓰기" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={openNew} />}
             </React.Fragment>
         )
     }
@@ -278,7 +278,7 @@ const Board = React.forwardRef((props, ref) => {
                     <Column style={{ textAlign: 'center' }} field="userId" header="작성자"></Column>
                     <Column style={{ textAlign: 'center' }} field="boardDt" header="작성일"></Column>
                     <Column style={{ textAlign: 'center' }} field="hit" header="조회"></Column>
-                    <Column style={{ textAlign: 'center' }} body={actionBodyTemplate}></Column>
+                    {sessionStorage.getItem('role') == '관리자' && <Column style={{ textAlign: 'center' }} body={actionBodyTemplate}></Column> }
                 </DataTable>
             </div>
 
