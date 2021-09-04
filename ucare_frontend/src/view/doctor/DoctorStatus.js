@@ -12,6 +12,7 @@ import { ProgressBar } from 'primereact/progressbar';
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
 import patientService from '../../service/patientService';
+import diagnosisService from '../../service/diagnosisService';
 
 import '../../assets/scss/DataScroller.scss';
 
@@ -33,8 +34,18 @@ export default function Status() {
         diagnosis_type: ''
     }
 
+    let emptyPastDiagnosis = {
+        diagnosisNo: null,
+        diagnosisMemo: '',
+        cureYN: '',
+        diagnosisDate: '',
+        diseaseName: ''
+    }
+
     const [items, setItems] = useState([]);
+    const [pastDiagnosis, setPastDiagnosis] = useState([]);
     const [item, setItem] = useState(emptyItem);
+    const [pastDiagnosisItem, setPastDiagnosisItem] = useState(emptyPastDiagnosis);
     const [patient, setPatient] = useState(emptyPatient);
     const [date, setDate] = useState(new Date());
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
@@ -149,8 +160,15 @@ export default function Status() {
 
     const menuControl = (e, data) => {
         patientService.retrieve(data.patientNo)
-            .then( res => {
+            .then(res => {
                 setPatient(res.data[0]);
+                diagnosisService.retrieveByPatientNo(res.data[0].patientNo)
+                    .then(res => {
+                        setPastDiagnosis(res.data);
+                    })
+                    .catch(err => {
+                        console.log('retrieveByPatientNo() Error!', err);
+                    })
             })
             .catch(err => {
                 console.log('retrieve() Error!', err);
@@ -166,6 +184,20 @@ export default function Status() {
                 </div>
                 <div className="product-price">
                     <div className="product-name">{data.value}</div>
+                </div>
+            </div>
+        );
+    }
+
+    const pastDiagnosisTemplate = (data) => {
+        return (
+            <div className="product-item" aria-controls="popup_menu" aria-haspopup>
+                <div className="product-detail">
+                    <div className="product-name">{data.diagnosisTime}</div>
+                </div>
+                <div className="product-price">
+                    <div className="product-name">{data.diseaseName}</div>
+                    <div className="product-description">{data.cureYN}</div>
                 </div>
             </div>
         );
@@ -240,23 +272,20 @@ export default function Status() {
     return (
         <div className="card">
             <div className="p-grid">
-                <div className="p-col-12 p-lg-3">
-                        <div className="datascroller" style={{ justifyContent:'center', padding: '50px' }}>
+                <div className="p-col-12 p-md-6 p-lg-4">
+                        <div className="datascroller" style={{ justifyContent:'center', padding: '20px' }}>
                                 <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                         </div>
                 </div>
-                <Divider layout="vertical">
-                </Divider>
-                <div className="p-col-12 p-lg-4">
-                <Panel header="환자정보" style={{ height: '100%' }} style={{ justifyContent:'center', padding: '50px' }}>
+                <div className="p-col-12 p-md-6 p-lg-4">
+                <div className="card p-fluid">
+                <Panel header="환자정보" style={{ height: '100%' }} style={{ justifyContent:'center', padding: '20px' }}>
                     <div className="activity-header">
                         <div className="p-grid">
                             <div className="p-col-6">
                                 <span style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center'}}>{patient.name}{patient.name && '/'}{patient.gender}</span>
-                                <p>Updated 1 minute ago</p>
                             </div>
                             <div className="p-col-6" style={{ textAlign: 'right' }}>
-                                <Button label="Refresh" icon="pi pi-refresh" />
                             </div>
                         </div>
                     </div>
@@ -264,25 +293,31 @@ export default function Status() {
                     <ul className="activity-list">
                         <li>
                             <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                <h5 className="activity p-m-0">Income</h5>
-                                <div className="count">$900</div>
+                                <h5 className="activity p-m-0">보험여부</h5>
+                                <div className="count">{patient.insurance}</div>
                             </div>
-                            <ProgressBar value={95} showValue={false} />
                         </li>
                         <li>
                             <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                <h5 className="activity p-m-0">Tax</h5>
-                                <div className="count" style={{ backgroundColor: '#f9c851' }}>$250</div>
+                                <h5 className="activity p-m-0">진료구분</h5>
+                                <div className="count">{patient.diagnosis}</div>
                             </div>
-                            <ProgressBar value={24} showValue={false} />
                         </li>
                     </ul>
                 </Panel>
                 </div>
-                <Divider layout="vertical">
-                </Divider>
-                <div className="p-col-12 p-lg-4">
-                <Panel header="환자정보" style={{ height: '100%' }} style={{ justifyContent:'center', padding: '50px' }}>
+                <div className="card p-fluid">
+                <Panel header="과거병력" style={{ height: '100%' }} style={{ justifyContent:'center', padding: '20px' }}>
+                    <div className="activity-header">
+                            <div className="datascroller">
+                                <DataScroller value={pastDiagnosis} itemTemplate={pastDiagnosisTemplate} rows={3} inline scrollHeight="300px" />
+                            </div>
+                    </div>
+                </Panel>
+                </div>
+                </div>
+                <div className="p-col-12 p-md-6 p-lg-4">
+                <Panel header="진료" style={{ height: '100%' }} style={{ justifyContent:'center', padding: '20px' }}>
                     <div className="activity-header">
                         <div className="p-grid">
                             <div className="p-col-6">

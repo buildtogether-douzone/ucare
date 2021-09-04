@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="diagnosis">	
+
+	<select id="retrieveByPatientNo" resultType="diagnosisvo" >
+		SELECT 
+			A.diagnosis_no AS diagnosisNo,
+			A.diagnosis_memo AS diagnosisMemo,
+			A.cure_yn AS cureYN,
+			A.diagnosis_dt AS diagnosisDate,
+			A.remark,
+			A.user_no AS userNo,
+			A.receipt_no AS receiptNo,
+			A.disease_no AS diseaseNo,
+			A.patient_no AS patientNo,
+			B.disease_nm AS diseaseName
+		FROM ucare.diagnosis A
+		INNER JOIN ucare.disease B ON A.disease_no = B.disease_no
+		WHERE A.patient_no = #{patientNo }
+		ORDER BY A.diagnosis_dt ASC
+	</select>
+
+</mapper>
