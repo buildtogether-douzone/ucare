@@ -9,6 +9,7 @@ public class DiagnosisVo {
 	private int receiptNo;
 	private int diseaseNo;
 	private int patientNo;
+	private String diseaseName;
 	
 	public int getDiagnosisNo() {
 		return diagnosisNo;
@@ -58,11 +59,17 @@ public class DiagnosisVo {
 	public void setPatientNo(int patientNo) {
 		this.patientNo = patientNo;
 	}
+	public String getDiseaseName() {
+		return diseaseName;
+	}
+	public void setDiseaseName(String diseaseName) {
+		this.diseaseName = diseaseName;
+	}
 	
 	@Override
 	public String toString() {
 		return "DiagnosisVo [diagnosisNo=" + diagnosisNo + ", diagnosisMemo=" + diagnosisMemo + ", cureYN=" + cureYN
 				+ ", diagnosisDate=" + diagnosisDate + ", userNo=" + userNo + ", receiptNo=" + receiptNo
-				+ ", diseaseNo=" + diseaseNo + ", patientNo=" + patientNo + "]";
+				+ ", diseaseNo=" + diseaseNo + ", patientNo=" + patientNo + ", diseaseName=" + diseaseName + "]";
 	}
 }
