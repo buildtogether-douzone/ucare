@@ -41,6 +41,9 @@ spring:
 ---
 # dev profile - spring boot configuration 
 spring:
+   batch:
+    initialize-schema: always
+
    profiles: dev
 
    # devtools enabled
