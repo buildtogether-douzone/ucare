@@ -8,6 +8,8 @@ import { Menu } from 'primereact/menu';
 import { Dialog } from 'primereact/dialog';
 import { Panel } from 'primereact/panel';
 import { ProgressBar } from 'primereact/progressbar';
+import { Checkbox } from 'primereact/checkbox';
+import { InputTextarea } from 'primereact/inputtextarea';
 
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
@@ -49,6 +51,14 @@ export default function Status() {
     const [patient, setPatient] = useState(emptyPatient);
     const [date, setDate] = useState(new Date());
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
+    const [sortKey, setSortKey] = useState(null);
+    const [sortField, setSortField] = useState(null);
+    const [checkboxValue, setCheckboxValue] = useState([]);
+    const [value1, setValue1] = useState('');
+    const sortOptions = [
+        {label: 'Price High to Low', value: '!price'},
+        {label: 'Price Low to High', value: 'price'},
+    ];
 
     const menu = useRef(null);
 
@@ -90,6 +100,21 @@ export default function Status() {
             ]
         }
     ];
+
+    const onSortChange = (event) => {
+        const value = event.value;
+
+        if (value.indexOf('!') === 0) {
+            setSortOrder(-1);
+            setSortField(value.substring(1, value.length));
+            setSortKey(value);
+        }
+        else {
+            setSortOrder(1);
+            setSortField(value);
+            setSortKey(value);
+        }
+    }
 
     useEffect(() => {
         statusService.retrieve(dateFormat(date))
@@ -257,6 +282,16 @@ export default function Status() {
         </React.Fragment>
     );
 
+    const onCheckboxChange = (e) => {
+        let selectedValue = [...checkboxValue];
+        if (e.checked)
+            selectedValue.push(e.value);
+        else
+            selectedValue.splice(selectedValue.indexOf(e.value), 1);
+
+        setCheckboxValue(selectedValue);
+    };
+
     const renderHeader = () => {
         return (
             <div className="p-grid p-nogutter">
@@ -318,34 +353,28 @@ export default function Status() {
                 </div>
                 <div className="p-col-12 p-md-6 p-lg-4">
                 <Panel header="진료" style={{ height: '100%' }} style={{ justifyContent:'center', padding: '20px' }}>
-                    <div className="activity-header">
-                        <div className="p-grid">
-                            <div className="p-col-6">
-                                <span style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center'}}>{patient.name}{patient.name && '/'}{patient.gender}</span>
-                                <p>Updated 1 minute ago</p>
-                            </div>
-                            <div className="p-col-6" style={{ textAlign: 'right' }}>
-                                <Button label="Refresh" icon="pi pi-refresh" />
-                            </div>
+                <div className="card p-fluid">
+                    <div className="p-field p-grid">
+                        <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">병명</label>
+                        <div className="p-col-12 p-md-10">
+                            <Dropdown options={sortOptions} value={sortKey} optionLabel="label" onChange={onSortChange}/>
                         </div>
                     </div>
-
-                    <ul className="activity-list">
-                        <li>
-                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                <h5 className="activity p-m-0">Income</h5>
-                                <div className="count">$900</div>
-                            </div>
-                            <ProgressBar value={95} showValue={false} />
-                        </li>
-                        <li>
-                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                <h5 className="activity p-m-0">Tax</h5>
-                                <div className="count" style={{ backgroundColor: '#f9c851' }}>$250</div>
-                            </div>
-                            <ProgressBar value={24} showValue={false} />
-                        </li>
-                    </ul>
+                    <div className="p-field p-grid">
+                        <label htmlFor="email3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">처방</label>
+                        <div className="p-col-12 p-md-10">
+                            <Checkbox inputId="checkOption1" name="option" value="Chicago" checked={checkboxValue.indexOf('Chicago') !== -1} onChange={onCheckboxChange} />
+                            <label htmlFor="checkOption1"> 치료</label>
+                        </div>
+                    </div>
+                </div>
+                    <div className="card">
+                        <h5>진료메모</h5>
+                        <InputTextarea value={value1} onChange={(e) => setValue1(e.target.value)} rows={5} cols={30} />
+                    </div>
+                    <div>
+                        <Button type="button" label="진료완료" />
+                    </div>
                 </Panel>
                 </div>
             </div>

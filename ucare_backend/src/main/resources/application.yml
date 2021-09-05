@@ -43,7 +43,7 @@ spring:
 spring:
    batch:
     initialize-schema: always
-    batch.job.enabled: false # CommandLineRunner 설정 해제
+    job.enabled: false # CommandLineRunner 설정 해제
 
    profiles: dev
 
