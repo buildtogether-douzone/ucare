@@ -7,6 +7,7 @@ import { Card } from 'primereact/card';
 import { Skeleton } from 'primereact/skeleton';
 import { AutoComplete } from 'primereact/autocomplete';
 import patientService from '../../service/patientService';
+import Select from './Select';
 
 
 export default function Reservation() {
@@ -48,7 +49,7 @@ export default function Reservation() {
             if (option) {
                 return (
                     <div className="country-item country-item-value">
-                        <div>{option.name} {option.ssn}</div>
+                        <div>{option.name}</div>
                     </div>
                 );
             }
@@ -68,24 +69,8 @@ export default function Reservation() {
             );
         }
 
+        
 
-        const selectedTelNoTemplate = (option, props) => {
-            if (option) {
-                return (
-                    <div className="country-item country-item-value">
-                        <div>{option.telNo}</div>
-                    </div>
-                );
-            }
-    
-            return (
-                <span>
-                    {props.placeholder}
-                </span>
-            );
-        }
-
-        //console.log(selectedPatient);
 
 
     return (
@@ -97,13 +82,8 @@ export default function Reservation() {
                         <label htmlFor="name">이름/주민등록번호</label>
                 <Dropdown value={selectedPatient} options={items} onChange={onPatientChange} optionLabel="name" filter showClear filterBy="name" placeholder="이름"
                     valueTemplate={selectedPatientTemplate} itemTemplate={patientOptionTemplate} />
-                        </div>
-                        <div className="p-field">
-                            <label htmlFor="email1">Email</label>
-                            <Dropdown value={selectedPatient} options={items} optionLabel="name" filter showClear filterBy="name" placeholder="이름"
-                valueTemplate={selectedTelNoTemplate} /> 
                     </div>
-        
+                       <Select select={selectedPatient} />
                     </Card>
 
                 </div>
