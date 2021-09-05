@@ -17,7 +17,7 @@ export default function Reservation(props) {
                 <div className="card p-fluid">
                         <div className="p-field">
                             <label htmlFor="ssn1">주민등록번호</label>
-                            <InputText id="ssn1" type="text" value={''} />
+                            <InputText id="ssn" type="text" value={''} />
                         </div>
                         <div className="p-field">
                             <label htmlFor="telNo1">연락처</label>
@@ -28,7 +28,7 @@ export default function Reservation(props) {
         </div>
         )
     }
-    console.log(select.name);
+
 
 
     return (

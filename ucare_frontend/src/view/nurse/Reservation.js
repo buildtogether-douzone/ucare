@@ -12,18 +12,10 @@ import Select from './Select';
 
 export default function Reservation() {
 
-    let emptyItem = {
-        patientNo: null,
-        name: '',
-        ssn: '',
-        telNo: '',
-        time: '',
-        userId: ''
-    };
-
         const [items, setItems] = useState([]);
-        const [item, setItem] = useState(emptyItem);
-        const [selectedPatient, setSelectedPatient] = useState(null);     
+        const [selectedPatient, setSelectedPatient] = useState(null);
+        const [time, setTime] = useState(null);  
+        const [selectedTime, setSelectedTime] = useState(null);   
            
         const retrieveAll = (e) => {
             patientService.retrieveAll()
@@ -69,7 +61,9 @@ export default function Reservation() {
             );
         }
 
-        
+        const onTimeChange = (e) => {
+            setSelectedTime(e.value);
+        }
 
 
 
@@ -84,6 +78,10 @@ export default function Reservation() {
                     valueTemplate={selectedPatientTemplate} itemTemplate={patientOptionTemplate} />
                     </div>
                        <Select select={selectedPatient} />
+                       <div className="p-field">
+                        <label htmlFor="name">시간</label>
+                <Dropdown value={selectedTime} options={time} onChange={onTimeChange} optionLabel="name" placeholder="시간" />
+                    </div>
                     </Card>
 
                 </div>
