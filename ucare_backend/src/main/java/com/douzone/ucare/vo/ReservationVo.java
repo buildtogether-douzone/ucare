@@ -9,7 +9,10 @@ public class ReservationVo {
 	private Long uptNo;
 	private String updDt;
 	private Long patientNo;
-
+	private String name;
+	private String telNo;
+	private String ssn;
+	
 	public Long getRevNo() {
 		return revNo;
 	}
@@ -58,7 +61,23 @@ public class ReservationVo {
 	public void setPatientNo(Long patientNo) {
 		this.patientNo = patientNo;
 	}
-	
-	
-	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getTelNo() {
+		return telNo;
+	}
+	public void setTelNo(String telNo) {
+		this.telNo = telNo;
+	}
+	public String getSsn() {
+		return ssn;
+	}
+	public void setSsn(String ssn) {
+		this.ssn = ssn;
+	}
+		
 }

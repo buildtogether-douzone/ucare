@@ -11,9 +11,14 @@ import { SelectButton } from 'primereact/selectbutton';
 import { ListBox } from 'primereact/listbox';
 import { DataScroller } from 'primereact/datascroller';
 import { Rating } from 'primereact/rating';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { ProgressBar } from 'primereact/progressbar';
+import { MultiSelect } from 'primereact/multiselect';
 import timeService from '../../service/timeService';
 import patientService from '../../service/patientService';
 import reservationService from '../../service/reservationService';
+import ReservationList from './ReservationList';
 
 
 export default function Reservation() {
@@ -35,7 +40,7 @@ export default function Reservation() {
 
     const [items, setItems] = useState([]);
     const [selectedPatient, setSelectedPatient] = useState(emptyItem);
-    const [time, setTime] = useState(null);
+    const [time, setTime] = useState([]);
     const [selectedTime, setSelectedTime] = useState(emptyTime);
     const [date, setDate] = useState(new Date());
 
@@ -151,8 +156,14 @@ export default function Reservation() {
 
     return (
         <div className="p-grid" style={{ margin: '10px' }}>
+            <div className="p-col-12 p-lg-6">
+                <div className="card p-fluid">
 
-            <div className="p-col-12 p-lg-8">
+                <ReservationList />
+
+                </div>
+                </div>
+            <div className="p-col-12 p-lg-4">
                 <div className="card p-fluid">
                     <Card title="예약">
                         <div className="p-field">
@@ -181,13 +192,13 @@ export default function Reservation() {
 
             </div>
 
-            <div className="p-col-12 p-lg-4">
+            <div className="p-col-12 p-lg-2">
                 <div className="card p-fluid">
                     <Card>
                         <div className="p-field">
                             <label htmlFor="time">시간</label>
                             <ListBox value={selectedTime} options={time} onChange={(e) => (reservation.revTime = e.value.time)} optionLabel="time" listStyle={{ maxHeight: '375px' }} />
-                        </div>
+                            </div>
                     </Card>
                 </div>
             </div>

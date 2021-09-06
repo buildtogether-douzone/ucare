@@ -19,4 +19,21 @@
 		)
 	</insert>
 	
+		<select id="retrieveAll" resultType="reservationvo" >
+		SELECT 
+			A.rev_no AS revNo, 
+			A.rev_date AS revDate,
+			A.rev_time AS revTime,
+			A.ins_dt AS insDt,
+			A.patient_no AS patientNo,
+			B.name AS name,
+			B.tel_no AS telNo,
+			CONCAT(SUBSTR(B.ssn, 1, 8), '******') AS ssn
+			FROM
+				ucare.reservation A
+			INNER JOIN ucare.patient B ON
+				A.patient_no = B.patient_no
+			ORDER BY A.rev_no DESC
+	</select>
+	
 </mapper>

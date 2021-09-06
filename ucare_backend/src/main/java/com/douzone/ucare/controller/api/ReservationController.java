@@ -3,6 +3,7 @@ package com.douzone.ucare.controller.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,11 @@ public class ReservationController {
 	@PostMapping("/create")
 	public ResponseEntity<?> create(@RequestBody ReservationVo reservation) {
 		return new ResponseEntity<>(reservationService.create(reservation), HttpStatus.OK);
+	}
+	
+	@GetMapping("/retrieveAll")
+	public ResponseEntity<?> retrieveAll() {
+		return new ResponseEntity<>(reservationService.retrieveAll(), HttpStatus.OK);
 	}
 	
 

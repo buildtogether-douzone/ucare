@@ -1,6 +1,8 @@
 package com.douzone.ucare.service;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +19,8 @@ public class ReservationService {
 		return ReservationRepository.create(reservation);
 	}
 
+	public List<ReservationVo> retrieveAll() {
+		return ReservationRepository.retrieveAll();
+	}
 
 }

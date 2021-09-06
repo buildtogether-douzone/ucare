@@ -40,9 +40,5 @@ public class UserController {
 		return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
 	}
 	
-	@GetMapping("/get")
-	public ResponseEntity<?> get() {
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
 	
 }

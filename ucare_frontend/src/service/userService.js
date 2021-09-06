@@ -23,10 +23,6 @@ class userService {
     return axios.put(USER_API_BASE_URL + '/update', formData, HEADERS)
   }
 
-  get(){
-    return axios.get(USER_API_BASE_URL + '/get', HEADERS);
-  }
-
 }
 
 export default new userService();
