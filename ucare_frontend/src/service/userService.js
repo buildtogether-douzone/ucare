@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { USER_API_BASE_URL } from './urlConfig';
+import { USER_API_BASE_URL, HEADERS } from './urlConfig';
 
 class userService {
 
@@ -8,23 +8,23 @@ class userService {
   }
 
   fetchUserByID(user){
-    return axios.post(USER_API_BASE_URL + '/fetchUser', user);
+    return axios.post(USER_API_BASE_URL + '/fetchUser', user, HEADERS);
   }
 
   deleteUser(userID){
-    return axios.delete(USER_API_BASE_URL + '/' + userID);
+    return axios.delete(USER_API_BASE_URL + '/' + userID, HEADERS);
   }
   
   addUser(user){
-    return axios.post(USER_API_BASE_URL + '/add', user);
+    return axios.post(USER_API_BASE_URL + '/add', user, HEADERS);
   }
 
   updateUser(formData){
-    return axios.put(USER_API_BASE_URL + '/update', formData)
+    return axios.put(USER_API_BASE_URL + '/update', formData, HEADERS)
   }
 
   get(){
-    return axios.get(USER_API_BASE_URL + '/get');
+    return axios.get(USER_API_BASE_URL + '/get', HEADERS);
   }
 
 }

@@ -114,6 +114,13 @@ public class UserVo {
 	public void setImage(String image) {
 		this.image = image;
 	}
+	@Override
+	public String toString() {
+		return "UserVo [rowNo=" + rowNo + ", userNo=" + userNo + ", id=" + id + ", password=" + password + ", name="
+				+ name + ", gender=" + gender + ", ssn=" + ssn + ", emailId=" + emailId + ", email=" + email
+				+ ", address=" + address + ", telNo=" + telNo + ", role=" + role + ", status=" + status + ", remark="
+				+ remark + ", birth=" + birth + ", image=" + image + "]";
+	}
 	
 
 	

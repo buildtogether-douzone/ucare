@@ -31,9 +31,6 @@ public class UserService {
 		return userRepository.addUser(user);
 	}
 
-	public UserVo login(UserVo user) {
-		return userRepository.findUser(user);
-	}
 
 	public int updateUser(UserVo user) {
 		return userRepository.updateUser(user);

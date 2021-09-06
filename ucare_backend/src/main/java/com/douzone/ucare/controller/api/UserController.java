@@ -24,11 +24,6 @@ public class UserController {
 	@Autowired
 	private FileUploadService fileUploadService;
 	
-	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody UserVo user) {
-		return new ResponseEntity<>(userService.login(user), HttpStatus.OK);
-	}
-	
 	@PostMapping("/add")
 	public ResponseEntity<?> add(@RequestBody UserVo user) {
 		return new ResponseEntity<>(userService.addUser(user), HttpStatus.OK);

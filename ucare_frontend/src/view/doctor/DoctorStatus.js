@@ -3,13 +3,12 @@ import { DataScroller } from 'primereact/datascroller';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
-import { Divider } from 'primereact/divider';
 import { Menu } from 'primereact/menu';
 import { Dialog } from 'primereact/dialog';
 import { Panel } from 'primereact/panel';
-import { ProgressBar } from 'primereact/progressbar';
 import { Checkbox } from 'primereact/checkbox';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { AutoComplete } from 'primereact/autocomplete';
 
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
@@ -35,7 +34,7 @@ export default function Status() {
         gender: '',
         insurance_yn: '',
         diagnosis_type: ''
-    }
+    };
 
     let emptyPastDiagnosis = {
         diagnosisNo: null,
@@ -43,7 +42,7 @@ export default function Status() {
         cureYN: '',
         diagnosisDate: '',
         diseaseName: ''
-    }
+    };
 
     let diagnosisItem = {
         cureYN: '',
@@ -52,7 +51,7 @@ export default function Status() {
         receiptNo: null,
         diseaseNo: null,
         patientNo: null
-    }
+    };
 
     const [items, setItems] = useState([]);
     const [pastDiagnosis, setPastDiagnosis] = useState([]);
@@ -66,6 +65,21 @@ export default function Status() {
     const [checkboxValue, setCheckboxValue] = useState([]);
     const [memo, setMemo] = useState('');
     const [cureYN, setCureYN] = useState('');
+    const [countries, setCountries] = useState([]);
+    const [selectedCountry2, setSelectedCountry2] = useState(null);
+    const [filteredCountries, setFilteredCountries] = useState(null);
+    const groupedCities = [{
+        data: [
+            {"name": "Afghanistan", "code": "AF"},
+            {"name": "Åland Islands", "code": "AX"},
+            {"name": "Albania", "code": "AL"},
+            {"name": "Wallis and Futuna", "code": "WF"},
+            {"name": "Western Sahara", "code": "EH"},
+            {"name": "Yemen", "code": "YE"},
+            {"name": "Zambia", "code": "ZM"},
+            {"name": "Zimbabwe", "code": "ZW"}
+        ]
+    }];
 
     const menu = useRef(null);
 
@@ -123,7 +137,33 @@ export default function Status() {
         }
     }
 
+    const searchCountry = (event) => {
+        setTimeout(() => {
+            let _filteredCountries;
+            if (!event.query.trim().length) {
+                _filteredCountries = [...countries];
+            }
+            else {
+                _filteredCountries = countries.filter((country) => {
+                    return country.name.toLowerCase().startsWith(event.query.toLowerCase());
+                });
+            }
+
+            setFilteredCountries(_filteredCountries);
+        }, 250);
+    }
+
+    const diseaseTemplate = (item) => {
+        return (
+            <div className="country-item">
+                <div>{item.name}</div>
+            </div>
+        );
+    }
+
     useEffect(() => {
+        console.log(groupedCities)
+        setCountries(groupedCities[0].data);
         statusService.retrieve(dateFormat(date))
           .then( res => {
             console.log('success!!');
@@ -208,7 +248,6 @@ export default function Status() {
                                 res.data[i].value = '치료';
                              else 
                                 res.data[i].value = '치료X';
-                            
                         }
                         setPastDiagnosis(res.data);
                     })
@@ -402,6 +441,7 @@ export default function Status() {
                         <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">병명</label>
                         <div className="p-col-12 p-md-10">
                             <Dropdown optionLabel="diseaseNm" optionValue="diseaseNo" value={diseaseItem} options={diseaseItems} onChange={(e) => setDiseaseItem(e.value)} placeholder="Select a Disease"/>
+                            <AutoComplete value={selectedCountry2} suggestions={filteredCountries} completeMethod={searchCountry} field="name" dropdown forceSelection itemTemplate={diseaseTemplate} onChange={(e) => setSelectedCountry2(e.value)} />
                         </div>
                     </div>
                     <div className="p-field p-grid">

@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import userService from '../service/userService';
 import Footer from '../layout/Footer';
+import jwt from 'jwt-decode';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
@@ -82,15 +83,21 @@ export default function SignInSide({ history }) {
     
     userService.login(user)
     .then( res => {
-      if(res.data) {
-        console.log(user.id + '님이 성공적으로 로그인하였습니다.');
-        sessionStorage.setItem('user', id);
-        sessionStorage.setItem('user_no', res.data.userNo);
-        sessionStorage.setItem('role', res.data.role);
+      var token = res.headers.authorization;
+      localStorage.setItem("authorization",token);
+      
+      token = token.replace('Bearer','');
+      var decoded = jwt(token);
+      console.log(decoded);
+      if(decoded) {
+        console.log(decoded.username + '님이 성공적으로 로그인하였습니다.');
+        sessionStorage.setItem('user', decoded.id);
+        sessionStorage.setItem('user_no', decoded.userNo);
+        sessionStorage.setItem('role', decoded.role);
         
-        history.push(res.data.role=='관리자'? '/admin/main' :
-                     res.data.role=='의사' ? '/doctor/main' :
-                     res.data.role=='간호사' && '/nurse/main');
+        history.push(decoded.role=='관리자'? '/admin/main' :
+                     decoded.role=='의사' ? '/doctor/main' :
+                     decoded.role=='간호사' && '/nurse/main');
       } else {
         console.log('로그인 정보가 없습니다.');
       }
