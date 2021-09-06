@@ -17,10 +17,10 @@ export default function Routes() {
         <Switch>
             <PublicRoute exact path="/" component={SignIn} />
             <PublicRoute exact path="/get" component={Get} />
-            <PrivateRoute exact path="/Home" component={Home} role={null}/>
+            <PrivateRoute exact path="/Home" component={Home}/>
             <PublicRoute exact path="/signUp" component={SignUp} />
-            <PrivateRoute exact path="/profile" component={Profile} role={null}/>
-            <PrivateRoute exact path="/board" component={Board} role={null}/>
+            <PrivateRoute exact path="/profile" component={Profile}/>
+            <PrivateRoute exact path="/board" component={Board}/>
         </Switch>
     );
 }
