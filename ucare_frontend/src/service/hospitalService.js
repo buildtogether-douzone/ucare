@@ -1,13 +1,13 @@
 import axios from 'axios';
-import { HOSPITAL_API_BASE_URL } from './urlConfig';
+import { HOSPITAL_API_BASE_URL, HEADERS } from './urlConfig';
 
 class hospitalService {
     fetchHospitalInfo() {
-        return axios.get(HOSPITAL_API_BASE_URL + '/fetchInfo');
+        return axios.get(HOSPITAL_API_BASE_URL + '/fetchInfo', HEADERS);
     }
 
     updateData(formData){
-        return axios.post(HOSPITAL_API_BASE_URL + '/updateInfo', formData);
+        return axios.post(HOSPITAL_API_BASE_URL + '/updateInfo', formData, HEADERS);
     }
 }
 

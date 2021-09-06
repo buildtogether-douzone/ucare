@@ -21,14 +21,14 @@
 		)
 	</insert>
 	
-	<select id="findUser" parameterType="uservo" resultType="uservo">
+	<select id="findUser" parameterType="string" resultType="uservo">
 		SELECT id,
 			   name,
+			   password,
 			   role,
 			   user_no as userNo
 		FROM ucare.user
-		WHERE id = #{id }
-		  AND password = #{password }
+		WHERE id = #{username }
 	</select>
 	
 	<select id="findByID" parameterType="uservo" resultType="uservo">
