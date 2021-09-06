@@ -8,7 +8,7 @@ import DoctorMain from '../view/doctor/DoctorMain';
 export default function Routes() {
     return (
         <Switch>
-            <PrivateRoute exact path="/doctor/main" component={DoctorMain} /> 
+            <PrivateRoute exact path="/doctor/main" component={DoctorMain} role={"의사"}/> 
         </Switch>
     );
 }

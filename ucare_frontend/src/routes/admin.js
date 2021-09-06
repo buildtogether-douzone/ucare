@@ -8,7 +8,7 @@ import Main from '../view/admin/AdminMain';
 export default function Routes() {
     return (
         <Switch>
-            <PrivateRoute exact path="/admin/main" component={Main} />
+            <PrivateRoute exact path="/admin/main" component={Main} role={"관리자"} />
         </Switch>
     );
 }

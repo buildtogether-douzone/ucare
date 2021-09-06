@@ -88,7 +88,6 @@ export default function SignInSide({ history }) {
       
       token = token.replace('Bearer','');
       var decoded = jwt(token);
-      console.log(decoded);
       if(decoded) {
         console.log(decoded.username + '님이 성공적으로 로그인하였습니다.');
         sessionStorage.setItem('user', decoded.id);

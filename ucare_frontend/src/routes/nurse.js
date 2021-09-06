@@ -8,7 +8,7 @@ import NurseMain from '../view/nurse/NurseMain';
 export default function Routes() {
     return (
         <Switch>
-            <PrivateRoute exact path="/nurse/main" component={NurseMain} /> 
+            <PrivateRoute exact path="/nurse/main" component={NurseMain} role={"간호사"}/> 
         </Switch>
     );
 }
