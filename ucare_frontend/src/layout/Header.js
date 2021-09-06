@@ -104,6 +104,7 @@ const Header = ({ open, drawerManage }) => {
   const logout = (e) => {
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('role');
+    localStorage.removeItem('authorization');
     sessionStorage.clear();
   }
 
