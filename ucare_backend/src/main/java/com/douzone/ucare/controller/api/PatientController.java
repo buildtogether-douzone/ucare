@@ -30,7 +30,7 @@ public class PatientController {
 	public ResponseEntity<?> retrieveAll() {
 		return new ResponseEntity<>(patientService.retrieveAll(), HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/retrieve/{patientNo}")
 	public ResponseEntity<?> retrieveAll(@PathVariable("patientNo") Long patientNo) {
 		return new ResponseEntity<>(patientService.retrieve(patientNo), HttpStatus.OK);
@@ -40,4 +40,6 @@ public class PatientController {
 	public ResponseEntity<?> update(@RequestBody PatientVo patient) {
 		return new ResponseEntity<>(patientService.update(patient), HttpStatus.OK);
 	}
+
+	
 }

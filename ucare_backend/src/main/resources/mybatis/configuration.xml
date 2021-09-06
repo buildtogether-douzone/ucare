@@ -12,6 +12,7 @@
 		<typeAlias type="com.douzone.ucare.vo.BoardVo" alias="boardvo"/>
 		<typeAlias type="com.douzone.ucare.vo.TimeVo" alias="timevo"/>
 		<typeAlias type="com.douzone.ucare.vo.DiagnosisVo" alias="diagnosisvo"/>
+		<typeAlias type="com.douzone.ucare.vo.ReservationVo" alias="reservationvo"/>
     </typeAliases>	
 	<mappers>
 		<mapper resource="mybatis/mappers/user.xml" />
@@ -25,5 +26,6 @@
 		<mapper resource="mybatis/mappers/status.xml" />
 		<mapper resource="mybatis/mappers/time.xml" />
 		<mapper resource="mybatis/mappers/diagnosis.xml" />
+		<mapper resource="mybatis/mappers/reservation.xml" />
 	</mappers>
 </configuration>

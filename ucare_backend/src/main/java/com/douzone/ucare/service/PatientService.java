@@ -30,4 +30,5 @@ public class PatientService {
 	public int update(PatientVo patient) {
 		return PatientRepository.update(patient);
 	}
+
 }

@@ -44,7 +44,7 @@
 				B.diagnosis_type AS diagnosis,
 				B.patient_no AS patientNo,
 				A.receipt_dt AS receiptDt,
-				TO_CHAR(receipt_time, 'HH24:MI:SS') as receiptTime,
+				TO_CHAR(receipt_time, 'HH24:MI:SS') AS receiptTime,
 				A.remark AS remark,
 				A.state AS state,
 				(ROW_NUMBER() OVER()) as no,

@@ -88,5 +88,5 @@
 		  FROM ucare.disease
 		 WHERE disease_no = #{diseaseNo }
 	</delete>
-
+	
 </mapper>

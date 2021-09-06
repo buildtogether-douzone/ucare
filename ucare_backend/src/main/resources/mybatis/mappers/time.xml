@@ -21,6 +21,7 @@
 	
 		<select id="retrieveTime" parameterType="string" resultType="timevo" >
 		SELECT 
+			time_no AS timeNo,
 			time AS time
 		FROM ucare.time
 		WHERE date = TO_DATE(#{date }, 'YYYY-MM-DD')

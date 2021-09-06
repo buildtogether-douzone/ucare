@@ -30,6 +30,7 @@ public class PatientRepository {
 	public int update(PatientVo patient) {
 		return sqlSession.update("patient.update", patient);
 	}
+	
 }
 
 
