@@ -9,7 +9,7 @@ export const BOARD_API_BASE_URL = "http://localhost:8080/ucare_backend/api/board
 export const STATUS_API_BASE_URL = "http://localhost:8080/ucare_backend/api/status";
 export const TIME_API_BASE_URL = "http://localhost:8080/ucare_backend/api/time";
 export const DIAGNOSIS_API_BASE_URL = "http://localhost:8080/ucare_backend/api/diagnosis";
-export const Reservation_API_BASE_URL = "http://localhost:8080/ucare_backend/api/reservation";
+export const RESERVATION_API_BASE_URL = "http://localhost:8080/ucare_backend/api/reservation";
 
 export const HEADERS = {
     headers: {
