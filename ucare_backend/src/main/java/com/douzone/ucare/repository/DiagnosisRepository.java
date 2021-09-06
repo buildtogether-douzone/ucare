@@ -14,6 +14,10 @@ public class DiagnosisRepository {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	public int create(DiagnosisVo data) {
+		return sqlSession.insert("diagnosis.create", data);
+	}
+	
 	public List<DiagnosisVo> retrieveByPatientNo(Long patientNo) {
 		return sqlSession.selectList("diagnosis.retrieveByPatientNo", patientNo);
 	}

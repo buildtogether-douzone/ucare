@@ -14,6 +14,10 @@ public class DiagnosisService {
 	@Autowired
 	private DiagnosisRepository DiagnosisRepository;
 	
+	public int create(DiagnosisVo data) {
+		return DiagnosisRepository.create(data);
+	}
+	
 	public List<DiagnosisVo> retrieveByPatientNo(Long patientNo) {
 		return DiagnosisRepository.retrieveByPatientNo(patientNo);
 	}

@@ -15,6 +15,7 @@ import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
 import patientService from '../../service/patientService';
 import diagnosisService from '../../service/diagnosisService';
+import diseaseService from '../../service/diseaseService';
 
 import '../../assets/scss/DataScroller.scss';
 
@@ -44,6 +45,15 @@ export default function Status() {
         diseaseName: ''
     }
 
+    let diagnosisItem = {
+        cureYN: '',
+        memo: '',
+        userNo: null,
+        receiptNo: null,
+        diseaseNo: null,
+        patientNo: null
+    }
+
     const [items, setItems] = useState([]);
     const [pastDiagnosis, setPastDiagnosis] = useState([]);
     const [item, setItem] = useState(emptyItem);
@@ -51,14 +61,11 @@ export default function Status() {
     const [patient, setPatient] = useState(emptyPatient);
     const [date, setDate] = useState(new Date());
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
-    const [sortKey, setSortKey] = useState(null);
-    const [sortField, setSortField] = useState(null);
+    const [diseaseItem, setDiseaseItem] = useState(null);
+    const [diseaseItems, setDiseaseItems] = useState([]);
     const [checkboxValue, setCheckboxValue] = useState([]);
-    const [value1, setValue1] = useState('');
-    const sortOptions = [
-        {label: 'Price High to Low', value: '!price'},
-        {label: 'Price Low to High', value: 'price'},
-    ];
+    const [memo, setMemo] = useState('');
+    const [cureYN, setCureYN] = useState('');
 
     const menu = useRef(null);
 
@@ -137,6 +144,16 @@ export default function Status() {
           .catch(err => {
             console.log('retrieve() Error!', err);
         });
+
+        diseaseService.retrieveAll()
+        .then( res => {
+            console.log('success!!');
+            setDiseaseItems(res.data);
+        })
+        .catch(err => {
+            console.log('retrieveDisease() Error!', err);
+        });
+
     }, []);
 
     const deleteItem = () => {
@@ -166,13 +183,6 @@ export default function Status() {
         setDeleteItemDialog(true);
     }
 
-    const selectOptions = [
-        {label: '진료중', value: 'care'},
-        {label: '진료대기중', value: 'careWait'},
-        {label: '수납대기중', value: 'wait'},
-        {label: '완료', value: 'finish'}
-    ];
-
     // yyyy-MM-dd 포맷으로 반환
     const dateFormat = (date) => {
         var year = date.getFullYear();              //yyyy
@@ -184,11 +194,22 @@ export default function Status() {
     }
 
     const menuControl = (e, data) => {
+        const index = findIndexByNo(data.receiptNo);
+        setItem(items[index]);
+
         patientService.retrieve(data.patientNo)
             .then(res => {
                 setPatient(res.data[0]);
+                console.log(res.data);
                 diagnosisService.retrieveByPatientNo(res.data[0].patientNo)
                     .then(res => {
+                        for(var i = 0; i < res.data.length; i++) {
+                            if(res.data[i].cureYN === 'true') 
+                                res.data[i].value = '치료';
+                             else 
+                                res.data[i].value = '치료X';
+                            
+                        }
                         setPastDiagnosis(res.data);
                     })
                     .catch(err => {
@@ -218,11 +239,11 @@ export default function Status() {
         return (
             <div className="product-item" aria-controls="popup_menu" aria-haspopup>
                 <div className="product-detail">
-                    <div className="product-name">{data.diagnosisTime}</div>
+                    <div className="product-name">{data.diagnosisDate}</div>
                 </div>
                 <div className="product-price">
                     <div className="product-name">{data.diseaseName}</div>
-                    <div className="product-description">{data.cureYN}</div>
+                    <div className="product-description">{data.value}</div>
                 </div>
             </div>
         );
@@ -281,6 +302,29 @@ export default function Status() {
             <Button label="예" icon="pi pi-check" className="p-button-text" onClick={deleteItem} />
         </React.Fragment>
     );
+
+    const saveDiagnosis = () => {
+        diagnosisItem.diseaseNo = diseaseItem;
+        diagnosisItem.cureYN = cureYN;
+        diagnosisItem.diagnosisMemo = memo;
+        diagnosisItem.patientNo = patient.patientNo;
+        diagnosisItem.receiptNo = item.receiptNo;
+        diagnosisItem.userNo = sessionStorage.getItem('user_no');
+
+        diagnosisService.create(diagnosisItem)
+          .then( res => {
+            console.log('success!!');
+            diagnosisItem.diseaseNo = null;
+            diagnosisItem.cureYN = '';
+            diagnosisItem.diagnosisMemo = '';
+            diagnosisItem.patientNo = null;
+            diagnosisItem.receiptNo = null;
+            diagnosisItem.userNo = null;
+        })
+          .catch(err => {
+            console.log('update() Error!', err);
+        });
+    }
 
     const onCheckboxChange = (e) => {
         let selectedValue = [...checkboxValue];
@@ -357,23 +401,23 @@ export default function Status() {
                     <div className="p-field p-grid">
                         <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">병명</label>
                         <div className="p-col-12 p-md-10">
-                            <Dropdown options={sortOptions} value={sortKey} optionLabel="label" onChange={onSortChange}/>
+                            <Dropdown optionLabel="diseaseNm" optionValue="diseaseNo" value={diseaseItem} options={diseaseItems} onChange={(e) => setDiseaseItem(e.value)} placeholder="Select a Disease"/>
                         </div>
                     </div>
                     <div className="p-field p-grid">
                         <label htmlFor="email3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">처방</label>
                         <div className="p-col-12 p-md-10">
-                            <Checkbox inputId="checkOption1" name="option" value="Chicago" checked={checkboxValue.indexOf('Chicago') !== -1} onChange={onCheckboxChange} />
+                            <Checkbox onChange={e => setCureYN(e.checked)} checked={cureYN}></Checkbox>
                             <label htmlFor="checkOption1"> 치료</label>
                         </div>
                     </div>
                 </div>
                     <div className="card">
                         <h5>진료메모</h5>
-                        <InputTextarea value={value1} onChange={(e) => setValue1(e.target.value)} rows={5} cols={30} />
+                        <InputTextarea value={memo} onChange={(e) => setMemo(e.target.value)} rows={5} cols={30} />
                     </div>
                     <div>
-                        <Button type="button" label="진료완료" />
+                        <Button type="button" label="진료완료" onClick={saveDiagnosis} />
                     </div>
                 </Panel>
                 </div>
