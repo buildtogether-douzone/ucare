@@ -7,7 +7,7 @@ export default function PrivateRoute ({ component: Component, role ,...rest}) {
             {...rest}
             render = {props =>
                 role != null ?
-                sessionStorage.getItem('user') && sessionStorage.getItem('role') == role ?(
+                !!sessionStorage.getItem('user') && sessionStorage.getItem('role') == role ?(
                     <Component {...props} />
                 ) : ( 
                     <Redirect to={{
@@ -16,7 +16,7 @@ export default function PrivateRoute ({ component: Component, role ,...rest}) {
                                   }}
                     />
                 ) : 
-                sessionStorage.getItem('user')?(
+                !!sessionStorage.getItem('user')?(
                     <Component {...props} />
                 ) : ( 
                     <Redirect to={{
