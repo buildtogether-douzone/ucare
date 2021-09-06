@@ -23,7 +23,7 @@ public class PatientRepository {
 		return sqlSession.selectList("patient.retrieveAll");
 	}
 	
-	public List<ReceiptVo> retrieve(Long patientNo) {
+	public List<PatientVo> retrieve(Long patientNo) {
 		return sqlSession.selectList("patient.retrieve", patientNo);
 	}
 

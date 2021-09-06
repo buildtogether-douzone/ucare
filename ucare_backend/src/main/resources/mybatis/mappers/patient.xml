@@ -43,7 +43,7 @@
 		ORDER BY patient_no desc
 	</select>
 	
-	<select id="retrieve" resultType="patientvo" >
+	<select id="retrieve" parameterType="patientvo" resultType="patientvo" >
 		SELECT 
 			patient_no AS patientNo, 
 			name,

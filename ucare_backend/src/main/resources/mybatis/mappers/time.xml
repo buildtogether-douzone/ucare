@@ -18,4 +18,12 @@
 			WHERE date = TO_DATE(#{receiptDt }, 'YYYY-MM-DD')
 			  AND time = #{diagnosisTime }
 	</update>
+	
+		<select id="retrieveTime" parameterType="string" resultType="timevo" >
+		SELECT 
+			time AS time
+		FROM ucare.time
+		WHERE date = TO_DATE(#{date }, 'YYYY-MM-DD')
+		AND status = false
+	</select>
 </mapper>

@@ -8,6 +8,9 @@ class timeService {
   updateByCancel(data){
     return axios.put(TIME_API_BASE_URL + '/updateByCancel', data)
   }
+  retrieveAll(date){
+    return axios.get(TIME_API_BASE_URL + '/retrieveAll/' + date);
+  }
 }
 
 export default new timeService();

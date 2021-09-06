@@ -23,7 +23,7 @@ public class PatientService {
 		return PatientRepository.retrieveAll();
 	}
 	
-	public List<ReceiptVo> retrieve(Long patientNo) {
+	public List<PatientVo> retrieve(Long patientNo) {
 		return PatientRepository.retrieve(patientNo);
 	}
 	

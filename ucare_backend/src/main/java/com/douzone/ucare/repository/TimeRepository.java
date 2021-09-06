@@ -1,10 +1,14 @@
 package com.douzone.ucare.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.douzone.ucare.vo.ReceiptVo;
+import com.douzone.ucare.vo.TimeVo;
+
 
 @Repository
 public class TimeRepository {
@@ -18,5 +22,9 @@ public class TimeRepository {
 
 	public int updateByCancel(ReceiptVo data) {
 		return sqlSession.update("time.updateByCancel", data);
+	}
+	
+	public List<TimeVo> retrieveTime(String date) {
+		return sqlSession.selectList("time.retrieveTime", date);
 	}
 }
