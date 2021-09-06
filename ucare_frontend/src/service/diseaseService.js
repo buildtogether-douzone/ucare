@@ -5,6 +5,9 @@ class diseaseService {
   create(data){
     return axios.post(DISEASE_API_BASE_URL + '/create', data, HEADERS);
   }
+  excelCreate(data){
+    return axios.post(DISEASE_API_BASE_URL + '/excelCreate', data, HEADERS);
+  }
   retrieveAll(){
     return axios.get(DISEASE_API_BASE_URL + '/retrieveAll', HEADERS);
   }

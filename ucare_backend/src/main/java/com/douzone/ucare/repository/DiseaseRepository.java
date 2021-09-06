@@ -16,6 +16,10 @@ public class DiseaseRepository {
 	public int create(DiseaseVo data) {
 		return sqlSession.insert("disease.create", data);
 	}
+	
+	public int excelCreate(DiseaseVo data) {
+		return sqlSession.update("disease.createExcel", data);
+	}
 
 	public List<DiseaseVo> retrieveAll() {
 		return sqlSession.selectList("disease.retrieveAll");

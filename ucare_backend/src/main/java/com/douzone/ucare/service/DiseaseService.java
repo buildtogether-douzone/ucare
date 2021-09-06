@@ -16,6 +16,10 @@ public class DiseaseService {
 	public int create(DiseaseVo data) {
 		return diseaseRepository.create(data);
 	}
+	
+	public int excelCreate(DiseaseVo data) {
+		return diseaseRepository.excelCreate(data);
+	}
 
 	public List<DiseaseVo> retrieveAll() {
 		return diseaseRepository.retrieveAll();

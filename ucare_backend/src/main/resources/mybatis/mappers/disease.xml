@@ -4,16 +4,48 @@
 
 	<insert id="create" parameterType="diseasevo">
 		INSERT
-			INTO ucare.disease(disease_nm, symptom)
+			INTO ucare.disease(disease_code, disease_nm, disease_eng_nm, symptom)
 		VALUES(
+			#{diseaseCode },
 			#{diseaseNm },
-			#{symptom })
+			#{diseaseEngNm },
+			#{symptom }
+		)
 	</insert>
+	
+	<update id="createExcel" parameterType="diseasevo">
+		WITH UPSERT AS 
+		(
+			UPDATE ucare.disease SET 
+				disease_code = #{diseaseCode },
+				disease_eng_nm = #{diseaseEngNm },
+				symptom = #{symptom }
+			WHERE
+				disease_nm = #{diseaseNm }
+			RETURNING *
+		)
+		
+		INSERT INTO ucare.disease
+		(
+			disease_code,
+			disease_nm,
+			disease_eng_nm,
+			symptom
+		)
+		SELECT 
+			#{diseaseCode },
+			#{diseaseNm },
+			#{diseaseEngNm },
+			#{symptom }
+		WHERE NOT EXISTS(SELECT * FROM UPSERT WHERE disease_nm = #{diseaseNm })
+	</update>
 
 	<select id="retrieveAll" resultType="diseasevo" >
 		SELECT 
 			disease_no AS diseaseNo,
+			disease_code AS diseaseCode,
 			disease_nm AS diseaseNm,
+			disease_eng_nm AS diseaseEngNm,
 			symptom
 		FROM ucare.disease
 	</select>
@@ -21,7 +53,9 @@
 	<update id="update" parameterType="diseasevo">
 			UPDATE  ucare.disease
 			   SET 
+			   		disease_code = #{diseaseCode },
 			   		disease_nm = #{diseaseNm },
+			   		disease_eng_nm = #{diseaseEngNm },
 			   		symptom = #{symptom }
 			WHERE disease_no = #{diseaseNo }
 	</update>

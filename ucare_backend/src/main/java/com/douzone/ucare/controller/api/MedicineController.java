@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.douzone.ucare.service.FileUploadService;
 import com.douzone.ucare.service.MedicineService;
 import com.douzone.ucare.vo.MedicineVo;
 
@@ -22,9 +21,6 @@ public class MedicineController {
 	
 	@Autowired
 	private MedicineService medicineService;
-	
-	@Autowired
-	private FileUploadService fileUploadService;
 	
 	@PostMapping("/create")
 	public ResponseEntity<?> create(@RequestBody MedicineVo data) {

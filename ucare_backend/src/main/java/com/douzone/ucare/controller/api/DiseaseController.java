@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.douzone.ucare.service.DiseaseService;
-import com.douzone.ucare.service.FileUploadService;
 import com.douzone.ucare.vo.DiseaseVo;
 
 @RestController
@@ -23,12 +22,14 @@ public class DiseaseController {
 	@Autowired
 	private DiseaseService diseaseService;
 	
-	@Autowired
-	private FileUploadService fileUploadService;
-	
 	@PostMapping("/create")
 	public ResponseEntity<?> create(@RequestBody DiseaseVo data) {
 		return new ResponseEntity<>(diseaseService.create(data), HttpStatus.OK);
+	}
+	
+	@PostMapping("/excelCreate")
+	public ResponseEntity<?> excelCreate(@RequestBody DiseaseVo data) {
+		return new ResponseEntity<>(diseaseService.excelCreate(data), HttpStatus.OK);
 	}
 	
 	@GetMapping("/retrieveAll")
