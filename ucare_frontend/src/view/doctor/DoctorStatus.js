@@ -12,19 +12,21 @@ import { MultiSelect } from 'primereact/multiselect';
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
 import patientService from '../../service/patientService';
+import receiptService from '../../service/receiptService';
 import diagnosisService from '../../service/diagnosisService';
 import diseaseService from '../../service/diseaseService';
 import medicineService from '../../service/medicineService';
 
 import '../../assets/scss/DataScroller.scss';
 
-export default function Status() {
+export default function DoctorDiagnosis() {
 
     let emptyItem = {
         receiptNo: null,
         name: '',
         state: '',
-        diagnosisTime: ''
+        diagnosisTime: '',
+        value: ''
     };
 
     let emptyPatient = {
@@ -33,7 +35,7 @@ export default function Status() {
         age: '',
         gender: '',
         insurance_yn: '',
-        diagnosis_type: ''
+        diagnosis: ''
     };
 
     const [items, setItems] = useState([]);
@@ -42,9 +44,9 @@ export default function Status() {
     const [patient, setPatient] = useState(emptyPatient);
     const [date, setDate] = useState(new Date());
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
-    const [diseaseItem, setDiseaseItem] = useState(null);
+    const [diseaseItem, setDiseaseItem] = useState([]);
     const [diseaseItems, setDiseaseItems] = useState([]);
-    const [medicineItem, setMedicineItem] = useState(null);
+    const [medicineItem, setMedicineItem] = useState([]);
     const [medicineItems, setMedicineItems] = useState([]);
     const [memo, setMemo] = useState('');
     const [cureYN, setCureYN] = useState('');
@@ -91,7 +93,6 @@ export default function Status() {
     ];
 
     useEffect(() => {
-        // setCountries(groupedCities[0].data);
         statusService.retrieve(dateFormat(date))
           .then( res => {
             console.log('success!!');
@@ -238,6 +239,7 @@ export default function Status() {
     }
 
     const onDateChange = (event) => {
+        setDate(dateFormat(event.value));
         statusService.retrieve(dateFormat(event.value))
           .then( res => {
             console.log('success!!');
@@ -292,6 +294,36 @@ export default function Status() {
             setMedicineItem(null);
             setCureYN('');
             setMemo('');
+            setDiseaseItem([]);
+            setMedicineItem([]);
+
+            if(pastDiagnosis.length != 0) {
+                let _patientItem = patient;
+                _patientItem.diagnosis = '재진';
+
+                patientService.updateDiagnosis(_patientItem)
+                .then(res => {
+                    setPatient(_patientItem);
+                })
+                .catch(err => {
+                    console.log('update() error', err);
+                })
+            }
+
+            let _receiptItem = item;
+            _receiptItem.state = 'wait';
+            _receiptItem.value = "수납대기중";
+
+            receiptService.updateState(_receiptItem).then(res => {
+                let _index = findIndexByNo(_receiptItem.receiptNo);
+                let _items = items;
+                _items[_index] = _receiptItem;
+
+                setItems(_items);
+            })
+            .catch(err => {
+                console.log('update() error', err);
+            })
         })
           .catch(err => {
             console.log('update() Error!', err);
@@ -380,7 +412,7 @@ export default function Status() {
                 </div>
                 <div className="p-col-12 p-md-6 p-lg-4">
                 <div className="card p-fluid">
-                <Panel header="환자정보" style={{ height: '100%' }} style={{ justifyContent:'center', padding: '20px' }}>
+                <Panel header="환자정보" style={{ height: '100%', justifyContent:'center', padding: '20px' }}>
                     <div className="activity-header">
                         <div className="p-grid">
                             <div className="p-col-6">
@@ -411,7 +443,7 @@ export default function Status() {
                 <Panel header="과거병력" style={{ height: '100%' }} style={{ justifyContent:'center', padding: '20px' }}>
                     <div className="activity-header">
                             <div className="datascroller">
-                                <DataScroller value={pastDiagnosis} itemTemplate={pastDiagnosisTemplate} rows={3} inline scrollHeight="300px" />
+                                <DataScroller value={pastDiagnosis} itemTemplate={pastDiagnosisTemplate} rows={5} inline scrollHeight="300px" />
                             </div>
                     </div>
                 </Panel>
@@ -444,10 +476,10 @@ export default function Status() {
                 </div>
                     <div className="card">
                         <h5>진료메모</h5>
-                        <InputTextarea value={memo} onChange={(e) => setMemo(e.target.value)} rows={10} cols={62} />
+                        <InputTextarea value={memo} onChange={(e) => setMemo(e.target.value)} rows={5} cols={30} autoResize />
                     </div>
                     <div>
-                        <Button type="button" label="진료완료" onClick={saveDiagnosis} />
+                        <Button type="button" label="진료완료" onClick={saveDiagnosis} style={{ marginTop: '20px' }} />
                     </div>
                 </Panel>
                 </div>

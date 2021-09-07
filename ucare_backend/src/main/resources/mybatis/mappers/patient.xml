@@ -3,7 +3,23 @@
 <mapper namespace="patient">	
 	<insert id="create" parameterType="patientvo">
 		INSERT
-			INTO ucare.patient(name, ssn, age, gender, tel_no, address, detail_address, email, insurance_yn, diagnosis_type, visit_date, remark, ins_dt, user_no)
+			INTO ucare.patient(
+				name, 
+				ssn, 
+				age, 
+				gender, 
+				tel_no, 
+				address, 
+				detail_
+				address, 
+				email, 
+				insurance_yn, 
+				diagnosis_type, 
+				visit_date, 
+				remark, 
+				ins_dt, 
+				user_no
+			)
 		VALUES(
 			#{name },
 			#{ssn },
@@ -36,9 +52,9 @@
 			insurance_yn AS insurance,
 			diagnosis_type AS diagnosis,
 			ins_dt AS insDt,
-		   split_part(email, '@', 1) as emailId,
-		   split_part(email, '@', 2) as email,
-		   remark AS remark
+		    split_part(email, '@', 1) as emailId,
+		    split_part(email, '@', 2) as email,
+		    remark AS remark
 		FROM ucare.patient
 		ORDER BY patient_no desc
 	</select>
@@ -66,21 +82,28 @@
 	
 	
 	<update id="update" parameterType="patientvo">
-			UPDATE  ucare.patient
-			   SET 
-		   		name = #{name },
-		   		ssn = #{ssn },
-		   		age = #{age },
-		   		gender = #{gender },
-		   		tel_no = #{telNo },
-		   		address = #{address },
-		   		detail_address = #{detailAddress }, 
-		   		email = #{domain },
-		   		insurance_yn = #{insurance },
-		   		remark = #{remark },
-		   		upt_no = #{uptNo },
-		   		upt_dt = now()
-			WHERE patient_no = #{patientNo }
+		UPDATE  ucare.patient
+		   SET 
+	   		name = #{name },
+	   		ssn = #{ssn },
+	   		age = #{age },
+	   		gender = #{gender },
+	   		tel_no = #{telNo },
+	   		address = #{address },
+	   		detail_address = #{detailAddress }, 
+	   		email = #{domain },
+	   		insurance_yn = #{insurance },
+	   		remark = #{remark },
+	   		upt_no = #{uptNo },
+	   		upt_dt = now()
+		WHERE patient_no = #{patientNo }
+	</update>
+	
+	<update id="updateDiagnosis" parameterType="patientvo">
+		UPDATE  ucare.patient
+		   SET 
+	   		diagnosis_type = #{diagnosis }
+		WHERE patient_no = #{patientNo }
 	</update>
 	
 	<delete id="delete" parameterType="int">

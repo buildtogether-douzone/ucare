@@ -18,6 +18,10 @@ class patientService {
   update(data){
     return axios.put(PATIENT_API_BASE_URL + '/update', data, HEADERS);
   }
+
+  updateDiagnosis(data){
+    return axios.put(PATIENT_API_BASE_URL + '/updateDiagnosis', data, HEADERS);
+  }
 }
 
 export default new patientService();

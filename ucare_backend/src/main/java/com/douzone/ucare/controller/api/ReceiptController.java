@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +30,11 @@ public class ReceiptController {
 	@GetMapping("/retrieveAll/{patientNo}")
 	public ResponseEntity<?> retrieveAll(@PathVariable("patientNo") Long patientNo) {
 		return new ResponseEntity<>(receiptService.retrieveAll(patientNo), HttpStatus.OK);
+	}
+	
+	@PutMapping("/updateState")
+	public ResponseEntity<?> updateState(@RequestBody ReceiptVo receipt) {
+		return new ResponseEntity<>(receiptService.updateState(receipt), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/delete/{receiptNo}")

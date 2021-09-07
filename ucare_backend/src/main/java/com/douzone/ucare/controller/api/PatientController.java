@@ -40,6 +40,10 @@ public class PatientController {
 	public ResponseEntity<?> update(@RequestBody PatientVo patient) {
 		return new ResponseEntity<>(patientService.update(patient), HttpStatus.OK);
 	}
-
+	
+	@PutMapping("/updateDiagnosis")
+	public ResponseEntity<?> updateDiagnosis(@RequestBody PatientVo patient) {
+		return new ResponseEntity<>(patientService.updateDiagnosis(patient), HttpStatus.OK);
+	}
 	
 }

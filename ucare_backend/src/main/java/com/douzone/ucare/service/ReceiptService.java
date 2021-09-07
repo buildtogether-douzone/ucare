@@ -22,6 +22,10 @@ public class ReceiptService {
 		return ReceiptRepository.retrieveAll(patientNo);
 	}
 	
+	public int updateState(ReceiptVo receipt) {
+		return ReceiptRepository.updateState(receipt);
+	}
+	
 	public int delete(Long receiptNo) {
 		return ReceiptRepository.delete(receiptNo);
 	}

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.douzone.ucare.repository.PatientRepository;
 import com.douzone.ucare.vo.PatientVo;
-import com.douzone.ucare.vo.ReceiptVo;
 
 @Service
 public class PatientService {
@@ -29,6 +28,10 @@ public class PatientService {
 	
 	public int update(PatientVo patient) {
 		return PatientRepository.update(patient);
+	}
+	
+	public int updateDiagnosis(PatientVo patient) {
+		return PatientRepository.updateDiagnosis(patient);
 	}
 
 }

@@ -57,6 +57,13 @@
 			ORDER BY receipt_no DESC
 	</select>
 	
+	<update id="updateState" parameterType="receiptvo">
+		UPDATE  ucare.receipt
+		   SET 
+	   		state = #{state }
+		WHERE receipt_no = #{receiptNo }
+	</update>
+	
 	<delete id="delete" parameterType="Long">
 		DELETE
 		  FROM ucare.receipt

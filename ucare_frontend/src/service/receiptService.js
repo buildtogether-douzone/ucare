@@ -11,6 +11,10 @@ class receiptService {
     return axios.get(RECEIPT_API_BASE_URL + '/retrieveAll/' + patientNo, HEADERS);
   }
 
+  updateState(data){
+    return axios.put(RECEIPT_API_BASE_URL + '/updateState', data, HEADERS);
+  }
+
   delete(receiptNo){
     return axios.delete(RECEIPT_API_BASE_URL + '/delete/' + receiptNo, HEADERS);
   }

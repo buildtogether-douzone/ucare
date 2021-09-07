@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.douzone.ucare.vo.PatientVo;
-import com.douzone.ucare.vo.ReceiptVo;
 
 @Repository
 public class PatientRepository {
@@ -29,6 +28,10 @@ public class PatientRepository {
 
 	public int update(PatientVo patient) {
 		return sqlSession.update("patient.update", patient);
+	}
+	
+	public int updateDiagnosis(PatientVo patient) {
+		return sqlSession.update("patient.updateDiagnosis", patient);
 	}
 	
 }

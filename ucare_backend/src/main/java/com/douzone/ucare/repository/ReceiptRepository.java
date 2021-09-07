@@ -22,6 +22,10 @@ public class ReceiptRepository {
 		return sqlSession.selectList("receipt.retrieveAll", patientNo);
 	}
 	
+	public int updateState(ReceiptVo receipt) {
+		return sqlSession.update("receipt.updateState", receipt);
+	}
+	
 	public int delete(Long receiptNo) {
 		return sqlSession.delete("receipt.delete", receiptNo);
 	}
