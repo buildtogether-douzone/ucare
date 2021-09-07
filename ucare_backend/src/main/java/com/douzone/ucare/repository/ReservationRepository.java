@@ -23,6 +23,9 @@ public class ReservationRepository {
 		return sqlSession.selectList("reservation.retrieveAll");
 	}
 	
+	public int delete(Long revNo) {
+		return sqlSession.delete("reservation.delete", revNo);
+	}
 }
 
 

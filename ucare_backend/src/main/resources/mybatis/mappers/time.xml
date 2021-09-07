@@ -27,4 +27,14 @@
 		WHERE date = TO_DATE(#{date }, 'YYYY-MM-DD')
 		AND status = false
 	</select>
+	
+		<update id="updateTime" parameterType="timevo">
+			UPDATE  ucare.time
+			   SET 
+			   		status = true
+			WHERE date = TO_DATE(#{date }, 'YYYY-MM-DD')
+			AND time = #{time }
+	</update>
+	
+	
 </mapper>

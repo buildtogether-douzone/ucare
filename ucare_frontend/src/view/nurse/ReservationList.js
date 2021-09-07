@@ -4,13 +4,16 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import { InputText } from 'primereact/inputtext';
+import { Dropdown } from 'primereact/dropdown';
+import { Dialog } from 'primereact/dialog';
 import reservationService from '../../service/reservationService';
 
 export default function ReservationList() {
     const [reservations, setReservations] = useState(null);
-    const [selectedRepresentative, setSelectedRepresentative] = useState(null);
+    const [reservation, setReservation] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
-    const [selectedStatus, setSelectedStatus] = useState(null);
+    const [date, setDate] = useState(new Date());
+    const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState('');
     const dt = useRef(null);
 
@@ -39,27 +42,21 @@ export default function ReservationList() {
             return false;
         }
 
-        return value === formatDate(filter);
+        return value === dateFormat(filter);
     }
 
-    const formatDate = (date) => {
-        let month = date.getMonth() + 1;
-        let day = date.getDate();
-
-        if (month < 10) {
-            month = '0' + month;
-        }
-
-        if (day < 10) {
-            day = '0' + day;
-        }
-
-        return date.getFullYear() + '-' + month + '-' + day;
+    // yyyy-MM-dd 포맷으로 반환
+    const dateFormat = (date) => {
+        var year = date.getFullYear();              //yyyy
+        var month = (1 + date.getMonth());          //M
+        month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+        var day = date.getDate();                   //d
+        day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+        return year + '-' + month + '-' + day;
     }
-
 
     const onDateChange = (e) => {
-        dt.current.filter(e.value, 'date', 'custom');
+        dt.current.filter(e.value, 'revDate', 'custom');
         setSelectedDate(e.value);
     }
 
@@ -89,44 +86,69 @@ export default function ReservationList() {
         );
     }
 
-    const editItem = (item) => {
-        setItem({ ...item });
-        setItemDialog(true);
+    const monthNavigatorTemplate = (e) => {
+        return <Dropdown value={e.value} options={e.options} onChange={(event) => e.onChange(event.originalEvent, event.value)} style={{ lineHeight: 1 }} />;
+    }
+
+    const yearNavigatorTemplate = (e) => {
+        return <Dropdown value={e.value} options={e.options} onChange={(event) => e.onChange(event.originalEvent, event.value)} className="p-ml-2" style={{ lineHeight: 1 }} />;
     }
 
     const confirmDeleteItem = (item) => {
-        setItem(item);
+        setReservation(item);
         setDeleteItemDialog(true);
     }
 
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" onClick={() => editItem(rowData)} />
                 <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteItem(rowData)} />
             </React.Fragment>
         );
     }
 
+    const hideDeleteItemDialog = () => {
+        setDeleteItemDialog(false);
+    }
+
+    const deleteItem = () => {
+        reservationService.delete(reservation.revNo)
+            .then(res => {
+                setDeleteItemDialog(false);
+                window.location.reload();
+                toast.current.show({ severity: 'success', summary: 'Successful', detail: '삭제 완료!', life: 3000 });
+            })
+            .catch(err => {
+                console.log('delete() Error!', err);
+            })
+    }
+
+    const deleteItemDialogFooter = (
+        <React.Fragment>
+            <Button label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
+            <Button label="예" icon="pi pi-check" className="p-button-text" onClick={deleteItem} />
+        </React.Fragment>
+    );
+
     const reset = () => {
-        setSelectedRepresentative(null);
         setSelectedDate(null);
-        setSelectedStatus(null);
         setGlobalFilter('');
         dt.current.reset();
     }
 
     const header = (
         <div className="table-header">
-            <Button style={{width: '15%'}} type="button" label="Clear" className="p-button-outlined" icon="pi pi-filter-slash" onClick={reset} />
-            <span className="p-input-icon-left">
+            <Button style={{float: 'left'}} type="button" onClick={reset} icon="pi pi-filter-slash" className="p-button-rounded" />
+            <span className="p-input-icon-left" style={{width: '30%', float: 'right'}}>
                 <i className="pi pi-search" />
                 <InputText type="search" value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} placeholder="검색" />
             </span>
+            <Calendar style={{width: '30%', float: 'right'}} id="navigatorstemplate" dateFormat="yy/mm/dd" value={selectedDate} onChange={onDateChange} monthNavigator yearNavigator yearRange="2010:2030"
+                                monthNavigatorTemplate={monthNavigatorTemplate} yearNavigatorTemplate={yearNavigatorTemplate} placeholder="예약 날짜" />
         </div>
     );
 
-    const dateFilter = <Calendar value={selectedDate} onChange={onDateChange} dateFormat="yy-mm-dd" className="p-column-filter" placeholder="예약날짜"/>;
+    const dateFilter = <Calendar value={selectedDate} onChange={onDateChange} dateFormat="yy-mm-dd" className="p-column-filter" placeholder="Registration Date"/>;
 
     return (
         <div className="datatable-filter-demo">
@@ -134,11 +156,18 @@ export default function ReservationList() {
                 <DataTable ref={dt} value={reservations} paginator rows={10}
                     header={header} className="p-datatable-customers"
                     globalFilter={globalFilter} emptyMessage="예약 내역이 없습니다.">
-                    <Column style={{ textAlign: 'center' }} field="name" header="이름" body={nameBodyTemplate} filter filterPlaceholder="이름" />
-                    <Column style={{ textAlign: 'center' }} field="ssn" filterField="ssn" header="주민등록번호" body={countryBodyTemplate} filter filterPlaceholder="주민등록번호" filterMatchMode="contains" />
-                    <Column style={{ textAlign: 'center' }} field="revDate" header="예약날짜" body={dateBodyTemplate} filter filterElement={dateFilter} filterFunction={filterDate} />
+                    <Column style={{ textAlign: 'center' }} field="name" header="이름" body={nameBodyTemplate} />
+                    <Column style={{ textAlign: 'center' }} field="ssn" filterField="ssn" header="주민등록번호" body={countryBodyTemplate} />
+                    <Column style={{ textAlign: 'center' }} field="revDate" header="예약날짜" body={dateBodyTemplate} filterElement={dateFilter} filterFunction={filterDate} />
                     <Column style={{ textAlign: 'center' }} header="예약취소" body={actionBodyTemplate}></Column>
                 </DataTable>
+
+                <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
+                <div className="confirmation-content">
+                    <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
+                    {reservation && <span><b>{reservation.name}</b>님의 예약을 취소하시겠습니까?</span>}
+                </div>
+            </Dialog>
             </div>
         </div>
     );

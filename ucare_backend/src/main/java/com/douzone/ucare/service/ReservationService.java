@@ -13,14 +13,18 @@ import com.douzone.ucare.vo.ReservationVo;
 public class ReservationService {
 	
 	@Autowired
-	private ReservationRepository ReservationRepository;
+	private ReservationRepository reservationRepository;
 
 	public int create(ReservationVo reservation) {
-		return ReservationRepository.create(reservation);
+		return reservationRepository.create(reservation);
 	}
 
 	public List<ReservationVo> retrieveAll() {
-		return ReservationRepository.retrieveAll();
+		return reservationRepository.retrieveAll();
+	}
+	
+	public int delete(Long revNo) {
+	return reservationRepository.delete(revNo);
 	}
 
 }
