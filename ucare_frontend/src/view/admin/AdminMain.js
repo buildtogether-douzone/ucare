@@ -5,6 +5,7 @@ import Setting from './Setting';
 import Hospital from './Hospital';
 import Disease from './Disease';
 import Medicine from './Medicine';
+import SignUp from './SignUp';
 
 const AdminMain = React.forwardRef((props, ref) => {
     return (
@@ -21,6 +22,9 @@ const AdminMain = React.forwardRef((props, ref) => {
         </Slide>
         <Slide>
           <Medicine />
+        </Slide>
+        <Slide>
+          <SignUp />
         </Slide>
       </FullPage>
       </SiteLayout>

@@ -12,8 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { FormControl, FormLabel, Radio, RadioGroup, Container } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import userService from '../service/userService';
-import Footter from '../layout/Footer';
+import userService from '../../service/userService';
+import Footter from '../../layout/Footer';
 
 const useStyles = makeStyles((theme) => ({
   paper: {

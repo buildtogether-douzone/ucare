@@ -46,6 +46,13 @@ const AdminList = React.forwardRef((props, ref) => {
                 </ListItemIcon>
                 <ListItemText primary="의약품 정보" />
             </ListItem>
+            <ListItem button onClick={(e) => { location.href='/#/admin/main'; 
+                                               ref.current !== null && ref.current.scrollToSlide(4) }}>
+                <ListItemIcon>
+                    <ColorizeIcon />
+                </ListItemIcon>
+                <ListItemText primary="회원 등록" />
+            </ListItem>
         </div>
     );
 });
