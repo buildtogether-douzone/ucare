@@ -113,7 +113,6 @@ export default function Reservation() {
 
     const onTimeChange = (e) => {
         setSelectedTime(e.value);
-        reservation.revTime = e.target.value;
     }
 
     const monthNavigatorTemplate = (e) => {
@@ -126,7 +125,6 @@ export default function Reservation() {
 
     const onDateChange = (event) => {
         setDate(event.target.value);
-        reservation.revDate = event.target.value;
         timeService.retrieveAll(dateFormat(event.value))
             .then(res => {
                 console.log('success!!');
