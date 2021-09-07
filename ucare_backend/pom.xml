@@ -179,6 +179,12 @@
 	        <artifactId>java-jwt</artifactId>
 	        <version>3.10.2</version>
       	</dependency>
+
+		<!-- websocket(stomp) -->      	
+      	<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
         
 	</dependencies>
 

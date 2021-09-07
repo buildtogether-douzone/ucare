@@ -42,7 +42,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
-		System.out.println("JwtAuthenticationFilter : 로그인 시도중");
 		
 		// 1. username, password를 받아서, json데이터를 파싱해준다.
 		ObjectMapper om = new ObjectMapper();
@@ -52,7 +51,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("JwtAuthenticationFilter : " + user);
 		
 		// 유저네임패스워드 토큰 생성
 		UsernamePasswordAuthenticationToken authenticationToken = 
@@ -69,7 +67,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		// 3. PrincipalDetails를 세션에 담고 (권한 관리를 위해서)
 		//  = 로그인이 되었다는 뜻.
 		PrincipalDetails principalDetails = (PrincipalDetails)authentication.getPrincipal();
-		System.out.println("로그인 완료됨 ? : " + principalDetails.getUser()); // 로그인이 정상적으로 되었다는 뜻
 		
 		// authentication 객체가 session영역에 저장해야 하고 그 방법이 return 해주면 됨.
 		// 리턴 이유는 권한 관리를 security가 대신 해주기 때문에 편하려고 하는것
@@ -84,7 +81,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
 		// 4. JWT토큰을 만들어서 응답해주면 됨.
-		System.out.println("successfulAuthentication 실행됨 : 인증 완료");
 		
 		PrincipalDetails principalDetails = (PrincipalDetails)authResult.getPrincipal();
 		
