@@ -8,6 +8,7 @@ import ColorizeIcon from '@material-ui/icons/Colorize';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import BlurOnIcon from '@material-ui/icons/BlurOn';
 import EventNoteIcon from '@material-ui/icons/EventNote';
+import HowToRegIcon from '@material-ui/icons/HowToReg';
 
 const AdminList = React.forwardRef((props, ref) => {
     return (
@@ -49,7 +50,7 @@ const AdminList = React.forwardRef((props, ref) => {
             <ListItem button onClick={(e) => { location.href='/#/admin/main'; 
                                                ref.current !== null && ref.current.scrollToSlide(4) }}>
                 <ListItemIcon>
-                    <ColorizeIcon />
+                    <HowToRegIcon />
                 </ListItemIcon>
                 <ListItemText primary="회원 등록" />
             </ListItem>
