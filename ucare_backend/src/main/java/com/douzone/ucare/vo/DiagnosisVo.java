@@ -7,9 +7,9 @@ public class DiagnosisVo {
 	private String diagnosisDate;
 	private int userNo;
 	private int receiptNo;
-	private int diseaseNo;
 	private int patientNo;
-	private String diseaseName;
+	private String diseaseNm;
+	private String medicineNm;
 	
 	public int getDiagnosisNo() {
 		return diagnosisNo;
@@ -47,29 +47,30 @@ public class DiagnosisVo {
 	public void setReceiptNo(int receiptNo) {
 		this.receiptNo = receiptNo;
 	}
-	public int getDiseaseNo() {
-		return diseaseNo;
-	}
-	public void setDiseaseNo(int diseaseNo) {
-		this.diseaseNo = diseaseNo;
-	}
 	public int getPatientNo() {
 		return patientNo;
 	}
 	public void setPatientNo(int patientNo) {
 		this.patientNo = patientNo;
 	}
-	public String getDiseaseName() {
-		return diseaseName;
+	public String getDiseaseNm() {
+		return diseaseNm;
 	}
-	public void setDiseaseName(String diseaseName) {
-		this.diseaseName = diseaseName;
+	public void setDiseaseNm(String diseaseNm) {
+		this.diseaseNm = diseaseNm;
+	}
+	public String getMedicineNm() {
+		return medicineNm;
+	}
+	public void setMedicineNm(String medicineNm) {
+		this.medicineNm = medicineNm;
 	}
 	
 	@Override
 	public String toString() {
 		return "DiagnosisVo [diagnosisNo=" + diagnosisNo + ", diagnosisMemo=" + diagnosisMemo + ", cureYN=" + cureYN
 				+ ", diagnosisDate=" + diagnosisDate + ", userNo=" + userNo + ", receiptNo=" + receiptNo
-				+ ", diseaseNo=" + diseaseNo + ", patientNo=" + patientNo + ", diseaseName=" + diseaseName + "]";
+				+ ", patientNo=" + patientNo + ", diseaseNm=" + diseaseNm + ", medicineNm=" + medicineNm + "]";
 	}
+	
 }

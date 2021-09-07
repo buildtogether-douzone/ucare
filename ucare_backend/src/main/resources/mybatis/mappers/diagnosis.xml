@@ -10,8 +10,9 @@
 				diagnosis_dt, 
 				user_no, 
 				receipt_no, 
-				disease_no, 
-				patient_no
+				patient_no,
+				disease_nm,
+				medicine_nm
 			)
 		VALUES(
 			#{diagnosisMemo },
@@ -19,27 +20,26 @@
 			now(),
 			#{userNo },
 			#{receiptNo },
-			#{diseaseNo },
-			#{patientNo }
+			#{patientNo },
+			#{diseaseNm },
+			#{medicineNm }
 		)
 	</insert>
 
 	<select id="retrieveByPatientNo" resultType="diagnosisvo" >
 		SELECT 
-			A.diagnosis_no AS diagnosisNo,
-			A.diagnosis_memo AS diagnosisMemo,
-			A.cure_yn AS cureYN,
-			A.diagnosis_dt AS diagnosisDate,
-			A.remark,
-			A.user_no AS userNo,
-			A.receipt_no AS receiptNo,
-			A.disease_no AS diseaseNo,
-			A.patient_no AS patientNo,
-			B.disease_nm AS diseaseName
-		FROM ucare.diagnosis A
-		INNER JOIN ucare.disease B ON A.disease_no = B.disease_no
-		WHERE A.patient_no = #{patientNo }
-		ORDER BY A.diagnosis_dt ASC
+			diagnosis_no AS diagnosisNo,
+			diagnosis_memo AS diagnosisMemo,
+			cure_yn AS cureYN,
+			diagnosis_dt AS diagnosisDate,
+			remark,
+			user_no AS userNo,
+			receipt_no AS receiptNo,
+			patient_no AS patientNo,
+			disease_nm AS diseaseNm
+		FROM ucare.diagnosis
+		WHERE patient_no = #{patientNo }
+		ORDER BY diagnosis_dt ASC
 	</select>
 
 </mapper>

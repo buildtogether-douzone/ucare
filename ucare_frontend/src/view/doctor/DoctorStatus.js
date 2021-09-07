@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { DataScroller } from 'primereact/datascroller';
 import { Button } from 'primereact/button';
-import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 import { Menu } from 'primereact/menu';
 import { Dialog } from 'primereact/dialog';
 import { Panel } from 'primereact/panel';
 import { Checkbox } from 'primereact/checkbox';
 import { InputTextarea } from 'primereact/inputtextarea';
-import { AutoComplete } from 'primereact/autocomplete';
+import { MultiSelect } from 'primereact/multiselect';
 
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
 import patientService from '../../service/patientService';
 import diagnosisService from '../../service/diagnosisService';
 import diseaseService from '../../service/diseaseService';
+import medicineService from '../../service/medicineService';
 
 import '../../assets/scss/DataScroller.scss';
 
@@ -36,50 +36,18 @@ export default function Status() {
         diagnosis_type: ''
     };
 
-    let emptyPastDiagnosis = {
-        diagnosisNo: null,
-        diagnosisMemo: '',
-        cureYN: '',
-        diagnosisDate: '',
-        diseaseName: ''
-    };
-
-    let diagnosisItem = {
-        cureYN: '',
-        memo: '',
-        userNo: null,
-        receiptNo: null,
-        diseaseNo: null,
-        patientNo: null
-    };
-
     const [items, setItems] = useState([]);
     const [pastDiagnosis, setPastDiagnosis] = useState([]);
     const [item, setItem] = useState(emptyItem);
-    const [pastDiagnosisItem, setPastDiagnosisItem] = useState(emptyPastDiagnosis);
     const [patient, setPatient] = useState(emptyPatient);
     const [date, setDate] = useState(new Date());
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [diseaseItem, setDiseaseItem] = useState(null);
     const [diseaseItems, setDiseaseItems] = useState([]);
-    const [checkboxValue, setCheckboxValue] = useState([]);
+    const [medicineItem, setMedicineItem] = useState(null);
+    const [medicineItems, setMedicineItems] = useState([]);
     const [memo, setMemo] = useState('');
     const [cureYN, setCureYN] = useState('');
-    const [countries, setCountries] = useState([]);
-    const [selectedCountry2, setSelectedCountry2] = useState(null);
-    const [filteredCountries, setFilteredCountries] = useState(null);
-    const groupedCities = [{
-        data: [
-            {"name": "Afghanistan", "code": "AF"},
-            {"name": "Åland Islands", "code": "AX"},
-            {"name": "Albania", "code": "AL"},
-            {"name": "Wallis and Futuna", "code": "WF"},
-            {"name": "Western Sahara", "code": "EH"},
-            {"name": "Yemen", "code": "YE"},
-            {"name": "Zambia", "code": "ZM"},
-            {"name": "Zimbabwe", "code": "ZW"}
-        ]
-    }];
 
     const menu = useRef(null);
 
@@ -122,48 +90,8 @@ export default function Status() {
         }
     ];
 
-    const onSortChange = (event) => {
-        const value = event.value;
-
-        if (value.indexOf('!') === 0) {
-            setSortOrder(-1);
-            setSortField(value.substring(1, value.length));
-            setSortKey(value);
-        }
-        else {
-            setSortOrder(1);
-            setSortField(value);
-            setSortKey(value);
-        }
-    }
-
-    const searchCountry = (event) => {
-        setTimeout(() => {
-            let _filteredCountries;
-            if (!event.query.trim().length) {
-                _filteredCountries = [...countries];
-            }
-            else {
-                _filteredCountries = countries.filter((country) => {
-                    return country.name.toLowerCase().startsWith(event.query.toLowerCase());
-                });
-            }
-
-            setFilteredCountries(_filteredCountries);
-        }, 250);
-    }
-
-    const diseaseTemplate = (item) => {
-        return (
-            <div className="country-item">
-                <div>{item.name}</div>
-            </div>
-        );
-    }
-
     useEffect(() => {
-        console.log(groupedCities)
-        setCountries(groupedCities[0].data);
+        // setCountries(groupedCities[0].data);
         statusService.retrieve(dateFormat(date))
           .then( res => {
             console.log('success!!');
@@ -192,6 +120,15 @@ export default function Status() {
         })
         .catch(err => {
             console.log('retrieveDisease() Error!', err);
+        });
+
+        medicineService.retrieveAll()
+        .then( res => {
+            console.log('success!!');
+            setMedicineItems(res.data);
+        })
+        .catch(err => {
+            console.log('retrieveMedicine() Error!', err);
         });
 
     }, []);
@@ -281,8 +218,8 @@ export default function Status() {
                     <div className="product-name">{data.diagnosisDate}</div>
                 </div>
                 <div className="product-price">
-                    <div className="product-name">{data.diseaseName}</div>
-                    <div className="product-description">{data.value}</div>
+                    <div className="product-name" style={{fontSize: 'x-small'}}>{data.diseaseNm}</div>
+                    <div className="product-description" style={{fontSize: 'x-small'}}>{data.value}</div>
                 </div>
             </div>
         );
@@ -298,26 +235,6 @@ export default function Status() {
         }
 
         return index;
-    }
-
-    const onSelectChange = (event, data) => {
-        let _items = [...items];
-        let _item = {...item};
-        const value = event.value;
-
-        const index = findIndexByNo(data.receiptNo);
-
-        _items[index].state = event.value;
-        _item = _items[index];
-
-        statusService.update(_item)
-          .then( res => {
-            console.log('success!!');
-            setItem(emptyItem);
-        })
-          .catch(err => {
-            console.log('update() Error!', err);
-        });
     }
 
     const onDateChange = (event) => {
@@ -343,37 +260,103 @@ export default function Status() {
     );
 
     const saveDiagnosis = () => {
-        diagnosisItem.diseaseNo = diseaseItem;
-        diagnosisItem.cureYN = cureYN;
-        diagnosisItem.diagnosisMemo = memo;
-        diagnosisItem.patientNo = patient.patientNo;
-        diagnosisItem.receiptNo = item.receiptNo;
-        diagnosisItem.userNo = sessionStorage.getItem('user_no');
+        let diagnosisItem = {
+            cureYN: cureYN,
+            diagnosisMemo: memo,
+            userNo: sessionStorage.getItem('user_no'),
+            receiptNo: item.receiptNo,
+            diseaseNm: '',
+            patientNo: patient.patientNo,
+            medicineNm: ''
+        };
+
+        let _diseaseNm = '';
+        for(var i = 0; i < diseaseItem.length; i++) {
+            if(i == 0) _diseaseNm = diseaseItem[i].diseaseNm;
+            else _diseaseNm = _diseaseNm + ',' + diseaseItem[i].diseaseNm;
+        }
+
+        let _medicineNm = '';
+        for(var i = 0; i < medicineItem.length; i++) {
+            if(i == 0) _medicineNm = medicineItem[i].medicineNm;
+            else _medicineNm = _medicineNm + ',' + medicineItem[i].medicineNm;
+        }
+
+        diagnosisItem.diseaseNm = _diseaseNm;
+        diagnosisItem.medicineNm = _medicineNm;
 
         diagnosisService.create(diagnosisItem)
           .then( res => {
             console.log('success!!');
-            diagnosisItem.diseaseNo = null;
-            diagnosisItem.cureYN = '';
-            diagnosisItem.diagnosisMemo = '';
-            diagnosisItem.patientNo = null;
-            diagnosisItem.receiptNo = null;
-            diagnosisItem.userNo = null;
+            setDiseaseItem(null);
+            setMedicineItem(null);
+            setCureYN('');
+            setMemo('');
         })
           .catch(err => {
             console.log('update() Error!', err);
         });
     }
 
-    const onCheckboxChange = (e) => {
-        let selectedValue = [...checkboxValue];
-        if (e.checked)
-            selectedValue.push(e.value);
-        else
-            selectedValue.splice(selectedValue.indexOf(e.value), 1);
+    const diseaseTemplate = (option) => {
+        return (
+            <div className="country-item">
+                <div>{option.diseaseNm}</div>
+            </div>
+        );
+    }
 
-        setCheckboxValue(selectedValue);
-    };
+    const selectedDiseaseTemplate = (option) => {
+        if (option) {
+            return (
+                <div className="country-item country-item-value">
+                    <div>{option.diseaseNm}</div>
+                </div>
+            );
+        }
+
+        return "Select Disease";
+    }
+
+    const diseasePanelFooterTemplate = () => {
+        const selectedItems = diseaseItem;
+        const length = selectedItems ? selectedItems.length : 0;
+        return (
+            <div className="p-py-2 p-px-3">
+                <b>{length}</b> item{length > 1 ? 's' : ''} selected.
+            </div>
+        );
+    }
+
+    const medicineTemplate = (option) => {
+        return (
+            <div className="country-item">
+                <div>{option.medicineNm}</div>
+            </div>
+        );
+    }
+
+    const selectedMedicineTemplate = (option) => {
+        if (option) {
+            return (
+                <div className="country-item country-item-value">
+                    <div>{option.medicineNm}</div>
+                </div>
+            );
+        }
+
+        return "Select Medicine";
+    }
+
+    const medicinePanelFooterTemplate = () => {
+        const selectedItems = medicineItem;
+        const length = selectedItems ? selectedItems.length : 0;
+        return (
+            <div className="p-py-2 p-px-3">
+                <b>{length}</b> item{length > 1 ? 's' : ''} selected.
+            </div>
+        );
+    }
 
     const renderHeader = () => {
         return (
@@ -440,21 +423,28 @@ export default function Status() {
                     <div className="p-field p-grid">
                         <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">병명</label>
                         <div className="p-col-12 p-md-10">
-                            <Dropdown optionLabel="diseaseNm" optionValue="diseaseNo" value={diseaseItem} options={diseaseItems} onChange={(e) => setDiseaseItem(e.value)} placeholder="Select a Disease"/>
-                            <AutoComplete value={selectedCountry2} suggestions={filteredCountries} completeMethod={searchCountry} field="name" dropdown forceSelection itemTemplate={diseaseTemplate} onChange={(e) => setSelectedCountry2(e.value)} />
+                            <MultiSelect value={diseaseItem} options={diseaseItems} onChange={(e) => setDiseaseItem(e.value)} optionLabel="diseaseNm" placeholder="Select disease" filter className="multiselect-custom"
+                    itemTemplate={diseaseTemplate} selectedItemTemplate={selectedDiseaseTemplate} panelFooterTemplate={diseasePanelFooterTemplate} />
                         </div>
                     </div>
                     <div className="p-field p-grid">
-                        <label htmlFor="email3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">처방</label>
+                        <label htmlFor="care" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">처방</label>
                         <div className="p-col-12 p-md-10">
                             <Checkbox onChange={e => setCureYN(e.checked)} checked={cureYN}></Checkbox>
                             <label htmlFor="checkOption1"> 치료</label>
                         </div>
                     </div>
+                    <div className="p-field p-grid">
+                        <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">처방약</label>
+                        <div className="p-col-12 p-md-10">
+                            <MultiSelect value={medicineItem} options={medicineItems} onChange={(e) => setMedicineItem(e.value)} optionLabel="medicineNm" placeholder="Select medicine" filter className="multiselect-custom"
+                        itemTemplate={medicineTemplate} selectedItemTemplate={selectedMedicineTemplate} panelFooterTemplate={medicinePanelFooterTemplate} />
+                        </div>
+                    </div>
                 </div>
                     <div className="card">
                         <h5>진료메모</h5>
-                        <InputTextarea value={memo} onChange={(e) => setMemo(e.target.value)} rows={5} cols={30} />
+                        <InputTextarea value={memo} onChange={(e) => setMemo(e.target.value)} rows={10} cols={62} />
                     </div>
                     <div>
                         <Button type="button" label="진료완료" onClick={saveDiagnosis} />
