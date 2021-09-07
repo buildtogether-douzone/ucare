@@ -167,18 +167,6 @@ export default function SignInSide({ history }) {
             >
               로그인 하기
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="/patient" variant="body2">
-                  비밀번호 찾기
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#/signUp" variant="body2" style={{ fontSize: 15 }}>
-                  {"회원가입"}
-                </Link>
-              </Grid>
-            </Grid>
           </form>
         </div>
       </Grid>

@@ -6,8 +6,6 @@ import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
 import { FileUpload } from 'primereact/fileupload';
 import { Toolbar } from 'primereact/toolbar';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 
@@ -19,11 +17,12 @@ export default function Medicine() {
 
     let emptyItem = {
         medicineNo: null,
+        medicineCode: '',
         medicineNm: '',
-        symptom: '',
-        generic: '',
-        price: 0,
-        maker: ''
+        company: '',
+        mainIngredient: '',
+        additive: '',
+        origin: ''
     };
 
     const [items, setItems] = useState(null);
@@ -250,14 +249,6 @@ export default function Medicine() {
         setItem(_item);
     }
 
-    const onInputNumberChange = (e, name) => {
-        const val = e.value || 0;
-        let _item = {...item};
-        _item[`${name}`] = val;
-
-        setItem(_item);
-    }
-
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
@@ -318,7 +309,7 @@ export default function Medicine() {
     );
 
     return (
-        <div className="datatable-crud">
+        <div className="datatable-crud" style={{ overflowY:'scroll'}}>
             <Toast ref={toast} />
 
             <div className="card">
@@ -332,40 +323,42 @@ export default function Medicine() {
                     header={header}>
 
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+                    <Column field="medicineCode" header="약품코드" sortable></Column>
                     <Column field="medicineNm" header="약품명" sortable></Column>
-                    <Column field="symptom" header="임상증상" sortable></Column>
-                    <Column field="generic" header="Generic" sortable></Column>
-                    <Column field="price" header="가격" body={priceBodyTemplate} sortable></Column>
-                    <Column field="maker" header="제조사" sortable></Column>
+                    <Column field="company" header="제조사" sortable></Column>
+                    <Column field="mainIngredient" header="주성분" sortable></Column>
+                    <Column field="additive" header="첨가제" sortable></Column>
+                    <Column field="origin" header="수입/제조" sortable></Column>
                     <Column body={actionBodyTemplate}></Column>
                 </DataTable>
             </div>
 
             <Dialog visible={itemDialog} style={{ width: '450px' }} header="약품 등록" modal className="p-fluid" footer={itemDialogFooter} onHide={hideDialog}>
                 <div className="p-field">
+                    <label htmlFor="medicineCode">약품코드</label>
+                    <InputText id="medicineCode" value={item.medicineCode} onChange={(e) => onInputChange(e, 'medicineCode')} required autoFocus className={classNames({ 'p-invalid': submitted && !item.medicineCode })} />
+                    {submitted && !item.medicineCode && <small className="p-error">약품코드는 필수입력입니다.</small>}
+                </div>
+                <div className="p-field">
                     <label htmlFor="medicineNm">약품명</label>
-                    <InputText id="medicineNm" value={item.medicineNm} onChange={(e) => onInputChange(e, 'medicineNm')} required autoFocus className={classNames({ 'p-invalid': submitted && !item.medicineNm })} />
-                    {submitted && !item.medicineNm && <small className="p-error">Name is required.</small>}
+                    <InputText id="medicineNm" value={item.medicineNm} onChange={(e) => onInputChange(e, 'medicineNm')} className={classNames({ 'p-invalid': submitted && !item.medicineNm })} />
+                    {submitted && !item.medicineNm && <small className="p-error">약품명은 필수입력입니다.</small>}
                 </div>
                 <div className="p-field">
-                    <label htmlFor="symptom">임상증상</label>
-                    <InputTextarea id="symptom" value={item.symptom} onChange={(e) => onInputChange(e, 'symptom')} required rows={3} cols={20} />
+                    <label htmlFor="company">제조사</label>
+                    <InputText id="company" value={item.company} onChange={(e) => onInputChange(e, 'company')} className={classNames({ 'p-invalid': submitted && !item.company })} />
                 </div>
                 <div className="p-field">
-                    <label htmlFor="generic">Generic</label>
-                    <InputText id="generic" value={item.generic} onChange={(e) => onInputChange(e, 'generic')} className={classNames({ 'p-invalid': submitted && !item.generic })} />
-                    {submitted && !item.generic && <small className="p-error">Name is required.</small>}
+                    <label htmlFor="mainIngredient">주성분</label>
+                    <InputText id="mainIngredient" value={item.mainIngredient} onChange={(e) => onInputChange(e, 'mainIngredient')} className={classNames({ 'p-invalid': submitted && !item.mainIngredient })} />
                 </div>
-
-                <div className="p-formgrid p-grid">
-                    <div className="p-field p-col">
-                        <label htmlFor="price">가격</label>
-                        <InputNumber id="price" value={item.price} onValueChange={(e) => onInputNumberChange(e, 'price')} mode="currency" currency="KRW" locale="ko-KR" />
-                    </div>
-                    <div className="p-field p-col">
-                        <label htmlFor="maker">제조사</label>
-                        <InputText id="maker" value={item.maker} onChange={(e) => onInputChange(e, 'maker')} />
-                    </div>
+                <div className="p-field">
+                    <label htmlFor="additive">첨가제</label>
+                    <InputText id="additive" value={item.additive} onChange={(e) => onInputChange(e, 'additive')} className={classNames({ 'p-invalid': submitted && !item.additive })} />
+                </div>
+                <div className="p-field">
+                    <label htmlFor="origin">수입/제조</label>
+                    <InputText id="origin" value={item.origin} onChange={(e) => onInputChange(e, 'origin')} className={classNames({ 'p-invalid': submitted && !item.origin })} />
                 </div>
             </Dialog>
 
