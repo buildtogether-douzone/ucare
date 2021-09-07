@@ -3,28 +3,37 @@
 <mapper namespace="medicine">
 
 	<insert id="create" parameterType="medicinevo">
-		INSERT
-			INTO ucare.medicine(medicine_nm, symptom, generic, price, maker)
-		VALUES(
-			#{medicineNm },
-			#{symptom },
-			#{generic },
-			#{price },
-			#{maker }
-			)
 		<selectKey keyProperty="medicineNo" resultType="int" order="AFTER">
 		  		SELECT LASTVAL()
 	  	</selectKey>
+		INSERT
+			INTO ucare.medicine(
+				medicine_code, 
+				medicine_nm, 
+				company, 
+				main_ingredient, 
+				additive,
+				origin
+			)
+		VALUES(
+			#{medicineCode },
+			#{medicineNm },
+			#{company },
+			#{mainIngredient },
+			#{additive },
+			#{origin }
+			)
 	</insert>
 	
 	<update id="createExcel" parameterType="medicinevo">
 		WITH UPSERT AS 
 		(
 			UPDATE ucare.medicine SET 
-				symptom = #{symptom },
-				generic = #{generic },
-				price = #{price },
-				maker = #{maker }
+				medicine_code = #{medicineCode },
+				company = #{company },
+				main_ingredient = #{mainIngredient },
+				additive = #{additive },
+				origin = #{origin }
 			WHERE
 				medicine_nm = #{medicineNm }
 			RETURNING *
@@ -32,29 +41,32 @@
 		
 		INSERT INTO ucare.medicine
 		(
+			medicine_code,
 			medicine_nm,
-			symptom,
-			generic,
-			price,
-			maker
+			company,
+			main_ingredient,
+			additive,
+			origin
 		)
 		SELECT 
+			#{medicineCode },
 			#{medicineNm },
-			#{symptom },
-			#{generic },
-			#{price },
-			#{maker }
+			#{company },
+			#{mainIngredient },
+			#{additive },
+			#{origin }
 		WHERE NOT EXISTS(SELECT * FROM UPSERT WHERE medicine_nm = #{medicineNm })
 	</update>
 
 	<select id="retrieveAll" resultType="medicinevo" >
 		SELECT 
 			medicine_no AS medicineNo,
+			medicine_code AS medicineCode,
 			medicine_nm AS medicineNm,
-			symptom,
-			generic,
-			price,
-			maker
+			company,
+			main_ingredient AS mainIngredient,
+			additive,
+			origin
 		FROM ucare.medicine
 		ORDER BY medicine_no DESC
 	</select>
@@ -62,11 +74,12 @@
 	<update id="update" parameterType="medicinevo">
 			UPDATE  ucare.medicine
 			   SET 
+			   		medicine_code = #{medicineCode },
 			   		medicine_nm = #{medicineNm },
-			   		symptom = #{symptom },
-			   		generic = #{generic },
-			   		price = #{price },
-			   		maker = #{maker }
+			   		company = #{company },
+			   		main_ingredient = #{mainIngredient },
+			   		additive = #{additive },
+			   		origin = #{origin }
 			WHERE medicine_no = #{medicineNo }
 	</update>
 	
