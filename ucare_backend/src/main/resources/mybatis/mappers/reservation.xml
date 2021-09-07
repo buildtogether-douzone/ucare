@@ -28,7 +28,8 @@
 			A.patient_no AS patientNo,
 			B.name AS name,
 			B.tel_no AS telNo,
-			CONCAT(SUBSTR(B.ssn, 1, 8), '******') AS ssn
+			CONCAT(SUBSTR(B.ssn, 1, 8), '******') AS ssn,
+			B.insurance_yn AS insurance
 			FROM
 				ucare.reservation A
 			INNER JOIN ucare.patient B ON

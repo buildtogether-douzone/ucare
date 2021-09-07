@@ -12,6 +12,7 @@ public class ReservationVo {
 	private String name;
 	private String telNo;
 	private String ssn;
+	private String insurance;
 	
 	public Long getRevNo() {
 		return revNo;
@@ -78,6 +79,12 @@ public class ReservationVo {
 	}
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
+	}
+	public String getInsurance() {
+		return insurance;
+	}
+	public void setInsurance(String insurance) {
+		this.insurance = insurance;
 	}
 		
 }

@@ -5,19 +5,34 @@ import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
+import { classNames } from 'primereact/utils';
+import { InputTextarea } from 'primereact/inputtextarea';
 import { Dialog } from 'primereact/dialog';
 import reservationService from '../../service/reservationService';
 import timeService from '../../service/timeService'
 import receiptService from '../../service/receiptService';
 
 export default function ReservationList() {
+
+    let emptyItem = {
+        patientNo: null,
+        name: '',
+        insurance: ''
+    };
+
     const [reservations, setReservations] = useState(null);
-    const [reservation, setReservation] = useState(null);
+    const [reservation, setReservation] = useState(emptyItem);
+    const [bp, setBP] = useState('');
+    const [bs, setBS] = useState('');
+    const [remark, setRemark] = useState('');
     const [date, setDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(date);
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
+    const [itemDialog, setItemDialog] = useState(false);
+    const [viewDialog, setViewDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState('');
     const dt = useRef(null);
+
 
     const retrieveAll = (e) => {
         reservationService.retrieveAll()
@@ -63,14 +78,46 @@ export default function ReservationList() {
         setSelectedDate(e.value);
     }
 
-
     const nameBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-                <span className="p-column-title">{rowData.name}</span>
+                <span style={{cursor: 'pointer'}} className="p-column-title" onClick={()=>rowColumnClick(rowData)}>{rowData.name}</span>
             </React.Fragment>
         );
     }
+
+
+    const rowColumnClick = (rowData) => {
+        setReservation({ ...rowData });
+        setItemDialog(true);
+    }
+
+    const hideDialog = () => {
+        setItemDialog(false);
+    }
+
+    const saveItem = (e) => {
+        e.preventDefault();
+    
+        let receipt = {
+          remark: receipt,
+          bp: bp,
+          bs: bs,
+          patientNo: reservation.patientNo,
+          userId: sessionStorage.getItem('user')
+        }
+    
+        receiptService.create(receipt)
+          .then(res => {
+            console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
+              window.location.reload();
+          })
+          .catch(err => {
+            console.log('create() 에러', err);
+          });
+
+        setItemDialog(false);
+      };
 
     const timeBodyTemplate = (rowData) => {
         return (
@@ -87,7 +134,6 @@ export default function ReservationList() {
             </React.Fragment>
         );
     }
-
 
     const dateBodyTemplate = (rowData) => {
         return (
@@ -145,15 +191,22 @@ export default function ReservationList() {
         </React.Fragment>
     );
 
+    const itemDialogFooter = (
+        <React.Fragment>
+            <Button label="취소" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+            <Button label="등록" icon="pi pi-check" className="p-button-text" onClick={saveItem} />
+        </React.Fragment>
+    );
+
     const reset = () => {
-        setSelectedDate(date);
+        setSelectedDate(null);
         setGlobalFilter('');
         dt.current.reset();
     }
 
     const header = (
         <div className="table-header">
-            <Button type="button" onClick={reset} icon="pi pi-filter-slash" className="p-button-rounded" style={{backgroundColor: '#1C91FB', borderColor: '#1C91FB'}}/>
+            <Button type="button" onClick={reset} icon="pi pi-filter-slash" className="p-button-rounded p-button-outlined" style={{borderColor: '#1C91FB'}}/>
             <span className="p-input-icon-left" style={{width: '30%', float: 'right'}}>
                 <i className="pi pi-search" />
                 <InputText type="search" value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} placeholder="검색" />
@@ -184,6 +237,35 @@ export default function ReservationList() {
                     {reservation && <span><b>{reservation.name}</b>님의 예약을 취소하시겠습니까?</span>}
                 </div>
             </Dialog>
+
+            <Dialog baseZIndex={9999} visible={itemDialog} style={{ width: '40%' }} header="접수" footer={itemDialogFooter} modal className="p-fluid" onHide={hideDialog}>
+                <div className="p-field">
+                    <label htmlFor="patientNo" style={{fontWeight: 'bold'}}>환자번호</label>
+                    <InputText value={reservation.patientNo} disabled />
+                </div>
+                <div className="p-field" style={{fontWeight: 'bold'}}>
+                    <label htmlFor="name">이름</label>
+                    <InputText value={reservation.name} disabled />
+                </div>
+                <div className="p-field">
+                <label htmlFor="insurance" style={{fontWeight: 'bold'}}>보험 여부</label>
+                    <InputText value={reservation.insurance} disabled />
+                </div>
+                <div className="p-field" style={{fontWeight: 'bold'}}>
+                <label htmlFor="bp">혈압</label>
+                <InputText value={bp} onChange={(e) => setBP(e.target.value)} />
+                </div>
+                <div className="p-field" style={{fontWeight: 'bold'}}>
+                <label htmlFor="bs">혈당</label>
+                <InputText value={bs} onChange={(e) => setBS(e.target.value)} />
+                </div>              
+                <div className="p-field" style={{fontWeight: 'bold'}}>
+                <label htmlFor="remark">접수 메모</label>
+                <InputTextarea value={remark} onChange={(e) => setRemark(e.target.value)} rows={5} cols={30} autoResize />
+                </div>
+
+            </Dialog>
+
             </div>
         </div>
     );

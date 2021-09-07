@@ -183,7 +183,7 @@ export default function Reservation() {
                                 monthNavigatorTemplate={monthNavigatorTemplate} yearNavigatorTemplate={yearNavigatorTemplate} />
                         </div>
 
-                        <Button label="예약" className="p-button-outlined" type="submit" onClick={(e) => create(reservation)} />
+                        <Button style={{marginTop: '16px', backgroundColor: '#1C91FB', color: 'white'}} label="예약" className="p-button-outlined" type="submit" onClick={(e) => create(reservation)} />
 
                     </Card>
                 </div>
