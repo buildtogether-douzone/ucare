@@ -143,9 +143,8 @@ export default function Reservation() {
                     date: reservation.revDate,
                     time: reservation.revTime
                 }
-
                 console.log(reservation.patientNo + '님의 정보가 성공적으로 등록되었습니다.');
-                timeService.updateTime(_time).then(res=> {console.log('타임서비스 성공')})
+                timeService.updateTime(_time);
             })
             .catch(err => {
                 console.log('create() 에러', err);
@@ -157,9 +156,9 @@ export default function Reservation() {
         <div className="p-grid" style={{ margin: '10px' }}>
             <div className="p-col-12 p-lg-6">
                 <div className="card p-fluid">
-
+                <Card>
                 <ReservationList />
-
+                </Card>
                 </div>
                 </div>
             <div className="p-col-12 p-lg-4">

@@ -14,6 +14,9 @@ class timeService {
   updateTime(date){
     return axios.put(TIME_API_BASE_URL + '/updateTime', date, HEADERS)
   }
+  updateDelete(date){
+    return axios.put(TIME_API_BASE_URL + '/updateDelete', date, HEADERS)
+  }
 }
 
 export default new timeService();

@@ -40,4 +40,9 @@ public class TimeController {
 	public ResponseEntity<?> updateTime(@RequestBody TimeVo data) {
 		return new ResponseEntity<>(timeService.updateTime(data), HttpStatus.OK);
 	}
+
+	@PutMapping("/updateDelete")
+	public ResponseEntity<?> updateDelete(@RequestBody TimeVo data) {
+		return new ResponseEntity<>(timeService.updateDelete(data), HttpStatus.OK);
+	}
 }

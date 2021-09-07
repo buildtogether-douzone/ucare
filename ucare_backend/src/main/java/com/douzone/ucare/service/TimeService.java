@@ -30,4 +30,8 @@ public class TimeService {
 	public int updateTime(TimeVo data) {
 		return timeRepository.updateTime(data);
 	}
+
+	public int updateDelete(TimeVo data) {
+		return timeRepository.updateDelete(data);
+	}
 }

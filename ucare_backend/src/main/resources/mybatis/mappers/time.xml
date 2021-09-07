@@ -26,6 +26,7 @@
 		FROM ucare.time
 		WHERE date = TO_DATE(#{date }, 'YYYY-MM-DD')
 		AND status = false
+		ORDER BY time_no
 	</select>
 	
 		<update id="updateTime" parameterType="timevo">
@@ -36,5 +37,12 @@
 			AND time = #{time }
 	</update>
 	
+		<update id="updateDelete" parameterType="timevo">
+			UPDATE  ucare.time
+			   SET 
+			   		status = false
+			WHERE date = TO_DATE(#{date }, 'YYYY-MM-DD')
+			AND time = #{time }
+	</update>
 	
 </mapper>

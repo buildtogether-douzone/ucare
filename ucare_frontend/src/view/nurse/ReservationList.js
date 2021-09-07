@@ -7,12 +7,14 @@ import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { Dialog } from 'primereact/dialog';
 import reservationService from '../../service/reservationService';
+import timeService from '../../service/timeService'
+import receiptService from '../../service/receiptService';
 
 export default function ReservationList() {
     const [reservations, setReservations] = useState(null);
     const [reservation, setReservation] = useState(null);
-    const [selectedDate, setSelectedDate] = useState(null);
     const [date, setDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState(date);
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState('');
     const dt = useRef(null);
@@ -31,6 +33,7 @@ export default function ReservationList() {
 
     useEffect(() => {
         retrieveAll();
+        dt.current.filter(date, 'revDate', 'custom');
     }, []);
 
     const filterDate = (value, filter) => {
@@ -69,7 +72,15 @@ export default function ReservationList() {
         );
     }
 
-    const countryBodyTemplate = (rowData) => {
+    const timeBodyTemplate = (rowData) => {
+        return (
+            <React.Fragment>
+                <span className="p-column-title">{rowData.revTime}</span>
+            </React.Fragment>
+        );
+    }
+
+    const ssnBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
                 <span className="image-text">{rowData.ssn}</span>
@@ -102,7 +113,7 @@ export default function ReservationList() {
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteItem(rowData)} />
+                <Button style={{color: '#1C91FB'}} icon="pi pi-trash" className="p-button-rounded p-button-warning p-button-text" onClick={() => confirmDeleteItem(rowData)} />
             </React.Fragment>
         );
     }
@@ -114,9 +125,13 @@ export default function ReservationList() {
     const deleteItem = () => {
         reservationService.delete(reservation.revNo)
             .then(res => {
+                let _time = {
+                    date: reservation.revDate,
+                    time: reservation.revTime
+                }
                 setDeleteItemDialog(false);
-                window.location.reload();
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: '삭제 완료!', life: 3000 });
+                //window.location.reload();
+                timeService.updateDelete(_time)
             })
             .catch(err => {
                 console.log('delete() Error!', err);
@@ -131,14 +146,14 @@ export default function ReservationList() {
     );
 
     const reset = () => {
-        setSelectedDate(null);
+        setSelectedDate(date);
         setGlobalFilter('');
         dt.current.reset();
     }
 
     const header = (
         <div className="table-header">
-            <Button style={{float: 'left'}} type="button" onClick={reset} icon="pi pi-filter-slash" className="p-button-rounded" />
+            <Button type="button" onClick={reset} icon="pi pi-filter-slash" className="p-button-rounded" style={{backgroundColor: '#1C91FB', borderColor: '#1C91FB'}}/>
             <span className="p-input-icon-left" style={{width: '30%', float: 'right'}}>
                 <i className="pi pi-search" />
                 <InputText type="search" value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} placeholder="검색" />
@@ -156,10 +171,11 @@ export default function ReservationList() {
                 <DataTable ref={dt} value={reservations} paginator rows={10}
                     header={header} className="p-datatable-customers"
                     globalFilter={globalFilter} emptyMessage="예약 내역이 없습니다.">
-                    <Column style={{ textAlign: 'center' }} field="name" header="이름" body={nameBodyTemplate} />
-                    <Column style={{ textAlign: 'center' }} field="ssn" filterField="ssn" header="주민등록번호" body={countryBodyTemplate} />
-                    <Column style={{ textAlign: 'center' }} field="revDate" header="예약날짜" body={dateBodyTemplate} filterElement={dateFilter} filterFunction={filterDate} />
-                    <Column style={{ textAlign: 'center' }} header="예약취소" body={actionBodyTemplate}></Column>
+                    <Column style={{ textAlign: 'center', padding: '8px', width: '20%'}} field="name" header="이름" body={nameBodyTemplate} />
+                    <Column style={{ textAlign: 'center', padding: '8px', width: '25%' }} field="ssn" filterField="ssn" header="주민등록번호" body={ssnBodyTemplate} />
+                    <Column style={{ textAlign: 'center', padding: '8px', width: '20%' }} field="revTime" header="예약시간" body={timeBodyTemplate} />
+                    <Column style={{ textAlign: 'center', padding: '8px', width: '20%' }} field="revDate" header="예약날짜" body={dateBodyTemplate} filterElement={dateFilter} filterFunction={filterDate} />
+                    <Column style={{ textAlign: 'center', padding: '8px', width: '15%' }} header="예약취소" body={actionBodyTemplate}></Column>
                 </DataTable>
 
                 <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>

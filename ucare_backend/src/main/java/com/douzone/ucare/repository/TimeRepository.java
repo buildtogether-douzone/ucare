@@ -31,4 +31,8 @@ public class TimeRepository {
 	public int updateTime(TimeVo data) {
 		return sqlSession.update("time.updateTime", data);
 	}
+
+	public int updateDelete(TimeVo data) {
+		return sqlSession.update("time.updateDelete", data);
+	}
 }
