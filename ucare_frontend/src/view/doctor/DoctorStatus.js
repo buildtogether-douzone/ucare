@@ -103,7 +103,7 @@ export default function DoctorDiagnosis() {
                 } else if(res.data[i].state === 'careWait') {
                     res.data[i].value = '진료대기중';
                 } else if(res.data[i].state === 'wait') {
-                    res.data[i].value = '수납대기중';
+                    res.data[i].value = '완료';
                 } else {
                     res.data[i].value = '완료';
                 }
@@ -297,28 +297,24 @@ export default function DoctorDiagnosis() {
             setDiseaseItem([]);
             setMedicineItem([]);
 
-            if(pastDiagnosis.length != 0) {
-                let _patientItem = patient;
-                _patientItem.diagnosis = '재진';
+            let _patientItem = patient;
+            _patientItem.diagnosis = '재진';
 
-                patientService.updateDiagnosis(_patientItem)
-                .then(res => {
-                    setPatient(_patientItem);
-                })
-                .catch(err => {
-                    console.log('update() error', err);
-                })
-            }
+            patientService.updateDiagnosis(_patientItem)
+            .then(res => {
+                setPatient(_patientItem);
+            })
+            .catch(err => {
+                console.log('update() error', err);
+            })
 
             let _receiptItem = item;
             _receiptItem.state = 'wait';
-            _receiptItem.value = "수납대기중";
+            _receiptItem.value = "완료";
 
             receiptService.updateState(_receiptItem).then(res => {
-                let _index = findIndexByNo(_receiptItem.receiptNo);
-                let _items = items;
-                _items[_index] = _receiptItem;
-
+                let _items = items.filter(item => item.receiptNo !== _receiptItem.receiptNo);
+                _items.push(_receiptItem);
                 setItems(_items);
             })
             .catch(err => {
