@@ -23,7 +23,6 @@ public class PrincipalDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		UserVo userEntity = userRepository.findUser(username);
 		userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-	
 		return new PrincipalDetails(userEntity);
 	}
 
