@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.douzone.ucare.service.TimeService;
 import com.douzone.ucare.vo.ReceiptVo;
+import com.douzone.ucare.vo.TimeVo;
 
 @RestController
 @RequestMapping("/api/time")
@@ -33,5 +34,10 @@ public class TimeController {
 	@GetMapping("/retrieveAll/{date}")
 	public ResponseEntity<?> retrieveTime(@PathVariable("date") String date) {
 		return new ResponseEntity<>(timeService.retrieveTime(date), HttpStatus.OK);
+	}
+	
+	@PutMapping("/updateTime")
+	public ResponseEntity<?> updateTime(@RequestBody TimeVo data) {
+		return new ResponseEntity<>(timeService.updateTime(data), HttpStatus.OK);
 	}
 }

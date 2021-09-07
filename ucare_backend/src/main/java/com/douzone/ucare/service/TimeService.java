@@ -26,4 +26,8 @@ public class TimeService {
 	public List<TimeVo> retrieveTime(String date) {
 		return timeRepository.retrieveTime(date);
 	}
+	
+	public int updateTime(TimeVo data) {
+		return timeRepository.updateTime(data);
+	}
 }

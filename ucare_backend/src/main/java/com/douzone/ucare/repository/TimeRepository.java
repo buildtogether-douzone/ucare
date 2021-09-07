@@ -27,4 +27,8 @@ public class TimeRepository {
 	public List<TimeVo> retrieveTime(String date) {
 		return sqlSession.selectList("time.retrieveTime", date);
 	}
+	
+	public int updateTime(TimeVo data) {
+		return sqlSession.update("time.updateTime", data);
+	}
 }

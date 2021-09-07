@@ -11,6 +11,9 @@ class timeService {
   retrieveAll(date){
     return axios.get(TIME_API_BASE_URL + '/retrieveAll/' + date, HEADERS);
   }
+  updateTime(date){
+    return axios.put(TIME_API_BASE_URL + '/updateTime', date, HEADERS)
+  }
 }
 
 export default new timeService();

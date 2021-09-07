@@ -36,4 +36,10 @@
 			ORDER BY A.rev_no DESC
 	</select>
 	
+		<delete id="delete" parameterType="Long">
+		DELETE
+		  FROM ucare.reservation
+		 WHERE rev_no = #{revNo }
+	</delete>
+	
 </mapper>

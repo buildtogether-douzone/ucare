@@ -1,20 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
 import { Card } from 'primereact/card';
-import { Skeleton } from 'primereact/skeleton';
-import { AutoComplete } from 'primereact/autocomplete';
 import { Calendar } from 'primereact/calendar';
-import { SelectButton } from 'primereact/selectbutton';
 import { ListBox } from 'primereact/listbox';
-import { DataScroller } from 'primereact/datascroller';
-import { Rating } from 'primereact/rating';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { ProgressBar } from 'primereact/progressbar';
-import { MultiSelect } from 'primereact/multiselect';
 import timeService from '../../service/timeService';
 import patientService from '../../service/patientService';
 import reservationService from '../../service/reservationService';
@@ -38,6 +28,16 @@ export default function Reservation() {
         telNo: ''
     };
 
+    // yyyy-MM-dd 포맷으로 반환
+    const dateFormat = (date) => {
+        var year = date.getFullYear();              //yyyy
+        var month = (1 + date.getMonth());          //M
+        month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+        var day = date.getDate();                   //d
+        day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+        return year + '-' + month + '-' + day;
+    }
+
     const [items, setItems] = useState([]);
     const [selectedPatient, setSelectedPatient] = useState(emptyItem);
     const [time, setTime] = useState([]);
@@ -46,8 +46,8 @@ export default function Reservation() {
 
     let reservation = {
         patientNo: selectedPatient.patientNo || null,
-        revDate: date,
-        revTime: '',
+        revDate: dateFormat(date),
+        revTime: selectedTime.time,
         insNo: window.sessionStorage.getItem('user_no')
     }
 
@@ -107,20 +107,13 @@ export default function Reservation() {
         );
     }
 
-    // yyyy-MM-dd 포맷으로 반환
-    const dateFormat = (date) => {
-        var year = date.getFullYear();              //yyyy
-        var month = (1 + date.getMonth());          //M
-        month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
-        var day = date.getDate();                   //d
-        day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
-        return year + '-' + month + '-' + day;
-    }
+
 
 
 
     const onTimeChange = (e) => {
         setSelectedTime(e.value);
+        reservation.revTime = e.target.value;
     }
 
     const monthNavigatorTemplate = (e) => {
@@ -132,6 +125,7 @@ export default function Reservation() {
     }
 
     const onDateChange = (event) => {
+        setDate(event.target.value);
         reservation.revDate = event.target.value;
         timeService.retrieveAll(dateFormat(event.value))
             .then(res => {
@@ -144,9 +138,16 @@ export default function Reservation() {
     }
 
     const create = (reservation) => {
+        console.log(reservation)
         reservationService.create(reservation)
             .then(res => {
+                let _time = {
+                    date: reservation.revDate,
+                    time: reservation.revTime
+                }
+
                 console.log(reservation.patientNo + '님의 정보가 성공적으로 등록되었습니다.');
+                timeService.updateTime(_time).then(res=> {console.log('타임서비스 성공')})
             })
             .catch(err => {
                 console.log('create() 에러', err);
@@ -173,11 +174,11 @@ export default function Reservation() {
                         </div>
                         <div className="p-field">
                             <label htmlFor="ssn">주민등록번호</label>
-                            <InputText id="ssn" type="text" value={selectedPatient.ssn} />
+                            <InputText id="ssn" type="text" value={selectedPatient.ssn} placeholder="주민등록번호" />
                         </div>
                         <div className="p-field">
                             <label htmlFor="tel">연락처</label>
-                            <InputText id="tel" type="text" value={selectedPatient.telNo} />
+                            <InputText id="tel" type="text" value={selectedPatient.telNo} placeholder="연락처" />
                         </div>
                         <div className="p-field">
                             <label htmlFor="navigatorstemplate">날짜</label>
@@ -197,7 +198,9 @@ export default function Reservation() {
                     <Card>
                         <div className="p-field">
                             <label htmlFor="time">시간</label>
-                            <ListBox value={selectedTime} options={time} onChange={(e) => (reservation.revTime = e.value.time)} optionLabel="time" listStyle={{ maxHeight: '375px' }} />
+                            {time != '' ? 
+                             <ListBox value={selectedTime} options={time} onChange={(e) => onTimeChange(e)} optionLabel="time" listStyle={{ maxHeight: '375px' }}  />
+                            : <div className="p-mb-3 p-text-left">예약 가능한 시간이 없습니다.</div>}
                             </div>
                     </Card>
                 </div>
