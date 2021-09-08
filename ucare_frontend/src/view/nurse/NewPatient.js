@@ -447,8 +447,8 @@ export default function NewPatient() {
             등록
           </Button>
           <Button
-            style={{ margin: '5px', backgroundColor: '#1C91FB', border: '1px solid #1C91FB', float: 'right' }}
-            variant="contained"
+            style={{ margin: '6px', color: '#1C91FB', border: '1px solid #1C91FB', float: 'right' }}
+            variant="outlined"
             color="primary"
             size="small"
             type="button"
