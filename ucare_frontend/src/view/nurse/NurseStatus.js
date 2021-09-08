@@ -12,10 +12,9 @@ import timeService from '../../service/timeService';
 import hospitalService from '../../service/hospitalService';
 import patientService from '../../service/patientService';
 import diagnosisService from '../../service/diagnosisService';
+import receiptService from '../../service/receiptService';
 
 import '../../assets/scss/DataScroller.scss';
-import { __esModule } from 'react-full-page/lib/components/FullPage';
-import receiptService from '../../service/receiptService';
 
 export default function Status() {
 
@@ -81,6 +80,7 @@ export default function Status() {
     const [insurancePrice, setInsurancePrice] = useState('');
     const [date, setDate] = useState(new Date());
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
+    const [receiptCompleteDialog, setReceiptCompleteDialog] = useState(false);
 
     const menu = useRef(null);
 
@@ -213,6 +213,7 @@ export default function Status() {
                 console.log('success!!');
                 setItems(_items);
                 setItem(emptyItem);
+                hideReceiptCompleteDialog();
             })
             .catch(err => {
                 console.log('update() Error!', err);
@@ -246,6 +247,10 @@ export default function Status() {
         setDeleteItemDialog(true);
     }
 
+    const confirmReceiptComplete = () => {
+        setReceiptCompleteDialog(true);
+    }
+
     // yyyy-MM-dd 포맷으로 반환
     const dateFormat = (date) => {
         var year = date.getFullYear();              //yyyy
@@ -260,7 +265,7 @@ export default function Status() {
         if(data.state === 'wait' || data.state === 'care') {
             calculatePrice(data);
         }
-        if(data.state === 'complete')
+        else if(data.state === 'complete')
             alert("수납완료된 건입니다.");
         else
             menu.current.toggle(e, setItem(data));
@@ -309,8 +314,19 @@ export default function Status() {
 
     const deleteItemDialogFooter = (
         <React.Fragment>
-            <Button label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
+            <Button label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideReceiptCompleteDialog} />
             <Button label="예" icon="pi pi-check" className="p-button-text" onClick={deleteItem} />
+        </React.Fragment>
+    );
+
+    const hideReceiptCompleteDialog = () => {
+        setReceiptCompleteDialog(false);
+    }
+
+    const receiptCompleteDialogFooter = (
+        <React.Fragment>
+            <Button label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideReceiptCompleteDialog} />
+            <Button label="예" icon="pi pi-check" className="p-button-text" onClick={receiptComplete} />
         </React.Fragment>
     );
 
@@ -381,7 +397,7 @@ export default function Status() {
                         </li>
                         }
                         <div>
-                            <Button type="button" label="수납완료" onClick={ receiptComplete } className="p-button-rounded" style={{ width: '100%', marginTop: '20px' }} />
+                            <Button type="button" label="수납완료" onClick={ confirmReceiptComplete } className="p-button-rounded" style={{ width: '100%', marginTop: '20px' }} />
                         </div>
                     </ul>
                     }
@@ -394,6 +410,13 @@ export default function Status() {
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
                     {item && <span><b>접수를 취소하시겠습니까?</b></span>}
+                </div>
+            </Dialog>
+
+            <Dialog visible={receiptCompleteDialog} style={{ width: '450px' }} header="Confirm" modal footer={receiptCompleteDialogFooter} onHide={hideReceiptCompleteDialog}>
+                <div className="confirmation-content">
+                    <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
+                    {item && <span><b>수납을 완료하시겠습니까?</b></span>}
                 </div>
             </Dialog>
         </div>
