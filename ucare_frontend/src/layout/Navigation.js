@@ -53,7 +53,7 @@ const Navigation = React.forwardRef(( { open, drawerManage }, ref) => {
     useEffect(() => {
       setRole((
         sessionStorage.getItem('role') == '간호사' ? <NurseList ref={ref}/> : 
-        sessionStorage.getItem('role') == '의사' ? <DoctorList /> : 
+        sessionStorage.getItem('role') == '의사' ? <DoctorList ref={ref}/> : 
         sessionStorage.getItem('role') == '관리자' && <AdminList ref={ref}/>
       ));
     }, [])

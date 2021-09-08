@@ -54,10 +54,6 @@ const Dashboard = ({open, children }) => {
   const classes = useStyles();
   const slideRef = useRef(null);
 
-  useEffect(()=>{
-    console.log(localStorage.getItem('authorization'));
-  }, [])
-
   return (
     <Fragment>
         <div className={classes.root}>

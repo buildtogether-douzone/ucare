@@ -20,8 +20,9 @@ class receiptService {
   }
 
   createRev(data){
-    return axios.post(RECEIPT_API_BASE_URL + '/createRev', data, HEADERS);
+    return axios.post(RECEIPT_API_BASE_URL + '/createRev', data, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
+  
 }
 
 export default new receiptService();

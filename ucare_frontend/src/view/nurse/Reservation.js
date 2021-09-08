@@ -45,7 +45,7 @@ export default function Reservation() {
     const [date, setDate] = useState(new Date());
 
     let reservation = {
-        patientNo: selectedPatient.patientNo || null,
+        patientNo: selectedPatient.patientNo,
         revDate: dateFormat(date),
         revTime: selectedTime.time,
         insNo: window.sessionStorage.getItem('user_no')
@@ -166,7 +166,7 @@ export default function Reservation() {
                     <Card title="예약">
                         <div className="p-field">
                             <label htmlFor="name">이름/주민등록번호</label>
-                            <Dropdown value={selectedPatient} options={items} onChange={onPatientChange} optionLabel="name" filter showClear filterBy="name" placeholder="이름"
+                            <Dropdown value={selectedPatient} options={items} onChange={onPatientChange} optionLabel="name" filter filterBy="name" placeholder="이름"
                                 valueTemplate={selectedPatientTemplate} itemTemplate={patientOptionTemplate} />
                         </div>
                         <div className="p-field">
