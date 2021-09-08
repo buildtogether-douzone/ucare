@@ -95,10 +95,14 @@ export default function ReservationList() {
     const rowColumnClick = (rowData) => {
         setReservation({ ...rowData });
         setItem(empty);
+        document.body.style.position = "relative";
+        document.body.style.overflow = "hidden";
         setItemDialog(true);
     }
 
     const hideDialog = () => {
+        document.body.style.position = "";
+        document.body.style.overflow = "";
         setItemDialog(false);
     }
 
@@ -131,6 +135,8 @@ export default function ReservationList() {
             console.log('create() 에러', err);
           });
 
+        document.body.style.position = "";
+        document.body.style.overflow = "";
         setItemDialog(false);
       };
 
