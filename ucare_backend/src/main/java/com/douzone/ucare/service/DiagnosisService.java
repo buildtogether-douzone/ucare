@@ -21,4 +21,8 @@ public class DiagnosisService {
 	public List<DiagnosisVo> retrieveByPatientNo(Long patientNo) {
 		return DiagnosisRepository.retrieveByPatientNo(patientNo);
 	}
+	
+	public DiagnosisVo retrieveByReceiptNo(Long receiptNo) {
+		return DiagnosisRepository.retrieveByReceiptNo(receiptNo);
+	}
 }

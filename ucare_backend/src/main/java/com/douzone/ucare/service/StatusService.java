@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.douzone.ucare.repository.StatusRepository;
-import com.douzone.ucare.vo.MedicineVo;
 import com.douzone.ucare.vo.ReceiptVo;
 
 @Service

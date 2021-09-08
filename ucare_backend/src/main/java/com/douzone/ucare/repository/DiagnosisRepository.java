@@ -21,4 +21,8 @@ public class DiagnosisRepository {
 	public List<DiagnosisVo> retrieveByPatientNo(Long patientNo) {
 		return sqlSession.selectList("diagnosis.retrieveByPatientNo", patientNo);
 	}
+	
+	public DiagnosisVo retrieveByReceiptNo(Long receiptNo) {
+		return sqlSession.selectOne("diagnosis.retrieveByReceiptNo", receiptNo);
+	}
 }

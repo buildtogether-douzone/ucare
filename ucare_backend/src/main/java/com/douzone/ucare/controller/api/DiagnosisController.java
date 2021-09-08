@@ -29,4 +29,9 @@ public class DiagnosisController {
 	public ResponseEntity<?> retrieveByPatientNo(@PathVariable("patientNo") Long patientNo) {
 		return new ResponseEntity<>(diagnosisService.retrieveByPatientNo(patientNo), HttpStatus.OK);
 	}
+	
+	@GetMapping("/retrieveByReceiptNo/{receiptNo}")
+	public ResponseEntity<?> retrieveByReceiptNo(@PathVariable("receiptNo") Long receiptNo) {
+		return new ResponseEntity<>(diagnosisService.retrieveByReceiptNo(receiptNo), HttpStatus.OK);
+	}
 }

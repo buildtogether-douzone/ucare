@@ -5,8 +5,13 @@ class diagnosisService {
   create(data){
     return axios.post(DIAGNOSIS_API_BASE_URL + '/create', data, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
+
   retrieveByPatientNo(patientNo){
     return axios.get(DIAGNOSIS_API_BASE_URL + '/retrieveByPatientNo/' + patientNo, { headers: { Authorization: localStorage.getItem("authorization") }});
+  }
+
+  retrieveByReceiptNo(receiptNo){
+    return axios.get(DIAGNOSIS_API_BASE_URL + '/retrieveByReceiptNo/' + receiptNo, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
 }
 

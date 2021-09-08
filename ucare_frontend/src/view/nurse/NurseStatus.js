@@ -11,17 +11,21 @@ import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
 import hospitalService from '../../service/hospitalService';
 import patientService from '../../service/patientService';
+import diagnosisService from '../../service/diagnosisService';
 
 import '../../assets/scss/DataScroller.scss';
 import { __esModule } from 'react-full-page/lib/components/FullPage';
+import receiptService from '../../service/receiptService';
 
 export default function Status() {
 
     let emptyItem = {
         receiptNo: null,
+        patientNo: null,
         name: '',
         state: '',
-        diagnosisTime: ''
+        diagnosisTime: '',
+        value: ''
     };
 
     let emptyHospitalItem = {
@@ -37,11 +41,44 @@ export default function Status() {
         telNo: ''
     }
 
-    let resultPrice = null;
+    let emptyPatientItem = {
+        patientNo: null,
+        name: '',
+        address: '',
+        insurance: '',
+        ssn: '',
+        telNo: '',
+        age: null,
+        ageGender: '',
+        detailAddress: '',
+        diagnosis: '',
+        domain: '',
+        email: '',
+        emailId: '',
+        gender: '',
+        height: null,
+        remark: ''
+    };
+
+    let emptyDiagnosisItem = {
+        diagnosisNo: null,
+        patientNo: null,
+        receiptNo: null,
+        userNo: null,
+        diagnosisDate: '',
+        diagnosisMemo: '',
+        cureYN: '',
+        diseaseNm: '',
+        medicineNm: ''
+    }
 
     const [items, setItems] = useState([]);
     const [item, setItem] = useState(emptyItem);
     const [hospitalItem, setHospitalItem] = useState(emptyHospitalItem);
+    const [patientItem, setPatientItem] = useState(emptyPatientItem);
+    const [diagnosisItem, setDiagnosisItem] = useState(emptyDiagnosisItem);
+    const [price, setPrice] = useState('');
+    const [insurancePrice, setInsurancePrice] = useState('');
     const [date, setDate] = useState(new Date());
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
 
@@ -88,7 +125,7 @@ export default function Status() {
 
     useEffect(() => {
         hospitalService.fetchHospitalInfo()
-         .then( res => {
+          .then( res => {
             setHospitalItem(res.data);
         })
           .catch(err => {
@@ -116,10 +153,70 @@ export default function Status() {
         });
     }, []);
 
-    const calculatePrice = () => {
-        let basicPrice = hospitalItem.basicPrice;
+    const calculatePrice = (data) => {
+        let resultPrice = hospitalItem.basicPrice;
+        
+        diagnosisService.retrieveByReceiptNo(data.receiptNo)
+          .then( res => {
+            console.log('success!!');
+            setDiagnosisItem(res.data);
 
-        //if()
+            if(res.data.cureYN === 'true') 
+                resultPrice += 10000;
+            
+            patientService.retrieve(data.patientNo)
+              .then( res => {
+                console.log('success!!');
+                setPatientItem(res.data);
+      
+                if(res.data.age < 7 || res.data.age >= 65)
+                    resultPrice -= 2000;
+      
+                if(data.diagnosisTime >= '09:00:00' && data.diagnosisTime < '12:00:00')
+                    resultPrice *= 0.9;
+                  
+                if(data.diagnosisTime > '18:00:00' && data.diagnosisTime < '24:00:00')
+                    resultPrice *= 1.1;
+                  
+                if(res.data.insurance === "Y") {
+                    setInsurancePrice(resultPrice * 0.25);
+                    resultPrice *= 0.75;
+                }
+      
+                setItem(data);
+                setPrice(resultPrice);
+            })
+              .catch(err => {
+                console.log('retrieve() Error!', err);
+            });
+        })
+          .catch(err => {
+            console.log('retrieve() Error!', err);
+        });
+    }
+
+    const receiptComplete = () => {
+        let _items = [...items];
+        let _item = {...item};
+
+        const index = findIndexByNo(item.receiptNo);
+
+        _item = _items[index];
+
+        _item.state = 'complete';
+        _item.value = '완료';
+
+        _items[index] = _item;
+
+        receiptService.updateState(_item)
+            .then( res => {
+                console.log('success!!');
+                setItems(_items);
+                setItem(emptyItem);
+            })
+            .catch(err => {
+                console.log('update() Error!', err);
+            });
     }
 
     const deleteItem = () => {
@@ -160,8 +257,11 @@ export default function Status() {
     }
 
     const menuToggle = (e, data) => {
-        if(data.state === 'wait' || data.state === 'care')
-            setItem(data)
+        if(data.state === 'wait' || data.state === 'care') {
+            calculatePrice(data);
+        }
+        if(data.state === 'complete')
+            alert("수납완료된 건입니다.");
         else
             menu.current.toggle(e, setItem(data));
     }
@@ -226,8 +326,6 @@ export default function Status() {
 
     const header = renderHeader();
 
-    console.log(item);
-
     return (
         <div className="card">
             <div className="p-grid">
@@ -258,20 +356,32 @@ export default function Status() {
                                 <div className="count">{ hospitalItem.basicPrice }원</div>
                             </div>
                         </li>
+                        { (diagnosisItem.cureYN === "true") &&
                         <li>
                             <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
                                 <h3 className="activity p-m-0">치료</h3>
                                 <div className="count">10000원</div>
                             </div>
                         </li>
+                        }
+                        { (patientItem.insurance === "Y") &&
                         <li>
                             <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
                                 <h3 className="activity p-m-0">보험</h3>
-                                <div className="count">10000원</div>
+                                <div className="count">-{ insurancePrice }원</div>
                             </div>
                         </li>
+                        }
+                        { (price !== '') &&
+                        <li>
+                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                <h3 className="activity p-m-0">총</h3>
+                                <div className="count">{ price }원</div>
+                            </div>
+                        </li>
+                        }
                         <div>
-                            <Button type="button" label="수납완료" className="p-button-rounded" style={{ width: '100%', marginTop: '20px' }} />
+                            <Button type="button" label="수납완료" onClick={ receiptComplete } className="p-button-rounded" style={{ width: '100%', marginTop: '20px' }} />
                         </div>
                     </ul>
                     }

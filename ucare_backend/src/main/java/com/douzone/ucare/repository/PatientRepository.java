@@ -22,8 +22,8 @@ public class PatientRepository {
 		return sqlSession.selectList("patient.retrieveAll");
 	}
 	
-	public List<PatientVo> retrieve(Long patientNo) {
-		return sqlSession.selectList("patient.retrieve", patientNo);
+	public PatientVo retrieve(Long patientNo) {
+		return sqlSession.selectOne("patient.retrieve", patientNo);
 	}
 
 	public int update(PatientVo patient) {

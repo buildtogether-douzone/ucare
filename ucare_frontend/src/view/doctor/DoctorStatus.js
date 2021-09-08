@@ -177,9 +177,9 @@ export default function DoctorDiagnosis() {
 
         patientService.retrieve(data.patientNo)
             .then(res => {
-                setPatient(res.data[0]);
+                setPatient(res.data);
                 console.log(res.data);
-                diagnosisService.retrieveByPatientNo(res.data[0].patientNo)
+                diagnosisService.retrieveByPatientNo(res.data.patientNo)
                     .then(res => {
                         for(var i = 0; i < res.data.length; i++) {
                             if(res.data[i].cureYN === 'true') 

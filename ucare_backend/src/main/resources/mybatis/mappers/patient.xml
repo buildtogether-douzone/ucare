@@ -10,8 +10,7 @@
 				gender, 
 				tel_no, 
 				address, 
-				detail_
-				address, 
+				detail_address,
 				email, 
 				insurance_yn, 
 				diagnosis_type, 
