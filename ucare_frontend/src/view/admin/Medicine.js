@@ -309,7 +309,7 @@ export default function Medicine() {
     );
 
     return (
-        <div className="datatable-crud" style={{ overflowY:'scroll'}}>
+        <div className="datatable-crud">
             <Toast ref={toast} />
 
             <div className="card">

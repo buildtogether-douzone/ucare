@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { DataScroller } from 'primereact/datascroller';
 import { Button } from 'primereact/button';
-import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 import { Divider } from 'primereact/divider';
 import { Menu } from 'primereact/menu';
 import { Dialog } from 'primereact/dialog';
+import { Panel } from 'primereact/panel';
 
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
+import hospitalService from '../../service/hospitalService';
 
 import '../../assets/scss/DataScroller.scss';
+import { __esModule } from 'react-full-page/lib/components/FullPage';
 
 export default function Status() {
 
@@ -21,8 +23,24 @@ export default function Status() {
         diagnosisTime: ''
     };
 
+    let emptyHospitalItem = {
+        hospitalNo: null,
+        address: '',
+        basicPrice: null,
+        email: '',
+        faxNo: '',
+        headName: '',
+        hospitalName: '',
+        image: '',
+        siteAddress: '',
+        telNo: ''
+    }
+
+    let resultPrice = null;
+
     const [items, setItems] = useState([]);
     const [item, setItem] = useState(emptyItem);
+    const [hospitalItem, setHospitalItem] = useState(emptyHospitalItem);
     const [date, setDate] = useState(new Date());
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
 
@@ -68,6 +86,13 @@ export default function Status() {
     ];
 
     useEffect(() => {
+        hospitalService.fetchHospitalInfo()
+         .then( res => {
+            setHospitalItem(res.data);
+        })
+          .catch(err => {
+            console.log('retrieve() Error!', err);
+        });
         statusService.retrieve(dateFormat(date))
           .then( res => {
             console.log('success!!');
@@ -89,6 +114,12 @@ export default function Status() {
             console.log('retrieve() Error!', err);
         });
     }, []);
+
+    const calculatePrice = () => {
+        let basicPrice = hospitalItem.basicPrice;
+
+        //if()
+    }
 
     const deleteItem = () => {
         let _items = [...items];
@@ -117,13 +148,6 @@ export default function Status() {
         setDeleteItemDialog(true);
     }
 
-    const selectOptions = [
-        {label: '진료중', value: 'care'},
-        {label: '진료대기중', value: 'careWait'},
-        {label: '수납대기중', value: 'wait'},
-        {label: '완료', value: 'finish'}
-    ];
-
     // yyyy-MM-dd 포맷으로 반환
     const dateFormat = (date) => {
         var year = date.getFullYear();              //yyyy
@@ -135,10 +159,10 @@ export default function Status() {
     }
 
     const menuToggle = (e, data) => {
-        if(data.state !== 'wait')
-            menu.current.toggle(e, setItem(data))
+        if(data.state === 'wait' || data.state === 'care')
+            setItem(data)
         else
-            alert("TEST")
+            menu.current.toggle(e, setItem(data));
     }
 
     const itemTemplate = (data) => {
@@ -165,26 +189,6 @@ export default function Status() {
         }
 
         return index;
-    }
-
-    const onSelectChange = (event, data) => {
-        let _items = [...items];
-        let _item = {...item};
-        const value = event.value;
-
-        const index = findIndexByNo(data.receiptNo);
-
-        _items[index].state = event.value;
-        _item = _items[index];
-
-        statusService.update(_item)
-          .then( res => {
-            console.log('success!!');
-            setItem(emptyItem);
-        })
-          .catch(err => {
-            console.log('update() Error!', err);
-        });
     }
 
     const onDateChange = (event) => {
@@ -221,6 +225,8 @@ export default function Status() {
 
     const header = renderHeader();
 
+    console.log(item);
+
     return (
         <div className="card">
             <div className="p-grid">
@@ -229,10 +235,46 @@ export default function Status() {
                                 <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                         </div>
                 </div>
-                <Divider layout="vertical">
-                </Divider>
-                <div className="p-col-5" style={{ display: 'flex', justifyContent:'center', alignItems: 'center', padding: '10px' }}>
-                        <Button label="Sign Up" icon="pi pi-user-plus" className="p-button-success"></Button>
+                <Divider layout="vertical" />
+                <div className="p-col-5">
+                <Panel header="수납" style={{ height: '100%', justifyContent:'center', padding: '20px' }}>
+                    <div className="activity-header">
+                        <div className="p-grid">
+                            <div className="p-col-12" style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center' }}>
+                                <span>
+                                    {(item.state === 'careWait' || item.state === 'care' || item.state === '') && <span>진료가 완료된 후 수납계산이 가능합니다.</span>}
+                                </span>
+                            </div>
+                            <div className="p-col-6" style={{ textAlign: 'right' }}>
+                            </div>
+                        </div>
+                    </div>
+                    { (item.state === 'wait') &&
+                    <ul className="activity-list">
+                        <li>
+                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                <h3 className="activity p-m-0">기본진료비</h3>
+                                <div className="count">{ hospitalItem.basicPrice }원</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                <h3 className="activity p-m-0">치료</h3>
+                                <div className="count">10000원</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                <h3 className="activity p-m-0">보험</h3>
+                                <div className="count">10000원</div>
+                            </div>
+                        </li>
+                        <div>
+                            <Button type="button" label="수납완료" className="p-button-rounded" style={{ width: '100%', marginTop: '20px' }} />
+                        </div>
+                    </ul>
+                    }
+                </Panel>
                 </div>
             </div>
             <Menu model={options} popup ref={menu} id="popup_menu" />
