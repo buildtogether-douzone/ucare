@@ -103,14 +103,15 @@ export default function ReservationList() {
           remark: receipt,
           bp: bp,
           bs: bs,
+          diagnosisTime: reservation.revTime,
           patientNo: reservation.patientNo,
           userId: sessionStorage.getItem('user')
         }
-    
-        receiptService.create(receipt)
+
+        receiptService.createRev(receipt)
           .then(res => {
             console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
-              window.location.reload();
+              //window.location.reload();
           })
           .catch(err => {
             console.log('create() 에러', err);

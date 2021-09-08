@@ -41,4 +41,9 @@ public class ReceiptController {
 	public ResponseEntity<?> delete(@PathVariable("receiptNo") Long receiptNo) {
 		return new ResponseEntity<>(receiptService.delete(receiptNo), HttpStatus.OK);
 	}
+	
+	@PostMapping("/createRev")
+	public ResponseEntity<?> createRev(@RequestBody ReceiptVo receipt) {
+		return new ResponseEntity<>(receiptService.createRev(receipt), HttpStatus.OK);
+	}
 }
