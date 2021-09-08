@@ -10,6 +10,7 @@ import { Panel } from 'primereact/panel';
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
 import hospitalService from '../../service/hospitalService';
+import patientService from '../../service/patientService';
 
 import '../../assets/scss/DataScroller.scss';
 import { __esModule } from 'react-full-page/lib/components/FullPage';
