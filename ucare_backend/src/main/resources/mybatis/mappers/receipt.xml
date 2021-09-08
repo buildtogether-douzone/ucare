@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="receipt">	
+
 	<insert id="create" parameterType="receiptvo">
 		INSERT
 			INTO ucare.receipt(
@@ -28,6 +29,36 @@
 			'N',
 			'careWait',
 			(SELECT MIN(time) FROM ucare.time WHERE date = TO_DATE(TO_CHAR(now(), 'YYYY-MM-DD'), 'YYYY-MM-DD') AND status = false)
+		)
+	</insert>
+	
+	<insert id="createRev" parameterType="receiptvo">
+		INSERT
+			INTO ucare.receipt(
+				receipt_dt, 
+				receipt_time, 
+				ins_dt, 
+				remark, 
+				bp, 
+				bs, 
+				user_no, 
+				patient_no, 
+				accept_yn,
+				state,
+				diagnosis_time
+			)
+		VALUES(
+			now(),
+			now(),
+			now(),
+			#{remark },
+			#{bp },
+			#{bs },
+			(SELECT user_no FROM ucare.user WHERE id = #{userId } ),
+			#{patientNo },
+			'N',
+			'careWait',
+			#{diagnosisTime }
 		)
 	</insert>
 	
@@ -69,5 +100,7 @@
 		  FROM ucare.receipt
 		 WHERE receipt_no = #{receiptNo }    
 	</delete>
+	
+	
 
 </mapper>

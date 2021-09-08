@@ -29,6 +29,10 @@ public class ReceiptRepository {
 	public int delete(Long receiptNo) {
 		return sqlSession.delete("receipt.delete", receiptNo);
 	}
+	
+	public int createRev(ReceiptVo receipt) {
+		return sqlSession.insert("receipt.createRev", receipt);
+	}
 }
 
 

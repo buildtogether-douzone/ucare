@@ -18,6 +18,10 @@ class receiptService {
   delete(receiptNo){
     return axios.delete(RECEIPT_API_BASE_URL + '/delete/' + receiptNo, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
+
+  createRev(data){
+    return axios.post(RECEIPT_API_BASE_URL + '/createRev', data, HEADERS);
+  }
 }
 
 export default new receiptService();

@@ -29,4 +29,8 @@ public class ReceiptService {
 	public int delete(Long receiptNo) {
 		return ReceiptRepository.delete(receiptNo);
 	}
+	
+	public int createRev(ReceiptVo receipt) {
+		return ReceiptRepository.createRev(receipt);
+	}
 }
