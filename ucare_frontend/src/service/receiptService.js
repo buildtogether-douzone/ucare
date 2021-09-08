@@ -1,22 +1,22 @@
 import axios from 'axios';
-import { RECEIPT_API_BASE_URL, HEADERS } from './urlConfig';
+import { RECEIPT_API_BASE_URL } from './urlConfig';
 
 class receiptService {
   
   create(data){
-    return axios.post(RECEIPT_API_BASE_URL + '/create', data, HEADERS);
+    return axios.post(RECEIPT_API_BASE_URL + '/create', data, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
 
   retrieveAll(patientNo){
-    return axios.get(RECEIPT_API_BASE_URL + '/retrieveAll/' + patientNo, HEADERS);
+    return axios.get(RECEIPT_API_BASE_URL + '/retrieveAll/' + patientNo, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
 
   updateState(data){
-    return axios.put(RECEIPT_API_BASE_URL + '/updateState', data, HEADERS);
+    return axios.put(RECEIPT_API_BASE_URL + '/updateState', data, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
 
   delete(receiptNo){
-    return axios.delete(RECEIPT_API_BASE_URL + '/delete/' + receiptNo, HEADERS);
+    return axios.delete(RECEIPT_API_BASE_URL + '/delete/' + receiptNo, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
 }
 

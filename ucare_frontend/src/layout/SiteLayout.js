@@ -1,4 +1,4 @@
-import React, { Fragment, useRef } from 'react';
+import React, { Fragment, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Footer from './Footer';
 import Header from './Header';
@@ -53,6 +53,10 @@ const useStyles = makeStyles((theme) => ({
 const Dashboard = ({open, children }) => {
   const classes = useStyles();
   const slideRef = useRef(null);
+
+  useEffect(()=>{
+    console.log(localStorage.getItem('authorization'));
+  }, [])
 
   return (
     <Fragment>

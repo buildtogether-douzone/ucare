@@ -84,8 +84,6 @@ export default function SignInSide({ history }) {
     userService.login(user)
     .then( res => {
       var token = res.headers.authorization;
-      localStorage.setItem("authorization",token);
-      
       token = token.replace('Bearer','');
       var decoded = jwt(token);
       if(decoded) {
@@ -93,6 +91,7 @@ export default function SignInSide({ history }) {
         sessionStorage.setItem('user', decoded.id);
         sessionStorage.setItem('user_no', decoded.userNo);
         sessionStorage.setItem('role', decoded.role);
+        localStorage.setItem("authorization", res.headers.authorization);
         
         history.push(decoded.role=='관리자'? '/admin/main' :
                      decoded.role=='의사' ? '/doctor/main' :

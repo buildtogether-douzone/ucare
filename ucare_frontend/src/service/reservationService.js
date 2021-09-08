@@ -1,18 +1,18 @@
 import axios from 'axios';
-import { RESERVATION_API_BASE_URL, HEADERS } from './urlConfig'
+import { RESERVATION_API_BASE_URL } from './urlConfig'
 
 class reservationService {
   
   create(data){
-    return axios.post(RESERVATION_API_BASE_URL + '/create', data, HEADERS);
+    return axios.post(RESERVATION_API_BASE_URL + '/create', data, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
 
   retrieveAll(){
-    return axios.get(RESERVATION_API_BASE_URL + '/retrieveAll', HEADERS);
+    return axios.get(RESERVATION_API_BASE_URL + '/retrieveAll', { headers: { Authorization: localStorage.getItem("authorization") }});
   }
 
   delete(revNo) {
-    return axios.delete(RESERVATION_API_BASE_URL + '/delete/' + revNo, HEADERS);
+    return axios.delete(RESERVATION_API_BASE_URL + '/delete/' + revNo, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
 }
 

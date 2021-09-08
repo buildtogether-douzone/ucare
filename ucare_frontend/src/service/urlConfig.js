@@ -10,9 +10,3 @@ export const STATUS_API_BASE_URL = "http://localhost:8080/ucare_backend/api/stat
 export const TIME_API_BASE_URL = "http://localhost:8080/ucare_backend/api/time";
 export const DIAGNOSIS_API_BASE_URL = "http://localhost:8080/ucare_backend/api/diagnosis";
 export const RESERVATION_API_BASE_URL = "http://localhost:8080/ucare_backend/api/reservation";
-
-export const HEADERS = {
-    headers: {
-        Authorization: localStorage.getItem("authorization")
-    }
-}
