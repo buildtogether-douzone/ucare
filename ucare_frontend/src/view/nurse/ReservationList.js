@@ -20,16 +20,21 @@ export default function ReservationList() {
         insurance: ''
     };
 
+    let empty = {
+        bp: null,
+        bs: null,
+        remark: '',
+        time: '',
+        patientNo: null
+    }
+
     const [reservations, setReservations] = useState(null);
     const [reservation, setReservation] = useState(emptyItem);
-    const [bp, setBP] = useState('');
-    const [bs, setBS] = useState('');
-    const [remark, setRemark] = useState('');
+    const [item, setItem] = useState(empty);
     const [date, setDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(date);
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [itemDialog, setItemDialog] = useState(false);
-    const [viewDialog, setViewDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState('');
     const dt = useRef(null);
 
@@ -89,6 +94,7 @@ export default function ReservationList() {
 
     const rowColumnClick = (rowData) => {
         setReservation({ ...rowData });
+        setItem(empty);
         setItemDialog(true);
     }
 
@@ -96,13 +102,21 @@ export default function ReservationList() {
         setItemDialog(false);
     }
 
+    const onInputChange = (e, name) => {
+        const val = (e.target && e.target.value) || '';
+        let _item = { ...item };
+        _item[`${name}`] = val;
+
+        setItem(_item);
+    }
+
     const saveItem = (e) => {
         e.preventDefault();
     
         let receipt = {
-          remark: receipt,
-          bp: bp,
-          bs: bs,
+          remark: item.remark,
+          bp: item.bp,
+          bs: item.bs,
           diagnosisTime: reservation.revTime,
           patientNo: reservation.patientNo,
           userId: sessionStorage.getItem('user')
@@ -254,15 +268,15 @@ export default function ReservationList() {
                 </div>
                 <div className="p-field" style={{fontWeight: 'bold'}}>
                 <label htmlFor="bp">혈압</label>
-                <InputText value={bp} onChange={(e) => setBP(e.target.value)} />
+                <InputText value={item.bp || ''} onChange={(e) => onInputChange(e, 'bp')} />
                 </div>
                 <div className="p-field" style={{fontWeight: 'bold'}}>
                 <label htmlFor="bs">혈당</label>
-                <InputText value={bs} onChange={(e) => setBS(e.target.value)} />
+                <InputText value={item.bs || ''} onChange={(e) => onInputChange(e, 'bs')} />
                 </div>              
                 <div className="p-field" style={{fontWeight: 'bold'}}>
                 <label htmlFor="remark">접수 메모</label>
-                <InputTextarea value={remark} onChange={(e) => setRemark(e.target.value)} rows={5} cols={30} autoResize />
+                <InputTextarea value={item.remark || ''} onChange={(e) => onInputChange(e, 'remark')} rows={5} cols={30} autoResize />
                 </div>
 
             </Dialog>
