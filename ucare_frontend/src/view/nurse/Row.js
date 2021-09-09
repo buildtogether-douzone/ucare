@@ -675,7 +675,7 @@ export default function Row(props) {
                       <TableCell 
                       onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
                       style={{padding: '10px' }}>{receiptList.remark}</TableCell>
-                      {receiptList.state == '완료' ?
+                      {receiptList.state == 'complete' ?
                         <TableCell></TableCell>
                         : <TableCell
                             style={{ textAlign: 'center', padding: '5px' }}>
