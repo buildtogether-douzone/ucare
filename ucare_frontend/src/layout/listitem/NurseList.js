@@ -44,5 +44,4 @@ const NurseList = React.forwardRef((props, ref) => {
         </div>
     );
 });
-
 export default NurseList;
