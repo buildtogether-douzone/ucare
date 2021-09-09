@@ -29,7 +29,9 @@
 				      address = #{address},
 				      tel_no = #{telNo},
 				      basic_price = #{basicPrice},
+				      <if test="image != null and image != '' ">
 				      image = #{image},
+				      </if>
 				      site_add = #{siteAddress},
 				      email = #{email},
 				      fax_no = #{faxNo},
@@ -45,7 +47,9 @@
 				   address,
 				   tel_no,
 				   basic_price,
+				   <if test="image != null and image != '' ">
 				   image,
+				   </if>
 				   site_add,
 				   email,
 				   fax_no,
@@ -57,7 +61,9 @@
 			   #{address},
 			   #{telNo},
 			   #{basicPrice},
+			   <if test="image != null and image != '' ">
 			   #{image},
+			   </if>
 			   #{siteAddress},
 			   #{email},
 			   #{faxNo},
