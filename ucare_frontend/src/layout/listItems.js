@@ -15,13 +15,13 @@ export const nurseListItems = (
       <ListItemIcon>
         <RemoveTwoToneIcon />
       </ListItemIcon>
-      <ListItemText primary="공지 사항" />
+      <ListItemText primary="공지사항" />
     </ListItem>
     <ListItem button component={Link} to="/nurse/patientList">
       <ListItemIcon>
         <ShoppingCartIcon />
       </ListItemIcon>
-      <ListItemText primary="환자 검색" />
+      <ListItemText primary="환자검색" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
@@ -50,7 +50,7 @@ export const doctorListItems = (
       <ListItemIcon>
         <RemoveTwoToneIcon />
       </ListItemIcon>
-      <ListItemText primary="공지 사항" />
+      <ListItemText primary="공지사항" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
@@ -73,31 +73,37 @@ export const adminListItems = (
       <ListItemIcon>
         <RemoveTwoToneIcon />
       </ListItemIcon>
-      <ListItemText primary="공지 사항" />
+      <ListItemText primary="공지사항" />
     </ListItem>
     <ListItem button component={Link} to="/admin/setting">
       <ListItemIcon>
         <RemoveTwoToneIcon />
       </ListItemIcon>
-      <ListItemText primary="권한 관리" />
+      <ListItemText primary="권한관리" />
     </ListItem>
     <ListItem button component={Link} to="/admin/hospital">
       <ListItemIcon>
         <RemoveTwoToneIcon />
       </ListItemIcon>
-      <ListItemText primary="병원 정보" />
+      <ListItemText primary="병원정보" />
+    </ListItem>
+    <ListItem button component={Link} to="/admin/signUp">
+      <ListItemIcon>
+        <RemoveTwoToneIcon />
+      </ListItemIcon>
+      <ListItemText primary="회원등록" />
     </ListItem>
     <ListItem button component={Link} to="/admin/disease">
       <ListItemIcon>
         <RemoveTwoToneIcon />
       </ListItemIcon>
-      <ListItemText primary="질병 정보" />
+      <ListItemText primary="질병정보" />
     </ListItem>
     <ListItem button component={Link} to="/admin/medicine">
       <ListItemIcon>
         <RemoveTwoToneIcon />
       </ListItemIcon>
-      <ListItemText primary="의약품 정보" />
+      <ListItemText primary="의약품정보" />
     </ListItem>
   </div>
 );

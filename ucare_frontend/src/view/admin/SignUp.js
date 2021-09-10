@@ -1,58 +1,74 @@
 import React, { useState, useEffect } from 'react';
-import Avatar from '@material-ui/core/Avatar';
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, FormLabel, Radio, RadioGroup, Container } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import userService from '../../service/userService';
-import Footter from '../../layout/Footer';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import Container from '@material-ui/core/Container';
+
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import SearchIcon from '@material-ui/icons/Search';
+import DaumPostcode from "react-daum-postcode";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    width:'100%',
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    boxShadow: '0 0 5px #BABABA',
-    padding: '30px 5px 70px 5px',
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-    borderRadius: '10px'
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    border: '1px solid white',
+    backgroundColor: '#FFFFFF'
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  image: {
-    position: 'relative',
-    height: '100vh',
     width: '100%',
-    overflowY: 'scroll',
-    "&::-webkit-scrollbar": {
-      display: "none"
-    },
-    "&::before":{
-      content: '""',
-      height: '100vh',
-      width: '100%',
-      backgroundSize: '100% 100%',
-      zIndex: -1,
-      position: 'fixed',
-    }
+  },
+  font: {
+    width: '30%',
+    float: 'left',
+    height: '100%',
+    paddingTop: '12px',
+    paddingLeft: '5px',
+    paddingRight: '10px',
+    backgroundColor: '#E7E7E7'
+  },
+  input: {
+    width: '65%',
+    float: 'left',
+    padding: '5px',
+    backgroundColor: '#FFFFFF',
+  },
+  radio: {
+    width: '50%',
+    float: 'left',
+    paddingLeft: '8px'
+  },
+  textField: {
+    display: 'inline-block',
+    float: 'right'
+  },
+  title: {
+    padding: theme.spacing(1),
+    border: '1px solid #DFDFDF',
+    width: '100%',
+    backgroundColor: '#DFDFDF',
+    borderRadius: '10px 10px 0 0',
+    fontWeight: 550,
+    color: '#656565'
   }
 }));
 
@@ -64,11 +80,14 @@ export default function SignUp({ history }) {
   const [name, setName] = useState('');
   const [gender, setGender] = useState('female');
   const [ssn, setSSN] = useState('');
+  const [emailID, setEmailID] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
+  const [detailAddress, setDetailAddress] = useState('');
   const [telNo, setTelNo] = useState('');
   const [role, setRole] = useState('');
   const [remark, setRemark] = useState('');
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const options = ['의사', '간호사'];
   const [value, setValue] = useState(options[0]);
@@ -108,6 +127,10 @@ export default function SignUp({ history }) {
     setName(e.target.value)
   }
 
+  const emailIDChange = (e) => {
+    setEmailID(e.target.value)
+  }
+
   const emailChange = (e) => {
     setEmail(e.target.value)
   }
@@ -127,6 +150,10 @@ export default function SignUp({ history }) {
     setAddress(e.target.value)
   }
 
+  const detailAddressChange = (e) => {
+    setDetailAddress(e.target.value)
+  }
+
   const telNoChange = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
     if (regex.test(e.target.value)) {
@@ -136,6 +163,34 @@ export default function SignUp({ history }) {
 
   const roleChange = (e) => {
     setRole(e.target.value)
+  }
+
+  const openPostCode = () => {
+    setIsPopupOpen(true)
+  };
+
+  const closePostCode = () => {
+    setIsPopupOpen(false)
+  };
+
+  const handlePostCode = (data) => {
+    let fullAddress = data.address;
+    let extraAddress = '';
+
+    if (data.addressType === 'R') {
+      if (data.bname !== '') {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== '') {
+        extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName);
+      }
+      fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
+    }
+    console.log(data)
+    console.log(fullAddress)
+    console.log(data.zonecode)
+    setAddress(fullAddress);
+    closePostCode();
   }
 
   const saveUser = (e) => {
@@ -169,180 +224,262 @@ export default function SignUp({ history }) {
   }
 
   return (
-    <div className={classes.image}>
-    <Container component="main" maxWidth="xs">
+    <Container component="main">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          회원가입
-        </Typography>
+        <Typography variant="h6" className={classes.title}>회원가입</Typography>
         <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid container>
+            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1" align="right">ID</Typography>
               <TextField
+                style={{ backgroundColor: '#FFFFFF' }}
+                className={classes.input}
                 variant="outlined"
                 required
                 fullWidth
-                id="id"
-                label="ID"
+                size="small"
+                id="outlined-name"
                 name="id"
                 autoComplete="id"
-                value={ id }
+                value={id}
                 onChange={ idChange }
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1" align="right">비밀번호</Typography>
               <TextField
+                style={{ backgroundColor: '#FFFFFF' }}
+                className={classes.input}
                 variant="outlined"
                 required
                 fullWidth
-                name="password"
-                error={hasError('password')} // 해당 텍스트필드에 error 핸들러 추가
                 label="비밀번호(5자 이상)"
+                size="small"
+                id="outlined-ssn"
+                name="password"
                 type="password"
-                id="password"
+                error={hasError('password')} // 해당 텍스트필드에 error 핸들러 추가
                 autoComplete="current-password"
-                value={ password }
-                onChange={ passwordChange }
+                value={password}
+                onChange={passwordChange}
               />
             </Grid>
-            <Grid item xs={12}>
+
+            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1" align="right">비밀번호 확인</Typography>
               <TextField
+                style={{ backgroundColor: '#FFFFFF' }}
+                className={classes.input}
                 variant="outlined"
                 required
                 fullWidth
+                size="small"
+                id="confirmPassword"
                 name="confirmPassword"
+                type="password"
                 error={hasNotSameError('confirmPassword')} // 해당 텍스트필드에 error 핸들러 추가
                 helperText={
                   hasNotSameError('confirmPassword') ? "입력한 비밀번호와 일치하지 않습니다." : null
                 } // 에러일 경우에만 안내 문구 표시
-                label="비밀번호 확인"
-                type="password"
-                id="confirmPassword"
                 autoComplete="current-password"
-                value={ confirmPassword }
-                onChange={ confirmPasswordChange }
+                value={confirmPassword}
+                onChange={confirmPasswordChange}
               />
             </Grid>
-            <Grid item xs={12}>
+
+            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1" align="right">이름</Typography>
               <TextField
+                style={{ backgroundColor: '#FFFFFF' }}
+                className={classes.input}
                 variant="outlined"
                 required
                 fullWidth
+                size="small"
                 id="name"
-                label="이름"
                 name="name"
                 autoComplete="name"
-                value={ name }
-                onChange={ nameChange }
+                value={name}
+                onChange={nameChange}
               />
             </Grid>
-            <Grid item xs={12}>
-            <FormControl component="fieldset">
-            <FormLabel component="legend">Gender</FormLabel>
-            <RadioGroup row aria-label="gender" name="gender1" value={ gender } onChange={ genderChange } >
-                <FormControlLabel value="female" control={<Radio />} label="Female" />
-                <FormControlLabel value="male" control={<Radio />} label="Male" />
-            </RadioGroup>
-            </FormControl>
-            </Grid>
-            <Grid item xs={12}>
+
+            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1" align="right">주민등록번호</Typography>
               <TextField
+                style={{ backgroundColor: '#FFFFFF' }}
+                className={classes.input}
                 variant="outlined"
                 required
                 fullWidth
-                id="ssn"
-                label="주민등록번호"
+                size="small"
+                id="outlined-ssn"
                 name="ssn"
-                value={ ssn }
-                onChange={ ssnChange }
+                autoComplete="ssn"
+                value={ssn}
+                onChange={ssnChange}
               />
             </Grid>
-            <Grid item xs={12}>
+
+            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1" align="right">성별</Typography>
+              <FormControl component="fieldset" className={classes.radio}>
+                <RadioGroup row aria-label="gender" name="gender" value={gender} onChange={genderChange} >
+                  <FormControlLabel
+                    control={<Radio color="primary" />}
+                    label="여자"
+                    labelPlacement="end"
+                    value="female"
+                  />
+                  <FormControlLabel
+                    control={<Radio color="primary" />}
+                    label="남자"
+                    labelPlacement="end"
+                    value="male"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1" align="right">연락처</Typography>
               <TextField
+                style={{ backgroundColor: '#FFFFFF' }}
+                className={classes.input}
                 variant="outlined"
                 required
                 fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                value={ email }
-                onChange={ emailChange }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="address"
-                label="주소"
-                name="address"
-                autoComplete="address"
-                value={ address }
-                onChange={ addressChange }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
+                size="small"
                 id="telNo"
-                label="연락처"
                 name="telNo"
-                value={ telNo }
-           
-                onChange={ telNoChange }
+                value={telNo}
+                onChange={telNoChange}
               />
             </Grid>
-            <Grid item xs={12}>
-              <Autocomplete
-                value={ role }
-                onChange={(event, newValue) => {
-                  setRole(newValue);
-                }}
-                inputValue={inputValue}
-                onInputChange={(event, newInputValue) => {
-                  setInputValue(newInputValue);
-                }}
-                id="role"
-                options={options}
-                style={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="역할" variant="outlined" />}
+
+            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1" align="right">주소</Typography>
+              <TextField
+                className={classes.input}
+                style={{ backgroundColor: '#FFFFFF', width: '58%' }}
+                variant="outlined"
+                required
+                size="small"
+                id="firstAddress"
+                name="firstAddress"
+                autoComplete="firstAddress"
+                value={address}
+                onChange={addressChange}
+              />
+              <SearchIcon onClick={openPostCode} style={{ fontSize: '30px', marginTop: '10px', cursor: 'pointer' }} />
+              <Dialog
+                open={isPopupOpen}
+                onClose={closePostCode}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth
+                maxWidth={'sm'}
+              >
+                <DialogTitle id="form-dialog-title">주소 찾기</DialogTitle>
+                <DialogContent>
+                  <DaumPostcode
+                    onComplete={handlePostCode}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={closePostCode} color="primary">닫기</Button>
+                </DialogActions>
+              </Dialog>
+              <TextField
+                className={classes.input}
+                style={{ backgroundColor: '#FFFFFF' }}
+                variant="outlined"
+                size="small"
+                id="detailAddress"
+                name="detailAddress"
+                autoComplete="detailAddress"
+                value={detailAddress}
+                onChange={detailAddressChange}
               />
             </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="약관에 동의합니다."
+
+            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1" align="right">이메일</Typography>
+              <TextField
+                className={classes.input}
+                style={{ float: 'left', width: '30%', backgroundColor: '#FFFFFF' }}
+                variant="outlined"
+                required
+                fullWidth
+                size="small"
+                id="emailID"
+                name="emailID"
+                autoComplete="email"
+                value={emailID}
+                onChange={emailIDChange}
               />
+              <Typography className={classes.font} style={{ float: 'left', width: '5%', padding: '5px', paddingTop: '10PX', textAlign: 'center', backgroundColor: 'white' }} variant="body1">@</Typography>
+              <FormControl variant="outlined" style={{ float: 'left', width: '30%', backgroundColor: '#FFFFFF', padding: '5px' }}>
+                <Select
+                  style={{ height: '2.5em' }}
+                  labelId="demo-simple-select-outlined-label"
+                  id="email"
+                  size="small"
+                  value={email}
+                  onChange={emailChange}
+                >
+                  <MenuItem value={email}></MenuItem>
+                  <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
+                  <MenuItem value={'naver.com'}>naver.com</MenuItem>
+                  <MenuItem value={'daum.net'}>daum.net</MenuItem>
+                  <MenuItem value={'yahoo.co.kr'}>yahoo.co.kr</MenuItem>
+                  <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
+                  <MenuItem value={'nate.com'}>nate.com</MenuItem>
+                  <MenuItem value={'empas.com'}>empas.com</MenuItem>
+                  <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
+                  <MenuItem value={'weppy.com'}>weppy.com</MenuItem>
+                  <MenuItem value={'korea.com'}>korea.com</MenuItem>
+                  <MenuItem value={'mail.co.kr'}>hotmail.com</MenuItem>
+
+                </Select>
+              </FormControl>
             </Grid>
+
+            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1" align="right">역할</Typography>
+              <FormControl component="fieldset" className={classes.radio}>
+                <RadioGroup row aria-label="role" name="role" value={role} onChange={roleChange} >
+                  <FormControlLabel
+                    value="Y"
+                    control={<Radio color="primary" />}
+                    label="의사"
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    value="N"
+                    control={<Radio color="primary" />}
+                    label="간호사"
+                    labelPlacement="end"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+
           </Grid>
+
           <Button
-            type="submit"
-            fullWidth
+            style={{ backgroundColor: '#616161', float: 'right', margin: '5px' }}
             variant="contained"
             color="primary"
-            className={classes.submit}
-            onClick={ saveUser }
+            size="medium"
+            type="submit"
+            onClick={saveUser}
           >
-            확인
+            등록하기
           </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="/" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
     </Container>
-    <Footter />
-    </div>
   );
 }

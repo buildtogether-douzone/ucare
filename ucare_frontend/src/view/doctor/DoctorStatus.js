@@ -436,7 +436,7 @@ export default function DoctorDiagnosis() {
                 </Panel>
                 </div>
                 <div className="card p-fluid">
-                <Panel header="과거병력" style={{ height: '100%' }} style={{ justifyContent:'center', padding: '20px' }}>
+                <Panel header="과거병력" style={{ height: '100%', justifyContent:'center', padding: '20px' }}>
                     <div className="activity-header">
                             <div className="datascroller">
                                 <DataScroller value={pastDiagnosis} itemTemplate={pastDiagnosisTemplate} rows={5} inline scrollHeight="300px" />
@@ -446,7 +446,7 @@ export default function DoctorDiagnosis() {
                 </div>
                 </div>
                 <div className="p-col-12 p-md-6 p-lg-4">
-                <Panel header="진료" style={{ height: '100%' }} style={{ justifyContent:'center', padding: '20px' }}>
+                <Panel header="진료" style={{ height: '100%', justifyContent:'center', padding: '20px' }}>
                 <div className="card p-fluid">
                     <div className="p-field p-grid">
                         <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">병명</label>

@@ -15,7 +15,7 @@ const DoctorList = React.forwardRef((props, ref) => {
                 <ListItemIcon>
                     <EventNoteIcon />
                 </ListItemIcon>
-                <ListItemText primary="공지 사항" />
+                <ListItemText primary="공지사항" />
             </ListItem>
             <ListItem button onClick={(e) => {  location.href='/#/doctor/main' ;
                                                 ref.current !== null && ref.current.scrollToSlide(0); }}>

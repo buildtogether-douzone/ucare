@@ -18,13 +18,13 @@ const AdminMain = React.forwardRef((props, ref) => {
           <Hospital />
         </Slide>
         <Slide>
+          <SignUp />
+        </Slide>
+        <Slide>
           <Disease />
         </Slide>
         <Slide>
           <Medicine />
-        </Slide>
-        <Slide>
-          <SignUp />
         </Slide>
       </FullPage>
       </SiteLayout>
