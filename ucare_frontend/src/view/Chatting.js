@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import chroma from 'chroma-js';
+import socketio from 'socket.io-client';
+
+const SOCKET_SERVER_URL = "http://localhost:4000";
+
+/* 소켓 연결은 컴포넌트와 동등한 위치에서 선언되어야 한다.
+왜냐하면 지속적으로 연결이 유지되어야 하기 때문이다*/
+const socket = socketio.connect(SOCKET_SERVER_URL);
 
 
-export default function Chatting({ nick, socket }) {
+export default function Chatting() {
+/* 함수 안에 socket 선언하면 컴포넌트 렌더링 끝나면
+연결이 끊기기 때문에 여기에 socket 선언하면 안됨 */
     const color = chroma.random()._rgb;
+
+    const user = sessionStorage.getItem('user');
     
     const [inputMessage, setInputMessage] = useState({
-        nickName: '',
+        userName: user,
         color: color,
         content: '',
+        timeStamp: new Date().toLocaleTimeString()
     });
 
     // 기존의 채팅 내용
@@ -24,8 +36,9 @@ export default function Chatting({ nick, socket }) {
     const handleInput = (e) => {
         setInputMessage({
         ...inputMessage,
-        nickName: nick,
+        userName: user,
         content: e.target.value,
+        timeStamp: new Date().toLocaleTimeString()
         });
     };
 
@@ -48,10 +61,16 @@ export default function Chatting({ nick, socket }) {
     };
 
     useEffect(() => {
+        if (user.length > 0) {
+            socket.emit('newUser', { user });
+            window.addEventListener('beforeunload', () => {
+              socket.emit('leaveUser', { user });
+            });
+          }
         socket.on('enter', (data) => {
         setEnterMsg({
             color: [255, 255, 255],
-            content: `${data.nick} 님이 입장하셨습니다`,
+            content: `${data.user} 님이 입장하셨습니다`,
         });
     });
 
@@ -61,10 +80,10 @@ export default function Chatting({ nick, socket }) {
         });
 
         socket.on('out', (data) => {
-        if (data.nick.length > 0) {
+        if (data.user.length > 0) {
             setOutMsg({
             color: [255, 255, 255],
-            content: `${data.nick} 님이 퇴장하셨습니다`,
+            content: `${data.user} 님이 퇴장하셨습니다`,
             });
         }
         });
@@ -106,7 +125,8 @@ export default function Chatting({ nick, socket }) {
             <ChatContent>
                 {chatMonitor.map((el, idx) => (
                 <div key={idx}>
-                    <p>{el.nickName}</p>
+                    <p>{el.userName}</p>
+                    <span>{el.timeStamp}</span>
                     <div
                     style={{
                         border: '3px solid black',

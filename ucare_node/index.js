@@ -40,8 +40,8 @@ io.on('connection', (socket) => { // 기본 연결
     io.emit('upload', data);
   });
 
-  socket.on('leaveUser', (nick) => {
-    io.emit('out', nick);
+  socket.on('leaveUser', (user) => {
+    io.emit('out', user);
   });
 
 

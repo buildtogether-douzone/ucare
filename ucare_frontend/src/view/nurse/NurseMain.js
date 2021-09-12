@@ -4,7 +4,7 @@ import SiteLayout from '../../layout/SiteLayout';
 import PatientList from './PatientList';
 import Reservation from './Reservation';
 import NurseStatus from './NurseStatus';
-import ChatMain from '../Chatting/Main';
+import Chatting from '../Chatting';
 
 const NurseMain = React.forwardRef((props, ref) => {
     return(
@@ -20,7 +20,7 @@ const NurseMain = React.forwardRef((props, ref) => {
                     <PatientList />
                 </Slide>
                 <Slide>
-                    <ChatMain />
+                    <Chatting />
                 </Slide>
             </FullPage>
         </SiteLayout>
