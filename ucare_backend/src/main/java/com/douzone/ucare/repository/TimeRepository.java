@@ -16,6 +16,10 @@ public class TimeRepository {
 	@Autowired
 	private SqlSession sqlSession;
 
+	public int create(TimeVo data) {
+		return sqlSession.insert("time.create", data);
+	}
+	
 	public int update(String date) {
 		return sqlSession.update("time.update", date);
 	}

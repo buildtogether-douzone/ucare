@@ -17,8 +17,8 @@ public class SpringBatchScheduler {
 	@Autowired
     public JobLauncher jobLauncher;
 
-    // 600초마다 실행
-    @Scheduled(fixedDelay = 60 * 10000L)
+    // 매일 0시 30분 실행
+    @Scheduled(cron="0 30 0 * * *")
     public void executeJob () {
         try {
             jobLauncher.run(

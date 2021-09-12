@@ -14,6 +14,10 @@ public class TimeService {
 	
 	@Autowired
 	private TimeRepository timeRepository;
+	
+	public int create(TimeVo data) {
+		return timeRepository.create(data);
+	}
 
 	public int update(String date) {
 		return timeRepository.update(date);

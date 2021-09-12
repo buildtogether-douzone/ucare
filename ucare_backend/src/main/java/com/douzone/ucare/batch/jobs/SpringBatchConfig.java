@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.douzone.ucare.batch.tasklets.SpringBatchTasklet;
+import com.douzone.ucare.service.TimeService;
 
 @Configuration
 @EnableBatchProcessing
@@ -20,6 +21,9 @@ public class SpringBatchConfig {
 
 	@Autowired
 	public StepBuilderFactory stepBuilderFactory;
+	
+	@Autowired
+	private TimeService timeService;
 
 	// JobBuilderFactory를 통해서 springBatchJob을 생성
     @Bean
@@ -33,7 +37,12 @@ public class SpringBatchConfig {
     @Bean
     public Step springBatchStep() {
         return stepBuilderFactory.get("springBatchStep")
-                .tasklet(new SpringBatchTasklet()) // Tasklet 설정
+                .tasklet(new SpringBatchTasklet(timeService)) // Tasklet 설정
                 .build();
+    }
+    
+    @Bean
+    public SpringBatchTasklet SpringBatchTasklet(TimeService timeService){
+        return new SpringBatchTasklet(timeService);
     }
 }
