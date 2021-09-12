@@ -126,22 +126,22 @@ export default function Chatting({ nick, socket }) {
 const ChattingWrap = styled.div`
   max-width: 500px;
   width: 100%;
-  height: 700px;
+  height: 600px;
 `;
 
 const ChattingBox = styled.div`
   width: 100%;
-  height: 100%;
+  height: 80%;
 `;
 
 const Monitor = styled.div`
-  height: 100%;
+  height: 80%;
   overflow-y: scroll;
   border-bottom: 1px solid lightgray;
 `;
 
 const ChatContent = styled.div`
-  height: 100%;
+  height: 80%;
   padding: 10px;
   div {
     font-family: 'Nanum Myeongjo', serif;
@@ -176,7 +176,7 @@ const ChatNav = styled.div`
 const SendMessageBox = styled.div`
   border-bottom: 1px solid lightgray;
   input {
-    width: 80%;
+    width: 60%;
     height: 30px;
     padding: 5px;
     font-size: 15px;
