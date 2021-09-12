@@ -24,7 +24,8 @@ public class TestController {
 		webSocket.convertAndSend("/topics/template" , "Template"); 
 	} 
 	
-	@RequestMapping(value="/api") public void SendAPI() { 
+	@RequestMapping(value="/api") 
+	public void SendAPI() { 
 		webSocket.convertAndSend("/topics/api" , "API"); 
 	}
 }

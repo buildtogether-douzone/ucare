@@ -1,7 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import SockJsClient from 'react-stomp';
 
-function App() { 
+export default function Chat() { 
+    const [prevState, setPrevState] = useState(null);
+    const [item, setItem] = useState(null);
+    
     const $websocket = useRef(null); 
     
     const handleMsg = msg => { 
@@ -16,6 +19,22 @@ function App() {
         $websocket.current.sendMessage('/Template'); 
     }; 
     
+    onMessageReceive = (msg, topic) => {
+        setItem(prevState => ({
+          messages: [...prevState.messages, msg]
+        }));
+      }
+
+    sendMessage = (msg, selfMsg) => {
+        try {
+          this.clientRef.sendMessage("/app/all", JSON.stringify(selfMsg));
+          return true;
+        } catch(e) {
+          return false;
+        }
+      }
+        
+
     return (
         <div> 
             <SockJsClient 
@@ -29,5 +48,3 @@ function App() {
             </div>
     ); 
 } 
-
-export default App;
