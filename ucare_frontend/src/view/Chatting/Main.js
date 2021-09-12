@@ -10,6 +10,10 @@ const SOCKET_SERVER_URL = "http://localhost:4000";
 const socket = socketio.connect(SOCKET_SERVER_URL);
 
 export default function Main() {
+/* 함수 안에 socket 선언하면 컴포넌트 렌더링 끝나면
+연결이 끊기기 때문에 여기에 socket 선언하면 안됨 */
+
+  const [nick, setNick] = useState('');
 
   const handleKeyup = (e) => {
     setNick(e.target.value);
@@ -18,6 +22,7 @@ export default function Main() {
   return (
     <>
       <Chatting nick={sessionStorage.getItem('user')} socket={socket} />
+      {/*<Modal nick={nick} handleKeyup={handleKeyup} socket={socket} />*/}
     </>
   );
 };

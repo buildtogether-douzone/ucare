@@ -11,11 +11,16 @@ export default function Chatting({ nick, socket }) {
         color: color,
         content: '',
     });
+
+    // 기존의 채팅 내용
     const [chatMonitor, setChatMonitor] = useState([]);
+    // 새로 추가된 채팅 내용
     const [recentChat, setRecentChat] = useState('');
+
     const [enterMsg, setEnterMsg] = useState('');
     const [outMsg, setOutMsg] = useState('');
 
+    // 입력값을 저장하는 상태값
     const handleInput = (e) => {
         setInputMessage({
         ...inputMessage,
@@ -24,6 +29,7 @@ export default function Chatting({ nick, socket }) {
         });
     };
 
+    // 입력값을 서버로 보내는 함수
     const handleEnter = (e) => {
         if (e.key === 'Enter') {
         socket.emit('message', { inputMessage });
@@ -36,6 +42,7 @@ export default function Chatting({ nick, socket }) {
         setInputMessage({ ...inputMessage, content: '' });
     };
 
+    // 스크롤을 하단으로 이동시키는 함수
     const scrollToBottom = () => {
         document.getElementById('chatMonitor').scrollBy({ top: 100 });
     };
@@ -46,8 +53,9 @@ export default function Chatting({ nick, socket }) {
             color: [255, 255, 255],
             content: `${data.nick} 님이 입장하셨습니다`,
         });
-        });
+    });
 
+        // 서버에서 받은 입력값을 로컬 상태값으로 갱신하는 함수(바로 밑의 함수로 연결된다)
         socket.on('upload', (data) => {
         setRecentChat(data.inputMessage);
         });
@@ -62,11 +70,16 @@ export default function Chatting({ nick, socket }) {
         });
     }, []);
 
+    // 서버에서 갱신된 내용(recentChat)을 받았을 때 로컬 채팅창에 추가하는 함수
+    /* 이때 async, await 구문을 활용해서 아래 함수가 채팅방이 갱신되고 나서 실행되도록 설정하는 것이다
+    -> 채팅창 갱신 보다 스크롤 함수가 먼저 실행되서 async, await 사용 */
     useEffect(async () => {
         (await recentChat.content?.length) > 0 &&
         setChatMonitor([...chatMonitor, recentChat]);
+        // await 밑에 스크롤 함수가 위치되어야 한다
         scrollToBottom();
         setRecentChat('');
+        // 채팅값 초기화 : 이렇게 설정하지 않으면 같은 채팅이 반복됐을 때 이 함수가 반응하지 않는다.
     }, [recentChat]);
 
     useEffect(async () => {
