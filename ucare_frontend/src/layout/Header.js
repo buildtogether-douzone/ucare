@@ -10,6 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import Badge from '@material-ui/core/Badge';
 import SockJsClient from 'react-stomp';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import { Avatar } from 'primereact/avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
@@ -69,6 +71,7 @@ const Header = ({ open, drawerManage }) => {
   const [email, setEmail] = useState('');
   const [userID, setUserID] = useState('');
   const [badge, setBadge] = useState(0);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const $websocket = useRef(null);
 
@@ -92,7 +95,17 @@ const Header = ({ open, drawerManage }) => {
       .catch(err => {
         console.log('fetchUser() 에러', err);
       });
-  }, [])
+  }, []);
+
+  function handleClick(event) {
+    if (anchorEl !== event.currentTarget) {
+      setAnchorEl(event.currentTarget);
+    }
+  }
+
+  function handleClose() {
+    setAnchorEl(null);
+  }
 
   const onClickButton = (name, position) => {
     dialogFuncMap[`${name}`](true);
@@ -161,8 +174,31 @@ const Header = ({ open, drawerManage }) => {
               { backgroundImage: `url(${URL})`, backgroundSize: 'cover' }}
             size="large"
             shape="circle"
-            onClick={() => { avatarClickHandler() }}
-          />
+          >
+            <Button style={{height:'100%', width:'100%'}}
+                    onClick={handleClick}
+                    onMouseOver={handleClick}/>
+          </Avatar>
+
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+            MenuListProps={{ onMouseLeave: handleClose }}
+          >
+              <div className={classes.image} style={URL == null ?
+                { backgroundImage: `url(${require("../assets/image/profile.jpg")})`, backgroundSize: '100% 100%' } :
+                { backgroundImage: `url(${URL})`, backgroundSize: '100% 100%' }}>
+              </div>
+              <Typography style={{marginLeft:'35%', fontSize: '20px' }}>
+                {name}님
+              </Typography>
+              <Typography style={{marginLeft:'35%', fontSize: '20px' }}>
+                {email}
+              </Typography> 
+            <MenuItem onClick={()=> {location.href='/#/profile'}}>회원정보 수정</MenuItem>
+          </Menu>
 
           <Button
             href="/"
@@ -170,25 +206,6 @@ const Header = ({ open, drawerManage }) => {
             style={{ padding: '0px', fontSize: '16px', color: '#FFFFFF' }} >
             <ExitToAppIcon style={{ fontSize: '35px' }} />
           </Button>
-
-          <Dialog header="회원 정보" visible={displayPosition} position={position} modal style={{ width: '28vw', height: '30%', marginTop: '4%' }} onHide={() => onHide('displayPosition')}
-            draggable={false} resizable={true}>
-            <div className={classes.image} style={URL == null ?
-              { backgroundImage: `url(${require("../assets/image/profile.jpg")})`, backgroundSize: '100% 100%' } :
-              { backgroundImage: `url(${URL})`, backgroundSize: '100% 100%' }}>
-            </div>
-            <div style={{ marginLeft: '20px', float: 'left' }}>
-              <Typography style={{ fontSize: '20px' }}>
-                {name}님
-              </Typography>
-              <Typography style={{ fontSize: '20px' }}>
-                {email}
-              </Typography>
-            </div>
-            <div style={{ position: 'absolute', top: '78%', right: '5%', float: 'right', backgroundColor: '#A7A7A7' }}>
-              <Button label="정보 수정" href="/#/profile">프로필 수정</Button>
-            </div>
-          </Dialog>
         </Toolbar>
       </AppBar>
     </Fragment>
