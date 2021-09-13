@@ -6,6 +6,8 @@ import { Divider } from 'primereact/divider';
 import { Menu } from 'primereact/menu';
 import { Dialog } from 'primereact/dialog';
 import { Panel } from 'primereact/panel';
+import { connect, useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { viewManage } from '../../redux/viewManagement/actions';
 
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
@@ -16,7 +18,7 @@ import receiptService from '../../service/receiptService';
 
 import '../../assets/scss/DataScroller.scss';
 
-export default function Status() {
+function NurseStatus( { viewManage } ) {
 
     let emptyItem = {
         receiptNo: null,
@@ -81,6 +83,7 @@ export default function Status() {
     const [date, setDate] = useState(new Date());
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [receiptCompleteDialog, setReceiptCompleteDialog] = useState(false);
+    const reload = useSelector(state => state.reload);
 
     const menu = useRef(null);
 
@@ -106,6 +109,8 @@ export default function Status() {
                             console.log('success!!');
                             setItems(_items);
                             setItem(emptyItem);
+
+                            viewManage();
                         })
                         .catch(err => {
                             console.log('update() Error!', err);
@@ -152,6 +157,36 @@ export default function Status() {
             console.log('retrieve() Error!', err);
         });
     }, []);
+
+    useEffect(() => {
+        hospitalService.fetchHospitalInfo()
+          .then( res => {
+            setHospitalItem(res.data);
+        })
+          .catch(err => {
+            console.log('retrieve() Error!', err);
+        });
+        statusService.retrieve(dateFormat(date))
+          .then( res => {
+            console.log('success!!');
+
+            for(var i = 0; i < res.data.length; i++) {
+                if(res.data[i].state === 'care') {
+                    res.data[i].value = '진료중';
+                } else if(res.data[i].state === 'careWait') {
+                    res.data[i].value = '진료대기중';
+                } else if(res.data[i].state === 'wait') {
+                    res.data[i].value = '수납대기중';
+                } else {
+                    res.data[i].value = '완료';
+                }
+            }
+            setItems(res.data);
+        })
+          .catch(err => {
+            console.log('retrieve() Error!', err);
+        });
+    }, [reload]);
 
     const calculatePrice = (data) => {
         let resultPrice = hospitalItem.basicPrice;
@@ -422,3 +457,16 @@ export default function Status() {
         </div>
     );
 }
+
+const mapStateToProps = (state)=>{
+    return{
+        reload: state.viewManageReducer.reload
+    }
+  }
+  
+  //object(es6 면 property와 value 값이 같으면 생략가능)
+  const mapDispatchToProps = {
+      viewManage
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(NurseStatus);

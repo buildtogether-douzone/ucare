@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import rootReducer from './drawerManagement';
+import rootReducer from './rootReducer'
 import { persistStore, persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
 

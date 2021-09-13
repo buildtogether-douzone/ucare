@@ -8,6 +8,8 @@ import { Panel } from 'primereact/panel';
 import { Checkbox } from 'primereact/checkbox';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { MultiSelect } from 'primereact/multiselect';
+import { connect, useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { viewManage } from '../../redux/viewManagement/actions';
 
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
@@ -19,7 +21,7 @@ import medicineService from '../../service/medicineService';
 
 import '../../assets/scss/DataScroller.scss';
 
-export default function DoctorDiagnosis() {
+function DoctorDiagnosis( { viewManage } ) {
 
     let emptyItem = {
         receiptNo: null,
@@ -50,6 +52,8 @@ export default function DoctorDiagnosis() {
     const [medicineItems, setMedicineItems] = useState([]);
     const [memo, setMemo] = useState('');
     const [cureYN, setCureYN] = useState('');
+
+    const reload = useSelector(state => state.reload);
 
     const menu = useRef(null);
 
@@ -133,6 +137,48 @@ export default function DoctorDiagnosis() {
         });
 
     }, []);
+
+    useEffect(() => {
+        statusService.retrieve(dateFormat(date))
+          .then( res => {
+            console.log('success!!');
+
+            for(var i = 0; i < res.data.length; i++) {
+                if(res.data[i].state === 'care') {
+                    res.data[i].value = '진료중';
+                } else if(res.data[i].state === 'careWait') {
+                    res.data[i].value = '진료대기중';
+                } else if(res.data[i].state === 'wait') {
+                    res.data[i].value = '완료';
+                } else {
+                    res.data[i].value = '완료';
+                }
+            }
+            setItems(res.data);
+        })
+          .catch(err => {
+            console.log('retrieve() Error!', err);
+        });
+
+        diseaseService.retrieveAll()
+        .then( res => {
+            console.log('success!!');
+            setDiseaseItems(res.data);
+        })
+        .catch(err => {
+            console.log('retrieveDisease() Error!', err);
+        });
+
+        medicineService.retrieveAll()
+        .then( res => {
+            console.log('success!!');
+            setMedicineItems(res.data);
+        })
+        .catch(err => {
+            console.log('retrieveMedicine() Error!', err);
+        });
+
+    }, [reload]);
 
     const deleteItem = () => {
         let _items = [...items];
@@ -316,6 +362,8 @@ export default function DoctorDiagnosis() {
                 let _items = items.filter(item => item.receiptNo !== _receiptItem.receiptNo);
                 _items.push(_receiptItem);
                 setItems(_items);
+
+                viewManage();
             })
             .catch(err => {
                 console.log('update() error', err);
@@ -459,7 +507,7 @@ export default function DoctorDiagnosis() {
                         <label htmlFor="care" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">처방</label>
                         <div className="p-col-12 p-md-10">
                             <Checkbox onChange={e => setCureYN(e.checked)} checked={cureYN}></Checkbox>
-                            <label htmlFor="checkOption1"> 치료</label>
+                            <label htmlFor="checkOption1">치료</label>
                         </div>
                     </div>
                     <div className="p-field p-grid">
@@ -491,3 +539,16 @@ export default function DoctorDiagnosis() {
         </div>
     );
 }
+
+const mapStateToProps = (state)=>{
+    return{
+        reload: state.viewManageReducer.reload
+    }
+  }
+  
+  //object(es6 면 property와 value 값이 같으면 생략가능)
+  const mapDispatchToProps = {
+      viewManage
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(DoctorDiagnosis);

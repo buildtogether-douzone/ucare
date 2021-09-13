@@ -1,0 +1,1 @@
+export const VIEW_STATE = 'VIEW_STATE';
