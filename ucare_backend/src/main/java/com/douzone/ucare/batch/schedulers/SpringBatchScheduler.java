@@ -18,7 +18,7 @@ public class SpringBatchScheduler {
     public JobLauncher jobLauncher;
 
     // 매일 0시 30분 실행
-    @Scheduled(cron="0 30 0 * * *")
+    @Scheduled(cron="0 18 9 * * *")
     public void executeJob () {
         try {
             jobLauncher.run(

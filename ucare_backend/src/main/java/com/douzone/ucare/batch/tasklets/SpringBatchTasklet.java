@@ -40,14 +40,12 @@ public class SpringBatchTasklet implements Tasklet {
 		
 		data.setDate(formatedNow);
 		
-		while(!(startTime.equals(endTime))) {
+		while(!(startTime.equals(endTime.plusMinutes(10)))) {
 			DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_TIME;
 			String formatedTime = startTime.format(timeFormatter);
 			
 			
 			data.setTime(formatedTime);
-		
-			// sqlSession.insert("time.create", data);
 			
 			timeService.create(data);
 			
