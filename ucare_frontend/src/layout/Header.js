@@ -191,10 +191,10 @@ const Header = ({ open, drawerManage }) => {
                 { backgroundImage: `url(${require("../assets/image/profile.jpg")})`, backgroundSize: '100% 100%' } :
                 { backgroundImage: `url(${URL})`, backgroundSize: '100% 100%' }}>
               </div>
-              <Typography style={{marginLeft:'35%', fontSize: '20px' }}>
+              <Typography style={{fontSize: '20px' }}>
                 {name}님
               </Typography>
-              <Typography style={{marginLeft:'35%', fontSize: '20px' }}>
+              <Typography style={{fontSize: '20px' }}>
                 {email}
               </Typography> 
             <MenuItem onClick={()=> {location.href='/#/profile'}}>회원정보 수정</MenuItem>
