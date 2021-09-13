@@ -58,5 +58,12 @@ public class FileUploadService {
 		
 		return filename;
 	}
+	
+	public boolean remove(String url) {
+		String filePath = url;
+		File deleteFile = new File(filePath);
+			
+		return deleteFile.delete();
+	}
 
 }
