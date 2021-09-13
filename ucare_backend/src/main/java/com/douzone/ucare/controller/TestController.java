@@ -16,7 +16,7 @@ public class TestController {
 	@MessageMapping("/sendTo") 
 	@SendTo("/topics/sendTo") 
 	public String SendToMessage() throws Exception { 
-		return "SendTo"; 
+		return "5"; 
 	} 
 	
 	@MessageMapping("/Template") 

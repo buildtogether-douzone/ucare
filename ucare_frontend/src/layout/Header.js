@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useRef } from 'react';
 import clsx from 'clsx';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -7,6 +7,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import userService from '../service/userService';
 import Typography from '@material-ui/core/Typography';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import Badge from '@material-ui/core/Badge';
+import SockJsClient from 'react-stomp';
 import { Avatar } from 'primereact/avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
@@ -64,7 +67,10 @@ const Header = ({ open, drawerManage }) => {
   const [name, setName] = useState('');
   const [URL, setURL] = useState('');
   const [email, setEmail] = useState('');
-  
+  const [userID, setUserID] = useState('');
+  const [badge, setBadge] = useState(0);
+
+  const $websocket = useRef(null);
 
   const dialogFuncMap = {
     'displayPosition': setDisplayPosition,
@@ -74,6 +80,8 @@ const Header = ({ open, drawerManage }) => {
     let user = {
       id: sessionStorage.getItem('user')
     };
+
+    setUserID(sessionStorage.getItem('user'));
 
     userService.fetchUserByID(user)
       .then(res => {
@@ -108,63 +116,82 @@ const Header = ({ open, drawerManage }) => {
     sessionStorage.clear();
   }
 
+  const handleClickSendTo = () => {
+    $websocket.current.sendMessage('/Template');
+  };
+
   return (
-    <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-      <Toolbar className={classes.toolbar}>
-        <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="open drawer"
-          onClick={() => { drawerManage() }}
-          className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-        >
-          <MenuIcon />
-        </IconButton>
-        <div style={{ flexGrow: 1 }}>
-          <Button
-            href="/Home"
-            style={{ padding: '0px', width: '100px', fontSize: '20px', color: '#FFFFFF' }} >U-Care</Button>
-        </div>
-        <Typography style={{fontSize:'20px', marginRight:'20px'}}>
+    <Fragment>
+      <SockJsClient
+        url="http://localhost:8080/ucare_backend/start"
+        topics={['/topics/template']}
+        onMessage={msg => { setBadge(msg) }}
+        ref={$websocket} />
+
+      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+        <Toolbar className={classes.toolbar}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={() => { drawerManage() }}
+            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <div style={{ flexGrow: 1 }}>
+            <Button
+              href="/Home"
+              style={{ padding: '0px', width: '100px', fontSize: '20px', color: '#FFFFFF' }} >U-Care</Button>
+          </div>
+          <Typography style={{ fontSize: '20px' }}>
             {name}님
-        </Typography>
-        <Avatar
-          className="p-mr-2"
-          style={URL == null ? 
-            { backgroundImage: `url(${require("../assets/image/profile.jpg")})`, backgroundSize:'cover' } : 
-            { backgroundImage: `url(${URL})`, backgroundSize:'cover' }}
-          size="large"
-          shape="circle"
-          onClick={() => { avatarClickHandler() }}
-        />
+          </Typography>
 
-        <Button
-          href="/"
-          onClick={logout}
-          style={{ padding: '0px', fontSize: '16px', color: '#FFFFFF' }} >
-          <ExitToAppIcon style={{ fontSize: '35px' }} />
-        </Button>
+          <Button onClick={handleClickSendTo}>
+            <Badge badgeContent={badge} color="secondary">
+              <MailOutlineIcon style={{ fontSize: '30px', color: '#FFFFFF' }} />
+            </Badge>
+          </Button>
 
-        <Dialog header="회원 정보" visible={displayPosition} position={position} modal style={{width: '28vw', height:'30%' , marginTop: '4%' }} onHide={() => onHide('displayPosition')}
-          draggable={false} resizable={true}>
-            <div className={classes.image} style={URL == null ? 
-              { backgroundImage: `url(${require("../assets/image/profile.jpg")})`, backgroundSize:'100% 100%' } : 
-              { backgroundImage: `url(${URL})`, backgroundSize:'100% 100%'}}>
+          <Avatar
+            className="p-mr-2"
+            style={URL == null ?
+              { backgroundImage: `url(${require("../assets/image/profile.jpg")})`, backgroundSize: 'cover' } :
+              { backgroundImage: `url(${URL})`, backgroundSize: 'cover' }}
+            size="large"
+            shape="circle"
+            onClick={() => { avatarClickHandler() }}
+          />
+
+          <Button
+            href="/"
+            onClick={logout}
+            style={{ padding: '0px', fontSize: '16px', color: '#FFFFFF' }} >
+            <ExitToAppIcon style={{ fontSize: '35px' }} />
+          </Button>
+
+          <Dialog header="회원 정보" visible={displayPosition} position={position} modal style={{ width: '28vw', height: '30%', marginTop: '4%' }} onHide={() => onHide('displayPosition')}
+            draggable={false} resizable={true}>
+            <div className={classes.image} style={URL == null ?
+              { backgroundImage: `url(${require("../assets/image/profile.jpg")})`, backgroundSize: '100% 100%' } :
+              { backgroundImage: `url(${URL})`, backgroundSize: '100% 100%' }}>
             </div>
-            <div style={{marginLeft:'20px', float:'left'}}>
-              <Typography style={{fontSize:'20px'}}>
-                  {name}님
+            <div style={{ marginLeft: '20px', float: 'left' }}>
+              <Typography style={{ fontSize: '20px' }}>
+                {name}님
               </Typography>
-              <Typography style={{fontSize:'20px'}}>
-                  {email}
+              <Typography style={{ fontSize: '20px' }}>
+                {email}
               </Typography>
             </div>
-            <div style={{position:'absolute', top:'78%', right:'5%', float:'right', backgroundColor:'#A7A7A7'}}>
+            <div style={{ position: 'absolute', top: '78%', right: '5%', float: 'right', backgroundColor: '#A7A7A7' }}>
               <Button label="정보 수정" href="/#/profile">프로필 수정</Button>
             </div>
-        </Dialog>
-      </Toolbar>
-    </AppBar>
+          </Dialog>
+        </Toolbar>
+      </AppBar>
+    </Fragment>
   );
 }
 
