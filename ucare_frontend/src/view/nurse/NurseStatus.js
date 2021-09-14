@@ -6,8 +6,9 @@ import { Divider } from 'primereact/divider';
 import { Menu } from 'primereact/menu';
 import { Dialog } from 'primereact/dialog';
 import { Panel } from 'primereact/panel';
-import { connect, useSelector, useDispatch, shallowEqual } from 'react-redux';
-import { viewManage } from '../../redux/viewManagement/actions';
+
+import { useRecoilState } from 'recoil';
+import { reloadState } from '../../recoil/atom/nurseAtom';
 
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
@@ -18,7 +19,7 @@ import receiptService from '../../service/receiptService';
 
 import '../../assets/scss/DataScroller.scss';
 
-function NurseStatus( { viewManage } ) {
+export default function NurseStatus() {
 
     let emptyItem = {
         receiptNo: null,
@@ -83,7 +84,8 @@ function NurseStatus( { viewManage } ) {
     const [date, setDate] = useState(new Date());
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [receiptCompleteDialog, setReceiptCompleteDialog] = useState(false);
-    const reload = useSelector(state => state.reload);
+
+    const [reload, setReload] = useRecoilState(reloadState);
 
     const menu = useRef(null);
 
@@ -109,8 +111,6 @@ function NurseStatus( { viewManage } ) {
                             console.log('success!!');
                             setItems(_items);
                             setItem(emptyItem);
-
-                            viewManage();
                         })
                         .catch(err => {
                             console.log('update() Error!', err);
@@ -457,16 +457,3 @@ function NurseStatus( { viewManage } ) {
         </div>
     );
 }
-
-const mapStateToProps = (state)=>{
-    return{
-        reload: state.viewManageReducer.reload
-    }
-  }
-  
-  //object(es6 면 property와 value 값이 같으면 생략가능)
-  const mapDispatchToProps = {
-      viewManage
-  }
-  
-  export default connect(mapStateToProps, mapDispatchToProps)(NurseStatus);

@@ -32,6 +32,9 @@ import receiptService from '../../service/receiptService';
 import timeService from '../../service/timeService';
 import DaumPostcode from "react-daum-postcode";
 
+import { useRecoilState } from 'recoil';
+import { reloadState } from '../../recoil/atom/nurseAtom';
+
 const useRowStyles = makeStyles((theme) => ({
   rowStyle: {
     '& > *': {
@@ -77,6 +80,8 @@ export default function Row(props) {
   const [dialogOpen3, setDialogOpen3] = useState(false);
   const [date, setDate] = useState(new Date());
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const [reload, setReload] = useRecoilState(reloadState);
 
   // yyyy-MM-dd 포맷으로 반환
   const dateFormat = (date) => {
@@ -252,7 +257,9 @@ export default function Row(props) {
       .then(res => {
         console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
         timeService.update(dateFormat(date)).then(res => {
-          window.location.reload();
+          // window.location.reload();
+
+          setReload(!reload);
         })
         .catch(err => {
           console.log('update() 에러', err);
