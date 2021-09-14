@@ -110,16 +110,8 @@ const Header = ({ open, drawerManage }) => {
       });
   }, []);
 
-  const formatCurrency = (value) => {
-    return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-  }
-
   const onProductSelect = (e) => {
     setSelectedProduct(e.value);
-  }
-
-  const priceBody = (rowData) => {
-    return formatCurrency(rowData.price);
   }
 
   function handleClick(event) {
@@ -186,13 +178,15 @@ const Header = ({ open, drawerManage }) => {
             </Badge>
           </Button>
 
-          <OverlayPanel ref={op} id="overlay_panel" style={{ width: '450px', marginTop:'1%', position:'fixed' }} className="overlaypanel-demo">
+          <OverlayPanel ref={op} id="overlay_panel" style={{ width: '650px', marginTop:'1%', position:'fixed' }} className="overlaypanel-demo">
             <DataTable value={products} selectionMode="single" paginator rows={5}
               selection={selectedProduct} onSelectionChange={onProductSelect}>
-              <Column field="name" header="Name" sortable />
-              <Column header="Image" />
-              <Column field="price" header="Price" sortable body={priceBody} />
+              <Column field="보낸사람" header="보낸사람"/>
+              <Column header="제목" />
+              <Column field="날짜" header="날짜" />
+              <Column header="상태" />
             </DataTable>
+            <Button style={{marginLeft:'85%'}}>쪽지 쓰기</Button>
           </OverlayPanel>
 
           <Avatar
