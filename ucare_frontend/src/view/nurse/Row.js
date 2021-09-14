@@ -49,7 +49,7 @@ const useRowStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Row(props) {
+const Row = React.forwardRef((props, ref) => {
   const classes = useRowStyles();
   const { row } = props;
   const [open, setOpen] = useState(false);
@@ -258,7 +258,10 @@ export default function Row(props) {
         console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
         timeService.update(dateFormat(date)).then(res => {
           // window.location.reload();
-
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
           setReload(!reload);
         })
         .catch(err => {
@@ -742,4 +745,6 @@ export default function Row(props) {
     </React.Fragment>
 
   );
-}
+})
+
+export default Row;
