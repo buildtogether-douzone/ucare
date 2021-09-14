@@ -17,7 +17,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { drawerManage } from '../redux/drawerManagement/actions';
-import { Dialog } from 'primereact/dialog';
+import { OverlayPanel } from 'primereact/overlaypanel';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 
 const drawerWidth = 240;
 
@@ -72,18 +74,29 @@ const Header = ({ open, drawerManage }) => {
   const [userID, setUserID] = useState('');
   const [badge, setBadge] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [products, setProducts] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const $websocket = useRef(null);
+  const op = useRef(null);
+  const isMounted = useRef(false);
 
   const dialogFuncMap = {
     'displayPosition': setDisplayPosition,
   }
 
   useEffect(() => {
+    if (isMounted.current) {
+      op.current.hide();
+    }
+  }, [selectedProduct]);
+
+  useEffect(() => {
     let user = {
       id: sessionStorage.getItem('user')
     };
 
+    isMounted.current = true;
     setUserID(sessionStorage.getItem('user'));
 
     userService.fetchUserByID(user)
@@ -96,6 +109,18 @@ const Header = ({ open, drawerManage }) => {
         console.log('fetchUser() 에러', err);
       });
   }, []);
+
+  const formatCurrency = (value) => {
+    return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+  }
+
+  const onProductSelect = (e) => {
+    setSelectedProduct(e.value);
+  }
+
+  const priceBody = (rowData) => {
+    return formatCurrency(rowData.price);
+  }
 
   function handleClick(event) {
     if (anchorEl !== event.currentTarget) {
@@ -116,12 +141,6 @@ const Header = ({ open, drawerManage }) => {
     dialogFuncMap[`${name}`](false);
   }
 
-  const avatarClickHandler = () => {
-    displayPosition == false ?
-      onClickButton('displayPosition', 'top-right') :
-      onHide('displayPosition');
-  }
-
   const logout = (e) => {
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('role');
@@ -137,7 +156,7 @@ const Header = ({ open, drawerManage }) => {
     <Fragment>
       <SockJsClient
         url="http://localhost:8080/ucare_backend/start"
-        topics={['/topics/template']}
+        topics={['/topics/template' + userID]}
         onMessage={msg => { setBadge(msg) }}
         ref={$websocket} />
 
@@ -161,11 +180,20 @@ const Header = ({ open, drawerManage }) => {
             {name}님
           </Typography>
 
-          <Button onClick={handleClickSendTo}>
+          <Button onClick={(e) => op.current.toggle(e)}>
             <Badge badgeContent={badge} color="secondary">
               <MailOutlineIcon style={{ fontSize: '30px', color: '#FFFFFF' }} />
             </Badge>
           </Button>
+
+          <OverlayPanel ref={op} id="overlay_panel" style={{ width: '450px', marginTop:'1%', position:'fixed' }} className="overlaypanel-demo">
+            <DataTable value={products} selectionMode="single" paginator rows={5}
+              selection={selectedProduct} onSelectionChange={onProductSelect}>
+              <Column field="name" header="Name" sortable />
+              <Column header="Image" />
+              <Column field="price" header="Price" sortable body={priceBody} />
+            </DataTable>
+          </OverlayPanel>
 
           <Avatar
             className="p-mr-2"
@@ -174,11 +202,8 @@ const Header = ({ open, drawerManage }) => {
               { backgroundImage: `url(${URL})`, backgroundSize: 'cover' }}
             size="large"
             shape="circle"
-          >
-            <Button style={{height:'100%', width:'100%'}}
-                    onClick={handleClick}
-                    onMouseOver={handleClick}/>
-          </Avatar>
+            onClick={handleClick}
+          />
 
           <Menu
             id="simple-menu"
@@ -187,17 +212,17 @@ const Header = ({ open, drawerManage }) => {
             onClose={handleClose}
             MenuListProps={{ onMouseLeave: handleClose }}
           >
-              <div className={classes.image} style={URL == null ?
-                { backgroundImage: `url(${require("../assets/image/profile.jpg")})`, backgroundSize: '100% 100%' } :
-                { backgroundImage: `url(${URL})`, backgroundSize: '100% 100%' }}>
-              </div>
-              <Typography style={{fontSize: '20px' }}>
-                {name}님
-              </Typography>
-              <Typography style={{fontSize: '20px' }}>
-                {email}
-              </Typography> 
-            <MenuItem onClick={()=> {location.href='/#/profile'}}>회원정보 수정</MenuItem>
+            <div className={classes.image} style={URL == null ?
+              { backgroundImage: `url(${require("../assets/image/profile.jpg")})`, backgroundSize: '100% 100%' } :
+              { backgroundImage: `url(${URL})`, backgroundSize: '100% 100%' }}>
+            </div>
+            <Typography style={{ fontSize: '20px' }}>
+              {name}님
+            </Typography>
+            <Typography style={{ fontSize: '20px' }}>
+              {email}
+            </Typography>
+            <MenuItem onClick={() => { location.href = '/#/profile' }}>회원정보 수정</MenuItem>
           </Menu>
 
           <Button
