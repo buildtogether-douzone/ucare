@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
@@ -34,6 +34,7 @@ import DaumPostcode from "react-daum-postcode";
 
 import { useRecoilState } from 'recoil';
 import { reloadState } from '../../recoil/atom/nurseAtom';
+import SockJsClient from 'react-stomp';
 
 const useRowStyles = makeStyles((theme) => ({
   rowStyle: {
@@ -82,6 +83,7 @@ const Row = React.forwardRef((props, ref) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const [reload, setReload] = useRecoilState(reloadState);
+  const $websocket = useRef(null);
 
   // yyyy-MM-dd 포맷으로 반환
   const dateFormat = (date) => {
@@ -90,7 +92,7 @@ const Row = React.forwardRef((props, ref) => {
     month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
     var day = date.getDate();                   //d
     day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
-    return  year + '-' + month + '-' + day;
+    return year + '-' + month + '-' + day;
   }
 
   const handleClickOpen = (a, b, c) => {
@@ -204,7 +206,7 @@ const Row = React.forwardRef((props, ref) => {
       .catch(err => {
         console.log('delete() 에러', err);
       });
-      alert('접수 취소 되었습니다.');
+    alert('접수 취소 되었습니다.');
   };
 
   useEffect(() => {
@@ -262,11 +264,12 @@ const Row = React.forwardRef((props, ref) => {
             top: 0,
             behavior: "smooth"
           });
+          $websocket.current.sendMessage('/Doctor');
           setReload(!reload);
         })
-        .catch(err => {
-          console.log('update() 에러', err);
-        });
+          .catch(err => {
+            console.log('update() 에러', err);
+          });
       })
       .catch(err => {
         console.log('create() 에러', err);
@@ -302,7 +305,7 @@ const Row = React.forwardRef((props, ref) => {
     setAddress(fullAddress);
     closePostCode();
   }
-  
+
 
   const onReset = () => {
     setBP('');
@@ -313,6 +316,11 @@ const Row = React.forwardRef((props, ref) => {
 
   return (
     <React.Fragment>
+      <SockJsClient
+        url="http://localhost:8080/ucare_backend/start"
+        topics={['/topics/nurse']}
+        onMessage={msg => { console.log(msg); }}
+        ref={$websocket} />
       <TableRow className={classes.rowStyle}>
         <TableCell style={{ textAlign: 'center', padding: '10px' }}>
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -327,26 +335,26 @@ const Row = React.forwardRef((props, ref) => {
         <TableCell style={{ textAlign: 'center', padding: '10px' }}>{row.ssn}</TableCell>
         <TableCell style={{ textAlign: 'center', padding: '10px' }}>{row.telNo}</TableCell>
         <TableCell style={{ textAlign: 'center', padding: '5px' }}>
-          <PermIdentityIcon 
-                    onClick={() => {
-                      document.body.style.position = "relative";
-                      patientInfoClickOpen(
-                        row.patientNo,
-                        row.name,
-                        row.gender,
-                        row.emailId,
-                        row.email,
-                        row.ssn,
-                        row.age,
-                        row.address,
-                        row.detailAddress,
-                        row.telNo,
-                        row.diagnosis,
-                        row.insurance,
-                        row.insDt,
-                        row.remark)
-                    }} 
-          style={{ color: '#1C91FB', fontSize: '30px', cursor: 'pointer' }} /></TableCell>
+          <PermIdentityIcon
+            onClick={() => {
+              document.body.style.position = "relative";
+              patientInfoClickOpen(
+                row.patientNo,
+                row.name,
+                row.gender,
+                row.emailId,
+                row.email,
+                row.ssn,
+                row.age,
+                row.address,
+                row.detailAddress,
+                row.telNo,
+                row.diagnosis,
+                row.insurance,
+                row.insDt,
+                row.remark)
+            }}
+            style={{ color: '#1C91FB', fontSize: '30px', cursor: 'pointer' }} /></TableCell>
         <Dialog open={dialogOpen2} onClose={handleClose2} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
           <DialogTitle id="form-dialog-title">환자 정보</DialogTitle>
           <DialogContent>
@@ -439,15 +447,15 @@ const Row = React.forwardRef((props, ref) => {
               </Dialog>
 
               <TextField
-          style={{backgroundColor: '#FFFFFF', marginTop: '10px'}} 
-          variant="outlined"
-          fullWidth
-          size="small"
-          id="detailAddress"
-          name="detailAddress"
-          value={ detailAddress }
-          onChange={(e) => { setDetailAddress(e.target.value) }}
-        />
+                style={{ backgroundColor: '#FFFFFF', marginTop: '10px' }}
+                variant="outlined"
+                fullWidth
+                size="small"
+                id="detailAddress"
+                name="detailAddress"
+                value={detailAddress}
+                onChange={(e) => { setDetailAddress(e.target.value) }}
+              />
             </div>
             <div style={{ width: '100%', overflow: 'hidden' }}>
               <Typography className={classes.font} variant="body1" gutterBottom>이메일</Typography>
@@ -555,13 +563,13 @@ const Row = React.forwardRef((props, ref) => {
 
         <TableCell style={{ textAlign: 'center', padding: '5px' }}>
           <AddBoxIcon
-                            onClick={() => {
-                              receiptClickOpen(
-                                row.patientNo,
-                                row.name,
-                                row.insurance)
-                            }}
-          style={{ color: '#1C91FB', fontSize: '30px', cursor: 'pointer' }} /></TableCell>
+            onClick={() => {
+              receiptClickOpen(
+                row.patientNo,
+                row.name,
+                row.insurance)
+            }}
+            style={{ color: '#1C91FB', fontSize: '30px', cursor: 'pointer' }} /></TableCell>
         <Dialog open={dialogOpen3} onClose={handleClose3} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
 
           <DialogTitle id="form-dialog-title">접수</DialogTitle>
@@ -657,7 +665,7 @@ const Row = React.forwardRef((props, ref) => {
               </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
-                  <TableRow style={{backgroundColor: '#DFDFDF'}}>
+                  <TableRow style={{ backgroundColor: '#DFDFDF' }}>
                     <TableCell style={{ width: '3%' }} />
                     <TableCell style={{ width: '6%', textAlign: 'center', padding: '10px' }}>No</TableCell>
                     <TableCell style={{ width: '12%', textAlign: 'center', padding: '10px' }}>접수 번호</TableCell>
@@ -671,25 +679,25 @@ const Row = React.forwardRef((props, ref) => {
                   {receipt.map((receiptList) => (
                     <TableRow key={receiptList.receiptNo} >
                       <TableCell />
-                      <TableCell 
-                      onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
-                      style={{ textAlign: 'center', padding: '10px' }} component="th" scope="row">{receiptList.no}</TableCell>
-                      <TableCell onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }} 
-                                style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptNo}</TableCell>
-                      <TableCell 
-                      onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
-                      style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptDt}</TableCell>
-                      <TableCell 
-                      onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
-                      style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptTime}</TableCell>
-                      <TableCell 
-                      onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
-                      style={{padding: '10px' }}>{receiptList.remark}</TableCell>
+                      <TableCell
+                        onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
+                        style={{ textAlign: 'center', padding: '10px' }} component="th" scope="row">{receiptList.no}</TableCell>
+                      <TableCell onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
+                        style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptNo}</TableCell>
+                      <TableCell
+                        onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
+                        style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptDt}</TableCell>
+                      <TableCell
+                        onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
+                        style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptTime}</TableCell>
+                      <TableCell
+                        onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
+                        style={{ padding: '10px' }}>{receiptList.remark}</TableCell>
                       {receiptList.state == 'complete' ?
                         <TableCell></TableCell>
                         : <TableCell
-                            style={{ textAlign: 'center', padding: '5px' }}>
-                              <ClearIcon onClick={() => { deleteReceipt(receiptList.receiptNo) }} style={{ color: '#1C91FB', fontSize: '30px', cursor: 'pointer' }}/>
+                          style={{ textAlign: 'center', padding: '5px' }}>
+                          <ClearIcon onClick={() => { deleteReceipt(receiptList.receiptNo) }} style={{ color: '#1C91FB', fontSize: '30px', cursor: 'pointer' }} />
                         </TableCell>
                       }
                     </TableRow>

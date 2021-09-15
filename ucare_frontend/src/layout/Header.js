@@ -20,6 +20,12 @@ import { drawerManage } from '../redux/drawerManagement/actions';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { InputText } from 'primereact/inputtext';
+import { Dialog } from 'primereact/dialog';
+import { Dropdown } from 'primereact/dropdown';
+import { InputTextarea } from 'primereact/inputtextarea';
+import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
+import UserService from '../service/userService';
 
 const drawerWidth = 240;
 
@@ -63,6 +69,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+let emptyItem = {
+  userNo: null,
+  id: '',
+  name: ''
+};
+
+let empty = {
+  to: '',
+  title: '',
+  contents: ''
+}
 
 const Header = ({ open, drawerManage }) => {
   const classes = useStyles();
@@ -76,6 +93,12 @@ const Header = ({ open, drawerManage }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [products, setProducts] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [itemDialog, setItemDialog] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(emptyItem);
+  const [item, setItem] = useState(empty);
+  const [deleteItemDialog, setDeleteItemDialog] = useState(false);
+  
 
   const $websocket = useRef(null);
   const op = useRef(null);
@@ -84,6 +107,21 @@ const Header = ({ open, drawerManage }) => {
   const dialogFuncMap = {
     'displayPosition': setDisplayPosition,
   }
+
+  const retrieveAll = (e) => {
+    UserService.retrieveAll()
+        .then(res => {
+            console.log('success!!');
+            setUsers(res.data);
+        })
+        .catch(err => {
+            console.log('retrieveAll() Error!', err);
+        });
+}
+
+  useEffect(() => {
+    retrieveAll();
+  }, []);
 
   useEffect(() => {
     if (isMounted.current) {
@@ -144,6 +182,73 @@ const Header = ({ open, drawerManage }) => {
     $websocket.current.sendMessage('/Template');
   };
 
+  const onMessage = () => {
+    document.body.style.position = "relative";
+    document.body.style.overflow = "hidden";
+    setItemDialog(true);
+  };
+
+  const hideDialog = () => {
+    document.body.style.position = "";
+    document.body.style.overflow = "";
+    setItemDialog(false);
+  };
+
+  const itemDialogFooter = (
+    <React.Fragment>
+        <Button onClick={hideDialog} color="primary">닫기</Button>
+    </React.Fragment>
+);
+
+
+  const onUserChange = (e) => {
+    setSelectedUser(e.value);
+};
+
+  const selectedUserTemplate = (option, props) => {
+    if (option) {
+        return (
+            <div className="country-item country-item-value">
+                <div>{option.name}</div>
+            </div>
+        );
+    }
+
+    return (
+        <span>
+            {props.placeholder}
+        </span>
+    );
+};
+
+  const userOptionTemplate = (option) => {
+    return (
+        <div className="country-item">
+            <div>{option.name}({option.id})</div>
+        </div>
+    );
+};
+
+  const onInputChange = (e, name) => {
+    const val = (e.target && e.target.value) || '';
+    let _item = { ...item };
+    _item[`${name}`] = val;
+
+    setItem(_item);
+};
+
+  const confirmDeleteItem = (item) => {
+    setDeleteItemDialog(true);
+  };
+
+  const actionBodyTemplate = (rowData) => {
+    return (
+        <React.Fragment>
+          <DeleteForeverOutlinedIcon style={{color: '#1C91FB'}} onClick={() => confirmDeleteItem(rowData)} />
+        </React.Fragment>
+    );
+};
+
   return (
     <Fragment>
       <SockJsClient
@@ -185,9 +290,25 @@ const Header = ({ open, drawerManage }) => {
               <Column header="제목" />
               <Column field="날짜" header="날짜" />
               <Column header="상태" />
+              <Column header="삭제" body={actionBodyTemplate} />
             </DataTable>
-            <Button style={{marginLeft:'85%'}}>쪽지 쓰기</Button>
+            <Button style={{marginLeft:'85%'}} onClick={onMessage}>쪽지 쓰기</Button>
           </OverlayPanel>
+          <Dialog baseZIndex={9999} visible={itemDialog} style={{ width: '40%' }} header="접수" footer={itemDialogFooter} modal className="p-fluid" onHide={hideDialog}>
+              <div className="p-field">
+                  <label htmlFor="name">To</label>
+                  <Dropdown value={selectedUser} options={users} onChange={onUserChange} optionLabel="name" filter filterBy="name" placeholder="이름"
+                            valueTemplate={selectedUserTemplate} itemTemplate={userOptionTemplate} />
+              </div>
+              <div className="p-field" style={{fontWeight: 'bold'}}>
+                <label htmlFor="title">제목</label>
+                <InputText value={item.title || ''} onChange={(e) => onInputChange(e, 'title')} />
+                </div>  
+              <div className="p-field" style={{fontWeight: 'bold'}}>
+                <label htmlFor="remark">내용</label>
+                <InputTextarea value={item.contents || ''} onChange={(e) => onInputChange(e, 'contents')} rows={5} cols={30} autoResize />
+                </div>
+            </Dialog>
 
           <Avatar
             className="p-mr-2"

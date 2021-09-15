@@ -3,6 +3,7 @@ package com.douzone.ucare.vo;
 public class MessageVo {
 	private Long msgNo;
 	private String name;
+	private String title;
 	private String toName;
 	private String contents;
 	private String msgDate;
@@ -50,6 +51,12 @@ public class MessageVo {
 	}
 	public void setUserNo(Long userNo) {
 		this.userNo = userNo;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	
