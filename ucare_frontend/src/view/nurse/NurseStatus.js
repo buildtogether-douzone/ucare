@@ -87,6 +87,7 @@ export default function NurseStatus() {
     const [receiptCompleteDialog, setReceiptCompleteDialog] = useState(false);
 
     const [reload, setReload] = useRecoilState(reloadState);
+    const [value, setValue] = useState('');
 
     const menu = useRef(null);
     const $websocket = useRef(null);
@@ -189,7 +190,7 @@ export default function NurseStatus() {
             .catch(err => {
                 console.log('retrieve() Error!', err);
             });
-    }, [reload]);
+    }, [reload, value]);
 
     const calculatePrice = (data) => {
         let resultPrice = hospitalItem.basicPrice;
@@ -311,7 +312,7 @@ export default function NurseStatus() {
 
     const itemTemplate = (data) => {
         return (
-            <div className="product-item" onClick={(e) => menuToggle(e, data)} aria-controls="popup_menu" aria-haspopup>
+            <div className="product-item" onContextMenu={(e) => { e.preventDefault(); menuToggle(e, data);}} aria-controls="popup_menu" aria-haspopup>
                 <div className="product-detail">
                     <div className="product-name">{data.name}</div>
                     <div className="product-description">{data.diagnosisTime}</div>
@@ -385,7 +386,7 @@ export default function NurseStatus() {
             <SockJsClient
                 url="http://localhost:8080/ucare_backend/start"
                 topics={['/topics/nurse']}
-                onMessage={msg => { console.log(msg); }}
+                onMessage={msg => { setValue(msg) }}
                 ref={$websocket} />
 
             <div className="card">

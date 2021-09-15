@@ -364,7 +364,7 @@ export default function DoctorDiagnosis() {
                     _items.push(_receiptItem);
                     setItems(_items);
 
-                    viewManage();
+                    $websocket.current.sendMessage('/Nurse');
                 })
                     .catch(err => {
                         console.log('update() error', err);
@@ -502,7 +502,6 @@ export default function DoctorDiagnosis() {
                                     </div>
                                 </div>
                             </Panel>
-                            <Button onClick={handleClickSendTo}>222</Button>
                         </div>
                     </div>
                     <div className="p-col-12 p-md-6 p-lg-4">
