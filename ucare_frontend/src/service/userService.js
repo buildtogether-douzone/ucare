@@ -23,6 +23,10 @@ class userService {
     return axios.put(USER_API_BASE_URL + '/update', formData, { headers: { Authorization: localStorage.getItem("authorization") }})
   }
 
+  retrieveAll(){
+    return axios.get(USER_API_BASE_URL + '/retrieveAll', { headers: { Authorization: localStorage.getItem("authorization") }});
+  }
+
 }
 
 export default new userService();

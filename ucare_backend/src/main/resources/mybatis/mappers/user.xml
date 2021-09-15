@@ -61,5 +61,15 @@
 			   		birth = TO_DATE(#{birth },'YYYY-MM-DD')
 			WHERE id = #{id }
 	</update>
+	
+	<select id="retrieveAll" resultType="uservo" >
+		SELECT 
+			user_no AS userNo, 
+			id AS id,
+			name AS name
+		FROM ucare.user
+		WHERE status = 'true'
+		ORDER BY userNo desc
+	</select>
 
 </mapper>

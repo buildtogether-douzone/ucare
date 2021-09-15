@@ -1,9 +1,12 @@
 package com.douzone.ucare.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.douzone.ucare.repository.UserRepository;
+import com.douzone.ucare.vo.PatientVo;
 import com.douzone.ucare.vo.UserVo;
 
 @Service
@@ -38,5 +41,9 @@ public class UserService {
 	
 	public UserVo fetchUser(UserVo user) {
 		return userRepository.fetchUser(user);
+	}
+	
+	public List<UserVo> retrieveAll() {
+		return userRepository.retrieveAll();
 	}
 }

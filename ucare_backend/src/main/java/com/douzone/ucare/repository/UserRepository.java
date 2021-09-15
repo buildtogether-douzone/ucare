@@ -1,12 +1,14 @@
 package com.douzone.ucare.repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.douzone.ucare.vo.PatientVo;
 import com.douzone.ucare.vo.UserVo;
 
 @Repository
@@ -49,6 +51,9 @@ public class UserRepository {
 
 	public UserVo findUser(String username) {
 		return sqlSession.selectOne("user.findUser", username);
+	}
+	public List<UserVo> retrieveAll() {
+		return sqlSession.selectList("user.retrieveAll");
 	}
 
 
