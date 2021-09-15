@@ -82,7 +82,7 @@ let empty = {
 
 const Header = ({ open, drawerManage }) => {
   const classes = useStyles();
-  const [displayPosition, setDisplayPosition] = useState(false);
+  const [displayModal, setDisplayModal] = useState(false);
   const [position, setPosition] = useState('center');
   const [name, setName] = useState('');
   const [URL, setURL] = useState('');
@@ -96,26 +96,26 @@ const Header = ({ open, drawerManage }) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(emptyItem);
   const [item, setItem] = useState(empty);
-  
+  const [view, setView] = useState(true);
 
   const $websocket = useRef(null);
   const op = useRef(null);
   const isMounted = useRef(false);
 
   const dialogFuncMap = {
-    'displayPosition': setDisplayPosition,
+    'displayModal': setDisplayModal
   }
 
   const retrieveAll = (e) => {
     UserService.retrieveAll()
-        .then(res => {
-            console.log('success!!');
-            setUsers(res.data);
-        })
-        .catch(err => {
-            console.log('retrieveAll() Error!', err);
-        });
-}
+      .then(res => {
+        console.log('success!!');
+        setUsers(res.data);
+      })
+      .catch(err => {
+        console.log('retrieveAll() Error!', err);
+      });
+  }
 
   useEffect(() => {
     retrieveAll();
@@ -160,25 +160,12 @@ const Header = ({ open, drawerManage }) => {
     setAnchorEl(null);
   }
 
-  const onClickButton = (name, position) => {
-    dialogFuncMap[`${name}`](true);
-    setPosition(position);
-  }
-
-  const onHide = (name) => {
-    dialogFuncMap[`${name}`](false);
-  }
-
   const logout = (e) => {
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('role');
     localStorage.removeItem('authorization');
     sessionStorage.clear();
   }
-
-  const handleClickSendTo = () => {
-    $websocket.current.sendMessage('/Template');
-  };
 
   const onMessage = () => {
     document.body.style.position = "relative";
@@ -191,41 +178,47 @@ const Header = ({ open, drawerManage }) => {
     document.body.style.overflow = "";
     setItemDialog(false);
   };
-  
+
   const itemDialogFooter = (
     <React.Fragment>
-        <Button onClick={hideDialog} color="primary">닫기</Button>
+      <Button onClick={hideDialog} color="primary">보내기</Button>
+      <Button onClick={hideDialog} color="primary">닫기</Button>
     </React.Fragment>
-);
+  );
 
+  const messageFooter = (
+    <div>
+      <Button onClick={onMessage}>쪽지 쓰기</Button>
+    </div>
+  );
 
   const onUserChange = (e) => {
     setSelectedUser(e.value);
-};
+  };
 
   const selectedUserTemplate = (option, props) => {
     if (option) {
-        return (
-            <div className="country-item country-item-value">
-                <div>{option.name}</div>
-            </div>
-        );
+      return (
+        <div className="country-item country-item-value">
+          <div>{option.name}</div>
+        </div>
+      );
     }
 
     return (
-        <span>
-            {props.placeholder}
-        </span>
+      <span>
+        {props.placeholder}
+      </span>
     );
-};
+  };
 
   const userOptionTemplate = (option) => {
     return (
-        <div className="country-item">
-            <div>{option.name}({option.id})</div>
-        </div>
+      <div className="country-item">
+        <div>{option.name}({option.id})</div>
+      </div>
     );
-};
+  };
 
   const onInputChange = (e, name) => {
     const val = (e.target && e.target.value) || '';
@@ -233,7 +226,19 @@ const Header = ({ open, drawerManage }) => {
     _item[`${name}`] = val;
 
     setItem(_item);
-};
+  };
+
+  const onClick = (name) => {
+    document.body.style.position = "relative";
+    document.body.style.overflow = "hidden";
+    dialogFuncMap[`${name}`](true);
+  }
+
+  const onHide = (name) => {
+    document.body.style.position = "";
+    document.body.style.overflow = "";
+    dialogFuncMap[`${name}`](false);
+  }
 
   return (
     <Fragment>
@@ -263,37 +268,37 @@ const Header = ({ open, drawerManage }) => {
             {name}님
           </Typography>
 
-          <Button onClick={(e) => op.current.toggle(e)}>
+          <Button onClick={() => onClick('displayModal') }>
             <Badge badgeContent={badge} color="secondary">
               <MailOutlineIcon style={{ fontSize: '30px', color: '#FFFFFF' }} />
             </Badge>
           </Button>
 
-          <OverlayPanel ref={op} id="overlay_panel" style={{ width: '650px', marginTop:'1%', position:'fixed' }} className="overlaypanel-demo">
+          <Dialog header="Header" visible={displayModal} modal={false} style={{ width: '50vw' }} footer={messageFooter} onHide={() => onHide('displayModal')}>
             <DataTable value={products} selectionMode="single" paginator rows={5}
               selection={selectedProduct} onSelectionChange={onProductSelect}>
-              <Column field="보낸사람" header="보낸사람"/>
+              <Column field="보낸사람" header="보낸사람" />
               <Column header="제목" />
               <Column field="날짜" header="날짜" />
               <Column header="상태" />
             </DataTable>
-            <Button style={{marginLeft:'85%'}} onClick={onMessage}>쪽지 쓰기</Button>
-          </OverlayPanel>
+          </Dialog>
+
           <Dialog baseZIndex={9999} visible={itemDialog} style={{ width: '40%' }} header="접수" footer={itemDialogFooter} modal className="p-fluid" onHide={hideDialog}>
-              <div className="p-field">
-                  <label htmlFor="name">To</label>
-                  <Dropdown value={selectedUser} options={users} onChange={onUserChange} optionLabel="name" filter filterBy="name" placeholder="이름"
-                            valueTemplate={selectedUserTemplate} itemTemplate={userOptionTemplate} />
-              </div>
-              <div className="p-field" style={{fontWeight: 'bold'}}>
-                <label htmlFor="title">제목</label>
-                <InputText value={item.title || ''} onChange={(e) => onInputChange(e, 'title')} />
-                </div>  
-              <div className="p-field" style={{fontWeight: 'bold'}}>
-                <label htmlFor="remark">내용</label>
-                <InputTextarea value={item.contents || ''} onChange={(e) => onInputChange(e, 'contents')} rows={5} cols={30} autoResize />
-                </div>
-            </Dialog>
+            <div className="p-field">
+              <label htmlFor="name">To</label>
+              <Dropdown value={selectedUser} options={users} onChange={onUserChange} optionLabel="name" filter filterBy="name" placeholder="이름"
+                valueTemplate={selectedUserTemplate} itemTemplate={userOptionTemplate} />
+            </div>
+            <div className="p-field" style={{ fontWeight: 'bold' }}>
+              <label htmlFor="title">제목</label>
+              <InputText value={item.title || ''} onChange={(e) => onInputChange(e, 'title')} />
+            </div>
+            <div className="p-field" style={{ fontWeight: 'bold' }}>
+              <label htmlFor="remark">내용</label>
+              <InputTextarea value={item.contents || ''} onChange={(e) => onInputChange(e, 'contents')} rows={5} cols={30} autoResize />
+            </div>
+          </Dialog>
 
           <Avatar
             className="p-mr-2"
