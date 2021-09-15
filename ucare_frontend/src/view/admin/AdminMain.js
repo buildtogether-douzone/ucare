@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => createStyles({
 
 const AdminMain = React.forwardRef((props, ref) => {
   const classes = useStyles();
+  
     return (
       <SiteLayout>
       <FullPage ref={ref} scrollMode='normal'>
@@ -35,7 +36,7 @@ const AdminMain = React.forwardRef((props, ref) => {
         <Slide className={classes.slide}>
           <Disease />
         </Slide>
-        <Slide className={classes.slide}>
+        <Slide className={classes.slide} style={{ paddingBottom: '5%' }}>
           <Medicine />
         </Slide>
       </FullPage>

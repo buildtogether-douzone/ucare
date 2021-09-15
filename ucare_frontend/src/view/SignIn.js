@@ -1,5 +1,5 @@
 
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -12,6 +12,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import userService from '../service/userService';
 import Footer from '../layout/Footer';
 import jwt from 'jwt-decode';
+import { Toast } from 'primereact/toast';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
@@ -61,6 +62,8 @@ export default function SignInSide({ history }) {
   const [password, setPassword] = useState('');
   const [check, setCheck] = useState(false);
 
+  const toast = useRef(null);
+
   const idChange = (e) => {
     setId(e.target.value)
   }
@@ -83,9 +86,9 @@ export default function SignInSide({ history }) {
     
     userService.login(user)
     .then( res => {
-      var token = res.headers.authorization;
+      let token = res.headers.authorization;
       token = token.replace('Bearer','');
-      var decoded = jwt(token);
+      let decoded = jwt(token);
       
       if(decoded) {
         console.log(decoded.username + '님이 성공적으로 로그인하였습니다.');
@@ -98,6 +101,7 @@ export default function SignInSide({ history }) {
                      decoded.role=='의사' ? '/doctor/main' :
                      decoded.role=='간호사' && '/nurse/main');
       } else {
+        toast.current.show({severity:'info', summary: '알림', detail:'로그인 정보가 없습니다.', life: 3000});
         console.log('로그인 정보가 없습니다.');
       }
     })

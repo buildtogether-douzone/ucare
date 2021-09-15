@@ -53,7 +53,7 @@ export default function DoctorDiagnosis() {
     const [memo, setMemo] = useState('');
     const [cureYN, setCureYN] = useState('');
 
-    const [value, setValue] = useState('');
+    const [reload, setReload] = useState('');
 
     const menu = useRef(null);
     const $websocket = useRef(null);
@@ -179,7 +179,7 @@ export default function DoctorDiagnosis() {
                 console.log('retrieveMedicine() Error!', err);
             });
 
-    }, [value]);
+    }, [reload]);
 
     const deleteItem = () => {
         let _items = [...items];
@@ -456,7 +456,7 @@ export default function DoctorDiagnosis() {
             <SockJsClient
                 url="http://localhost:8080/ucare_backend/start"
                 topics={['/topics/doctor']}
-                onMessage={msg => { setValue(msg) }}
+                onMessage={msg => { setReload(msg) }}
                 ref={$websocket} />
             <div className="card">
                 <div className="p-grid">
