@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { DataScroller } from 'primereact/datascroller';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
@@ -9,6 +9,7 @@ import { Panel } from 'primereact/panel';
 
 import { useRecoilState } from 'recoil';
 import { reloadState } from '../../recoil/atom/nurseAtom';
+import SockJsClient from 'react-stomp';
 
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
@@ -88,6 +89,7 @@ export default function NurseStatus() {
     const [reload, setReload] = useRecoilState(reloadState);
 
     const menu = useRef(null);
+    const $websocket = useRef(null);
 
     const options = [
         {
@@ -97,7 +99,7 @@ export default function NurseStatus() {
                     icon: 'pi pi-refresh',
                     command: () => {
                         let _items = [...items];
-                        let _item = {...item};
+                        let _item = { ...item };
                         const value = 'care';
 
                         const index = findIndexByNo(item.receiptNo);
@@ -107,14 +109,15 @@ export default function NurseStatus() {
                         _item = _items[index];
 
                         statusService.update(_item)
-                        .then( res => {
-                            console.log('success!!');
-                            setItems(_items);
-                            setItem(emptyItem);
-                        })
-                        .catch(err => {
-                            console.log('update() Error!', err);
-                        });
+                            .then(res => {
+                                console.log('success!!');
+                                setItems(_items);
+                                setItem(emptyItem);
+                                $websocket.current.sendMessage('/Doctor');
+                            })
+                            .catch(err => {
+                                console.log('update() Error!', err);
+                            });
                     }
                 },
                 {
@@ -130,109 +133,109 @@ export default function NurseStatus() {
 
     useEffect(() => {
         hospitalService.fetchHospitalInfo()
-          .then( res => {
-            setHospitalItem(res.data);
-        })
-          .catch(err => {
-            console.log('retrieve() Error!', err);
-        });
+            .then(res => {
+                setHospitalItem(res.data);
+            })
+            .catch(err => {
+                console.log('retrieve() Error!', err);
+            });
         statusService.retrieve(dateFormat(date))
-          .then( res => {
-            console.log('success!!');
+            .then(res => {
+                console.log('success!!');
 
-            for(var i = 0; i < res.data.length; i++) {
-                if(res.data[i].state === 'care') {
-                    res.data[i].value = '진료중';
-                } else if(res.data[i].state === 'careWait') {
-                    res.data[i].value = '진료대기중';
-                } else if(res.data[i].state === 'wait') {
-                    res.data[i].value = '수납대기중';
-                } else {
-                    res.data[i].value = '완료';
+                for (var i = 0; i < res.data.length; i++) {
+                    if (res.data[i].state === 'care') {
+                        res.data[i].value = '진료중';
+                    } else if (res.data[i].state === 'careWait') {
+                        res.data[i].value = '진료대기중';
+                    } else if (res.data[i].state === 'wait') {
+                        res.data[i].value = '수납대기중';
+                    } else {
+                        res.data[i].value = '완료';
+                    }
                 }
-            }
-            setItems(res.data);
-        })
-          .catch(err => {
-            console.log('retrieve() Error!', err);
-        });
+                setItems(res.data);
+            })
+            .catch(err => {
+                console.log('retrieve() Error!', err);
+            });
     }, []);
 
     useEffect(() => {
         hospitalService.fetchHospitalInfo()
-          .then( res => {
-            setHospitalItem(res.data);
-        })
-          .catch(err => {
-            console.log('retrieve() Error!', err);
-        });
+            .then(res => {
+                setHospitalItem(res.data);
+            })
+            .catch(err => {
+                console.log('retrieve() Error!', err);
+            });
         statusService.retrieve(dateFormat(date))
-          .then( res => {
-            console.log('success!!');
+            .then(res => {
+                console.log('success!!');
 
-            for(var i = 0; i < res.data.length; i++) {
-                if(res.data[i].state === 'care') {
-                    res.data[i].value = '진료중';
-                } else if(res.data[i].state === 'careWait') {
-                    res.data[i].value = '진료대기중';
-                } else if(res.data[i].state === 'wait') {
-                    res.data[i].value = '수납대기중';
-                } else {
-                    res.data[i].value = '완료';
+                for (var i = 0; i < res.data.length; i++) {
+                    if (res.data[i].state === 'care') {
+                        res.data[i].value = '진료중';
+                    } else if (res.data[i].state === 'careWait') {
+                        res.data[i].value = '진료대기중';
+                    } else if (res.data[i].state === 'wait') {
+                        res.data[i].value = '수납대기중';
+                    } else {
+                        res.data[i].value = '완료';
+                    }
                 }
-            }
-            setItems(res.data);
-        })
-          .catch(err => {
-            console.log('retrieve() Error!', err);
-        });
+                setItems(res.data);
+            })
+            .catch(err => {
+                console.log('retrieve() Error!', err);
+            });
     }, [reload]);
 
     const calculatePrice = (data) => {
         let resultPrice = hospitalItem.basicPrice;
-        
-        diagnosisService.retrieveByReceiptNo(data.receiptNo)
-          .then( res => {
-            console.log('success!!');
-            setDiagnosisItem(res.data);
 
-            if(res.data.cureYN === 'true') 
-                resultPrice += 10000;
-            
-            patientService.retrieve(data.patientNo)
-              .then( res => {
+        diagnosisService.retrieveByReceiptNo(data.receiptNo)
+            .then(res => {
                 console.log('success!!');
-                setPatientItem(res.data);
-      
-                if(res.data.age < 7 || res.data.age >= 65)
-                    resultPrice -= 2000;
-      
-                if(data.diagnosisTime >= '09:00:00' && data.diagnosisTime < '12:00:00')
-                    resultPrice *= 0.9;
-                  
-                if(data.diagnosisTime > '18:00:00' && data.diagnosisTime < '24:00:00')
-                    resultPrice *= 1.1;
-                  
-                if(res.data.insurance === "Y") {
-                    setInsurancePrice(resultPrice * 0.25);
-                    resultPrice *= 0.75;
-                }
-      
-                setItem(data);
-                setPrice(resultPrice);
+                setDiagnosisItem(res.data);
+
+                if (res.data.cureYN === 'true')
+                    resultPrice += 10000;
+
+                patientService.retrieve(data.patientNo)
+                    .then(res => {
+                        console.log('success!!');
+                        setPatientItem(res.data);
+
+                        if (res.data.age < 7 || res.data.age >= 65)
+                            resultPrice -= 2000;
+
+                        if (data.diagnosisTime >= '09:00:00' && data.diagnosisTime < '12:00:00')
+                            resultPrice *= 0.9;
+
+                        if (data.diagnosisTime > '18:00:00' && data.diagnosisTime < '24:00:00')
+                            resultPrice *= 1.1;
+
+                        if (res.data.insurance === "Y") {
+                            setInsurancePrice(resultPrice * 0.25);
+                            resultPrice *= 0.75;
+                        }
+
+                        setItem(data);
+                        setPrice(resultPrice);
+                    })
+                    .catch(err => {
+                        console.log('retrieve() Error!', err);
+                    });
             })
-              .catch(err => {
+            .catch(err => {
                 console.log('retrieve() Error!', err);
             });
-        })
-          .catch(err => {
-            console.log('retrieve() Error!', err);
-        });
     }
 
     const receiptComplete = () => {
         let _items = [...items];
-        let _item = {...item};
+        let _item = { ...item };
 
         const index = findIndexByNo(item.receiptNo);
 
@@ -244,7 +247,7 @@ export default function NurseStatus() {
         _items[index] = _item;
 
         receiptService.updateState(_item)
-            .then( res => {
+            .then(res => {
                 console.log('success!!');
                 setItems(_items);
                 setItem(emptyItem);
@@ -257,14 +260,14 @@ export default function NurseStatus() {
 
     const deleteItem = () => {
         let _items = [...items];
-        let _item = {...item};
+        let _item = { ...item };
 
         const index = findIndexByNo(item.receiptNo);
 
         _item = _items[index];
 
         statusService.delete(_item.receiptNo)
-            .then( res => {
+            .then(res => {
                 console.log('success!!');
                 timeService.updateByCancel(_item);
                 let _items = items.filter(item => item.receiptNo !== _item.receiptNo);
@@ -293,14 +296,14 @@ export default function NurseStatus() {
         month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
         var day = date.getDate();                   //d
         day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
-        return  year + '-' + month + '-' + day;
+        return year + '-' + month + '-' + day;
     }
 
     const menuToggle = (e, data) => {
-        if(data.state === 'wait' || data.state === 'care') {
+        if (data.state === 'wait' || data.state === 'care') {
             calculatePrice(data);
         }
-        else if(data.state === 'complete')
+        else if (data.state === 'complete')
             alert("수납완료된 건입니다.");
         else
             menu.current.toggle(e, setItem(data));
@@ -334,13 +337,13 @@ export default function NurseStatus() {
 
     const onDateChange = (event) => {
         statusService.retrieve(dateFormat(event.value))
-          .then( res => {
-            console.log('success!!');
-            setItems(res.data);
-        })
-          .catch(err => {
-            console.log('retrieve() Error!', err);
-        });
+            .then(res => {
+                console.log('success!!');
+                setItems(res.data);
+            })
+            .catch(err => {
+                console.log('retrieve() Error!', err);
+            });
     }
 
     const hideDeleteItemDialog = () => {
@@ -368,7 +371,7 @@ export default function NurseStatus() {
     const renderHeader = () => {
         return (
             <div className="p-grid p-nogutter">
-                <div style={{textAlign: 'left'}}>
+                <div style={{ textAlign: 'left' }}>
                     <Calendar dateFormat="yy/mm/dd" value={date} onChange={(e) => onDateChange(e)}></Calendar>
                 </div>
             </div>
@@ -378,82 +381,90 @@ export default function NurseStatus() {
     const header = renderHeader();
 
     return (
-        <div className="card">
-            <div className="p-grid">
-                <div className="p-col-6">
-                        <div className="datascroller" style={{ justifyContent:'center', padding: '50px' }}>
-                                <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
-                        </div>
-                </div>
-                <Divider layout="vertical" />
-                <div className="p-col-5">
-                <Panel header="수납" style={{ height: '100%', justifyContent:'center', padding: '20px' }}>
-                    <div className="activity-header">
-                        <div className="p-grid">
-                            <div className="p-col-12" style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center' }}>
-                                <span>
-                                    {(item.state === 'careWait' || item.state === 'care' || item.state === '') && <span>진료가 완료된 후 수납계산이 가능합니다.</span>}
-                                </span>
-                            </div>
-                            <div className="p-col-6" style={{ textAlign: 'right' }}>
-                            </div>
+        <Fragment>
+            <SockJsClient
+                url="http://localhost:8080/ucare_backend/start"
+                topics={['/topics/nurse']}
+                onMessage={msg => { console.log(msg); }}
+                ref={$websocket} />
+
+            <div className="card">
+                <div className="p-grid">
+                    <div className="p-col-6">
+                        <div className="datascroller" style={{ justifyContent: 'center', padding: '50px' }}>
+                            <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                         </div>
                     </div>
-                    { (item.state === 'wait') &&
-                    <ul className="activity-list">
-                        <li>
-                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                <h3 className="activity p-m-0">기본진료비</h3>
-                                <div className="count">{ hospitalItem.basicPrice }원</div>
+                    <Divider layout="vertical" />
+                    <div className="p-col-5">
+                        <Panel header="수납" style={{ height: '100%', justifyContent: 'center', padding: '20px' }}>
+                            <div className="activity-header">
+                                <div className="p-grid">
+                                    <div className="p-col-12" style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center' }}>
+                                        <span>
+                                            {(item.state === 'careWait' || item.state === 'care' || item.state === '') && <span>진료가 완료된 후 수납계산이 가능합니다.</span>}
+                                        </span>
+                                    </div>
+                                    <div className="p-col-6" style={{ textAlign: 'right' }}>
+                                    </div>
+                                </div>
                             </div>
-                        </li>
-                        { (diagnosisItem.cureYN === "true") &&
-                        <li>
-                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                <h3 className="activity p-m-0">치료</h3>
-                                <div className="count">10000원</div>
-                            </div>
-                        </li>
-                        }
-                        { (patientItem.insurance === "Y") &&
-                        <li>
-                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                <h3 className="activity p-m-0">보험</h3>
-                                <div className="count">-{ insurancePrice }원</div>
-                            </div>
-                        </li>
-                        }
-                        { (price !== '') &&
-                        <li>
-                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                <h3 className="activity p-m-0">총</h3>
-                                <div className="count">{ price }원</div>
-                            </div>
-                        </li>
-                        }
-                        <div>
-                            <Button type="button" label="수납완료" onClick={ confirmReceiptComplete } className="p-button-rounded" style={{ width: '100%', marginTop: '20px' }} />
-                        </div>
-                    </ul>
-                    }
-                </Panel>
+                            {(item.state === 'wait') &&
+                                <ul className="activity-list">
+                                    <li>
+                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                            <h3 className="activity p-m-0">기본진료비</h3>
+                                            <div className="count">{hospitalItem.basicPrice}원</div>
+                                        </div>
+                                    </li>
+                                    {(diagnosisItem.cureYN === "true") &&
+                                        <li>
+                                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                                <h3 className="activity p-m-0">치료</h3>
+                                                <div className="count">10000원</div>
+                                            </div>
+                                        </li>
+                                    }
+                                    {(patientItem.insurance === "Y") &&
+                                        <li>
+                                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                                <h3 className="activity p-m-0">보험</h3>
+                                                <div className="count">-{insurancePrice}원</div>
+                                            </div>
+                                        </li>
+                                    }
+                                    {(price !== '') &&
+                                        <li>
+                                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                                <h3 className="activity p-m-0">총</h3>
+                                                <div className="count">{price}원</div>
+                                            </div>
+                                        </li>
+                                    }
+                                    <div>
+                                        <Button type="button" label="수납완료" onClick={confirmReceiptComplete} className="p-button-rounded" style={{ width: '100%', marginTop: '20px' }} />
+                                    </div>
+                                </ul>
+                            }
+                        </Panel>
+                    </div>
                 </div>
+                <Menu model={options} popup ref={menu} id="popup_menu" />
+
+                <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
+                    <div className="confirmation-content">
+                        <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
+                        {item && <span><b>접수를 취소하시겠습니까?</b></span>}
+                    </div>
+                </Dialog>
+
+                <Dialog visible={receiptCompleteDialog} style={{ width: '450px' }} header="Confirm" modal footer={receiptCompleteDialogFooter} onHide={hideReceiptCompleteDialog}>
+                    <div className="confirmation-content">
+                        <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
+                        {item && <span><b>수납을 완료하시겠습니까?</b></span>}
+                    </div>
+                </Dialog>
             </div>
-            <Menu model={options} popup ref={menu} id="popup_menu" />
-
-            <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
-                <div className="confirmation-content">
-                    <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
-                    {item && <span><b>접수를 취소하시겠습니까?</b></span>}
-                </div>
-            </Dialog>
-
-            <Dialog visible={receiptCompleteDialog} style={{ width: '450px' }} header="Confirm" modal footer={receiptCompleteDialogFooter} onHide={hideReceiptCompleteDialog}>
-                <div className="confirmation-content">
-                    <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
-                    {item && <span><b>수납을 완료하시겠습니까?</b></span>}
-                </div>
-            </Dialog>
-        </div>
+        </Fragment>
     );
 }

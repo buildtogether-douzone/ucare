@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { DataScroller } from 'primereact/datascroller';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
@@ -18,6 +18,8 @@ import diseaseService from '../../service/diseaseService';
 import medicineService from '../../service/medicineService';
 
 import '../../assets/scss/DataScroller.scss';
+
+import SockJsClient from 'react-stomp';
 
 export default function DoctorDiagnosis() {
 
@@ -51,7 +53,10 @@ export default function DoctorDiagnosis() {
     const [memo, setMemo] = useState('');
     const [cureYN, setCureYN] = useState('');
 
+    const [value, setValue] = useState('');
+
     const menu = useRef(null);
+    const $websocket = useRef(null);
 
     const options = [
         {
@@ -61,7 +66,7 @@ export default function DoctorDiagnosis() {
                     icon: 'pi pi-refresh',
                     command: () => {
                         let _items = [...items];
-                        let _item = {...item};
+                        let _item = { ...item };
                         const value = 'care';
 
                         const index = findIndexByNo(item.receiptNo);
@@ -71,14 +76,14 @@ export default function DoctorDiagnosis() {
                         _item = _items[index];
 
                         statusService.update(_item)
-                        .then( res => {
-                            console.log('success!!');
-                            setItems(_items);
-                            setItem(emptyItem);
-                        })
-                        .catch(err => {
-                            console.log('update() Error!', err);
-                        });
+                            .then(res => {
+                                console.log('success!!');
+                                setItems(_items);
+                                setItem(emptyItem);
+                            })
+                            .catch(err => {
+                                console.log('update() Error!', err);
+                            });
                     }
                 },
                 {
@@ -94,56 +99,98 @@ export default function DoctorDiagnosis() {
 
     useEffect(() => {
         statusService.retrieve(dateFormat(date))
-          .then( res => {
-            console.log('success!!');
+            .then(res => {
+                console.log('success!!');
 
-            for(var i = 0; i < res.data.length; i++) {
-                if(res.data[i].state === 'care') {
-                    res.data[i].value = '진료중';
-                } else if(res.data[i].state === 'careWait') {
-                    res.data[i].value = '진료대기중';
-                } else if(res.data[i].state === 'wait') {
-                    res.data[i].value = '완료';
-                } else {
-                    res.data[i].value = '완료';
+                for (var i = 0; i < res.data.length; i++) {
+                    if (res.data[i].state === 'care') {
+                        res.data[i].value = '진료중';
+                    } else if (res.data[i].state === 'careWait') {
+                        res.data[i].value = '진료대기중';
+                    } else if (res.data[i].state === 'wait') {
+                        res.data[i].value = '완료';
+                    } else {
+                        res.data[i].value = '완료';
+                    }
                 }
-            }
-            setItems(res.data);
-        })
-          .catch(err => {
-            console.log('retrieve() Error!', err);
-        });
+                setItems(res.data);
+            })
+            .catch(err => {
+                console.log('retrieve() Error!', err);
+            });
 
         diseaseService.retrieveAll()
-        .then( res => {
-            console.log('success!!');
-            setDiseaseItems(res.data);
-        })
-        .catch(err => {
-            console.log('retrieveDisease() Error!', err);
-        });
+            .then(res => {
+                console.log('success!!');
+                setDiseaseItems(res.data);
+            })
+            .catch(err => {
+                console.log('retrieveDisease() Error!', err);
+            });
 
         medicineService.retrieveAll()
-        .then( res => {
-            console.log('success!!');
-            setMedicineItems(res.data);
-        })
-        .catch(err => {
-            console.log('retrieveMedicine() Error!', err);
-        });
+            .then(res => {
+                console.log('success!!');
+                setMedicineItems(res.data);
+            })
+            .catch(err => {
+                console.log('retrieveMedicine() Error!', err);
+            });
 
     }, []);
 
+    useEffect(() => {
+        statusService.retrieve(dateFormat(date))
+            .then(res => {
+                console.log('success!!');
+
+                for (var i = 0; i < res.data.length; i++) {
+                    if (res.data[i].state === 'care') {
+                        res.data[i].value = '진료중';
+                    } else if (res.data[i].state === 'careWait') {
+                        res.data[i].value = '진료대기중';
+                    } else if (res.data[i].state === 'wait') {
+                        res.data[i].value = '완료';
+                    } else {
+                        res.data[i].value = '완료';
+                    }
+                }
+                setItems(res.data);
+            })
+            .catch(err => {
+                console.log('retrieve() Error!', err);
+            });
+
+        diseaseService.retrieveAll()
+            .then(res => {
+                console.log('success!!');
+                setDiseaseItems(res.data);
+            })
+            .catch(err => {
+                console.log('retrieveDisease() Error!', err);
+            });
+
+        medicineService.retrieveAll()
+            .then(res => {
+                console.log('success!!');
+                setMedicineItems(res.data);
+            })
+            .catch(err => {
+                console.log('retrieveMedicine() Error!', err);
+            });
+
+    }, [value]);
+
     const deleteItem = () => {
         let _items = [...items];
-        let _item = {...item};
+        let _item = { ...item };
 
         const index = findIndexByNo(item.receiptNo);
 
         _item = _items[index];
 
         statusService.delete(_item.receiptNo)
-            .then( res => {
+            .then(res => {
                 console.log('success!!');
                 timeService.updateByCancel(_item);
                 let _items = items.filter(item => item.receiptNo !== _item.receiptNo);
@@ -168,7 +215,7 @@ export default function DoctorDiagnosis() {
         month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
         var day = date.getDate();                   //d
         day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
-        return  year + '-' + month + '-' + day;
+        return year + '-' + month + '-' + day;
     }
 
     const menuControl = (e, data) => {
@@ -181,10 +228,10 @@ export default function DoctorDiagnosis() {
                 console.log(res.data);
                 diagnosisService.retrieveByPatientNo(res.data.patientNo)
                     .then(res => {
-                        for(var i = 0; i < res.data.length; i++) {
-                            if(res.data[i].cureYN === 'true') 
+                        for (var i = 0; i < res.data.length; i++) {
+                            if (res.data[i].cureYN === 'true')
                                 res.data[i].value = '치료';
-                             else 
+                            else
                                 res.data[i].value = '치료X';
                         }
                         setPastDiagnosis(res.data);
@@ -219,8 +266,8 @@ export default function DoctorDiagnosis() {
                     <div className="product-name">{data.diagnosisDate}</div>
                 </div>
                 <div className="product-price">
-                    <div className="product-name" style={{fontSize: 'x-small'}}>{data.diseaseNm}</div>
-                    <div className="product-description" style={{fontSize: 'x-small'}}>{data.value}</div>
+                    <div className="product-name" style={{ fontSize: 'x-small' }}>{data.diseaseNm}</div>
+                    <div className="product-description" style={{ fontSize: 'x-small' }}>{data.value}</div>
                 </div>
             </div>
         );
@@ -241,13 +288,13 @@ export default function DoctorDiagnosis() {
     const onDateChange = (event) => {
         setDate(dateFormat(event.value));
         statusService.retrieve(dateFormat(event.value))
-          .then( res => {
-            console.log('success!!');
-            setItems(res.data);
-        })
-          .catch(err => {
-            console.log('retrieve() Error!', err);
-        });
+            .then(res => {
+                console.log('success!!');
+                setItems(res.data);
+            })
+            .catch(err => {
+                console.log('retrieve() Error!', err);
+            });
     }
 
     const hideDeleteItemDialog = () => {
@@ -273,14 +320,14 @@ export default function DoctorDiagnosis() {
         };
 
         let _diseaseNm = '';
-        for(var i = 0; i < diseaseItem.length; i++) {
-            if(i == 0) _diseaseNm = diseaseItem[i].diseaseNm;
+        for (var i = 0; i < diseaseItem.length; i++) {
+            if (i == 0) _diseaseNm = diseaseItem[i].diseaseNm;
             else _diseaseNm = _diseaseNm + ',' + diseaseItem[i].diseaseNm;
         }
 
         let _medicineNm = '';
-        for(var i = 0; i < medicineItem.length; i++) {
-            if(i == 0) _medicineNm = medicineItem[i].medicineNm;
+        for (var i = 0; i < medicineItem.length; i++) {
+            if (i == 0) _medicineNm = medicineItem[i].medicineNm;
             else _medicineNm = _medicineNm + ',' + medicineItem[i].medicineNm;
         }
 
@@ -288,44 +335,44 @@ export default function DoctorDiagnosis() {
         diagnosisItem.medicineNm = _medicineNm;
 
         diagnosisService.create(diagnosisItem)
-          .then( res => {
-            console.log('success!!');
-            setDiseaseItem(null);
-            setMedicineItem(null);
-            setCureYN('');
-            setMemo('');
-            setDiseaseItem([]);
-            setMedicineItem([]);
-
-            let _patientItem = patient;
-            _patientItem.diagnosis = '재진';
-
-            patientService.updateDiagnosis(_patientItem)
             .then(res => {
-                setPatient(_patientItem);
+                console.log('success!!');
+                setDiseaseItem(null);
+                setMedicineItem(null);
+                setCureYN('');
+                setMemo('');
+                setDiseaseItem([]);
+                setMedicineItem([]);
+
+                let _patientItem = patient;
+                _patientItem.diagnosis = '재진';
+
+                patientService.updateDiagnosis(_patientItem)
+                    .then(res => {
+                        setPatient(_patientItem);
+                    })
+                    .catch(err => {
+                        console.log('update() error', err);
+                    })
+
+                let _receiptItem = item;
+                _receiptItem.state = 'wait';
+                _receiptItem.value = "완료";
+
+                receiptService.updateState(_receiptItem).then(res => {
+                    let _items = items.filter(item => item.receiptNo !== _receiptItem.receiptNo);
+                    _items.push(_receiptItem);
+                    setItems(_items);
+
+                    viewManage();
+                })
+                    .catch(err => {
+                        console.log('update() error', err);
+                    })
             })
             .catch(err => {
-                console.log('update() error', err);
-            })
-
-            let _receiptItem = item;
-            _receiptItem.state = 'wait';
-            _receiptItem.value = "완료";
-
-            receiptService.updateState(_receiptItem).then(res => {
-                let _items = items.filter(item => item.receiptNo !== _receiptItem.receiptNo);
-                _items.push(_receiptItem);
-                setItems(_items);
-
-                viewManage();
-            })
-            .catch(err => {
-                console.log('update() error', err);
-            })
-        })
-          .catch(err => {
-            console.log('update() Error!', err);
-        });
+                console.log('update() Error!', err);
+            });
     }
 
     const diseaseTemplate = (option) => {
@@ -391,105 +438,117 @@ export default function DoctorDiagnosis() {
     const renderHeader = () => {
         return (
             <div className="p-grid p-nogutter">
-                <div style={{textAlign: 'left'}}>
+                <div style={{ textAlign: 'left' }}>
                     <Calendar dateFormat="yy/mm/dd" value={date} onChange={(e) => onDateChange(e)}></Calendar>
                 </div>
             </div>
         );
     }
 
+    const handleClickSendTo = () => {
+        $websocket.current.sendMessage('/Nurse');
+    };
+
     const header = renderHeader();
 
     return (
-        <div className="card">
-            <div className="p-grid">
-                <div className="p-col-12 p-md-6 p-lg-4">
-                        <div className="datascroller" style={{ justifyContent:'center', padding: '20px' }}>
-                                <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
-                        </div>
-                </div>
-                <div className="p-col-12 p-md-6 p-lg-4">
-                <div className="card p-fluid">
-                <Panel header="환자정보" style={{ height: '100%', justifyContent:'center', padding: '20px' }}>
-                    <div className="activity-header">
-                        <div className="p-grid">
-                            <div className="p-col-6">
-                                <span style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center'}}>{patient.name}{patient.name && '/'}{patient.gender}</span>
-                            </div>
-                            <div className="p-col-6" style={{ textAlign: 'right' }}>
-                            </div>
+        <Fragment>
+            <SockJsClient
+                url="http://localhost:8080/ucare_backend/start"
+                topics={['/topics/doctor']}
+                onMessage={msg => { setValue(msg) }}
+                ref={$websocket} />
+            <div className="card">
+                <div className="p-grid">
+                    <div className="p-col-12 p-md-6 p-lg-4">
+                        <div className="datascroller" style={{ justifyContent: 'center', padding: '20px' }}>
+                            <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                         </div>
                     </div>
+                    <div className="p-col-12 p-md-6 p-lg-4">
+                        <div className="card p-fluid">
+                            <Panel header="환자정보" style={{ height: '100%', justifyContent: 'center', padding: '20px' }}>
+                                <div className="activity-header">
+                                    <div className="p-grid">
+                                        <div className="p-col-6">
+                                            <span style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center' }}>{patient.name}{patient.name && '/'}{patient.gender}</span>
+                                        </div>
+                                        <div className="p-col-6" style={{ textAlign: 'right' }}>
+                                        </div>
+                                    </div>
+                                </div>
 
-                    <ul className="activity-list">
-                        <li>
-                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                <h5 className="activity p-m-0">보험여부</h5>
-                                <div className="count">{patient.insurance}</div>
-                            </div>
-                        </li>
-                        <li>
-                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                <h5 className="activity p-m-0">진료구분</h5>
-                                <div className="count">{patient.diagnosis}</div>
-                            </div>
-                        </li>
-                    </ul>
-                </Panel>
-                </div>
-                <div className="card p-fluid">
-                <Panel header="과거병력" style={{ height: '100%', justifyContent:'center', padding: '20px' }}>
-                    <div className="activity-header">
-                            <div className="datascroller">
-                                <DataScroller value={pastDiagnosis} itemTemplate={pastDiagnosisTemplate} rows={5} inline scrollHeight="300px" />
-                            </div>
-                    </div>
-                </Panel>
-                </div>
-                </div>
-                <div className="p-col-12 p-md-6 p-lg-4">
-                <Panel header="진료" style={{ height: '100%', justifyContent:'center', padding: '20px' }}>
-                <div className="card p-fluid">
-                    <div className="p-field p-grid">
-                        <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">병명</label>
-                        <div className="p-col-12 p-md-10">
-                            <MultiSelect value={diseaseItem} options={diseaseItems} onChange={(e) => setDiseaseItem(e.value)} optionLabel="diseaseNm" placeholder="Select disease" filter className="multiselect-custom"
-                    itemTemplate={diseaseTemplate} selectedItemTemplate={selectedDiseaseTemplate} panelFooterTemplate={diseasePanelFooterTemplate} />
+                                <ul className="activity-list">
+                                    <li>
+                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                            <h5 className="activity p-m-0">보험여부</h5>
+                                            <div className="count">{patient.insurance}</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                            <h5 className="activity p-m-0">진료구분</h5>
+                                            <div className="count">{patient.diagnosis}</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </Panel>
+                        </div>
+                        <div className="card p-fluid">
+                            <Panel header="과거병력" style={{ height: '100%', justifyContent: 'center', padding: '20px' }}>
+                                <div className="activity-header">
+                                    <div className="datascroller">
+                                        <DataScroller value={pastDiagnosis} itemTemplate={pastDiagnosisTemplate} rows={5} inline scrollHeight="300px" />
+                                    </div>
+                                </div>
+                            </Panel>
+                            <Button onClick={handleClickSendTo}>222</Button>
                         </div>
                     </div>
-                    <div className="p-field p-grid">
-                        <label htmlFor="care" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">처방</label>
-                        <div className="p-col-12 p-md-10">
-                            <Checkbox onChange={e => setCureYN(e.checked)} checked={cureYN}></Checkbox>
-                            <label htmlFor="checkOption1">치료</label>
-                        </div>
-                    </div>
-                    <div className="p-field p-grid">
-                        <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">처방약</label>
-                        <div className="p-col-12 p-md-10">
-                            <MultiSelect value={medicineItem} options={medicineItems} onChange={(e) => setMedicineItem(e.value)} optionLabel="medicineNm" placeholder="Select medicine" filter className="multiselect-custom"
-                        itemTemplate={medicineTemplate} selectedItemTemplate={selectedMedicineTemplate} panelFooterTemplate={medicinePanelFooterTemplate} />
-                        </div>
+                    <div className="p-col-12 p-md-6 p-lg-4">
+                        <Panel header="진료" style={{ height: '100%', justifyContent: 'center', padding: '20px' }}>
+                            <div className="card p-fluid">
+                                <div className="p-field p-grid">
+                                    <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">병명</label>
+                                    <div className="p-col-12 p-md-10">
+                                        <MultiSelect value={diseaseItem} options={diseaseItems} onChange={(e) => setDiseaseItem(e.value)} optionLabel="diseaseNm" placeholder="Select disease" filter className="multiselect-custom"
+                                            itemTemplate={diseaseTemplate} selectedItemTemplate={selectedDiseaseTemplate} panelFooterTemplate={diseasePanelFooterTemplate} />
+                                    </div>
+                                </div>
+                                <div className="p-field p-grid">
+                                    <label htmlFor="care" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">처방</label>
+                                    <div className="p-col-12 p-md-10">
+                                        <Checkbox onChange={e => setCureYN(e.checked)} checked={cureYN}></Checkbox>
+                                        <label htmlFor="checkOption1">치료</label>
+                                    </div>
+                                </div>
+                                <div className="p-field p-grid">
+                                    <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">처방약</label>
+                                    <div className="p-col-12 p-md-10">
+                                        <MultiSelect value={medicineItem} options={medicineItems} onChange={(e) => setMedicineItem(e.value)} optionLabel="medicineNm" placeholder="Select medicine" filter className="multiselect-custom"
+                                            itemTemplate={medicineTemplate} selectedItemTemplate={selectedMedicineTemplate} panelFooterTemplate={medicinePanelFooterTemplate} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="card">
+                                <h5>진료메모</h5>
+                                <InputTextarea value={memo} onChange={(e) => setMemo(e.target.value)} rows={5} cols={30} autoResize />
+                            </div>
+                            <div>
+                                <Button type="button" label="진료완료" onClick={saveDiagnosis} style={{ marginTop: '20px' }} />
+                            </div>
+                        </Panel>
                     </div>
                 </div>
-                    <div className="card">
-                        <h5>진료메모</h5>
-                        <InputTextarea value={memo} onChange={(e) => setMemo(e.target.value)} rows={5} cols={30} autoResize />
+                <Menu model={options} popup ref={menu} id="popup_menu" />
+
+                <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
+                    <div className="confirmation-content">
+                        <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
+                        {item && <span><b>접수를 취소하시겠습니까?</b></span>}
                     </div>
-                    <div>
-                        <Button type="button" label="진료완료" onClick={saveDiagnosis} style={{ marginTop: '20px' }} />
-                    </div>
-                </Panel>
-                </div>
+                </Dialog>
             </div>
-            <Menu model={options} popup ref={menu} id="popup_menu" />
-
-            <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
-                <div className="confirmation-content">
-                    <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
-                    {item && <span><b>접수를 취소하시겠습니까?</b></span>}
-                </div>
-            </Dialog>
-        </div>
+        </Fragment>
     );
 }
