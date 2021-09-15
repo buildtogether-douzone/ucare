@@ -36,11 +36,11 @@ public class SpringBatchTasklet implements Tasklet {
 		
 		LocalTime startTime = LocalTime.parse("09:00:00");
 		
-		LocalTime endTime = LocalTime.parse("23:50:00");
+		LocalTime endTime = LocalTime.parse("00:00:00");
 		
 		data.setDate(formatedNow);
 		
-		while(!(startTime.equals(endTime.plusMinutes(10)))) {
+		while(!(startTime.equals(endTime))) {
 			DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_TIME;
 			String formatedTime = startTime.format(timeFormatter);
 			
