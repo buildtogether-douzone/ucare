@@ -268,7 +268,7 @@ const Header = ({ open, drawerManage }) => {
             {name}님
           </Typography>
 
-          <Button onClick={() => onClick('displayModal') }>
+          <Button onClick={() => onClick('displayModal')}>
             <Badge badgeContent={badge} color="secondary">
               <MailOutlineIcon style={{ fontSize: '30px', color: '#FFFFFF' }} />
             </Badge>
