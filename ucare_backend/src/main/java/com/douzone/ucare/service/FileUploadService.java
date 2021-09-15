@@ -60,9 +60,9 @@ public class FileUploadService {
 	}
 	
 	public boolean remove(String url) {
-		String filePath = url;
-		File deleteFile = new File(filePath);
-			
+		String fileName = new File(url).getName();
+		File deleteFile = new File(SAVE_PATH + File.separator + fileName);
+		
 		return deleteFile.delete();
 	}
 

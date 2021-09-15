@@ -33,7 +33,12 @@ public class HospitalController {
 	public ResponseEntity<?> updateInfo(
 			@RequestPart("data") HospitalVo hospital, 
 			@RequestPart(value="file" , required = false) MultipartFile file ) {
+		
+		if(hospital.getImage() != null) fileUploadService.remove(hospital.getImage());
+		
 		if(file != null) hospital.setImage(fileUploadService.restore(file));
+		
+		
 		return new ResponseEntity<>(hospitalService.updateInfo(hospital), HttpStatus.OK);
 	}
 }

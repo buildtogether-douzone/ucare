@@ -71,6 +71,7 @@ export default function Profile() {
   const [birth, setBirth] = useState('');
   const [file, setFile] = useState('');
   const [previewURL, setPreviewURL] = useState('');
+  const [imageURL, setImageURL] = useState('');
 
   useEffect(() => {
     let user = {
@@ -92,6 +93,7 @@ export default function Profile() {
         setEmailId(res.data.emailId);
         setEmail(res.data.email);
         setPreviewURL(res.data.image);
+        setImageURL(res.data.image);
         res.data.birth ? setBirth(res.data.birth) : setBirth(`${year}-${month}-${date}`);
       })
       .catch(err => {
@@ -137,7 +139,8 @@ export default function Profile() {
       telNo: telNo,
       email: (emailId + '@' + email),
       address: address,
-      birth: birth
+      birth: birth,
+      image: imageURL
     }
 
     const formData = new FormData();

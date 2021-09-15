@@ -67,6 +67,7 @@ export default function Hospital() {
     const [faxNo, setFaxNo] = useState('');
     const [headSpeak, setHeadSpeak] = useState('');
     const [previewURL, setPreviewURL] = useState('');
+    const [imageURL, setImageURL] = useState('');
     const [file, setFile] = useState('');
 
     useEffect(() => {
@@ -82,6 +83,7 @@ export default function Hospital() {
                 setFaxNo(res.data.faxNo);
                 setHeadSpeak(res.data.headSpeak);
                 setPreviewURL(res.data.image);
+                setImageURL(res.data.image);
             }).catch(err => {
                 console.log('fetchHospitalInfo error', err);
             });
@@ -109,7 +111,8 @@ export default function Hospital() {
             siteAddress: siteAddress,
             email: email,
             faxNo: faxNo,
-            headSpeak: headSpeak
+            headSpeak: headSpeak,
+            image: imageURL
         }
 
         const formData = new FormData();
