@@ -24,6 +24,7 @@ import { InputText } from 'primereact/inputtext';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
+import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import UserService from '../service/userService';
 
 const drawerWidth = 240;
@@ -96,6 +97,7 @@ const Header = ({ open, drawerManage }) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(emptyItem);
   const [item, setItem] = useState(empty);
+  const [deleteItemDialog, setDeleteItemDialog] = useState(false);
   
 
   const $websocket = useRef(null);
@@ -191,7 +193,7 @@ const Header = ({ open, drawerManage }) => {
     document.body.style.overflow = "";
     setItemDialog(false);
   };
-  
+
   const itemDialogFooter = (
     <React.Fragment>
         <Button onClick={hideDialog} color="primary">닫기</Button>
@@ -235,6 +237,18 @@ const Header = ({ open, drawerManage }) => {
     setItem(_item);
 };
 
+  const confirmDeleteItem = (item) => {
+    setDeleteItemDialog(true);
+  };
+
+  const actionBodyTemplate = (rowData) => {
+    return (
+        <React.Fragment>
+          <DeleteForeverOutlinedIcon style={{color: '#1C91FB'}} onClick={() => confirmDeleteItem(rowData)} />
+        </React.Fragment>
+    );
+};
+
   return (
     <Fragment>
       <SockJsClient
@@ -276,6 +290,7 @@ const Header = ({ open, drawerManage }) => {
               <Column header="제목" />
               <Column field="날짜" header="날짜" />
               <Column header="상태" />
+              <Column header="삭제" body={actionBodyTemplate} />
             </DataTable>
             <Button style={{marginLeft:'85%'}} onClick={onMessage}>쪽지 쓰기</Button>
           </OverlayPanel>
