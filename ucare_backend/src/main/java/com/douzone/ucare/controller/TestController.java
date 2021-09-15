@@ -17,7 +17,17 @@ public class TestController {
 	@SendTo("/topics/sendTo") 
 	public String SendToMessage() throws Exception { 
 		return "5"; 
-	} 
+	}
+	
+	@MessageMapping("/Doctor") 
+	public void SendToDoctor() { 
+		webSocket.convertAndSend("/topics/doctor" , Math.random()); 
+	}
+	
+	@MessageMapping("/Nurse") 
+	public void SendToNurse() { 
+		webSocket.convertAndSend("/topics/nurse" , Math.random()); 
+	}
 	
 	@MessageMapping("/Template") 
 	public void SendTemplateMessage() { 
