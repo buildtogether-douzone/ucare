@@ -29,19 +29,12 @@ public class BoardRepository {
 		return sqlSession.update("board.updateHit", boardNo);
 	}
 	
-	public int delete(Long boardNo) {
-		return sqlSession.delete("board.delete", boardNo);
+	public int delete(BoardVo data) {
+		return sqlSession.delete("board.delete", data);
 	}
 
 	public int update(BoardVo data) {
-	return sqlSession.update("board.update", data);
+		return sqlSession.update("board.update", data);
 	}
-
-	//	public int excelCreate(MedicineVo data) {
-//		return sqlSession.update("medicine.createExcel", data);
-//	}
-//
-//
-
 
 }

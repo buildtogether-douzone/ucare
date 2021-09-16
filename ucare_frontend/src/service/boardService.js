@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { BOARD_API_BASE_URL } from './urlConfig'
 
-class medicineService {
+class boardService {
   create(data) {
     return axios.post(BOARD_API_BASE_URL + '/create', data, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
@@ -11,8 +11,8 @@ class medicineService {
   retrieveContents(boardNo) {
     return axios.get(BOARD_API_BASE_URL + '/retrieveContents' + boardNo, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
-  delete(boardNo) {
-    return axios.delete(BOARD_API_BASE_URL + '/delete/' + boardNo, { headers: { Authorization: localStorage.getItem("authorization") }});
+  delete(data) {
+    return axios.post(BOARD_API_BASE_URL + '/delete', data, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
   update(data) {
     return axios.put(BOARD_API_BASE_URL + '/update', data, { headers: { Authorization: localStorage.getItem("authorization") }})
@@ -22,4 +22,4 @@ class medicineService {
   }
 }
 
-export default new medicineService();
+export default new boardService();

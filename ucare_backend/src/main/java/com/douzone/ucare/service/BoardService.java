@@ -29,12 +29,12 @@ public class BoardService {
 		return boardRepository.updateHit(boardNo);
 	}
 	
-	public int delete(Long boardNo) {
-	return boardRepository.delete(boardNo);
+	public int delete(BoardVo data) {
+		return boardRepository.delete(data);
 	}
 
 	public int update(BoardVo data) {
-	return boardRepository.update(data);
+		return boardRepository.update(data);
 	}
 
 }

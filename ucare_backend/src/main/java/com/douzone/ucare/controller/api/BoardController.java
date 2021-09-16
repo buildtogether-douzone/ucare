@@ -3,11 +3,11 @@ package com.douzone.ucare.controller.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +30,7 @@ public class BoardController {
 	@PostMapping("/create")
 	public ResponseEntity<?> create(@RequestPart("data") BoardVo data,  @RequestPart(value="URL", required = false) MultipartFile file) {
 		if(file != null) data.setURL(fileUploadService.restore(file));
+		
 		return new ResponseEntity<>(boardService.create(data), HttpStatus.OK);
 	}
 	
@@ -38,14 +39,18 @@ public class BoardController {
 		return new ResponseEntity<>(boardService.retrieveAll(), HttpStatus.OK);
 	}
 		
-	@DeleteMapping("/delete/{boardNo}")
-	public ResponseEntity<?> delete(@PathVariable("boardNo") Long boardNo) {
-		return new ResponseEntity<>(boardService.delete(boardNo), HttpStatus.OK);
+	@PostMapping("/delete")
+	public ResponseEntity<?> delete(@RequestBody BoardVo data) {
+		if(data.getURL() != null) fileUploadService.remove(data.getURL());
+		
+		return new ResponseEntity<>(boardService.delete(data), HttpStatus.OK);
 	}
 	
 	@PutMapping("/update")
 	public ResponseEntity<?> update(@RequestPart("data") BoardVo data, @RequestPart(value="URL", required = false) MultipartFile file) {
+		if(data.getURL() != null) fileUploadService.remove(data.getURL());
 		if(file != null) data.setURL(fileUploadService.restore(file));
+		
 		return new ResponseEntity<>(boardService.update(data), HttpStatus.OK);
 	}
 	
@@ -53,6 +58,5 @@ public class BoardController {
 	public ResponseEntity<?> updateHit(@PathVariable("boardNo") Long boardNo) {
 		return new ResponseEntity<>(boardService.updateHit(boardNo), HttpStatus.OK);
 	}
-
 
 }

@@ -22,6 +22,7 @@ const Board = React.forwardRef((props, ref) => {
         boardDt: '',
         boardTime: '',
         userId: '',
+        url:''
     };
 
     const [items, setItems] = useState(null);
@@ -123,7 +124,7 @@ const Board = React.forwardRef((props, ref) => {
     }
 
     const deleteItem = () => {
-        boardService.delete(item.boardNo)
+        boardService.delete(item)
             .then(res => {
                 setDeleteItemDialog(false);
                 window.location.reload();

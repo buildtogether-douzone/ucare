@@ -72,7 +72,7 @@
 	</update>
 
 
-	<delete id="delete" parameterType="Long">
+	<delete id="delete" parameterType="boardvo">
 		DELETE
 		  FROM ucare.board
 		 WHERE board_no = #{boardNo }
