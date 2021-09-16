@@ -48,7 +48,7 @@ public class BoardController {
 	
 	@PutMapping("/update")
 	public ResponseEntity<?> update(@RequestPart("data") BoardVo data, @RequestPart(value="URL", required = false) MultipartFile file) {
-		if(data.getURL() != null) fileUploadService.remove(data.getURL());
+		if((data.getURL() != null) && (file != null)) fileUploadService.remove(data.getURL());
 		if(file != null) data.setURL(fileUploadService.restore(file));
 		
 		return new ResponseEntity<>(boardService.update(data), HttpStatus.OK);
