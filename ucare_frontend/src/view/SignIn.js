@@ -101,11 +101,11 @@ export default function SignInSide({ history }) {
                      decoded.role=='의사' ? '/doctor/main' :
                      decoded.role=='간호사' && '/nurse/main');
       } else {
-        toast.current.show({severity:'info', summary: '알림', detail:'로그인 정보가 없습니다.', life: 3000});
         console.log('로그인 정보가 없습니다.');
       }
     })
     .catch( err => {
+      toast.current.show({severity:'error', summary: '알림', detail:'로그인 정보가 없습니다.', life: 3000});
       console.log('login() 에러', err);
     });
   }
@@ -117,6 +117,7 @@ export default function SignInSide({ history }) {
 
   return (
     <Fragment>
+      <Toast ref={toast} />
     <CssBaseline />
     <Grid container component="main" className={classes.image}>
       <Grid item xs={12} sm={6} md={4} />
