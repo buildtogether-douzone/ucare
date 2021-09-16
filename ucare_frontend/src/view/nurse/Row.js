@@ -95,10 +95,10 @@ const Row = React.forwardRef((props, ref) => {
     return year + '-' + month + '-' + day;
   }
 
-  const handleClickOpen = (a, b, c) => {
-    setModalBP(a);
-    setModalBS(b);
-    setModalRemark(c);
+  const handleClickOpen = (bp, bs, remark) => {
+    setModalBP(bp);
+    setModalBS(bs);
+    setModalRemark(remark);
     setDialogOpen(true);
   };
 
@@ -106,21 +106,21 @@ const Row = React.forwardRef((props, ref) => {
     setDialogOpen(false);
   };
 
-  const patientInfoClickOpen = (a, b, c, d, e, f, g, h, i, j, k, l, m, n) => {
-    setPatientNo(a);
-    setName(b);
-    setGender(c);
-    setEmailId(d);
-    setEmail(e);
-    setSSN(f);
-    setAge(g);
-    setAddress(h);
-    setDetailAddress(i);
-    setTelNo(j);
-    setDiagnosis(k);
-    setInsurance(l)
-    setInsDt(m);
-    setRemark(n);
+  const patientInfoClickOpen = (patientNo, name, gender, emailId, email, ssn, age, address, detailAddress, telNo, diagnosis, insurance, insDt, remark) => {
+    setPatientNo(patientNo);
+    setName(name);
+    setGender(gender);
+    setEmailId(emailId);
+    setEmail(email);
+    setSSN(ssn);
+    setAge(age);
+    setAddress(address);
+    setDetailAddress(detailAddress);
+    setTelNo(telNo);
+    setDiagnosis(diagnosis);
+    setInsurance(insurance)
+    setInsDt(insDt);
+    setRemark(remark);
     setDialogOpen2(true);
 
   };
@@ -131,10 +131,10 @@ const Row = React.forwardRef((props, ref) => {
 
   };
 
-  const receiptClickOpen = (a, b, c) => {
-    setPatientNo(a);
-    setName(b);
-    setInsurance(c)
+  const receiptClickOpen = (patientNo, name, insurance) => {
+    setPatientNo(patientNo);
+    setName(name);
+    setInsurance(insurance)
     setDialogOpen3(true);
 
   };
@@ -178,6 +178,7 @@ const Row = React.forwardRef((props, ref) => {
     if (ssn.length === 13) {
       setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
     }
+
   }, [ssn, telNo, gender, age]);
 
   const telNoChange = (e) => {
@@ -515,7 +516,7 @@ const Row = React.forwardRef((props, ref) => {
 
             <Typography className={classes.font} variant="body1" gutterBottom>진료 구분</Typography>
             <FormControl component="fieldset">
-              <RadioGroup row aria-label="diagnosis" name="diagnosis" value={diagnosis} onChange={(e) => { setDiagnosis(e.target.value) }} >
+              <RadioGroup row aria-label="diagnosis" name="diagnosis" value={diagnosis} >
                 <FormControlLabel
                   value="초진"
                   control={<Radio color="primary" />}
@@ -624,6 +625,7 @@ const Row = React.forwardRef((props, ref) => {
               name="bp"
               id="filled-read-only-bp"
               value={bp}
+              label="혈압을 입력하세요."
               onChange={(e) => { setBP(e.target.value) }}
             />
             <Typography className={classes.font} variant="body1" gutterBottom>혈당</Typography>
@@ -634,6 +636,7 @@ const Row = React.forwardRef((props, ref) => {
               name="bs"
               id="filled-read-only-bs"
               value={bs}
+              label="혈당을 입력하세요."
               onChange={(e) => { setBS(e.target.value) }}
             />
             <Typography className={classes.font} variant="body1" gutterBottom>접수 메모</Typography>
@@ -643,6 +646,7 @@ const Row = React.forwardRef((props, ref) => {
               fullWidth
               variant="outlined"
               rows={6}
+              label="접수 메모를 입력하세요."
               value={receiptRemark}
               onChange={(e) => { setReceiptRemark(e.target.value) }}
             />
@@ -681,18 +685,18 @@ const Row = React.forwardRef((props, ref) => {
                       <TableCell />
                       <TableCell
                         onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
-                        style={{ textAlign: 'center', padding: '10px' }} component="th" scope="row">{receiptList.no}</TableCell>
+                        style={{ cursor: 'pointer', textAlign: 'center', padding: '10px' }} component="th" scope="row">{receiptList.no}</TableCell>
                       <TableCell onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
-                        style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptNo}</TableCell>
+                        style={{ cursor: 'pointer', textAlign: 'center', padding: '10px' }}>{receiptList.receiptNo}</TableCell>
                       <TableCell
                         onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
-                        style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptDt}</TableCell>
+                        style={{ cursor: 'pointer', textAlign: 'center', padding: '10px' }}>{receiptList.receiptDt}</TableCell>
                       <TableCell
                         onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
-                        style={{ textAlign: 'center', padding: '10px' }}>{receiptList.receiptTime}</TableCell>
+                        style={{ cursor: 'pointer', textAlign: 'center', padding: '10px' }}>{receiptList.receiptTime}</TableCell>
                       <TableCell
                         onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
-                        style={{ padding: '10px' }}>{receiptList.remark}</TableCell>
+                        style={{ cursor: 'pointer', padding: '10px' }}>{receiptList.remark}</TableCell>
                       {receiptList.state == 'complete' ?
                         <TableCell></TableCell>
                         : <TableCell
