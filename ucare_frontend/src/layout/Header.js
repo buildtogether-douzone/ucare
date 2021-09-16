@@ -15,6 +15,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { Avatar } from 'primereact/avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
+import { Button as PrimeButton } from 'primereact/button';
 import { connect } from 'react-redux';
 import { drawerManage } from '../redux/drawerManagement/actions';
 import { DataTable } from 'primereact/datatable';
@@ -99,6 +100,7 @@ const Header = ({ open, drawerManage }) => {
   const [item, setItem] = useState(empty);
   const [messages, setMessages] = useState(null);
   const [view, setView] = useState(true);
+  const [deleteItemDialog, setDeleteItemDialog] = useState(false);
 
   const $websocket = useRef(null);
   const op = useRef(null);
@@ -120,8 +122,8 @@ const Header = ({ open, drawerManage }) => {
     
       MessageService.retrieveAll(sessionStorage.getItem('user'))
         .then(res =>{
-          setBadge(res.data.countFalse);
-          setMessages(res.data);
+          setBadge(res.data.count);
+          setMessages(res.data.message);
           console.log(res.data);
         })
         .catch(err => {
@@ -252,13 +254,29 @@ const Header = ({ open, drawerManage }) => {
     dialogFuncMap[`${name}`](false);
   }
 
-  const deleteButton = (rowData) => {
-      <React.Fragment>
-          <Button>
-            <DeleteIcon/>
-          </Button>
-      </React.Fragment>
-  }
+  const actionBodyTemplate = (rowData) => {
+    return (
+        <React.Fragment>
+            <PrimeButton icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteItem(rowData)} />
+        </React.Fragment>
+    );
+}
+
+const confirmDeleteItem = (item) => {
+  // setItem(item);
+  setDeleteItemDialog(true);
+}
+
+const hideDeleteItemDialog = () => {
+  setDeleteItemDialog(false);
+}
+
+const deleteItemDialogFooter = (
+  <React.Fragment>
+      <PrimeButton label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
+      <PrimeButton label="예" icon="pi pi-check" className="p-button-text" onClick={console.log('test')} />
+  </React.Fragment>
+);
 
   return (
     <Fragment>
@@ -301,7 +319,7 @@ const Header = ({ open, drawerManage }) => {
               <Column field="title" header="제목" />
               <Column field="msgDate" header="날짜" />
               <Column field="status" header="상태" />
-              <Column body={deleteButton} />
+              <Column body={actionBodyTemplate}></Column>
             </DataTable>
           </Dialog>
 
@@ -359,6 +377,12 @@ const Header = ({ open, drawerManage }) => {
           </Button>
         </Toolbar>
       </AppBar>
+      <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
+                <div className="confirmation-content">
+                    <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
+                    {item && <span>Are you sure you want to delete <b>{item.medicineNm}</b>?</span>}
+                </div>
+            </Dialog>
     </Fragment>
   );
 }

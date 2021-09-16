@@ -1,5 +1,7 @@
 package com.douzone.ucare.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,8 +14,8 @@ public class MessageRepository {
 	@Autowired
 	private SqlSession sqlSession;
 
-	public MessageVo findById(String id) {
-		return sqlSession.selectOne("message.findById", id);
+	public List<MessageVo> findById(String id) {
+		return sqlSession.selectList("message.findById", id);
 	}
 
 	public int findFalseCount() {
