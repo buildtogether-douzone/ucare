@@ -17,7 +17,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { drawerManage } from '../redux/drawerManagement/actions';
-import { OverlayPanel } from 'primereact/overlaypanel';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
@@ -25,6 +24,8 @@ import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import UserService from '../service/userService';
+import MessageService from '../service/messageService';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const drawerWidth = 240;
 
@@ -96,6 +97,7 @@ const Header = ({ open, drawerManage }) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(emptyItem);
   const [item, setItem] = useState(empty);
+  const [messages, setMessages] = useState(null);
   const [view, setView] = useState(true);
 
   const $websocket = useRef(null);
@@ -115,6 +117,16 @@ const Header = ({ open, drawerManage }) => {
       .catch(err => {
         console.log('retrieveAll() Error!', err);
       });
+    
+      MessageService.retrieveAll(sessionStorage.getItem('user'))
+        .then(res =>{
+          setBadge(res.data.countFalse);
+          setMessages(res.data);
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log('Message retrieveAll() Error!', err);
+        })
   }
 
   useEffect(() => {
@@ -240,6 +252,14 @@ const Header = ({ open, drawerManage }) => {
     dialogFuncMap[`${name}`](false);
   }
 
+  const deleteButton = (rowData) => {
+      <React.Fragment>
+          <Button>
+            <DeleteIcon/>
+          </Button>
+      </React.Fragment>
+  }
+
   return (
     <Fragment>
       <SockJsClient
@@ -275,12 +295,13 @@ const Header = ({ open, drawerManage }) => {
           </Button>
 
           <Dialog header="Header" visible={displayModal} modal={false} style={{ width: '50vw' }} footer={messageFooter} onHide={() => onHide('displayModal')}>
-            <DataTable value={products} selectionMode="single" paginator rows={5}
-              selection={selectedProduct} onSelectionChange={onProductSelect}>
-              <Column field="보낸사람" header="보낸사람" />
-              <Column header="제목" />
-              <Column field="날짜" header="날짜" />
-              <Column header="상태" />
+            <DataTable value={messages} selectionMode="single" paginator rows={5}
+              selection={selectedProduct} onSelectionChange={onProductSelect} dataKey="msgNo">
+              <Column field="name" header="보낸사람" />
+              <Column field="title" header="제목" />
+              <Column field="msgDate" header="날짜" />
+              <Column field="status" header="상태" />
+              <Column body={deleteButton} />
             </DataTable>
           </Dialog>
 

@@ -9,7 +9,14 @@ public class MessageVo {
 	private String msgDate;
 	private String status;
 	private Long userNo;
-
+	private int countFalse;
+	
+	public int getCountFalse() {
+		return countFalse;
+	}
+	public void setCountFalse(int countFalse) {
+		this.countFalse = countFalse;
+	}
 	public Long getMsgNo() {
 		return msgNo;
 	}
@@ -58,8 +65,12 @@ public class MessageVo {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-	
+	@Override
+	public String toString() {
+		return "MessageVo [msgNo=" + msgNo + ", name=" + name + ", title=" + title + ", toName=" + toName
+				+ ", contents=" + contents + ", msgDate=" + msgDate + ", status=" + status + ", userNo=" + userNo
+				+ ", countFalse=" + countFalse + "]";
+	}
 
 }
 	
