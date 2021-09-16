@@ -130,7 +130,14 @@ export default function NewPatient() {
     if (regex.test(e.target.value)) {
       setTelNo(e.target.value);
     }
-  }
+  };
+
+  const ssnChange = (e) => {
+    const regex = /^[0-9\b -]{0,13}$/;
+    if (regex.test(e.target.value)) {
+      setSSN(e.target.value);
+    }
+  };
 
   const create = (e) => {
     e.preventDefault();
@@ -240,7 +247,7 @@ export default function NewPatient() {
                 name="ssn"
                 autoComplete="ssn"
                 value={ssn}
-                onChange={(e) => { setSSN(e.target.value) }}
+                onChange={ssnChange}
               />
             </Grid>
 
