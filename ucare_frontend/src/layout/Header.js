@@ -119,16 +119,25 @@ const Header = ({ open, drawerManage }) => {
       .catch(err => {
         console.log('retrieveAll() Error!', err);
       });
-    
-      MessageService.retrieveAll(sessionStorage.getItem('user'))
-        .then(res =>{
-          setBadge(res.data.count);
-          setMessages(res.data.message);
-          console.log(res.data);
-        })
-        .catch(err => {
-          console.log('Message retrieveAll() Error!', err);
-        })
+
+    MessageService.retrieveAll(sessionStorage.getItem('user'))
+      .then(res => {
+        setBadge(res.data.count);
+
+        for (var i = 0; i < res.data.message.length; i++) {
+          if (res.data.message[i].status === 'f') {
+              res.data.message[i].status = '안읽음';
+          } else if (res.data.message[i].status === 't') {
+              res.data.message[i].status = '읽음';
+          }
+        }
+
+        setMessages(res.data.message);
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log('Message retrieveAll() Error!', err);
+      })
   }
 
   useEffect(() => {
@@ -256,27 +265,27 @@ const Header = ({ open, drawerManage }) => {
 
   const actionBodyTemplate = (rowData) => {
     return (
-        <React.Fragment>
-            <PrimeButton icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteItem(rowData)} />
-        </React.Fragment>
+      <React.Fragment>
+        <PrimeButton icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteItem(rowData)} />
+      </React.Fragment>
     );
-}
+  }
 
-const confirmDeleteItem = (item) => {
-  // setItem(item);
-  setDeleteItemDialog(true);
-}
+  const confirmDeleteItem = (item) => {
+    // setItem(item);
+    setDeleteItemDialog(true);
+  }
 
-const hideDeleteItemDialog = () => {
-  setDeleteItemDialog(false);
-}
+  const hideDeleteItemDialog = () => {
+    setDeleteItemDialog(false);
+  }
 
-const deleteItemDialogFooter = (
-  <React.Fragment>
+  const deleteItemDialogFooter = (
+    <React.Fragment>
       <PrimeButton label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
       <PrimeButton label="예" icon="pi pi-check" className="p-button-text" onClick={console.log('test')} />
-  </React.Fragment>
-);
+    </React.Fragment>
+  );
 
   return (
     <Fragment>
@@ -312,7 +321,7 @@ const deleteItemDialogFooter = (
             </Badge>
           </Button>
 
-          <Dialog header="Header" visible={displayModal} modal={false} style={{ width: '50vw' }} footer={messageFooter} onHide={() => onHide('displayModal')}>
+          <Dialog header="Header" visible={displayModal} modal={false} style={{ width: '50vw' }} footer={messageFooter} onHide={() => {console.log(messages[0]); onHide('displayModal');}}>
             <DataTable value={messages} selectionMode="single" paginator rows={5}
               selection={selectedProduct} onSelectionChange={onProductSelect} dataKey="msgNo">
               <Column field="name" header="보낸사람" />
@@ -378,11 +387,11 @@ const deleteItemDialogFooter = (
         </Toolbar>
       </AppBar>
       <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
-                <div className="confirmation-content">
-                    <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {item && <span>Are you sure you want to delete <b>{item.medicineNm}</b>?</span>}
-                </div>
-            </Dialog>
+        <div className="confirmation-content">
+          <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
+          {item && <span>Are you sure you want to delete <b>{item.medicineNm}</b>?</span>}
+        </div>
+      </Dialog>
     </Fragment>
   );
 }
