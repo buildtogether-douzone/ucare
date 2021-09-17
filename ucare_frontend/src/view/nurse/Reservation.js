@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { Card } from 'primereact/card';
 import { Calendar } from 'primereact/calendar';
 import { ListBox } from 'primereact/listbox';
+import { Toast } from 'primereact/toast';
+
 import timeService from '../../service/timeService';
 import patientService from '../../service/patientService';
 import reservationService from '../../service/reservationService';
 import ReservationList from './ReservationList';
-
 
 export default function Reservation() {
 
@@ -43,6 +44,8 @@ export default function Reservation() {
     const [time, setTime] = useState([]);
     const [selectedTime, setSelectedTime] = useState(emptyTime);
     const [date, setDate] = useState(new Date());
+
+    const toast = useRef(null);
 
     let reservation = {
         patientNo: selectedPatient.patientNo,
@@ -82,7 +85,6 @@ export default function Reservation() {
         setSelectedPatient(e.value);
     }
 
-
     const selectedPatientTemplate = (option, props) => {
         if (option) {
             return (
@@ -107,10 +109,6 @@ export default function Reservation() {
         );
     }
 
-
-
-
-
     const onTimeChange = (e) => {
         setSelectedTime(e.value);
     }
@@ -124,15 +122,31 @@ export default function Reservation() {
     }
 
     const onDateChange = (event) => {
-        setDate(event.target.value);
-        timeService.retrieveAll(dateFormat(event.value))
-            .then(res => {
-                console.log('success!!');
-                setTime(res.data);
-            })
-            .catch(err => {
-                console.log('retrieve() Error!', err);
-            });
+        let today = new Date();
+
+        if (dateFormat(today) > dateFormat(event.target.value)) {
+            toast.current.show({ severity: 'error', summary: '알림', detail: '금일 이후 날짜를 선택해주세요.', life: 3000 });
+            setDate(today);
+            timeService.retrieveAll(dateFormat(today))
+                .then(res => {
+                    console.log('success!!');
+                    setTime(res.data);
+                })
+                .catch(err => {
+                    console.log('retrieve() Error!', err);
+                });
+        }
+        else {
+            setDate(event.target.value);
+            timeService.retrieveAll(dateFormat(event.value))
+                .then(res => {
+                    console.log('success!!');
+                    setTime(res.data);
+                })
+                .catch(err => {
+                    console.log('retrieve() Error!', err);
+                });
+        }
     }
 
     const create = (reservation) => {
@@ -154,13 +168,14 @@ export default function Reservation() {
 
     return (
         <div className="p-grid" style={{ margin: '10px' }}>
+            <Toast ref={toast} />
             <div className="p-col-12 p-lg-6">
                 <div className="card p-fluid">
-                <Card>
-                <ReservationList />
-                </Card>
+                    <Card>
+                        <ReservationList />
+                    </Card>
                 </div>
-                </div>
+            </div>
             <div className="p-col-12 p-lg-4">
                 <div className="card p-fluid">
                     <Card title="예약">
@@ -183,11 +198,9 @@ export default function Reservation() {
                                 monthNavigatorTemplate={monthNavigatorTemplate} yearNavigatorTemplate={yearNavigatorTemplate} />
                         </div>
 
-                        <Button style={{marginTop: '16px', backgroundColor: '#1C91FB', color: 'white'}} label="예약" className="p-button-outlined" type="submit" onClick={(e) => create(reservation)} />
-
+                        <Button style={{ marginTop: '16px', backgroundColor: '#1C91FB', color: 'white' }} label="예약" className="p-button-outlined" type="submit" onClick={(e) => create(reservation)} />
                     </Card>
                 </div>
-
             </div>
 
             <div className="p-col-12 p-lg-2">
@@ -195,10 +208,10 @@ export default function Reservation() {
                     <Card>
                         <div className="p-field">
                             <label htmlFor="time">시간</label>
-                            {time != '' ? 
-                             <ListBox value={selectedTime} options={time} onChange={(e) => onTimeChange(e)} optionLabel="time" listStyle={{ maxHeight: '375px' }}  />
-                            : <div className="p-mb-3 p-text-left">예약 가능한 시간이 없습니다.</div>}
-                            </div>
+                            {time != '' ?
+                                <ListBox value={selectedTime} options={time} onChange={(e) => onTimeChange(e)} optionLabel="time" listStyle={{ maxHeight: '375px' }} />
+                                : <div className="p-mb-3 p-text-left">예약 가능한 시간이 없습니다.</div>}
+                        </div>
                     </Card>
                 </div>
             </div>

@@ -8,6 +8,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { classNames } from 'primereact/utils';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dialog } from 'primereact/dialog';
+
 import reservationService from '../../service/reservationService';
 import timeService from '../../service/timeService'
 import receiptService from '../../service/receiptService';
@@ -38,7 +39,6 @@ export default function ReservationList() {
     const [globalFilter, setGlobalFilter] = useState('');
     const dt = useRef(null);
 
-
     const retrieveAll = (e) => {
         reservationService.retrieveAll()
             .then(res => {
@@ -49,7 +49,6 @@ export default function ReservationList() {
                 console.log('retrieveAll() Error!', err);
             });
     }
-
 
     useEffect(() => {
         retrieveAll();
