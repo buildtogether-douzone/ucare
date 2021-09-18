@@ -17,7 +17,7 @@ public class MessageService {
 
 	public HashMap<String,Object> retrieveMessage(String id) {
 		List<MessageVo> message = messageRepository.findById(id);
-		int count = messageRepository.findFalseCount();
+		int count = messageRepository.findFalseCount(id);
 		
 		HashMap<String,Object> map = new HashMap<String, Object>();
 		map.put("message", message);

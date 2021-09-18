@@ -13,9 +13,10 @@
 		WHERE to_name = #{id } 
 	</select>
 	
-	<select id="falseCount" resultType="int">
+	<select id="falseCount" parameterType="String" resultType="int">
 		SELECT COUNT(status)
 		FROM ucare.message
 		WHERE status = 'false'
+		AND to_name = #{ id }
 	</select>
 </mapper>	

@@ -18,8 +18,8 @@ public class MessageRepository {
 		return sqlSession.selectList("message.findById", id);
 	}
 
-	public int findFalseCount() {
-		return sqlSession.selectOne("message.falseCount");
+	public int findFalseCount(String id) {
+		return sqlSession.selectOne("message.falseCount", id);
 	}
 
 }

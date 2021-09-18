@@ -321,7 +321,7 @@ const Header = ({ open, drawerManage }) => {
             </Badge>
           </Button>
 
-          <Dialog header="Header" visible={displayModal} modal={false} style={{ width: '50vw' }} footer={messageFooter} onHide={() => {console.log(messages[0]); onHide('displayModal');}}>
+          <Dialog header="Header" visible={displayModal} modal={false} style={{ width: '50vw' }} footer={messageFooter} onHide={() => {onHide('displayModal');}}>
             <DataTable value={messages} selectionMode="single" paginator rows={5}
               selection={selectedProduct} onSelectionChange={onProductSelect} dataKey="msgNo">
               <Column field="name" header="보낸사람" />
