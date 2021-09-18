@@ -26,4 +26,8 @@ public class MessageRepository {
 		return sqlSession.update("message.update", no);
 	}
 
+	public Object delete(Long no) {
+		return sqlSession.delete("message.delete", no);
+	}
+
 }

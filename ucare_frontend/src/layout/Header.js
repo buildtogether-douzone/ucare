@@ -105,6 +105,7 @@ const Header = ({ open, drawerManage }) => {
   const [view, setView] = useState(emptyView);
   const [deleteItemDialog, setDeleteItemDialog] = useState(false);
   const [reload, setReload] = useState(false);
+  const [messageItem, setMessageItem] = useState(empty);
 
   const $websocket = useRef(null);
   const isMounted = useRef(false);
@@ -282,7 +283,7 @@ const Header = ({ open, drawerManage }) => {
   }
 
   const confirmDeleteItem = (item) => {
-    setItem(item);
+    setMessageItem(item);
     setDeleteItemDialog(true);
   }
 
@@ -300,7 +301,14 @@ const Header = ({ open, drawerManage }) => {
   };
 
   const deleteItem = () => {
-    console.log(item);
+    MessageService.delete(messageItem.msgNo)
+      .then(res => {
+        setReload(!reload);
+        setDeleteItemDialog(false);
+      })
+      .catch(err => {
+        console.log("message delete Error", err)
+      })
   }
   const coltemplate = (rowData) => {
     return (
@@ -382,7 +390,7 @@ const Header = ({ open, drawerManage }) => {
           <Dialog baseZIndex={9999} visible={itemDialog} style={{ width: '40%' }} header="접수" footer={itemDialogFooter} modal className="p-fluid" onHide={hideDialog}>
             <div className="p-field">
               <label htmlFor="name">To</label>
-              <Dropdown value={selectedUser} options={users} onChange={onUserChange} optionLabel="name" filter filterBy="name" placeholder="이름"
+              <Dropdown value={selectedUser} options={users} onChange={onUserChange} optionLabel="name" filter filterBy="name" placeholder="받는이"
                 valueTemplate={selectedUserTemplate} itemTemplate={userOptionTemplate} />
             </div>
             <div className="p-field" style={{ fontWeight: 'bold' }}>
@@ -447,7 +455,7 @@ const Header = ({ open, drawerManage }) => {
       <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
         <div className="confirmation-content">
           <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
-          {item && <span>Are you sure you want to delete <b>{item.medicineNm}</b>?</span>}
+          {item && <span>이 메시지를 삭제 하시겠습니까?</span>}
         </div>
       </Dialog>
     </Fragment>

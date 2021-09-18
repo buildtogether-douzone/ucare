@@ -27,8 +27,11 @@ public class MessageService {
 	}
 
 	public Object revise(Long no) {
-		System.out.println(no);
 		return messageRepository.update(no);
+	}
+
+	public Object delete(Long no) {
+		return messageRepository.delete(no);
 	}
 
 }

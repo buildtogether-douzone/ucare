@@ -9,6 +9,10 @@ class messageService {
     revise(data){
       return axios.put(MESSAGE_API_BASE_URL + '/revise/'+ data, null, { headers: { Authorization: localStorage.getItem("authorization") }});
     }
+
+    delete(data){
+      return axios.delete(MESSAGE_API_BASE_URL + '/delete/'+ data, { headers: { Authorization: localStorage.getItem("authorization") }});
+    }
 }
 
 export default new messageService();
