@@ -22,4 +22,8 @@ public class MessageRepository {
 		return sqlSession.selectOne("message.falseCount", id);
 	}
 
+	public Object update(Long no) {
+		return sqlSession.update("message.update", no);
+	}
+
 }

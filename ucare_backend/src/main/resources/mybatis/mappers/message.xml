@@ -19,4 +19,10 @@
 		WHERE status = 'false'
 		AND to_name = #{ id }
 	</select>
+	<update id="update" parameterType="long">
+		UPDATE ucare.message
+		   SET 
+		   	status=true
+		WHERE msg_no = #{no }
+	</update>
 </mapper>	

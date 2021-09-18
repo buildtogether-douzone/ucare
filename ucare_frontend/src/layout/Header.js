@@ -26,7 +26,6 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import UserService from '../service/userService';
 import MessageService from '../service/messageService';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 const drawerWidth = 240;
 
@@ -82,28 +81,32 @@ let empty = {
   contents: ''
 }
 
+let emptyView = {
+  title: '',
+  contents: '',
+}
+
 const Header = ({ open, drawerManage }) => {
   const classes = useStyles();
   const [displayModal, setDisplayModal] = useState(false);
-  const [position, setPosition] = useState('center');
   const [name, setName] = useState('');
   const [URL, setURL] = useState('');
   const [email, setEmail] = useState('');
   const [userID, setUserID] = useState('');
   const [badge, setBadge] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [products, setProducts] = useState(null);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedMessage, setSelectedMessage] = useState(null);
   const [itemDialog, setItemDialog] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(emptyItem);
   const [item, setItem] = useState(empty);
   const [messages, setMessages] = useState(null);
-  const [view, setView] = useState(true);
+  const [viewDialog, setViewDialog] = useState(false);
+  const [view, setView] = useState(emptyView);
   const [deleteItemDialog, setDeleteItemDialog] = useState(false);
+  const [reload, setReload] = useState(false);
 
   const $websocket = useRef(null);
-  const op = useRef(null);
   const isMounted = useRef(false);
 
   const dialogFuncMap = {
@@ -126,9 +129,9 @@ const Header = ({ open, drawerManage }) => {
 
         for (var i = 0; i < res.data.message.length; i++) {
           if (res.data.message[i].status === 'f') {
-              res.data.message[i].status = '안읽음';
+            res.data.message[i].status = '안읽음';
           } else if (res.data.message[i].status === 't') {
-              res.data.message[i].status = '읽음';
+            res.data.message[i].status = '읽음';
           }
         }
 
@@ -145,10 +148,21 @@ const Header = ({ open, drawerManage }) => {
   }, []);
 
   useEffect(() => {
-    if (isMounted.current) {
-      op.current.hide();
-    }
-  }, [selectedProduct]);
+    MessageService.retrieveAll(sessionStorage.getItem('user'))
+    .then(res => {
+      setBadge(res.data.count);
+
+      for (var i = 0; i < res.data.message.length; i++) {
+        if (res.data.message[i].status === 'f') {
+          res.data.message[i].status = '안읽음';
+        } else if (res.data.message[i].status === 't') {
+          res.data.message[i].status = '읽음';
+        }
+      }
+
+      setMessages(res.data.message);
+    })
+  }, [reload])
 
   useEffect(() => {
     let user = {
@@ -168,10 +182,6 @@ const Header = ({ open, drawerManage }) => {
         console.log('fetchUser() 에러', err);
       });
   }, []);
-
-  const onProductSelect = (e) => {
-    setSelectedProduct(e.value);
-  }
 
   function handleClick(event) {
     if (anchorEl !== event.currentTarget) {
@@ -272,7 +282,7 @@ const Header = ({ open, drawerManage }) => {
   }
 
   const confirmDeleteItem = (item) => {
-    // setItem(item);
+    setItem(item);
     setDeleteItemDialog(true);
   }
 
@@ -280,12 +290,49 @@ const Header = ({ open, drawerManage }) => {
     setDeleteItemDialog(false);
   }
 
-  const deleteItemDialogFooter = (
-    <React.Fragment>
+  const deleteItemDialogFooter = () => {
+    return(
+    <div>
       <PrimeButton label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
-      <PrimeButton label="예" icon="pi pi-check" className="p-button-text" onClick={console.log('test')} />
+      <PrimeButton label="예" icon="pi pi-check" className="p-button-text" onClick={() => deleteItem()} />
+    </div>
+    );
+  };
+
+  const deleteItem = () => {
+    console.log(item);
+  }
+  const coltemplate = (rowData) => {
+    return (
+      <div>
+        <a onClick={() => rowColumnClick(rowData)}>{rowData.title}</a>
+      </div>);
+  }
+
+  const rowColumnClick = (rowData) => {
+    if(rowData.status=='안읽음'){
+      MessageService.revise(rowData.msgNo)
+        .then(res => {
+          setReload(!reload);
+        })
+        .catch(err => {
+          console.log("message revise Error", err)
+        })
+    }
+
+    setView(rowData);
+    setViewDialog(true);
+  }
+
+  const checkDialogFooter = (
+    <React.Fragment>
+      <PrimeButton label="확인" className="p-button-text" onClick={()=>{hideViewDialog()}} />
     </React.Fragment>
   );
+
+  const hideViewDialog = () => {
+    setViewDialog(false);
+  }
 
   return (
     <Fragment>
@@ -321,14 +368,14 @@ const Header = ({ open, drawerManage }) => {
             </Badge>
           </Button>
 
-          <Dialog header="Header" visible={displayModal} modal={false} style={{ width: '50vw' }} footer={messageFooter} onHide={() => {onHide('displayModal');}}>
+          <Dialog header="Header" visible={displayModal} modal={false} style={{ width: '50vw' }} footer={messageFooter} onHide={() => { onHide('displayModal'); }}>
             <DataTable value={messages} selectionMode="single" paginator rows={5}
-              selection={selectedProduct} onSelectionChange={onProductSelect} dataKey="msgNo">
+              selection={selectedMessage} onSelectionChange={(e) => setSelectedMessage(e.value)} dataKey="msgNo">
               <Column field="name" header="보낸사람" />
-              <Column field="title" header="제목" />
+              <Column field="title" header="제목" body={coltemplate} />
               <Column field="msgDate" header="날짜" />
               <Column field="status" header="상태" />
-              <Column body={actionBodyTemplate}></Column>
+              <Column field="delete" body={actionBodyTemplate}/>
             </DataTable>
           </Dialog>
 
@@ -345,6 +392,17 @@ const Header = ({ open, drawerManage }) => {
             <div className="p-field" style={{ fontWeight: 'bold' }}>
               <label htmlFor="remark">내용</label>
               <InputTextarea value={item.contents || ''} onChange={(e) => onInputChange(e, 'contents')} rows={5} cols={30} autoResize />
+            </div>
+          </Dialog>
+
+          <Dialog baseZIndex={9999} visible={viewDialog} style={{ width: '40%' }} header="쪽지 내용" footer={checkDialogFooter} modal className="p-fluid" onHide={hideViewDialog}>
+            <div className="p-field">
+              <label htmlFor="title">제목</label>
+              <InputText id="title" value={view.title} readOnly={true} />
+            </div>
+            <div className="p-field">
+              <label htmlFor="contents">내용</label>
+              <InputText style={{ height: '320px' }} value={view.contents} readOnly={true} />
             </div>
           </Dialog>
 

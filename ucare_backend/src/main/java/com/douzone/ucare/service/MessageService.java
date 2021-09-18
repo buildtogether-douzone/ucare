@@ -26,4 +26,9 @@ public class MessageService {
 		return map;
 	}
 
+	public Object revise(Long no) {
+		System.out.println(no);
+		return messageRepository.update(no);
+	}
+
 }
