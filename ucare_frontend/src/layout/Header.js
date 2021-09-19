@@ -139,7 +139,6 @@ const Header = ({ open, drawerManage }) => {
         }
 
         setMessages(res.data.message);
-        console.log(res.data);
       })
       .catch(err => {
         console.log('Message retrieveAll() Error!', err);
