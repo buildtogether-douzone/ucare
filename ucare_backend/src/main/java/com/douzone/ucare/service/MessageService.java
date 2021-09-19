@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.douzone.ucare.controller.api.SocketController;
 import com.douzone.ucare.repository.MessageRepository;
 import com.douzone.ucare.vo.MessageVo;
 
@@ -14,6 +15,9 @@ public class MessageService {
 	
 	@Autowired
 	private MessageRepository messageRepository;
+	
+	@Autowired
+	private SocketController socketController;
 
 	public HashMap<String,Object> retrieveMessage(String id) {
 		List<MessageVo> message = messageRepository.findById(id);
@@ -32,6 +36,12 @@ public class MessageService {
 
 	public Object delete(Long no) {
 		return messageRepository.delete(no);
+	}
+
+	public Object sendMessage(MessageVo vo) {
+		messageRepository.insert(vo);
+		socketController.sendMessage(vo.getToName());
+		return null;
 	}
 
 }

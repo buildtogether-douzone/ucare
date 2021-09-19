@@ -30,4 +30,8 @@ public class MessageRepository {
 		return sqlSession.delete("message.delete", no);
 	}
 
+	public void insert(MessageVo vo) {
+		sqlSession.insert("message.insert", vo);
+	}
+
 }

@@ -13,6 +13,10 @@ class messageService {
     delete(data){
       return axios.delete(MESSAGE_API_BASE_URL + '/delete/'+ data, { headers: { Authorization: localStorage.getItem("authorization") }});
     }
+
+    sendMessage(data){
+      return axios.post(MESSAGE_API_BASE_URL + '/sendMessage', data, { headers: { Authorization: localStorage.getItem("authorization") }})
+    }
 }
 
 export default new messageService();

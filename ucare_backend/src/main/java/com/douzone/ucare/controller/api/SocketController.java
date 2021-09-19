@@ -1,4 +1,4 @@
-package com.douzone.ucare.controller;
+package com.douzone.ucare.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -8,25 +8,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class TestController {
+public class SocketController {
 	
 	@Autowired 
 	private SimpMessagingTemplate webSocket; 
 	
 	@MessageMapping("/sendTo") 
 	@SendTo("/topics/sendTo") 
-	public String SendToMessage() throws Exception { 
+	public String sendToMessage() throws Exception { 
 		return "5"; 
 	}
 	
 	@MessageMapping("/Doctor") 
-	public void SendToDoctor() { 
+	public void sendToDoctor() { 
 		webSocket.convertAndSend("/topics/doctor" , Math.random()); 
 	}
 	
 	@MessageMapping("/Nurse") 
-	public void SendToNurse() { 
+	public void sendToNurse() { 
 		webSocket.convertAndSend("/topics/nurse" , Math.random()); 
+	}
+	
+	@MessageMapping("/Message") 
+	public void sendMessage(String receiveUser) {
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!" + receiveUser);
+		webSocket.convertAndSend("/topics/message/" + receiveUser , Math.random());
 	}
 	
 	@MessageMapping("/Template") 

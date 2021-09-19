@@ -26,6 +26,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import UserService from '../service/userService';
 import MessageService from '../service/messageService';
+import session from 'redux-persist/lib/storage/session';
 
 const drawerWidth = 240;
 
@@ -106,6 +107,7 @@ const Header = ({ open, drawerManage }) => {
   const [deleteItemDialog, setDeleteItemDialog] = useState(false);
   const [reload, setReload] = useState(false);
   const [messageItem, setMessageItem] = useState(empty);
+  const [sendNo, setSendNo] = useState(null);
 
   const $websocket = useRef(null);
   const isMounted = useRef(false);
@@ -213,9 +215,29 @@ const Header = ({ open, drawerManage }) => {
     setItemDialog(false);
   };
 
+  const sendMessage = () => {
+    const data ={
+      toName: selectedUser.id,
+      name: sessionStorage.getItem('user'),
+      contents: item.contents,
+      title: item.title
+    }
+
+    MessageService.sendMessage(data)
+      .then(res => {
+        item.title = '';
+        item.contents = '';
+        setItemDialog(false);
+        setReload(!reload);
+      })
+      .catch(err => {
+        console.log('sendMessage 에러', err);
+      })
+  }
+
   const itemDialogFooter = (
     <React.Fragment>
-      <Button onClick={hideDialog} color="primary">보내기</Button>
+      <Button onClick={sendMessage} color="primary">보내기</Button>
       <Button onClick={hideDialog} color="primary">닫기</Button>
     </React.Fragment>
   );
@@ -346,8 +368,8 @@ const Header = ({ open, drawerManage }) => {
     <Fragment>
       <SockJsClient
         url="http://localhost:8080/ucare_backend/start"
-        topics={['/topics/template' + userID]}
-        onMessage={msg => { setBadge(msg) }}
+        topics={['/topics/message/' + sessionStorage.getItem('user')]}
+        onMessage={msg => { setReload(!reload); }}
         ref={$websocket} />
 
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>

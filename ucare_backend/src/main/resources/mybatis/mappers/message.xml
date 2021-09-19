@@ -32,4 +32,17 @@
 		  FROM ucare.message
 		 WHERE msg_no = #{no }
 	</delete>
+	
+		<insert id="insert" parameterType="messagevo">
+		INSERT
+			INTO ucare.message(name, to_name, contents, msg_date, status, title)
+		VALUES(
+			#{name },
+			#{toName },
+			#{contents },
+			now(),
+			false,
+			#{title }
+		)
+	</insert>
 </mapper>	
