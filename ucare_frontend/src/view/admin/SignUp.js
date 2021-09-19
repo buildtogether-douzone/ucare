@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SignUp({ history }) {
+export default function SignUp() {
   const classes = useStyles();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
@@ -206,8 +206,9 @@ export default function SignUp({ history }) {
       name: name,
       gender: gender,
       ssn: ssn,
-      email: email,
+      email: (emailID + '@' + email),
       address: address,
+      detailAddress: detailAddress,
       telNo: telNo,
       role: role,
       remark: remark
@@ -216,7 +217,6 @@ export default function SignUp({ history }) {
     userService.addUser(user)
     .then( res => {
         console.log(user.name + '님이 성공적으로 등록되었습니다.');
-        history.push('/');
     })
     .catch( err => {
       console.log('saveUser() 에러', err);
@@ -451,13 +451,13 @@ export default function SignUp({ history }) {
               <FormControl component="fieldset" className={classes.radio}>
                 <RadioGroup row aria-label="role" name="role" value={role} onChange={roleChange} >
                   <FormControlLabel
-                    value="Y"
+                    value="의사"
                     control={<Radio color="primary" />}
                     label="의사"
                     labelPlacement="end"
                   />
                   <FormControlLabel
-                    value="N"
+                    value="간호사"
                     control={<Radio color="primary" />}
                     label="간호사"
                     labelPlacement="end"

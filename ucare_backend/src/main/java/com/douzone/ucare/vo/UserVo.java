@@ -11,6 +11,7 @@ public class UserVo {
 	private String emailId;
 	private String email;
 	private String address;
+	private String detailAddress;
 	private String telNo;
 	private String role;
 	private String status;
@@ -78,6 +79,12 @@ public class UserVo {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	public String getDetailAddress() {
+		return detailAddress;
+	}
+	public void setDetailAddress(String detailAddress) {
+		this.detailAddress = detailAddress;
+	}
 	public String getTelNo() {
 		return telNo;
 	}
@@ -114,14 +121,13 @@ public class UserVo {
 	public void setImage(String image) {
 		this.image = image;
 	}
+	
 	@Override
 	public String toString() {
 		return "UserVo [rowNo=" + rowNo + ", userNo=" + userNo + ", id=" + id + ", password=" + password + ", name="
 				+ name + ", gender=" + gender + ", ssn=" + ssn + ", emailId=" + emailId + ", email=" + email
-				+ ", address=" + address + ", telNo=" + telNo + ", role=" + role + ", status=" + status + ", remark="
-				+ remark + ", birth=" + birth + ", image=" + image + "]";
+				+ ", address=" + address + ", detailAddress=" + detailAddress + ", telNo=" + telNo + ", role=" + role
+				+ ", status=" + status + ", remark=" + remark + ", birth=" + birth + ", image=" + image + "]";
 	}
-	
-
 	
 }
