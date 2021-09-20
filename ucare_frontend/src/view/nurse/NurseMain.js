@@ -4,31 +4,20 @@ import SiteLayout from '../../layout/SiteLayout';
 import PatientList from './PatientList';
 import Reservation from './Reservation';
 import NurseStatus from './NurseStatus';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => createStyles({
-  slide:{
-    position:'relative', 
-    overflow:'scroll',
-    "&::-webkit-scrollbar": {
-      display: "none"
-    }
-  }
-}));
+import styles from '../../assets/scss/Slide.scss'
 
 const NurseMain = React.forwardRef((props, ref) => {
-    const classes = useStyles();
     
     return(
         <SiteLayout >
             <FullPage ref={ref} scrollMode='normal'>
-                <Slide className={classes.slide}>
+                <Slide className={styles.PageSlide}>
                     <NurseStatus />
                 </Slide>
-                <Slide className={classes.slide}>
+                <Slide className={styles.PageSlide}>
                     <Reservation />
                 </Slide>
-                <Slide className={classes.slide}>
+                <Slide className={styles.PageSlide}>
                     <PatientList />
                 </Slide>
             </FullPage>

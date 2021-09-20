@@ -6,37 +6,26 @@ import Hospital from './Hospital';
 import Disease from './Disease';
 import Medicine from './Medicine';
 import SignUp from './SignUp';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => createStyles({
-  slide:{
-    position:'relative', 
-    overflow:'scroll',
-    "&::-webkit-scrollbar": {
-      display: "none"
-    }
-  }
-}));
+import styles from '../../assets/scss/Slide.scss'
 
 const AdminMain = React.forwardRef((props, ref) => {
-  const classes = useStyles();
   
     return (
       <SiteLayout>
       <FullPage ref={ref} scrollMode='normal'>
-        <Slide className={classes.slide}>
+        <Slide className={styles.PageSlide}>
           <Setting />
         </Slide>
-        <Slide className={classes.slide}>
+        <Slide className={styles.PageSlide}>
           <Hospital />
         </Slide>
-        <Slide className={classes.slide}>
+        <Slide className={styles.PageSlide}>
           <SignUp />
         </Slide>
-        <Slide className={classes.slide}>
+        <Slide className={styles.PageSlide}>
           <Disease />
         </Slide>
-        <Slide className={classes.slide} style={{ paddingBottom: '5%' }}>
+        <Slide className={styles.PageSlide} style={{ paddingBottom: '5%' }}>
           <Medicine />
         </Slide>
       </FullPage>

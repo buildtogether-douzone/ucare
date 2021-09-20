@@ -26,7 +26,6 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import UserService from '../service/userService';
 import MessageService from '../service/messageService';
-import session from 'redux-persist/lib/storage/session';
 
 const drawerWidth = 240;
 
@@ -156,7 +155,6 @@ const Header = ({ open, drawerManage }) => {
           }
         }
 
-        console.log(res.data);
         setSendMessageItem(res.data);
       })
       .catch(err => {
