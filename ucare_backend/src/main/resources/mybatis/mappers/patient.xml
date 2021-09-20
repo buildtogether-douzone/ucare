@@ -27,7 +27,7 @@
 			#{telNo },
 			#{address },
 			#{detailAddress }, 
-			#{domain },
+			#{email },
 			#{insurance },
 			#{diagnosis },
 			TO_DATE(#{visitDate },'YYYY-MM-DD'),
@@ -51,8 +51,7 @@
 			insurance_yn AS insurance,
 			diagnosis_type AS diagnosis,
 			ins_dt AS insDt,
-		    split_part(email, '@', 1) as emailId,
-		    split_part(email, '@', 2) as email,
+			email AS email,
 		    remark AS remark
 		FROM ucare.patient
 		ORDER BY patient_no desc
@@ -71,8 +70,7 @@
 			insurance_yn AS insurance,
 			diagnosis_type AS diagnosis,
 			ins_dt AS insDt,
-		   split_part(email, '@', 1) as emailId,
-		   split_part(email, '@', 2) as email,
+			email AS email,
 		   remark AS remark
 		FROM ucare.patient
 		WHERE patient_no = #{patientNo }
@@ -90,7 +88,7 @@
 	   		tel_no = #{telNo },
 	   		address = #{address },
 	   		detail_address = #{detailAddress }, 
-	   		email = #{domain },
+	   		email = #{email },
 	   		insurance_yn = #{insurance },
 	   		remark = #{remark },
 	   		upt_no = #{uptNo },

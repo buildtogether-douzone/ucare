@@ -65,8 +65,7 @@ export default function Profile() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [telNo, setTelNo] = useState('');
-  const [emailId, setEmailId] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('email@co.kr');
   const [address, setAddress] = useState('');
   const [birth, setBirth] = useState('');
   const [file, setFile] = useState('');
@@ -90,7 +89,6 @@ export default function Profile() {
         setConfirmPassword(res.data.password);
         setTelNo(res.data.telNo);
         setAddress(res.data.address);
-        setEmailId(res.data.emailId);
         setEmail(res.data.email);
         setPreviewURL(res.data.image);
         setImageURL(res.data.image);
@@ -124,6 +122,10 @@ export default function Profile() {
     password != confirmPassword ? true : false;
 
 
+  const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+  const hasNotValidError = emailEntered =>
+    regex.test(email) ? false : true; 
 
 
   const saveUpdate = (e) => {
@@ -137,7 +139,7 @@ export default function Profile() {
       name: name,
       password: password,
       telNo: telNo,
-      email: (emailId + '@' + email),
+      email: email,
       address: address,
       birth: birth,
       image: imageURL
@@ -266,31 +268,20 @@ export default function Profile() {
           <Grid item xs={12}>
             <Typography className={classes.font} variant="body1">이메일</Typography>
             <TextField
-              style={{ float: 'left', width: '45%', backgroundColor: '#FFFFFF' }}
+              style={{ backgroundColor: '#FFFFFF' }}
               variant="outlined"
               required
               fullWidth
-              id="emailId"
-              name="emailId"
+              id="email"
+              name="email"
               autoComplete="email"
-              value={emailId}
-              onChange={(e) => { setEmailId(e.target.value) }}
+              error={hasNotValidError('email')}
+              helperText={
+                hasNotValidError('email') ? "이메일 주소를 다시 확인해주세요." : null
+              }
+              value={email}
+              onChange={(e) => { setEmail(e.target.value) }}
             />
-            <Typography className={classes.font} style={{ float: 'left', width: '10%', padding: '2%', textAlign: 'center' }} variant="body1">@</Typography>
-            <FormControl variant="outlined" style={{ float: 'left', width: '45%', backgroundColor: '#FFFFFF' }}>
-              <Select
-                labelId="demo-simple-select-outlined-label"
-                id="email"
-                value={email}
-                onChange={(e) => { setEmail(e.target.value) }}
-              >
-                <MenuItem value=""></MenuItem>
-                <MenuItem value={'naver.com'}>naver.com</MenuItem>
-                <MenuItem value={'daum.net'}>daum.net</MenuItem>
-                <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
-              </Select>
-            </FormControl>
-
           </Grid>
           <Grid item xs={12}>
             <Typography className={classes.font} variant="body1">주소</Typography>

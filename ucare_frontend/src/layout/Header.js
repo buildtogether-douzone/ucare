@@ -175,7 +175,7 @@ const Header = ({ open, drawerManage }) => {
       .then(res => {
         setName(res.data.name);
         setURL(res.data.image);
-        setEmail(res.data.emailId + '@' + res.data.email)
+        setEmail(res.data.email)
       })
       .catch(err => {
         console.log('fetchUser() 에러', err);

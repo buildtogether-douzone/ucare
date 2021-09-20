@@ -64,7 +64,6 @@ const Row = React.forwardRef((props, ref) => {
   const [patientNo, setPatientNo] = useState('');
   const [name, setName] = useState('');
   const [gender, setGender] = useState('');
-  const [emailId, setEmailId] = useState('');
   const [email, setEmail] = useState('');
   const [ssn, setSSN] = useState('');
   const [age, setAge] = useState('');
@@ -107,11 +106,10 @@ const Row = React.forwardRef((props, ref) => {
     setDialogOpen(false);
   };
 
-  const patientInfoClickOpen = (patientNo, name, gender, emailId, email, ssn, age, address, detailAddress, telNo, diagnosis, insurance, insDt, remark) => {
+  const patientInfoClickOpen = (patientNo, name, gender, email, ssn, age, address, detailAddress, telNo, diagnosis, insurance, insDt, remark) => {
     setPatientNo(patientNo);
     setName(name);
     setGender(gender);
-    setEmailId(emailId);
     setEmail(email);
     setSSN(ssn);
     setAge(age);
@@ -187,7 +185,12 @@ const Row = React.forwardRef((props, ref) => {
     if (regex.test(e.target.value)) {
       setTelNo(e.target.value);
     }
-  }
+  };
+
+  const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+  const hasNotValidError = emailEntered =>
+    regex.test(email) ? false : true; 
 
   const fetchReceipt = () => {
     receiptService.retrieveAll(row.patientNo)
@@ -226,7 +229,7 @@ const Row = React.forwardRef((props, ref) => {
       telNo: telNo,
       address: address,
       detailAddress: detailAddress,
-      domain: (emailId + '@' + email),
+      email: email,
       insurance: insurance,
       remark: remark,
       patientNo: row.patientNo,
@@ -344,7 +347,6 @@ const Row = React.forwardRef((props, ref) => {
                 row.patientNo,
                 row.name,
                 row.gender,
-                row.emailId,
                 row.email,
                 row.ssn,
                 row.age,
@@ -459,44 +461,22 @@ const Row = React.forwardRef((props, ref) => {
                 onChange={(e) => { setDetailAddress(e.target.value) }}
               />
             </div>
-            <div style={{ width: '100%', overflow: 'hidden' }}>
               <Typography className={classes.font} variant="body1" gutterBottom>이메일</Typography>
               <TextField
-                style={{ float: 'left', width: '45%', backgroundColor: '#FFFFFF' }}
                 variant="outlined"
                 required
                 fullWidth
                 size="small"
-                id="emailId"
-                name="emailId"
-                autoComplete="emai"
-                value={emailId}
-                onChange={(e) => { setEmailId(e.target.value) }}
+                id="email"
+                name="email"
+                autoComplete="email"
+                error={hasNotValidError('email')}
+                helperText={
+                  hasNotValidError('email') ? "이메일 주소를 다시 확인해주세요." : null
+                }
+                value={email}
+                onChange={(e) => { setEmail(e.target.value) }}
               />
-              <Typography style={{ float: 'left', width: '10%', padding: '2%', textAlign: 'center', height: '2.5em' }} variant="body1">@</Typography>
-
-              <FormControl variant="outlined" style={{ float: 'left', width: '45%' }}>
-                <Select
-                  style={{ height: '2.5em' }}
-                  labelId="demo-simple-select-outlined-label"
-                  id="email"
-                  value={email}
-                  onChange={(e) => { setEmail(e.target.value) }}
-                >
-                  <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
-                  <MenuItem value={'naver.com'}>naver.com</MenuItem>
-                  <MenuItem value={'daum.net'}>daum.net</MenuItem>
-                  <MenuItem value={'yahoo.co.kr'}>yahoo.co.kr</MenuItem>
-                  <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
-                  <MenuItem value={'nate.com'}>nate.com</MenuItem>
-                  <MenuItem value={'empas.com'}>empas.com</MenuItem>
-                  <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
-                  <MenuItem value={'weppy.com'}>weppy.com</MenuItem>
-                  <MenuItem value={'korea.com'}>korea.com</MenuItem>
-                  <MenuItem value={'mail.co.kr'}>hotmail.com</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
             <Typography className={classes.font} variant="body1" gutterBottom>보험 여부</Typography>
             <FormControl component="fieldset">
               <RadioGroup row aria-label="insurance" name="insurance" value={insurance} onChange={(e) => { setInsurance(e.target.value) }} >

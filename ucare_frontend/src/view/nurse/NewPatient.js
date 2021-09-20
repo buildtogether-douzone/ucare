@@ -79,8 +79,7 @@ export default function NewPatient() {
   const [telNo, setTelNo] = useState('');
   const [address, setAddress] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
-  const [emailId, setEmailId] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('email@co.kr');
   const [insurance, setInsurance] = useState('Y');
   const [diagType, setDiagType] = useState('초진');
   const [visitDate, setVisitDate] = useState('');
@@ -139,6 +138,12 @@ export default function NewPatient() {
     }
   };
 
+  const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+  const hasNotValidError = emailEntered =>
+    regex.test(email) ? false : true; 
+
+
   const create = (e) => {
     e.preventDefault();
 
@@ -150,7 +155,7 @@ export default function NewPatient() {
       telNo: telNo,
       address: address,
       detailAddress: detailAddress,
-      domain: (emailId + '@' + email),
+      email: email,
       insurance: insurance,
       diagnosis: diagType,
       visitDate: visitDate,
@@ -177,7 +182,6 @@ export default function NewPatient() {
     setTelNo('');
     setAddress('');
     setDetailAddress('');
-    setEmailId('');
     setEmail('');
     setInsurance('');
     setRemark('');
@@ -337,41 +341,21 @@ export default function NewPatient() {
               <Typography className={classes.font} variant="body1">이메일</Typography>
               <TextField
                 className={classes.input}
-                style={{ float: 'left', width: '30%', backgroundColor: '#FFFFFF' }}
+                style={{ backgroundColor: '#FFFFFF' }}
                 variant="outlined"
                 required
                 fullWidth
                 size="small"
-                id="emailId"
-                name="emailId"
-                autoComplete="emai"
-                value={emailId}
-                onChange={(e) => { setEmailId(e.target.value) }}
+                id="email"
+                name="email"
+                autoComplete="email"
+                error={hasNotValidError('email')}
+                helperText={
+                  hasNotValidError('email') ? "이메일 주소를 다시 확인해주세요." : null
+                }
+                value={email}
+                onChange={(e) => { setEmail(e.target.value) }}
               />
-              <Typography className={classes.font} style={{ float: 'left', width: '5%', padding: '5px', paddingTop: '10PX', textAlign: 'center', backgroundColor: 'white' }} variant="body1">@</Typography>
-              <FormControl variant="outlined" style={{ float: 'left', width: '30%', backgroundColor: '#FFFFFF', padding: '5px' }}>
-                <Select
-                  style={{ height: '2.5em' }}
-                  labelId="demo-simple-select-outlined-label"
-                  id="email"
-                  size="small"
-                  value={email}
-                  onChange={(e) => { setEmail(e.target.value) }}
-                >
-                  <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
-                  <MenuItem value={'naver.com'}>naver.com</MenuItem>
-                  <MenuItem value={'daum.net'}>daum.net</MenuItem>
-                  <MenuItem value={'yahoo.co.kr'}>yahoo.co.kr</MenuItem>
-                  <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
-                  <MenuItem value={'nate.com'}>nate.com</MenuItem>
-                  <MenuItem value={'empas.com'}>empas.com</MenuItem>
-                  <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
-                  <MenuItem value={'weppy.com'}>weppy.com</MenuItem>
-                  <MenuItem value={'korea.com'}>korea.com</MenuItem>
-                  <MenuItem value={'mail.co.kr'}>hotmail.com</MenuItem>
-
-                </Select>
-              </FormControl>
             </Grid>
 
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>

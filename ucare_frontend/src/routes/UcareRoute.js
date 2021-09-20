@@ -9,7 +9,6 @@ import Profile from '../view/Profile';
 
 import Board from '../view/admin/Board';
 
-import Get from '../view/Get';
 import DoctorMain from '../view/doctor/DoctorMain';
 import NurseMain from '../view/nurse/NurseMain';
 import Main from '../view/admin/AdminMain';
@@ -20,7 +19,6 @@ export default function Routes() {
         <Switch>
             <PublicRoute exact path="/chat" component={Chat} />
             <PublicRoute exact path="/" component={SignIn} />
-            <PublicRoute exact path="/get" component={Get} />
             <PrivateRoute exact path="/Home" component={Home}/>
             <PrivateRoute exact path="/profile" component={Profile}/>
             <PrivateRoute exact path="/board" component={Board}/>

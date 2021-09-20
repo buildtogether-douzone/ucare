@@ -80,8 +80,7 @@ export default function SignUp() {
   const [name, setName] = useState('');
   const [gender, setGender] = useState('female');
   const [ssn, setSSN] = useState('');
-  const [emailID, setEmailID] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('email@co.kr');
   const [address, setAddress] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
   const [telNo, setTelNo] = useState('');
@@ -123,12 +122,15 @@ export default function SignUp() {
   const hasNotSameError = passwordEntered =>
     password != confirmPassword ? true : false; 
 
+
+  const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+  const hasNotValidError = emailEntered =>
+    regex.test(email) ? false : true; 
+
+
   const nameChange = (e) => {
     setName(e.target.value)
-  }
-
-  const emailIDChange = (e) => {
-    setEmailID(e.target.value)
   }
 
   const emailChange = (e) => {
@@ -206,7 +208,7 @@ export default function SignUp() {
       name: name,
       gender: gender,
       ssn: ssn,
-      email: (emailID + '@' + email),
+      email: email,
       address: address,
       detailAddress: detailAddress,
       telNo: telNo,
@@ -408,42 +410,21 @@ export default function SignUp() {
               <Typography className={classes.font} variant="body1" align="right">이메일</Typography>
               <TextField
                 className={classes.input}
-                style={{ float: 'left', width: '30%', backgroundColor: '#FFFFFF' }}
+                style={{ backgroundColor: '#FFFFFF' }}
                 variant="outlined"
                 required
                 fullWidth
                 size="small"
-                id="emailID"
-                name="emailID"
+                id="email"
+                name="email"
                 autoComplete="email"
-                value={emailID}
-                onChange={emailIDChange}
+                error={hasNotValidError('email')}
+                helperText={
+                  hasNotValidError('email') ? "이메일 주소를 다시 확인해주세요." : null
+                }
+                value={email}
+                onChange={emailChange}
               />
-              <Typography className={classes.font} style={{ float: 'left', width: '5%', padding: '5px', paddingTop: '10PX', textAlign: 'center', backgroundColor: 'white' }} variant="body1">@</Typography>
-              <FormControl variant="outlined" style={{ float: 'left', width: '30%', backgroundColor: '#FFFFFF', padding: '5px' }}>
-                <Select
-                  style={{ height: '2.5em' }}
-                  labelId="demo-simple-select-outlined-label"
-                  id="email"
-                  size="small"
-                  value={email}
-                  onChange={emailChange}
-                >
-                  <MenuItem value={email}></MenuItem>
-                  <MenuItem value={'gmail.com'}>gmail.com</MenuItem>
-                  <MenuItem value={'naver.com'}>naver.com</MenuItem>
-                  <MenuItem value={'daum.net'}>daum.net</MenuItem>
-                  <MenuItem value={'yahoo.co.kr'}>yahoo.co.kr</MenuItem>
-                  <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
-                  <MenuItem value={'nate.com'}>nate.com</MenuItem>
-                  <MenuItem value={'empas.com'}>empas.com</MenuItem>
-                  <MenuItem value={'hotmail.com'}>hotmail.com</MenuItem>
-                  <MenuItem value={'weppy.com'}>weppy.com</MenuItem>
-                  <MenuItem value={'korea.com'}>korea.com</MenuItem>
-                  <MenuItem value={'mail.co.kr'}>hotmail.com</MenuItem>
-
-                </Select>
-              </FormControl>
             </Grid>
 
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>

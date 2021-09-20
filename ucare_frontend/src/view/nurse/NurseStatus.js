@@ -56,9 +56,7 @@ export default function NurseStatus() {
         ageGender: '',
         detailAddress: '',
         diagnosis: '',
-        domain: '',
         email: '',
-        emailId: '',
         gender: '',
         height: null,
         remark: ''
