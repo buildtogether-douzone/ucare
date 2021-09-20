@@ -6,6 +6,7 @@ import { Divider } from 'primereact/divider';
 import { Menu } from 'primereact/menu';
 import { Dialog } from 'primereact/dialog';
 import { Panel } from 'primereact/panel';
+import { TabView, TabPanel } from 'primereact/tabview';
 
 import { useRecoilState } from 'recoil';
 import { reloadState } from '../../recoil/atom/nurseAtom';
@@ -85,6 +86,7 @@ export default function NurseStatus() {
     const [date, setDate] = useState(new Date());
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [receiptCompleteDialog, setReceiptCompleteDialog] = useState(false);
+    const [activeIndex, setActiveIndex] = useState(1);
 
     const [reload, setReload] = useRecoilState(reloadState);
     const [value, setValue] = useState('');
@@ -392,9 +394,33 @@ export default function NurseStatus() {
             <div className="card">
                 <div className="p-grid">
                     <div className="p-col-6">
-                        <div className="datascroller" style={{ justifyContent: 'center', padding: '50px' }}>
-                            <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
-                        </div>
+                    <TabView style={{ justifyContent: 'center', padding: '20px' }}>
+                        <TabPanel header="전체">
+                            <div className="datascroller" style={{ justifyContent: 'center' }}>
+                                <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                            </div>
+                        </TabPanel>
+                        <TabPanel header="대기">
+                            <div className="datascroller" style={{ justifyContent: 'center' }}>
+                                <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                            </div>
+                        </TabPanel>
+                        <TabPanel header="진료중">
+                            <div className="datascroller" style={{ justifyContent: 'center' }}>
+                                <DataScroller value={items.filter(val => val.state === 'care')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                            </div>
+                        </TabPanel>
+                        <TabPanel header="수납대기">
+                            <div className="datascroller" style={{ justifyContent: 'center' }}>
+                                <DataScroller value={items.filter(val => val.state === 'wait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                            </div>
+                        </TabPanel>
+                        <TabPanel header="완료">
+                            <div className="datascroller" style={{ justifyContent: 'center' }}>
+                                <DataScroller value={items.filter(val => val.state === 'complete')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                            </div>
+                        </TabPanel>
+                    </TabView>
                     </div>
                     <Divider layout="vertical" />
                     <div className="p-col-5">
