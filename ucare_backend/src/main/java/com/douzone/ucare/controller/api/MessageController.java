@@ -27,9 +27,15 @@ public class MessageController {
 		return new ResponseEntity<>(messageService.retrieveMessage(id), HttpStatus.OK);
 	}
 	
-	@PutMapping("/revise/{no}")
-	public ResponseEntity<?> reviseCount(@PathVariable("no") Long no) {
-		return new ResponseEntity<>(messageService.revise(no), HttpStatus.OK);
+	@GetMapping("/sendMessageRetrieveAll/{userID}")
+	public ResponseEntity<?> sendMessageRetrieveAll(@PathVariable("userID") String id) {
+		return new ResponseEntity<>(messageService.sendMessageRetrieveAll(id), HttpStatus.OK);
+	}
+	
+	@PutMapping("/revise/{no}/{name}")
+	public ResponseEntity<?> reviseCount(@PathVariable("no") Long no, @PathVariable("name") String name) {
+		System.out.println(name);
+		return new ResponseEntity<>(messageService.revise(no, name), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/delete/{no}")

@@ -107,7 +107,9 @@ const Header = ({ open, drawerManage }) => {
   const [deleteItemDialog, setDeleteItemDialog] = useState(false);
   const [reload, setReload] = useState(false);
   const [messageItem, setMessageItem] = useState(empty);
-  const [sendNo, setSendNo] = useState(null);
+  const [messageName, setMessageName] = useState('받은 쪽지함');
+  const [sendMessageItem, setSendMessageItem] = useState(null);
+  const [massageState, setMassageSatate] = useState(true);
 
   const $websocket = useRef(null);
   const isMounted = useRef(false);
@@ -143,30 +145,27 @@ const Header = ({ open, drawerManage }) => {
       .catch(err => {
         console.log('Message retrieveAll() Error!', err);
       })
+
+    MessageService.sendMessageRetrieveAll(sessionStorage.getItem('user'))
+      .then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          if (res.data[i].status === 'f') {
+            res.data[i].status = '안읽음';
+          } else if (res.data[i].status === 't') {
+            res.data[i].status = '읽음';
+          }
+        }
+
+        console.log(res.data);
+        setSendMessageItem(res.data);
+      })
+      .catch(err => {
+        console.log('sendMessageRetrieveAll() Error!', err);
+      })
   }
 
   useEffect(() => {
     retrieveAll();
-  }, []);
-
-  useEffect(() => {
-    MessageService.retrieveAll(sessionStorage.getItem('user'))
-    .then(res => {
-      setBadge(res.data.count);
-
-      for (var i = 0; i < res.data.message.length; i++) {
-        if (res.data.message[i].status === 'f') {
-          res.data.message[i].status = '안읽음';
-        } else if (res.data.message[i].status === 't') {
-          res.data.message[i].status = '읽음';
-        }
-      }
-
-      setMessages(res.data.message);
-    })
-  }, [reload])
-
-  useEffect(() => {
     let user = {
       id: sessionStorage.getItem('user')
     };
@@ -184,6 +183,42 @@ const Header = ({ open, drawerManage }) => {
         console.log('fetchUser() 에러', err);
       });
   }, []);
+
+  useEffect(() => {
+    MessageService.retrieveAll(sessionStorage.getItem('user'))
+      .then(res => {
+        setBadge(res.data.count);
+
+        for (var i = 0; i < res.data.message.length; i++) {
+          if (res.data.message[i].status === 'f') {
+            res.data.message[i].status = '안읽음';
+          } else if (res.data.message[i].status === 't') {
+            res.data.message[i].status = '읽음';
+          }
+        }
+
+        setMessages(res.data.message);
+      })
+      .catch(err => {
+        console.log('Message retrieveAll() Error!', err);
+      })
+
+    MessageService.sendMessageRetrieveAll(sessionStorage.getItem('user'))
+      .then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          if (res.data[i].status === 'f') {
+            res.data[i].status = '안읽음';
+          } else if (res.data[i].status === 't') {
+            res.data[i].status = '읽음';
+          }
+        }
+
+        setSendMessageItem(res.data);
+      })
+      .catch(err => {
+        console.log('sendMessageRetrieveAll() Error!', err);
+      })
+  }, [reload])
 
   function handleClick(event) {
     if (anchorEl !== event.currentTarget) {
@@ -215,7 +250,7 @@ const Header = ({ open, drawerManage }) => {
   };
 
   const sendMessage = () => {
-    const data ={
+    const data = {
       toName: selectedUser.id,
       name: sessionStorage.getItem('user'),
       contents: item.contents,
@@ -313,13 +348,33 @@ const Header = ({ open, drawerManage }) => {
   }
 
   const deleteItemDialogFooter = () => {
-    return(
-    <div>
-      <PrimeButton label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
-      <PrimeButton label="예" icon="pi pi-check" className="p-button-text" onClick={() => deleteItem()} />
-    </div>
+    return (
+      <div>
+        <PrimeButton label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
+        <PrimeButton label="예" icon="pi pi-check" className="p-button-text" onClick={() => deleteItem()} />
+      </div>
     );
   };
+
+  const header = () => {
+    return (
+      <div>
+        <h4 style={{ margin: '0px', marginLeft: '1%', float: 'left' }}>{messageName}</h4>
+        <PrimeButton style={{ float: 'right' }} label="보낸 쪽지함" className="p-button-text" onClick={setSendMessageItems} />
+        <PrimeButton style={{ float: 'right' }} label="받은 쪽지함" className="p-button-text" onClick={setReceiveMessageItems} />
+      </div>
+    );
+  };
+
+  const setSendMessageItems = () => {
+    setMassageSatate(false);
+    setMessageName('보낸 쪽지함');
+  }
+
+  const setReceiveMessageItems = () => {
+    setMassageSatate(true);
+    setMessageName('받은 쪽지함');
+  }
 
   const deleteItem = () => {
     MessageService.delete(messageItem.msgNo)
@@ -334,19 +389,28 @@ const Header = ({ open, drawerManage }) => {
   const coltemplate = (rowData) => {
     return (
       <div>
-        <a onClick={() => rowColumnClick(rowData)}>{rowData.title}</a>
+        <a onClick={() => rowColumnClick(rowData, 'send')}>{rowData.title}</a>
       </div>);
   }
 
-  const rowColumnClick = (rowData) => {
-    if(rowData.status=='안읽음'){
-      MessageService.revise(rowData.msgNo)
-        .then(res => {
-          setReload(!reload);
-        })
-        .catch(err => {
-          console.log("message revise Error", err)
-        })
+  const clickColumn = (rowData) => {
+    return (
+      <div>
+        <a onClick={() => rowColumnClick(rowData, 'recieve')}>{rowData.title}</a>
+      </div>);
+  }
+
+  const rowColumnClick = (rowData, state) => {
+    if (state == 'send') {
+      if (rowData.status == '안읽음') {
+        MessageService.revise(rowData.msgNo, rowData.name)
+          .then(res => {
+            setReload(!reload);
+          })
+          .catch(err => {
+            console.log("message revise Error", err)
+          })
+      }
     }
 
     setView(rowData);
@@ -355,7 +419,7 @@ const Header = ({ open, drawerManage }) => {
 
   const checkDialogFooter = (
     <React.Fragment>
-      <PrimeButton label="확인" className="p-button-text" onClick={()=>{hideViewDialog()}} />
+      <PrimeButton label="확인" className="p-button-text" onClick={() => { hideViewDialog() }} />
     </React.Fragment>
   );
 
@@ -397,15 +461,25 @@ const Header = ({ open, drawerManage }) => {
             </Badge>
           </Button>
 
-          <Dialog header="Header" visible={displayModal} modal={false} style={{ width: '50vw' }} footer={messageFooter} onHide={() => { onHide('displayModal'); }}>
-            <DataTable value={messages} selectionMode="single" paginator rows={5}
-              selection={selectedMessage} onSelectionChange={(e) => setSelectedMessage(e.value)} dataKey="msgNo">
-              <Column field="name" header="보낸사람" />
-              <Column field="title" header="제목" body={coltemplate} />
-              <Column field="msgDate" header="날짜" />
-              <Column field="status" header="상태" />
-              <Column field="delete" body={actionBodyTemplate}/>
-            </DataTable>
+          <Dialog header={header} visible={displayModal} modal={false} style={{ width: '50vw' }} footer={messageFooter} onHide={() => { onHide('displayModal'); }}>
+            {
+              massageState ?
+                <DataTable value={messages} selectionMode="single" paginator rows={5}
+                  selection={selectedMessage} onSelectionChange={(e) => setSelectedMessage(e.value)} dataKey="msgNo">
+                  <Column field="name" header="보낸사람" />
+                  <Column field="title" header="제목" body={coltemplate} />
+                  <Column field="msgDate" header="날짜" />
+                  <Column field="status" header="상태" />
+                  <Column field="delete" body={actionBodyTemplate} />
+                </DataTable> :
+                <DataTable value={sendMessageItem} selectionMode="single" paginator rows={5}
+                  selection={selectedMessage} onSelectionChange={(e) => setSelectedMessage(e.value)} dataKey="msgNo">
+                  <Column field="toName" header="받은사람" />
+                  <Column field="title" header="제목" body={clickColumn} />
+                  <Column field="msgDate" header="날짜" />
+                  <Column field="status" header="상태" />
+                </DataTable>
+            }
           </Dialog>
 
           <Dialog baseZIndex={9999} visible={itemDialog} style={{ width: '40%' }} header="접수" footer={itemDialogFooter} modal className="p-fluid" onHide={hideDialog}>

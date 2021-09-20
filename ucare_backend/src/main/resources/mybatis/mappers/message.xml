@@ -13,6 +13,18 @@
 		WHERE to_name = #{id } 
 	</select>
 	
+	<select id="findsendMessageById" parameterType="String" resultType="messagevo">
+		SELECT msg_no as msgNo,
+			   to_name as toName,
+			   title,
+			   contents,
+			   status,
+			   TO_CHAR(msg_date, 'YYYY-MM-DD HH24:MI:SS') AS msgDate,
+			   user_no as userNo
+		FROM ucare.message
+		WHERE name = #{id } 
+	</select>
+	
 	<select id="falseCount" parameterType="String" resultType="int">
 		SELECT COUNT(status)
 		FROM ucare.message

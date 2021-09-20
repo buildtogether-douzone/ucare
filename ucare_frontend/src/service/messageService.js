@@ -6,8 +6,8 @@ class messageService {
         return axios.get(MESSAGE_API_BASE_URL + '/retrieveAll/' + userID , { headers: { Authorization: localStorage.getItem("authorization") }});
     }
 
-    revise(data){
-      return axios.put(MESSAGE_API_BASE_URL + '/revise/'+ data, null, { headers: { Authorization: localStorage.getItem("authorization") }});
+    revise(no, name){
+      return axios.put(MESSAGE_API_BASE_URL + '/revise/'+ no + '/' + name, null, { headers: { Authorization: localStorage.getItem("authorization") }});
     }
 
     delete(data){
@@ -16,6 +16,10 @@ class messageService {
 
     sendMessage(data){
       return axios.post(MESSAGE_API_BASE_URL + '/sendMessage', data, { headers: { Authorization: localStorage.getItem("authorization") }})
+    }
+
+    sendMessageRetrieveAll(userID){
+      return axios.get(MESSAGE_API_BASE_URL + '/sendMessageRetrieveAll/' + userID , { headers: { Authorization: localStorage.getItem("authorization") }});
     }
 }
 

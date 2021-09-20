@@ -31,7 +31,6 @@ public class SocketController {
 	
 	@MessageMapping("/Message") 
 	public void sendMessage(String receiveUser) {
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!" + receiveUser);
 		webSocket.convertAndSend("/topics/message/" + receiveUser , Math.random());
 	}
 	

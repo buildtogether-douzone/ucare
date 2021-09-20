@@ -34,4 +34,8 @@ public class MessageRepository {
 		sqlSession.insert("message.insert", vo);
 	}
 
+	public List<MessageVo> findsendMessageById(String id) {
+		return sqlSession.selectList("message.findsendMessageById", id);
+	}
+
 }
