@@ -5,6 +5,7 @@ import { Calendar } from 'primereact/calendar';
 import { Menu } from 'primereact/menu';
 import { Dialog } from 'primereact/dialog';
 import { Panel } from 'primereact/panel';
+import { TabView, TabPanel } from 'primereact/tabview';
 import { Checkbox } from 'primereact/checkbox';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { MultiSelect } from 'primereact/multiselect';
@@ -461,9 +462,33 @@ export default function DoctorDiagnosis() {
             <div className="card">
                 <div className="p-grid">
                     <div className="p-col-12 p-md-6 p-lg-4">
-                        <div className="datascroller" style={{ justifyContent: 'center', padding: '20px' }}>
-                            <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
-                        </div>
+                        <TabView style={{ justifyContent: 'center', padding: '20px' }}>
+                            <TabPanel header={"전체" + "(" + items.length + ")"} headerStyle={{fontSize:'20%', width:'20%'}}>
+                                <div className="datascroller" style={{ justifyContent: 'center' }}>
+                                    <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                </div>
+                            </TabPanel>
+                            <TabPanel header={"대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"} headerStyle={{fontSize:'20%', width:'20%'}}>
+                                <div className="datascroller" style={{ justifyContent: 'center' }}>
+                                    <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                </div>
+                            </TabPanel>
+                            <TabPanel header={"진료중" + "(" + items.filter(val => val.state === 'care').length + ")"} headerStyle={{fontSize:'20%', width:'20%'}}>
+                                <div className="datascroller" style={{ justifyContent: 'center' }}>
+                                    <DataScroller value={items.filter(val => val.state === 'care')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                </div>
+                            </TabPanel>
+                            <TabPanel header={"수납대기" + "(" + items.filter(val => val.state === 'wait').length + ")"} headerStyle={{fontSize:'20%', width:'20%'}}>
+                                <div className="datascroller" style={{ justifyContent: 'center' }}>
+                                    <DataScroller value={items.filter(val => val.state === 'wait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                </div>
+                            </TabPanel>
+                            <TabPanel header={"완료" + "(" + items.filter(val => val.state === 'complete').length + ")"} headerStyle={{fontSize:'20%', width:'20%'}}>
+                                <div className="datascroller" style={{ justifyContent: 'center' }}>
+                                    <DataScroller value={items.filter(val => val.state === 'complete')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                </div>
+                            </TabPanel>
+                        </TabView>
                     </div>
                     <div className="p-col-12 p-md-6 p-lg-4">
                         <div className="card p-fluid">
