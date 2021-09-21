@@ -4,6 +4,7 @@ import SiteLayout from '../../layout/SiteLayout';
 import PatientList from './PatientList';
 import Reservation from './Reservation';
 import NurseStatus from './NurseStatus';
+import CalHoliday from './CalHoliday';
 import styles from '../../assets/scss/Slide.scss'
 
 const NurseMain = React.forwardRef((props, ref) => {
@@ -19,6 +20,9 @@ const NurseMain = React.forwardRef((props, ref) => {
                 </Slide>
                 <Slide className={styles.PageSlide}>
                     <PatientList />
+                </Slide>
+                <Slide className={styles.PageSlide}>
+                    <CalHoliday />
                 </Slide>
             </FullPage>
         </SiteLayout>

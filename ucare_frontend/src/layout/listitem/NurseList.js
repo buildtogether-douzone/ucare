@@ -4,7 +4,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import RemoveTwoToneIcon from '@material-ui/icons/RemoveTwoTone';;
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
@@ -40,6 +39,13 @@ const NurseList = React.forwardRef((props, ref) => {
                     <PeopleIcon />
                 </ListItemIcon>
                 <ListItemText primary="환자 등록/접수" />
+            </ListItem>
+            <ListItem button onClick={(e) => {  location.href='/#/nurse/main'; 
+                                                ref.current !== null && ref.current.scrollToSlide(3) }}>
+                <ListItemIcon>
+                    <EventNoteIcon />
+                </ListItemIcon>
+                <ListItemText primary="휴일관리" />
             </ListItem>
         </div>
     );

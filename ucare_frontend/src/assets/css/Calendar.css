@@ -1,0 +1,44 @@
+html, body {
+    height: 100%;
+  }
+  
+  
+   .Cal {
+    height:200px;
+    width:200px;
+    font-size: 1.5vh;
+    display: flex;      /* display 설정해줘야 아래 flex로 해주면 direction 선택가능*/
+    flex-direction: column;   /* 이건 세로순으로  태그들을 표시함 css*/
+    align-items: center;      /* 이건 가로 중앙 css*/
+    justify-content: center;  /* 이건 세로 중앙 css*/
+  
+  }
+  
+  .Cal .control{
+    display: flex;
+    flex-direction: row;
+  }
+  .Cal table{
+    display:flex;
+    width:100px;
+    height:100px;
+  }
+  .Cal table tbody{
+    display:flex;
+    flex-direction: column;
+  }
+  .Cal tr{
+      display:flex;
+      flex-direction: row;
+  }
+  .Cal td{
+      display:flex;
+      border:1px solid gray;
+      width:100px;
+      height:100px;
+  }
+  .Cal td span{
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+  }
