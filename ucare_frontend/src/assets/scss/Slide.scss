@@ -7,14 +7,6 @@
     }
   }
 
-  .slide {
-    position:'relative';
-    overflow:'scroll';
-    &::-webkit-scrollbar {
-      display: "none"
-    }
-  }
-
   .Red{
     background-color: red;
   }

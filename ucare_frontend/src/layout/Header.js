@@ -259,6 +259,7 @@ const Header = ({ open, drawerManage }) => {
       .then(res => {
         item.title = '';
         item.contents = '';
+        setSelectedUser(null);
         setItemDialog(false);
         setReload(!reload);
       })
