@@ -258,7 +258,7 @@ export default function SignUp() {
                 fullWidth
                 label="비밀번호(5자 이상)"
                 size="small"
-                id="outlined-ssn"
+                id="outlined-password"
                 name="password"
                 type="password"
                 error={hasError('password')} // 해당 텍스트필드에 error 핸들러 추가

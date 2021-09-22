@@ -1,0 +1,15 @@
+.SiteLayout_root{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar{
+        display: none !important;
+    }
+
+    .content{
+        margin: 0;
+        flex-grow: 1;
+        height: 100vh;
+    }
+}

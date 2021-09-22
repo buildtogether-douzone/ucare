@@ -5,23 +5,10 @@ import Header from './Header';
 import Navigation from './Navigation';
 import { connect } from 'react-redux';
 import { drawerManage } from '../redux/drawerManagement/actions';
+import styles from '../assets/scss/Layout.scss';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    height:'100vh',
-    width:'100%',
-    display: 'flex',
-    msOverflowStyle:"none",
-    "&::-webkit-scrollbar": {
-      display:"none !important"
-    }
-  },
   appBarSpacer: theme.mixins.toolbar,
-  content: {
-    margin:0,
-    flexGrow: 1,
-    height: '100vh',
-  },
   container: {
     paddingLeft: theme.spacing(0),
     paddingRight: theme.spacing(0),
@@ -56,13 +43,13 @@ const Dashboard = ({open, children }) => {
 
   return (
     <Fragment>
-        <div className={classes.root}>
+        <div className={styles.SiteLayout_root}>
           <Header />
           <div className={open ? classes.openState : classes.closeState}>
             {'&&&&&&&&&&&&&&&&&&&&&&&&&'}
           </div>
           <Navigation ref={slideRef}/>
-          <main className={classes.content}>
+          <main className={styles.content}>
             <div className={classes.appBarSpacer} />
                 {React.isValidElement(children) ? React.cloneElement(children, { ref:slideRef }) : children}
           </main>
