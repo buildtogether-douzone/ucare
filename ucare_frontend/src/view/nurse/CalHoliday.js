@@ -7,6 +7,7 @@ import styles from '../../assets/scss/Calendar.scss';
 
 export default function CalHoliday() {
   const [getMoment, setMoment] = useState(moment());
+
   let items = [];
 
   const today = getMoment;
@@ -21,14 +22,22 @@ export default function CalHoliday() {
   const findIndexByDate = (date) => {
     let index = -1;
     for (let i = 0; i < items.length; i++) {
-        if (items[i].date === date) {
-            index = i;
-            break;
-        }
+      if (items[i].date === date) {
+        index = i;
+        break;
+      }
     }
 
     return index;
-}
+  }
+
+  const changeHoliday = (date) => {
+    let index = findIndexByDate(date);
+
+    let data = items[index].holiday
+    items[index].holiday = !data;
+    console.log(items);
+  }
 
   const calendarArr = () => {
 
@@ -51,19 +60,19 @@ export default function CalHoliday() {
               if (today.format('YYYYMM') === days.format('YYYYMM')) {
                 if ((WEEKDAY[days.day()] === 'SAT') || (WEEKDAY[days.day()] === 'SUN')) {
                   item.date = days.format('YYYYMMDD');
-                  item.holiday = 'true';
+                  item.holiday = true;
                   items.push(item);
                 }
                 else {
                   item.date = days.format('YYYYMMDD');
-                  item.holiday = 'false';
+                  item.holiday = false;
                   items.push(item);
                 }
 
                 holidays.map((data) => {
-                  if(data === days.format('YYYYMMDD')) {
+                  if (data === days.format('YYYYMMDD')) {
                     item.date = days.format('YYYYMMDD');
-                    item.holiday = 'true';
+                    item.holiday = true;
                     let index = findIndexByDate(item.date);
                     items[index] = item;
                   }
@@ -72,7 +81,7 @@ export default function CalHoliday() {
 
               if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
                 return (
-                  <td key={index}>
+                  <td key={index} onClick={() => changeHoliday(days.format('YYYYMMDD'))}>
                     <div className={styles.today_inner}>
                       <span className={styles.today}>{days.format('D')}</span>
                     </div>
@@ -86,9 +95,9 @@ export default function CalHoliday() {
                     </div>
                   </td>
                 );
-              } else if(holidays.includes(days.format('YYYYMMDD'))) {
+              } else if (holidays.includes(days.format('YYYYMMDD'))) {
                 return (
-                  <td key={index}>
+                  <td key={index} onClick={() => changeHoliday(days.format('YYYYMMDD'))}>
                     <div className={styles.inner}>
                       <span className={styles.holiday}>{days.format('D')}</span>
                     </div>
@@ -96,7 +105,7 @@ export default function CalHoliday() {
                 );
               } else if (WEEKDAY[days.day()] === 'SAT') {
                 return (
-                  <td key={index}>
+                  <td key={index} onClick={() => changeHoliday(days.format('YYYYMMDD'))}>
                     <div className={styles.inner}>
                       <span className={styles.holiday_sat}>{days.format('D')}</span>
                     </div>
@@ -104,7 +113,7 @@ export default function CalHoliday() {
                 );
               } else if (WEEKDAY[days.day()] === 'SUN') {
                 return (
-                  <td key={index}>
+                  <td key={index}onClick={() => changeHoliday(days.format('YYYYMMDD'))}>
                     <div className={styles.inner}>
                       <span className={styles.holiday_sun}>{days.format('D')}</span>
                     </div>
@@ -113,7 +122,7 @@ export default function CalHoliday() {
               }
               else {
                 return (
-                  <td key={index}>
+                  <td key={index} onClick={() => changeHoliday(days.format('YYYYMMDD'))}>
                     <div className={styles.inner}>
                       <span className={styles.date}>{days.format('D')}</span>
                     </div>
