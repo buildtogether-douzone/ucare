@@ -1,18 +1,34 @@
 package com.douzone.ucare.vo;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class BoardVo {
+	
+	@ApiModelProperty(example="게시물 번호")
 	private Long boardNo;
+	@ApiModelProperty(example="게시물 제목")
 	private String title;
+	@ApiModelProperty(example="게시물 내용")
 	private String contents;
+	@ApiModelProperty(example="게시물 조회수")
 	private Long hit;
+	@ApiModelProperty(example="게시물 파일 URL")
 	private String URL;
+	@ApiModelProperty(example="게시물 날짜")
 	private String boardDt;
+	@ApiModelProperty(example="게시물 시간")
 	private String boardTime;
+	@ApiModelProperty(example="입력자")
 	private Long insNo;
+	@ApiModelProperty(example="입력일자")
 	private String insDt;
+	@ApiModelProperty(example="수정자")
 	private Long uptNo;
+	@ApiModelProperty(example="수정일자")
 	private String uptDt;
+	@ApiModelProperty(example="게시물 등록자 번호")
 	private Long userNo;
+	@ApiModelProperty(example="게시물 등록자 아이디")
 	private String userId;
 	
 	public String getUserId() {

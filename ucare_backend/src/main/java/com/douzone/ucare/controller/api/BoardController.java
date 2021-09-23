@@ -47,15 +47,20 @@ public class BoardController {
 	public ResponseEntity<?> retrieveAll() {
 		return new ResponseEntity<>(boardService.retrieveAll(), HttpStatus.OK);
 	}
-		
+	
 	@PostMapping("/delete")
+	@ApiOperation(value="게시판 데이터 지우기", notes="게시판 삭제 버튼 클릭시 실행 되는 API")
 	public ResponseEntity<?> delete(@RequestBody BoardVo data) {
-		if(data.getURL() != null) fileUploadService.remove(data.getURL());
-		
+		if(data.getURL() != null) fileUploadService.remove(data.getURL());	
 		return new ResponseEntity<>(boardService.delete(data), HttpStatus.OK);
 	}
 	
 	@PutMapping("/update")
+	@ApiOperation(value="게시판 글 수정", notes="게시판 글 수정시 실행되는 API")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="data", value="작성된 글에 대한 정보"),
+		@ApiImplicitParam(name="URL", value="글 작성시 올렸던 파일")
+	})
 	public ResponseEntity<?> update(@RequestPart("data") BoardVo data, @RequestPart(value="URL", required = false) MultipartFile file) {
 		if((data.getURL() != null) && (file != null)) fileUploadService.remove(data.getURL());
 		if(file != null) data.setURL(fileUploadService.restore(file));
@@ -64,6 +69,8 @@ public class BoardController {
 	}
 	
 	@PutMapping("/updateHit/{boardNo}")
+	@ApiOperation(value="게시물 조회수 업데이트", notes="게시판 글 볼 때 마다 조회수 업데이트")
+	@ApiImplicitParam(name="boardNo", value="게시물 번호")
 	public ResponseEntity<?> updateHit(@PathVariable("boardNo") Long boardNo) {
 		return new ResponseEntity<>(boardService.updateHit(boardNo), HttpStatus.OK);
 	}
