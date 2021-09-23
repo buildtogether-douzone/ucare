@@ -15,7 +15,7 @@
 			address,
 			tel_no AS telNo,
 			role,
-			status,y
+			status,
 			remark,
 			birth,
 			image
