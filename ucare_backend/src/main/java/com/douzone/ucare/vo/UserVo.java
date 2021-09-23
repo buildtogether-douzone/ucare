@@ -1,22 +1,40 @@
 package com.douzone.ucare.vo;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class UserVo {
 	private int rowNo;
+	@ApiModelProperty(example="사용자 번호")
 	private int userNo;
+	@ApiModelProperty(example="사용자 아이디")
 	private String id;
+	@ApiModelProperty(example="사용자 비밀번호")
 	private String password;
+	@ApiModelProperty(example="사용자 이름")
 	private String name;
+	@ApiModelProperty(example="사용자 성별")
 	private String gender;
+	@ApiModelProperty(example="사용자 주민번호")
 	private String ssn;
+	@ApiModelProperty(example="사용자 이메일 id")
 	private String emailId;
+	@ApiModelProperty(example="사용자 이메일 주소")
 	private String email;
+	@ApiModelProperty(example="사용자 주소")
 	private String address;
+	@ApiModelProperty(example="사용자 상세 주소")
 	private String detailAddress;
+	@ApiModelProperty(example="사용자 전화번호")
 	private String telNo;
+	@ApiModelProperty(example="사용자 역할")
 	private String role;
+	@ApiModelProperty(example="사용자 상태")
 	private String status;
+	@ApiModelProperty(example="비고")
 	private String remark;
+	@ApiModelProperty(example="사용자 생일")
 	private String birth;
+	@ApiModelProperty(example="사용자 사진")
 	private String image;
 	
 	public int getRowNo() {

@@ -15,6 +15,10 @@ import com.douzone.ucare.service.FileUploadService;
 import com.douzone.ucare.service.UserService;
 import com.douzone.ucare.vo.UserVo;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 public class UserController {
 	
@@ -25,17 +29,26 @@ public class UserController {
 	private FileUploadService fileUploadService;
 	
 	@PostMapping("/add")
+	@ApiOperation(value="회원가입", notes="회원가입시 실행되는 API")
 	public ResponseEntity<?> add(@RequestBody UserVo user) {
 		return new ResponseEntity<>(userService.addUser(user), HttpStatus.OK);
 	}
 	
 	@PostMapping("/fetchUser")
+	@ApiOperation(value="사용자 정보", notes="사용자 정보를 가져오는 API")
 	public ResponseEntity<?> fetchUser(@RequestBody UserVo user) {
 		return new ResponseEntity<>(userService.fetchUser(user), HttpStatus.OK);
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<?> update(@RequestPart("user") UserVo user, @RequestPart(value="file", required = false) MultipartFile file) {
+	@ApiOperation(value="사용자 정보 수정", notes="사용자 정보 수정시 실행되는 API")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="user", value="사용자에 대한 변경사항"),
+		@ApiImplicitParam(name="file", value="사용자 사진 파일")
+	})
+	public ResponseEntity<?> update(
+			@RequestPart("user") UserVo user, 
+			@RequestPart(value="file", required = false) MultipartFile file) {
 		if(user.getImage() != null) fileUploadService.remove(user.getImage());
 		if(file != null) user.setImage(fileUploadService.restore(file));
 		
@@ -43,6 +56,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/retrieveAll")
+	@ApiOperation(value="모든 사용자 정보", notes="모든 사용자 정보를 가져오는 API")
 	public ResponseEntity<?> retrieveAll() {
 		return new ResponseEntity<>(userService.retrieveAll(), HttpStatus.OK);
 	}
