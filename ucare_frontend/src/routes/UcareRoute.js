@@ -12,12 +12,10 @@ import Board from '../view/admin/Board';
 import DoctorMain from '../view/doctor/DoctorMain';
 import NurseMain from '../view/nurse/NurseMain';
 import Main from '../view/admin/AdminMain';
-import Chat from '../view/Chat';
 
 export default function Routes() {
     return (
         <Switch>
-            <PublicRoute exact path="/chat" component={Chat} />
             <PublicRoute exact path="/" component={SignIn} />
             <PrivateRoute exact path="/Home" component={Home}/>
             <PrivateRoute exact path="/profile" component={Profile}/>
