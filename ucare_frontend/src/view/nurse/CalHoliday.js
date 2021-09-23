@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+
+import { GetHolidays } from '../../lib/commDate';
 
 import styles from '../../assets/scss/Calendar.scss';
 
@@ -10,6 +12,23 @@ export default function CalHoliday() {
   const today = getMoment;
   const firstWeek = today.clone().startOf('month').week();
   const lastWeek = today.clone().endOf('month').week() === 1 ? 53 : today.clone().endOf('month').week();
+
+  let year = today.clone().startOf('year').format('YYYY');
+  let tHolidays = GetHolidays(year);
+
+  let holidays = tHolidays.map((data, index) => data.toString().substring(0, 8));
+
+  const findIndexByDate = (date) => {
+    let index = -1;
+    for (let i = 0; i < items.length; i++) {
+        if (items[i].date === date) {
+            index = i;
+            break;
+        }
+    }
+
+    return index;
+}
 
   const calendarArr = () => {
 
@@ -40,6 +59,15 @@ export default function CalHoliday() {
                   item.holiday = 'false';
                   items.push(item);
                 }
+
+                holidays.map((data) => {
+                  if(data === days.format('YYYYMMDD')) {
+                    item.date = days.format('YYYYMMDD');
+                    item.holiday = 'true';
+                    let index = findIndexByDate(item.date);
+                    items[index] = item;
+                  }
+                });
               }
 
               if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
@@ -55,6 +83,14 @@ export default function CalHoliday() {
                   <td key={index}>
                     <div className={styles.inner}>
                       <span className={styles.dimmed}>{days.format('D')}</span>
+                    </div>
+                  </td>
+                );
+              } else if(holidays.includes(days.format('YYYYMMDD'))) {
+                return (
+                  <td key={index}>
+                    <div className={styles.inner}>
+                      <span className={styles.holiday}>{days.format('D')}</span>
                     </div>
                   </td>
                 );
