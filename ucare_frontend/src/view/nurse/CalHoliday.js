@@ -44,7 +44,7 @@ export default function CalHoliday() {
 
               if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
                 return (
-                  <td>
+                  <td key={index}>
                     <div className={styles.today_inner}>
                       <span className={styles.today}>{days.format('D')}</span>
                     </div>
@@ -52,7 +52,7 @@ export default function CalHoliday() {
                 );
               } else if (days.format('MM') !== today.format('MM')) {
                 return (
-                  <td>
+                  <td key={index}>
                     <div className={styles.inner}>
                       <span className={styles.dimmed}>{days.format('D')}</span>
                     </div>
@@ -60,7 +60,7 @@ export default function CalHoliday() {
                 );
               } else if (WEEKDAY[days.day()] === 'SAT') {
                 return (
-                  <td>
+                  <td key={index}>
                     <div className={styles.inner}>
                       <span className={styles.holiday_sat}>{days.format('D')}</span>
                     </div>
@@ -68,7 +68,7 @@ export default function CalHoliday() {
                 );
               } else if (WEEKDAY[days.day()] === 'SUN') {
                 return (
-                  <td>
+                  <td key={index}>
                     <div className={styles.inner}>
                       <span className={styles.holiday_sun}>{days.format('D')}</span>
                     </div>
@@ -77,7 +77,7 @@ export default function CalHoliday() {
               }
               else {
                 return (
-                  <td>
+                  <td key={index}>
                     <div className={styles.inner}>
                       <span className={styles.date}>{days.format('D')}</span>
                     </div>
