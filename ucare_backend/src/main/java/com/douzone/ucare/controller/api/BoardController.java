@@ -17,6 +17,8 @@ import com.douzone.ucare.service.BoardService;
 import com.douzone.ucare.service.FileUploadService;
 import com.douzone.ucare.vo.BoardVo;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/api/board")
 public class BoardController {
@@ -28,6 +30,7 @@ public class BoardController {
 	private FileUploadService fileUploadService;
 	
 	@PostMapping("/create")
+	@ApiOperation(value="게시판 글 작성", notes="게시판 글 작성시 실행되는 API")
 	public ResponseEntity<?> create(@RequestPart("data") BoardVo data,  @RequestPart(value="URL", required = false) MultipartFile file) {
 		if(file != null) data.setURL(fileUploadService.restore(file));
 		
