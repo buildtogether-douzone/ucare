@@ -65,7 +65,6 @@ const mapStateToProps = (state)=>{
   }
 }
 
-//object(es6 면 property와 value 값이 같으면 생략가능)
 const mapDispatchToProps = {
     drawerManage
 }

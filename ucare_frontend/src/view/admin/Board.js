@@ -29,8 +29,6 @@ const Board = React.forwardRef((props, ref) => {
     const [itemDialog, setItemDialog] = useState(false);
     const [viewDialog, setViewDialog] = useState(false);
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
-    const [deleteItemsDialog, setDeleteItemsDialog] = useState(false);
-    const [importedData, setImportedData] = useState([]);
     const [item, setItem] = useState(emptyItem);
     const [selectedItems, setSelectedItems] = useState(null);
     const [submitted, setSubmitted] = useState(false);
