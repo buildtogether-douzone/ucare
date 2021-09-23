@@ -17,6 +17,8 @@ import com.douzone.ucare.service.BoardService;
 import com.douzone.ucare.service.FileUploadService;
 import com.douzone.ucare.vo.BoardVo;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -31,13 +33,17 @@ public class BoardController {
 	
 	@PostMapping("/create")
 	@ApiOperation(value="게시판 글 작성", notes="게시판 글 작성시 실행되는 API")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="data", value="게시판 글 작성에 대한 정보"),
+		@ApiImplicitParam(name="URL", value="글 작성시 올렸던 파일")
+	})
 	public ResponseEntity<?> create(@RequestPart("data") BoardVo data,  @RequestPart(value="URL", required = false) MultipartFile file) {
 		if(file != null) data.setURL(fileUploadService.restore(file));
-		
 		return new ResponseEntity<>(boardService.create(data), HttpStatus.OK);
 	}
 	
 	@GetMapping("/retrieveAll")
+	@ApiOperation(value="게시판 데이터 불러오기", notes="홈페이지 렌더링시 게시판 정보를 가져오기 위한 API")
 	public ResponseEntity<?> retrieveAll() {
 		return new ResponseEntity<>(boardService.retrieveAll(), HttpStatus.OK);
 	}
