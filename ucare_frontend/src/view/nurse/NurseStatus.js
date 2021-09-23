@@ -19,7 +19,7 @@ import patientService from '../../service/patientService';
 import diagnosisService from '../../service/diagnosisService';
 import receiptService from '../../service/receiptService';
 
-import '../../assets/scss/DataScroller.scss';
+import styles from '../../assets/scss/DataScroller.scss';
 
 export default function NurseStatus() {
 
@@ -312,13 +312,13 @@ export default function NurseStatus() {
 
     const itemTemplate = (data) => {
         return (
-            <div className="product-item" onContextMenu={(e) => { e.preventDefault(); menuToggle(e, data);}} aria-controls="popup_menu" aria-haspopup>
-                <div className="product-detail">
-                    <div className="product-name">{data.name}</div>
-                    <div className="product-description">{data.diagnosisTime}</div>
+            <div className={styles.product_item} onContextMenu={(e) => { e.preventDefault(); menuToggle(e, data);}} aria-controls="popup_menu" aria-haspopup>
+                <div className={styles.product_detail}>
+                    <div className={styles.product_name}>{data.name}</div>
+                    <div className={styles.product_description}>{data.diagnosisTime}</div>
                 </div>
-                <div className="product-price">
-                    <div className="product-name">{data.value}</div>
+                <div className={styles.product_price}>
+                    <div className={styles.product_name}>{data.value}</div>
                 </div>
             </div>
         );
@@ -394,27 +394,27 @@ export default function NurseStatus() {
                     <div className="p-col-6">
                     <TabView style={{ justifyContent: 'center', padding: '20px' }}>
                         <TabPanel header={"전체" + "(" + items.length + ")"}>
-                            <div className="datascroller" style={{ justifyContent: 'center' }}>
+                            <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
                                 <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                             </div>
                         </TabPanel>
                         <TabPanel header={"대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"}>
-                            <div className="datascroller" style={{ justifyContent: 'center' }}>
+                            <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
                                 <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                             </div>
                         </TabPanel>
                         <TabPanel header={"진료중" + "(" + items.filter(val => val.state === 'care').length + ")"}>
-                            <div className="datascroller" style={{ justifyContent: 'center' }}>
+                            <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
                                 <DataScroller value={items.filter(val => val.state === 'care')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                             </div>
                         </TabPanel>
                         <TabPanel header={"수납대기" + "(" + items.filter(val => val.state === 'wait').length + ")"}>
-                            <div className="datascroller" style={{ justifyContent: 'center' }}>
+                            <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
                                 <DataScroller value={items.filter(val => val.state === 'wait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                             </div>
                         </TabPanel>
                         <TabPanel header={"완료" + "(" + items.filter(val => val.state === 'complete').length + ")"}>
-                            <div className="datascroller" style={{ justifyContent: 'center' }}>
+                            <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
                                 <DataScroller value={items.filter(val => val.state === 'complete')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                             </div>
                         </TabPanel>

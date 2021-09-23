@@ -18,7 +18,7 @@ import diagnosisService from '../../service/diagnosisService';
 import diseaseService from '../../service/diseaseService';
 import medicineService from '../../service/medicineService';
 
-import '../../assets/scss/DataScroller.scss';
+import styles from '../../assets/scss/DataScroller.scss';
 
 import SockJsClient from 'react-stomp';
 
@@ -248,13 +248,13 @@ export default function DoctorDiagnosis() {
 
     const itemTemplate = (data) => {
         return (
-            <div className="product-item" onClick={(e) => menuControl(e, data)} aria-controls="popup_menu" aria-haspopup>
-                <div className="product-detail">
-                    <div className="product-name">{data.name}</div>
-                    <div className="product-description">{data.diagnosisTime}</div>
+            <div className={styles.product_item} onClick={(e) => menuControl(e, data)} aria-controls="popup_menu" aria-haspopup>
+                <div className={styles.product_detail}>
+                    <div className={styles.product_name}>{data.name}</div>
+                    <div className={styles.product_description}>{data.diagnosisTime}</div>
                 </div>
-                <div className="product-price">
-                    <div className="product-name">{data.value}</div>
+                <div className={styles.product_price}>
+                    <div className={styles.product_name}>{data.value}</div>
                 </div>
             </div>
         );
@@ -262,13 +262,13 @@ export default function DoctorDiagnosis() {
 
     const pastDiagnosisTemplate = (data) => {
         return (
-            <div className="product-item" aria-controls="popup_menu" aria-haspopup>
-                <div className="product-detail">
-                    <div className="product-name">{data.diagnosisDate}</div>
+            <div className={styles.product_item} aria-controls="popup_menu" aria-haspopup>
+                <div className={styles.product_detail}>
+                    <div className={styles.product_name}>{data.diagnosisDate}</div>
                 </div>
-                <div className="product-price">
-                    <div className="product-name" style={{ fontSize: 'x-small' }}>{data.diseaseNm}</div>
-                    <div className="product-description" style={{ fontSize: 'x-small' }}>{data.value}</div>
+                <div className={styles.product_price}>
+                    <div className={styles.product_name} style={{ fontSize: 'x-small' }}>{data.diseaseNm}</div>
+                    <div className={styles.product_description} style={{ fontSize: 'x-small' }}>{data.value}</div>
                 </div>
             </div>
         );
@@ -464,22 +464,22 @@ export default function DoctorDiagnosis() {
                     <div className="p-col-12 p-md-6 p-lg-4">
                         <TabView style={{ justifyContent: 'center', padding: '20px' }}>
                             <TabPanel header={"전체" + "(" + items.length + ")"} headerStyle={{fontSize:'25%', width:'25%'}}>
-                                <div className="datascroller" style={{ justifyContent: 'center' }}>
+                                <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
                                     <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                                 </div>
                             </TabPanel>
                             <TabPanel header={"대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"} headerStyle={{fontSize:'25%', width:'25%'}}>
-                                <div className="datascroller" style={{ justifyContent: 'center' }}>
+                                <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
                                     <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                                 </div>
                             </TabPanel>
                             <TabPanel header={"진료중" + "(" + items.filter(val => val.state === 'care').length + ")"} headerStyle={{fontSize:'25%', width:'25%'}}>
-                                <div className="datascroller" style={{ justifyContent: 'center' }}>
+                                <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
                                     <DataScroller value={items.filter(val => val.state === 'care')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                                 </div>
                             </TabPanel>
                             <TabPanel header={"완료" + "(" + items.filter(val => (val.state === 'complete') || (val.state === 'wait')).length + ")"} headerStyle={{fontSize:'25%', width:'25%'}}>
-                                <div className="datascroller" style={{ justifyContent: 'center' }}>
+                                <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
                                     <DataScroller value={items.filter(val => (val.state === 'complete') || (val.state === 'wait'))} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                                 </div>
                             </TabPanel>
