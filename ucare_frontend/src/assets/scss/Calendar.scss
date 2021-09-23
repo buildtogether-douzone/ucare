@@ -1,0 +1,113 @@
+@charset "UTF-8";
+
+body {
+  font-family: NanumSquare, '나눔 스퀘어', sans-serif;
+}
+
+.calendar {
+  caption {
+    margin: 10px;
+    font-weight: bold;
+  }
+
+  border-collapse: collapse;
+  table-layout: fixed;
+  border-right: 1px solid #e4e4e4;
+  border-bottom: 1px solid #e4e4e4;
+  margin: 0 auto;
+  width: 100%;
+  font-size: 20px;
+  border: none;
+
+  th, td {
+    border-top: 1px solid #e4e4e4;
+    border-left: 1px solid #e4e4e4;
+    border: none;
+  }
+}
+
+th {
+  height: 130px;
+  color: #777;
+}
+
+.nav_btn {
+  border: none;
+  font-size: 16px;
+  background-color: transparent;
+  padding: 1%;
+  cursor: pointer;
+  font-weight: bold;
+  border: 1px solid #e4e4e4;
+}
+
+.date {
+  font-weight: bold;
+}
+
+.inner {
+  position: relative;
+  height: 130px;
+  padding: 5px;
+  text-align: center;
+}
+
+.dimmed {
+  color: #e7e7e7;
+}
+
+em.text {
+  display: block;
+  font-style: normal;
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.holiday_sat {
+  color: #00c;
+}
+
+.holiday_sun, .day {
+  color: #f44e4e;
+}
+
+.anniversary {
+  color: #00c;
+}
+
+.lunar {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+
+  /* inner에 패딩 5px 있는걸 감안하여 6으로 했음 */
+  color: #bababa;
+}
+
+.today {
+  font-weight: bold;
+  padding: 15px;
+  background-color: #812733;
+  border-radius: 10px;
+}
+
+.today_inner {
+  position: relative;
+  height: 130px;
+  padding: 5px;
+  text-align: center;
+  color: #e7e7e7;
+}
+
+/* IR */
+
+.blind {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+}

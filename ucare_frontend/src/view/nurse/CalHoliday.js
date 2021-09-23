@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 
-import styles from '../../assets/css/Calendar.css';
+import styles from '../../assets/scss/Calendar.scss';
 
 export default function CalHoliday() {
   const [getMoment, setMoment] = useState(moment());
@@ -44,20 +44,43 @@ export default function CalHoliday() {
 
               if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
                 return (
-                  <td key={index} style={{ backgroundColor: 'red' }} >
-                    <span>{days.format('D')}</span>
+                  <td>
+                    <div className={styles.today_inner}>
+                      <span className={styles.today}>{days.format('D')}</span>
+                    </div>
                   </td>
                 );
               } else if (days.format('MM') !== today.format('MM')) {
                 return (
-                  <td key={index} style={{ backgroundColor: 'gray' }} >
-                    <span>{days.format('D')}</span>
+                  <td>
+                    <div className={styles.inner}>
+                      <span className={styles.dimmed}>{days.format('D')}</span>
+                    </div>
                   </td>
                 );
-              } else {
+              } else if (WEEKDAY[days.day()] === 'SAT') {
                 return (
-                  <td key={index}  >
-                    <span>{days.format('D')}</span>
+                  <td>
+                    <div className={styles.inner}>
+                      <span className={styles.holiday_sat}>{days.format('D')}</span>
+                    </div>
+                  </td>
+                );
+              } else if (WEEKDAY[days.day()] === 'SUN') {
+                return (
+                  <td>
+                    <div className={styles.inner}>
+                      <span className={styles.holiday_sun}>{days.format('D')}</span>
+                    </div>
+                  </td>
+                );
+              }
+              else {
+                return (
+                  <td>
+                    <div className={styles.inner}>
+                      <span className={styles.date}>{days.format('D')}</span>
+                    </div>
                   </td>
                 );
               }
@@ -71,22 +94,25 @@ export default function CalHoliday() {
   }
 
   return (
-    <div className={styles.Cal}>
-
-      <div className={styles.control}>
-        <button onClick={() => { setMoment(getMoment.clone().subtract(1, 'month')) }} >이전달</button>
-        <span>{today.format('YYYY 년 MM 월')}</span>
-        <button onClick={() => { setMoment(getMoment.clone().add(1, 'month')) }} >다음달</button>
-      </div>
-      <table>
-        <tbody>
+    <div style={{ padding: '10%' }}>
+      <table className={styles.calendar}>
+        <caption>
+          <button className={styles.nav_btn} onClick={() => { setMoment(getMoment.clone().subtract(1, 'month')) }}>&lt;</button>
+          <span style={{ padding: '1%' }}>{today.format('YYYY 년 MM 월')}</span>
+          <button className={styles.nav_btn} onClick={() => { setMoment(getMoment.clone().add(1, 'month')) }}>&gt;</button>
+        </caption>
+        <thead>
           <tr>
-            {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((el) => (
-              <td key={el}  >
-                <span>{el}</span>
-              </td>
-            ))}
+            <th scope="col" style={{ color: '#f44e4e' }}>일</th>
+            <th scope="col">월</th>
+            <th scope="col">화</th>
+            <th scope="col">수</th>
+            <th scope="col">목</th>
+            <th scope="col">금</th>
+            <th scope="col" style={{ color: '#00c' }}>토</th>
           </tr>
+        </thead>
+        <tbody>
           {calendarArr()}
         </tbody>
       </table>
