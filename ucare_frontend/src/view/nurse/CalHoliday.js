@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 import { GetHolidays } from '../../lib/commDate';
-
 import styles from '../../assets/scss/Calendar.scss';
 
 export default function CalHoliday() {
