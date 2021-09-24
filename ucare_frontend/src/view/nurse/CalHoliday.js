@@ -17,7 +17,7 @@ export default function CalHoliday() {
 
   let year = today.clone().startOf('year').format('YYYY');
 
-  useEffect( ()=> {
+  useEffect(() => {
     let tHolidays = GetHolidays(year).map((data, index) => data.toString().substring(0, 8));
     setHolidays(tHolidays);
   }, [])
@@ -41,7 +41,7 @@ export default function CalHoliday() {
     let deleteDateIndex = holidays.findIndex((holiday) => holiday == date);
     items[index].holiday = !data;
 
-    items[index].holiday ? 
+    items[index].holiday ?
       holidays.push(date) :
       holidays.splice(deleteDateIndex, 1);
 
@@ -89,15 +89,7 @@ export default function CalHoliday() {
                 });
               }
 
-              if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
-                return (
-                  <td key={index} onClick={() => changeHoliday(days.format('YYYYMMDD'))}>
-                    <div className={styles.today_inner}>
-                      <span className={styles.today}>{days.format('D')}</span>
-                    </div>
-                  </td>
-                );
-              } else if (days.format('MM') !== today.format('MM')) {
+              if (days.format('MM') !== today.format('MM')) {
                 return (
                   <td key={index}>
                     <div className={styles.inner}>
@@ -107,9 +99,9 @@ export default function CalHoliday() {
                 );
               } else if (holidays.includes(days.format('YYYYMMDD'))) {
                 return (
-                  <td key={index} onClick={() =>{changeHoliday(days.format('YYYYMMDD'))}}>
+                  <td key={index} onClick={() => { changeHoliday(days.format('YYYYMMDD')) }}>
                     <div className={styles.inner}>
-                        <span className={ styles.holiday }>{days.format('D')}</span>
+                      <span className={styles.holiday}>{days.format('D')}</span>
                     </div>
                   </td>
                 );
@@ -123,9 +115,17 @@ export default function CalHoliday() {
                 );
               } else if (WEEKDAY[days.day()] === 'SUN') {
                 return (
-                  <td key={index}onClick={() => changeHoliday(days.format('YYYYMMDD'))}>
+                  <td key={index} onClick={() => changeHoliday(days.format('YYYYMMDD'))}>
                     <div className={styles.inner}>
                       <span className={styles.holiday_sun}>{days.format('D')}</span>
+                    </div>
+                  </td>
+                );
+              } else if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
+                return (
+                  <td key={index} onClick={() => changeHoliday(days.format('YYYYMMDD'))}>
+                    <div className={styles.today_inner}>
+                      <span className={styles.today}>{days.format('D')}</span>
                     </div>
                   </td>
                 );
