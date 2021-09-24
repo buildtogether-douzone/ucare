@@ -7,6 +7,8 @@ import styles from '../../assets/scss/Calendar.scss';
 
 export default function CalHoliday() {
   const [getMoment, setMoment] = useState(moment());
+  const [holidays, setHolidays] = useState([]);
+  const [reload, setReload] = useState(true);
 
   let items = [];
 
@@ -15,9 +17,11 @@ export default function CalHoliday() {
   const lastWeek = today.clone().endOf('month').week() === 1 ? 53 : today.clone().endOf('month').week();
 
   let year = today.clone().startOf('year').format('YYYY');
-  let tHolidays = GetHolidays(year);
 
-  let holidays = tHolidays.map((data, index) => data.toString().substring(0, 8));
+  useEffect( ()=> {
+    let tHolidays = GetHolidays(year).map((data, index) => data.toString().substring(0, 8));
+    setHolidays(tHolidays);
+  }, [])
 
   const findIndexByDate = (date) => {
     let index = -1;
@@ -34,9 +38,16 @@ export default function CalHoliday() {
   const changeHoliday = (date) => {
     let index = findIndexByDate(date);
 
-    let data = items[index].holiday
+    let data = items[index].holiday;
+    let deleteDateIndex = holidays.findIndex((holiday) => holiday == date);
     items[index].holiday = !data;
-    console.log(items);
+
+    items[index].holiday ? 
+      holidays.push(date) :
+      holidays.splice(deleteDateIndex, 1);
+
+    setHolidays(holidays);
+    setReload(!reload);
   }
 
   const calendarArr = () => {
@@ -97,9 +108,9 @@ export default function CalHoliday() {
                 );
               } else if (holidays.includes(days.format('YYYYMMDD'))) {
                 return (
-                  <td key={index} onClick={() => changeHoliday(days.format('YYYYMMDD'))}>
+                  <td key={index} onClick={() =>{changeHoliday(days.format('YYYYMMDD'))}}>
                     <div className={styles.inner}>
-                      <span className={styles.holiday}>{days.format('D')}</span>
+                        <span className={ styles.holiday }>{days.format('D')}</span>
                     </div>
                   </td>
                 );
@@ -140,6 +151,7 @@ export default function CalHoliday() {
 
   return (
     <div style={{ padding: '10%' }}>
+      {reload}
       <table className={styles.calendar}>
         <caption>
           <button className={styles.nav_btn} onClick={() => { setMoment(getMoment.clone().subtract(1, 'month')) }}>&lt;</button>
