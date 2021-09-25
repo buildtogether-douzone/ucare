@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="holiday">
+
+	<select id="retrieve" parameterType="string" resultType="holidayvo" >
+		SELECT 
+			holiday_no AS holidayNo,
+			date,
+			holiday
+		FROM ucare.holiday
+		WHERE TO_CHAR(date, 'YYYY-MM') = #{date }
+		ORDER BY date
+	</select>
 	
 	<update id="update" parameterType="holidayvo">
 			WITH upsert AS 

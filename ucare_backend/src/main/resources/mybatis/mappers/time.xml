@@ -29,7 +29,7 @@
 			  AND time = #{diagnosisTime }
 	</update>
 	
-		<select id="retrieveTime" parameterType="string" resultType="timevo" >
+	<select id="retrieveTime" parameterType="string" resultType="timevo" >
 		SELECT 
 			time_no AS timeNo,
 			time AS time
@@ -39,7 +39,7 @@
 		ORDER BY time_no
 	</select>
 	
-		<update id="updateTime" parameterType="timevo">
+	<update id="updateTime" parameterType="timevo">
 			UPDATE  ucare.time
 			   SET 
 			   		status = true
@@ -47,7 +47,7 @@
 			AND time = #{time }
 	</update>
 	
-		<update id="updateDelete" parameterType="timevo">
+	<update id="updateDelete" parameterType="timevo">
 			UPDATE  ucare.time
 			   SET 
 			   		status = false

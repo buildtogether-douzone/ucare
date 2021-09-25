@@ -14,6 +14,10 @@ public class HolidayService {
 	@Autowired
 	private HolidayRepository holidayRepository;
 	
+	public List<HolidayVo> retrieve(String date) {
+		return holidayRepository.retrieve(date);
+	}
+	
 	public int update(List<HolidayVo> data) {
 		int result = 0;
 		
