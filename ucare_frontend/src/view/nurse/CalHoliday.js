@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import { Button } from 'primereact/button';
 
 import { GetHolidays } from '../../lib/commDate';
 import styles from '../../assets/scss/Calendar.scss';
+import holidayService from '../../service/holidayService';
 
 export default function CalHoliday() {
   const [getMoment, setMoment] = useState(moment());
   const [holidays, setHolidays] = useState([]);
   const [reload, setReload] = useState(true);
 
-  let items = [];
-
   const today = getMoment;
   const firstWeek = today.clone().startOf('month').week();
   const lastWeek = today.clone().endOf('month').week() === 1 ? 53 : today.clone().endOf('month').week();
 
+  let items = [];
   let year = today.clone().startOf('year').format('YYYY');
+  let tHolidays = GetHolidays(year).map((data, index) => data.toString().substring(0, 8));
 
   useEffect(() => {
-    let tHolidays = GetHolidays(year).map((data, index) => data.toString().substring(0, 8));
+    tHolidays = GetHolidays(year).map((data, index) => data.toString().substring(0, 8));
     setHolidays(tHolidays);
   }, [])
 
@@ -32,6 +34,18 @@ export default function CalHoliday() {
     }
 
     return index;
+  }
+
+  const subtractMonth = () => {
+    setMoment(getMoment.clone().subtract(1, 'month'));
+    tHolidays = GetHolidays(year).map((data, index) => data.toString().substring(0, 8));
+    setHolidays(tHolidays);
+  }
+
+  const addMonth = () => {
+    setMoment(getMoment.clone().add(1, 'month'));
+    tHolidays = GetHolidays(year).map((data, index) => data.toString().substring(0, 8));
+    setHolidays(tHolidays);
   }
 
   const changeHoliday = (date) => {
@@ -144,18 +158,29 @@ export default function CalHoliday() {
         </tr>
       );
     }
-    console.log(items);
     return result;
+  }
+
+  const saveItems = () => {
+    console.log(items);
+    holidayService.update(items)
+        .then(res => {
+          console.log('정보가 성공적으로 전송 되었습니다.');
+        })
+        .catch(err => {
+          console.log('update holiday data() 에러', err);
+        });
   }
 
   return (
     <div style={{ padding: '10%' }}>
       {reload}
+        <Button label="저장" icon="pi pi-check" style={{ float: 'right' }} className="p-button-text" onClick={() => { saveItems() }}  />
       <table className={styles.calendar}>
         <caption>
-          <button className={styles.nav_btn} onClick={() => { setMoment(getMoment.clone().subtract(1, 'month')) }}>&lt;</button>
+          <button className={styles.nav_btn} onClick={() => { subtractMonth() }}>&lt;</button>
           <span style={{ padding: '1%' }}>{today.format('YYYY 년 MM 월')}</span>
-          <button className={styles.nav_btn} onClick={() => { setMoment(getMoment.clone().add(1, 'month')) }}>&gt;</button>
+          <button className={styles.nav_btn} onClick={() => { addMonth() }}>&gt;</button>
         </caption>
         <thead>
           <tr>
