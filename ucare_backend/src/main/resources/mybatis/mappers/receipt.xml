@@ -14,6 +14,7 @@
 				user_no, 
 				patient_no, 
 				accept_yn,
+				overlap,
 				state,
 				diagnosis_time
 			)
@@ -27,6 +28,7 @@
 			(SELECT user_no FROM ucare.user WHERE id = #{userId } ),
 			#{patientNo },
 			'N',
+			'true',
 			'careWait',
 			(SELECT MIN(time) FROM ucare.time WHERE date = TO_DATE(TO_CHAR(now(), 'YYYY-MM-DD'), 'YYYY-MM-DD') AND status = false)
 		)
@@ -101,6 +103,13 @@
 		 WHERE receipt_no = #{receiptNo }    
 	</delete>
 	
+	<select id="retrieveOverlap" parameterType="receiptvo" resultType="receiptvo" >
+			SELECT
+				overlap AS overlap
+			FROM
+				ucare.receipt
+			WHERE receipt_dt = TO_DATE(#{receiptDt },'YYYY-MM-DD')
+			AND patient_no = #{patientNo }
+	</select>
 	
-
 </mapper>

@@ -22,6 +22,10 @@ class receiptService {
   createRev(data){
     return axios.post(RECEIPT_API_BASE_URL + '/createRev', data, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
+
+  retrieveOverlap(receiptOverlap){
+    return axios.get(RECEIPT_API_BASE_URL + '/retrieveOverlap/' + receiptOverlap, { headers: { Authorization: localStorage.getItem("authorization") }});
+  }
   
 }
 

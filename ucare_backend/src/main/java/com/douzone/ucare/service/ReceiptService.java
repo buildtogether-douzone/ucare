@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.douzone.ucare.repository.ReceiptRepository;
+import com.douzone.ucare.vo.PatientVo;
 import com.douzone.ucare.vo.ReceiptVo;
 
 @Service
@@ -32,5 +33,9 @@ public class ReceiptService {
 	
 	public int createRev(ReceiptVo receipt) {
 		return ReceiptRepository.createRev(receipt);
+	}
+	
+	public List<ReceiptVo> retrieveOverlap(ReceiptVo receipt) {
+		return ReceiptRepository.retrieveOverlap(receipt);
 	}
 }

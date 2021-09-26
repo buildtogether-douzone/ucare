@@ -17,6 +17,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { useRecoilState } from 'recoil';
+import { reloadState } from '../../recoil/atom/nurseAtom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -76,12 +78,13 @@ export default function NewPatient() {
   const [telNo, setTelNo] = useState('');
   const [address, setAddress] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
-  const [email, setEmail] = useState('email@co.kr');
+  const [email, setEmail] = useState('');
   const [insurance, setInsurance] = useState('Y');
   const [diagType, setDiagType] = useState('초진');
   const [visitDate, setVisitDate] = useState('');
   const [remark, setRemark] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [reload, setReload] = useRecoilState(reloadState);
 
   useEffect(() => {
     const newDate = new Date();
@@ -137,12 +140,36 @@ export default function NewPatient() {
 
   const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
-  const hasNotValidError = emailEntered =>
+  const hasNotValidError = () =>
     regex.test(email) ? false : true; 
 
 
+  const onReset = () => {
+    setName('');
+    setSSN('');
+    setAge('');
+    setGender('');
+    setTelNo('');
+    setAddress('');
+    setDetailAddress('');
+    setEmail('');
+    setInsurance('');
+    setRemark('');
+  };
+
   const create = (e) => {
     e.preventDefault();
+
+    if (name == '') {
+      alert("이름을 입력해주세요.")
+      return;
+    } else if (ssn == '') {
+      alert("주민등록번호를 입력해주세요.")
+      return;
+    } else if (telNo == '') {
+      alert("연락처를 입력해주세요.")
+      return;
+    }
 
     let patient = {
       name: name,
@@ -163,26 +190,17 @@ export default function NewPatient() {
     patientService.create(patient)
       .then(res => {
         console.log(patient.name + '님의 정보가 성공적으로 등록되었습니다.');
-        window.location.reload();
+        alert(`${patient.name}님이 등록되었습니다.`)
+        //window.location.reload();
+        setReload(!reload);
       })
       .catch(err => {
         console.log('create() 에러', err);
       });
-
+      onReset();
   };
 
-  const onReset = () => {
-    setName('');
-    setSSN('');
-    setAge('');
-    setGender('');
-    setTelNo('');
-    setAddress('');
-    setDetailAddress('');
-    setEmail('');
-    setInsurance('');
-    setRemark('');
-  };
+
   
   const openPostCode = () => {
     setIsPopupOpen(true)
@@ -346,12 +364,12 @@ export default function NewPatient() {
                 id="email"
                 name="email"
                 autoComplete="email"
-                error={hasNotValidError('email')}
-                helperText={
-                  hasNotValidError('email') ? "이메일 주소를 다시 확인해주세요." : null
-                }
                 value={email}
                 onChange={(e) => { setEmail(e.target.value) }}
+                error={hasNotValidError()}
+                helperText={
+                  hasNotValidError() ? "이메일 주소를 다시 확인해주세요." : null
+                }
               />
             </Grid>
 

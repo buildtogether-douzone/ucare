@@ -91,8 +91,8 @@ const Row = React.forwardRef((props, ref) => {
     var day = date.getDate();                   //d
     day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
     return year + '-' + month + '-' + day;
-  }
-
+  };
+  
   const handleClickOpen = (bp, bs, remark) => {
     setModalBP(bp);
     setModalBS(bs);
@@ -133,7 +133,6 @@ const Row = React.forwardRef((props, ref) => {
     setName(name);
     setInsurance(insurance)
     setDialogOpen3(true);
-
   };
 
   const handleClose3 = () => {
@@ -246,7 +245,6 @@ const Row = React.forwardRef((props, ref) => {
     setDialogOpen2(false);
   };
 
-
   const create = (e) => {
     e.preventDefault();
 
@@ -279,6 +277,9 @@ const Row = React.forwardRef((props, ref) => {
       });
 
     setDialogOpen3(false);
+    setBP('');
+    setBS('');
+    setReceiptRemark('');
   };
 
   const openPostCode = () => {

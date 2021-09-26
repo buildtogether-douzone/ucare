@@ -17,6 +17,7 @@ public class ReceiptVo {
 	private Long no;
 	private String state;
 	private String diagnosisTime;
+	private String overlap;
 
 	public Long getNo() {
 		return no;
@@ -113,6 +114,12 @@ public class ReceiptVo {
 	}
 	public void setDiagnosisTime(String diagnosisTime) {
 		this.diagnosisTime = diagnosisTime;
+	}
+	public String getOverlap() {
+		return overlap;
+	}
+	public void setOverlap(String overlap) {
+		this.overlap = overlap;
 	}
 
 	
