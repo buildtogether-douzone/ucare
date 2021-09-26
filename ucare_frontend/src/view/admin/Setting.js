@@ -59,8 +59,8 @@ export default function Setting() {
   const [data, setData] = useState([]); //table data
 
   //for error handling
-  const [iserror, setIserror] = useState(false)
-  const [errorMessages, setErrorMessages] = useState([])
+  const [iserror, setIserror] = useState(false);
+  const [errorMessages, setErrorMessages] = useState([]);
 
   useEffect(() => { 
     retrieveAll();
