@@ -12,6 +12,9 @@ import reservationService from '../../service/reservationService';
 import timeService from '../../service/timeService'
 import receiptService from '../../service/receiptService';
 
+import { useRecoilState } from 'recoil';
+import { reloadState } from '../../recoil/atom/nurseAtom';
+
 export default function ReservationList() {
 
     let emptyItem = {
@@ -38,6 +41,8 @@ export default function ReservationList() {
     const [globalFilter, setGlobalFilter] = useState('');
     const dt = useRef(null);
 
+    const [reload, setReload] = useRecoilState(reloadState);
+
     const retrieveAll = (e) => {
         reservationService.retrieveAll()
             .then(res => {
@@ -52,7 +57,7 @@ export default function ReservationList() {
     useEffect(() => {
         retrieveAll();
         dt.current.filter(date, 'revDate', 'custom');
-    }, []);
+    }, [reload]);
 
     const filterDate = (value, filter) => {
         if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
@@ -196,7 +201,8 @@ export default function ReservationList() {
                 }
                 setDeleteItemDialog(false);
                 //window.location.reload();
-                timeService.updateDelete(_time)
+                timeService.updateDelete(_time);
+                setReload(!reload);
             })
             .catch(err => {
                 console.log('delete() Error!', err);
@@ -213,7 +219,7 @@ export default function ReservationList() {
     const itemDialogFooter = (
         <React.Fragment>
             <Button label="취소" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="등록" icon="pi pi-check" className="p-button-text" onClick={saveItem} />
+            <Button label="접수" icon="pi pi-check" className="p-button-text" onClick={saveItem} />
         </React.Fragment>
     );
 

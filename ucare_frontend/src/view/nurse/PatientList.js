@@ -15,8 +15,6 @@ import Grid from '@material-ui/core/Grid';
 import Row from './Row';
 import PatientPage from './PatientPage';
 import NewPatient from './NewPatient';
-import { useRecoilState } from 'recoil';
-import { reloadState } from '../../recoil/atom/nurseAtom';
 
 const useStyles2 = makeStyles((theme) => ({
   table: {
@@ -38,7 +36,6 @@ export default function PatientList() {
  const [page, setPage] = useState(0);
  const [rowsPerPage, setRowsPerPage] = useState(10);
  const [search, setSearch] = useState('');
- const [reload, setReload] = useRecoilState(reloadState);
 
  const searchableKeys = ['name', 'ssn', 'gender', 'telNo', 'address'];
 
@@ -72,7 +69,7 @@ export default function PatientList() {
 
  useEffect(() => {
   fetchPatient();
- }, [reload]);
+ }, []);
 
  return (
     <Grid container>

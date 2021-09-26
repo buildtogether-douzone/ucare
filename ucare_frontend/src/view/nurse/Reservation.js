@@ -12,6 +12,9 @@ import patientService from '../../service/patientService';
 import reservationService from '../../service/reservationService';
 import ReservationList from './ReservationList';
 
+import { useRecoilState } from 'recoil';
+import { reloadState } from '../../recoil/atom/nurseAtom';
+
 export default function Reservation() {
 
     let emptyItem = {
@@ -45,10 +48,13 @@ export default function Reservation() {
     const [selectedTime, setSelectedTime] = useState(emptyTime);
     const [date, setDate] = useState(new Date());
 
+    const [reload, setReload] = useRecoilState(reloadState);
+
     const toast = useRef(null);
 
     let reservation = {
         patientNo: selectedPatient.patientNo,
+        name: selectedPatient.name,
         revDate: dateFormat(date),
         revTime: selectedTime.time,
         insNo: window.sessionStorage.getItem('user_no')
@@ -159,6 +165,8 @@ export default function Reservation() {
                 }
                 console.log(reservation.patientNo + '님의 정보가 성공적으로 등록되었습니다.');
                 timeService.updateTime(_time);
+                alert(`${reservation.name}님이 예약되었습니다.`)
+                setReload(!reload);
             })
             .catch(err => {
                 console.log('create() 에러', err);
