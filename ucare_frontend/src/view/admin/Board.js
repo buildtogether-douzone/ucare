@@ -276,7 +276,7 @@ const Board = React.forwardRef((props, ref) => {
                     header={header}>
 
                     <Column style={{ textAlign: 'center' }} field="boardNo" header="No"></Column>
-                    <Column style={{ textAlign: 'center' }} field="title" header="제목" body={coltemplate}></Column>
+                    <Column style={{ textAlign: 'center', cursor: 'pointer'}} field="title" header="제목" body={coltemplate}></Column>
                     <Column style={{ textAlign: 'center' }} field="userId" header="작성자"></Column>
                     <Column style={{ textAlign: 'center' }} field="boardDt" header="작성일"></Column>
                     <Column style={{ textAlign: 'center' }} field="hit" header="조회"></Column>
