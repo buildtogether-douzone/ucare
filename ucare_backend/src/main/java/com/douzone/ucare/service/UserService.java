@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.douzone.ucare.repository.UserRepository;
-import com.douzone.ucare.vo.PatientVo;
 import com.douzone.ucare.vo.UserVo;
 
 @Service
 public class UserService {
+	
 	@Autowired
 	private UserRepository userRepository;
 
