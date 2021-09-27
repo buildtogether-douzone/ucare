@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -34,113 +34,112 @@ const useStyles2 = makeStyles((theme) => ({
 }));
 
 export default function PatientList() {
- const classes = useStyles2();
- const [patient, setPatient] = useState([]);
- const [page, setPage] = useState(0);
- const [rowsPerPage, setRowsPerPage] = useState(10);
- const [search, setSearch] = useState('');
+  const classes = useStyles2();
+  const [patient, setPatient] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [search, setSearch] = useState('');
 
- const [reload, setReload] = useRecoilState(reloadState);
+  const [reload, setReload] = useRecoilState(reloadState);
 
- const searchableKeys = ['name', 'ssn', 'gender', 'telNo', 'address'];
+  const searchableKeys = ['name', 'ssn', 'gender', 'telNo', 'address'];
 
- const filteredPatients = patient.filter((item) =>
- searchableKeys.some((key) =>
-   item[key].toLowerCase().includes(search.toLowerCase())
- )
-);
+  const filteredPatients = patient.filter((item) =>
+    searchableKeys.some((key) =>
+      item[key].toLowerCase().includes(search.toLowerCase())
+    )
+  );
 
- const emptyRows = rowsPerPage - Math.min(rowsPerPage, patient.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, patient.length - page * rowsPerPage);
 
- const handleChangePage = (event, newPage) => {
-   setPage(newPage);
- };
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
- const handleChangeRowsPerPage = (event) => {
-   setRowsPerPage(parseInt(event.target.value, 10));
-   setPage(0);
- };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
- const fetchPatient =  () => {
-  patientService.retrieveAll()
-  .then( res => {
-    setPatient(res.data);
-  })
-  .catch( err => {
-    console.log('retrieveAll() 에러', err);
-  });
-};
+  const fetchPatient = () => {
+    patientService.retrieveAll()
+      .then(res => {
+        setPatient(res.data);
+      })
+      .catch(err => {
+        console.log('retrieveAll() 에러', err);
+      });
+  };
 
+  useEffect(() => {
+    fetchPatient();
+  }, [reload]);
 
- useEffect(() => {
-  fetchPatient();
- }, [reload]);
-
- return (
+  return (
     <Grid container>
       <Grid item xs={5}>
-      <NewPatient />
+        <NewPatient />
       </Grid>
       <Grid item xs={7}>
-      <div className={classes.paper}>
-      <SearchBar
-      value={search}
-      onChange={(value) => setSearch(value)}
-      onCancelSearch={() => setSearch('')}
-      style={{
-        margin: '0 0 10px auto',
-        maxWidth: 800,
-      }}
-    />
-  <TableContainer component={Paper}>
-  <Table className={classes.table} aria-label="collapsible table">
-    <TableHead>
-      <TableRow style={{backgroundColor: '#DFDFDF'}}>
-        <TableCell style={{width: '10%', padding: '10px'}}/>
-        <TableCell style={{width: '10%', textAlign: 'center', padding: '10px'}}>환자 번호</TableCell>
-        <TableCell style={{width: '10%', textAlign: 'center', padding: '10px'}}>이름</TableCell>
-        <TableCell style={{width: '10%', textAlign: 'center', padding: '10px'}}>성별/나이</TableCell>
-        <TableCell style={{width: '20%', textAlign: 'center', padding: '10px'}}>주민등록번호</TableCell>
-        <TableCell style={{width: '20%', textAlign: 'center', padding: '10px'}}>전화번호</TableCell>
-        <TableCell style={{width: '10%', textAlign: 'center', padding: '10px'}}>환자정보</TableCell>
-        <TableCell style={{width: '10%', textAlign: 'center', padding: '10px'}}>접수</TableCell>
-      </TableRow>
-    </TableHead>
-    <TableBody>
-    {(rowsPerPage > 0
-            ? filteredPatients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : filteredPatients
-            ).map((patientList) => (
-        <Row key={patientList.patientNo} row={patientList}/>
-      ))}
+        <div className={classes.paper}>
+          <SearchBar
+            value={search}
+            onChange={(value) => setSearch(value)}
+            onCancelSearch={() => setSearch('')}
+            style={{
+              margin: '0 0 10px auto',
+              maxWidth: 800,
+            }}
+          />
+          <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="collapsible table">
+              <TableHead>
+                <TableRow style={{ backgroundColor: '#DFDFDF' }}>
+                  <TableCell style={{ width: '10%', padding: '10px' }} />
+                  <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }}>환자번호</TableCell>
+                  <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }}>이름</TableCell>
+                  <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }}>성별/나이</TableCell>
+                  <TableCell style={{ width: '20%', textAlign: 'center', padding: '10px' }}>주민등록번호</TableCell>
+                  <TableCell style={{ width: '20%', textAlign: 'center', padding: '10px' }}>전화번호</TableCell>
+                  <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }}>환자정보</TableCell>
+                  <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }}>접수</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(rowsPerPage > 0
+                  ? filteredPatients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : filteredPatients
+                ).map((patientList) => (
+                  <Row key={patientList.patientNo} row={patientList} />
+                ))}
                 {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={8} />
-            </TableRow>
-          )}
-    </TableBody>
-    <TableFooter>
-          <TableRow>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 15, 25, { label: 'All', value: -1 }]}
-              colSpan={8}
-              count={patient.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: { 'aria-label': 'rows per page' },
-                native: true,
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={PatientPage}
-            />
-          </TableRow>
-        </TableFooter>
-  </Table>
-</TableContainer>
-</div>
-</Grid>
-</Grid>
- );
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={8} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 15, 25, { label: 'All', value: -1 }]}
+                    colSpan={8}
+                    count={patient.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: { 'aria-label': 'rows per page' },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={PatientPage}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        </div>
+      </Grid>
+    </Grid>
+  );
 }

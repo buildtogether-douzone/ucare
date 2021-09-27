@@ -164,7 +164,7 @@ export default function Reservation() {
         }
         reservationService.create(reservation)
             .then(res => {
-                if(res.data != 0) {
+                if (res.data != 0) {
                     let _time = {
                         date: reservation.revDate,
                         time: reservation.revTime

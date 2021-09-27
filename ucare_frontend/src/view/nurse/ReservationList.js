@@ -270,7 +270,7 @@ export default function ReservationList() {
     const dateFilter = <Calendar value={selectedDate} onChange={onDateChange} dateFormat="yy-mm-dd" className="p-column-filter" placeholder="Registration Date"/>;
 
     return (
-        <div className="datatable-filter-demo">
+        <div className="datatable-filter">
             <SockJsClient
                 url="http://localhost:8080/ucare_backend/start"
                 topics={['/topics/nurse']}

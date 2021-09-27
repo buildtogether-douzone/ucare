@@ -88,6 +88,20 @@
 			ORDER BY receipt_no DESC
 	</select>
 	
+	<select id="retrieveByDuplication" resultType="receiptvo" >
+		SELECT
+				receipt_no AS receiptNo,
+				bp AS bp,
+				bs AS bs,
+				receipt_dt AS receiptDt,
+				remark AS remark,
+				state AS state,
+				diagnosis_time as diagnosisTime
+			FROM ucare.receipt 
+			WHERE TO_CHAR(receipt_dt, 'YYYY-MM-DD') = TO_CHAR(now(), 'YYYY-MM-DD')
+			  AND patient_no = #{patientNo }
+	</select>
+	
 	<update id="updateState" parameterType="receiptvo">
 		UPDATE  ucare.receipt
 		   SET 

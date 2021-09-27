@@ -6,36 +6,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.douzone.ucare.repository.ReceiptRepository;
-import com.douzone.ucare.vo.PatientVo;
 import com.douzone.ucare.vo.ReceiptVo;
 
 @Service
 public class ReceiptService {
 	
 	@Autowired
-	private ReceiptRepository ReceiptRepository;
+	private ReceiptRepository receiptRepository;
 
 	public int create(ReceiptVo receipt) {
-		return ReceiptRepository.create(receipt);
+		List<ReceiptVo> list = receiptRepository.retrieveByDuplication(receipt);
+		
+		if(list.size() != 0) 
+			return 0;
+		else 
+			return receiptRepository.create(receipt);
 	}
 
 	public List<ReceiptVo> retrieveAll(Long patientNo) {
-		return ReceiptRepository.retrieveAll(patientNo);
+		return receiptRepository.retrieveAll(patientNo);
 	}
 	
 	public int updateState(ReceiptVo receipt) {
-		return ReceiptRepository.updateState(receipt);
+		return receiptRepository.updateState(receipt);
 	}
 	
 	public int delete(Long receiptNo) {
-		return ReceiptRepository.delete(receiptNo);
+		return receiptRepository.delete(receiptNo);
 	}
 	
 	public int createRev(ReceiptVo receipt) {
-		return ReceiptRepository.createRev(receipt);
+		return receiptRepository.createRev(receipt);
 	}
 	
 	public List<ReceiptVo> retrieveOverlap(ReceiptVo receipt) {
-		return ReceiptRepository.retrieveOverlap(receipt);
+		return receiptRepository.retrieveOverlap(receipt);
 	}
 }

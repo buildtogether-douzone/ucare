@@ -52,18 +52,18 @@ const useRowStyles = makeStyles((theme) => ({
       textDecoration: "underline",
       textUnderlinePosition: "under"
     },
-    cursor: 'pointer', 
-    textAlign: 'center', 
+    cursor: 'pointer',
+    textAlign: 'center',
     padding: '10px'
-  }, 
+  },
   mouseRemark: {
     '&:hover': {
       textDecoration: "underline",
       textUnderlinePosition: "under"
     },
-    cursor: 'pointer', 
+    cursor: 'pointer',
     padding: '10px'
-  }, 
+  },
 
 
 }));
@@ -112,7 +112,7 @@ const Row = React.forwardRef((props, ref) => {
     day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
     return year + '-' + month + '-' + day;
   };
-  
+
   const handleClickOpen = (bp, bs, remark) => {
     setModalBP(bp);
     setModalBS(bs);
@@ -207,7 +207,7 @@ const Row = React.forwardRef((props, ref) => {
   const regex = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
 
   const hasNotValidError = emailEntered =>
-    regex.test(email) ? false : true; 
+    regex.test(email) ? false : true;
 
   const fetchReceipt = () => {
     receiptService.retrieveAll(row.patientNo)
@@ -278,19 +278,23 @@ const Row = React.forwardRef((props, ref) => {
 
     receiptService.create(receipt)
       .then(res => {
-        console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
-        timeService.update(dateFormat(date)).then(res => {
-          // window.location.reload();
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-          });
-          $websocket.current.sendMessage('/Doctor');
-          setReload(!reload);
-        })
-          .catch(err => {
-            console.log('update() 에러', err);
-          });
+        console.log(res);
+        if (res.data != 0) {
+          console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
+          timeService.update(dateFormat(date)).then(res => {
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+            $websocket.current.sendMessage('/Doctor');
+            setReload(!reload);
+          })
+            .catch(err => {
+              console.log('update() 에러', err);
+            });
+        }
+        else
+          alert("이미 금일 접수된 환자입니다.");
       })
       .catch(err => {
         console.log('create() 에러', err);
@@ -480,22 +484,22 @@ const Row = React.forwardRef((props, ref) => {
                 onChange={(e) => { setDetailAddress(e.target.value) }}
               />
             </div>
-              <Typography className={classes.font} variant="body1" gutterBottom>이메일</Typography>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                size="small"
-                id="email"
-                name="email"
-                autoComplete="email"
-                error={hasNotValidError('email')}
-                helperText={
-                  hasNotValidError('email') ? "이메일 주소를 다시 확인해주세요." : null
-                }
-                value={email}
-                onChange={(e) => { setEmail(e.target.value) }}
-              />
+            <Typography className={classes.font} variant="body1" gutterBottom>이메일</Typography>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              size="small"
+              id="email"
+              name="email"
+              autoComplete="email"
+              error={hasNotValidError('email')}
+              helperText={
+                hasNotValidError('email') ? "이메일 주소를 다시 확인해주세요." : null
+              }
+              value={email}
+              onChange={(e) => { setEmail(e.target.value) }}
+            />
             <Typography className={classes.font} variant="body1" gutterBottom>보험 여부</Typography>
             <FormControl component="fieldset">
               <RadioGroup row aria-label="insurance" name="insurance" value={insurance} onChange={(e) => { setInsurance(e.target.value) }} >
@@ -657,8 +661,6 @@ const Row = React.forwardRef((props, ref) => {
           </DialogActions>
         </Dialog>
 
-
-
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
@@ -689,13 +691,13 @@ const Row = React.forwardRef((props, ref) => {
                         {receiptList.receiptNo}</TableCell>
                       <TableCell
                         onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }} className={classes.mouse}>
-                          {receiptList.receiptDt}</TableCell>
+                        {receiptList.receiptDt}</TableCell>
                       <TableCell
-                        onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}  className={classes.mouse}>
-                          {receiptList.receiptTime}</TableCell>
+                        onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }} className={classes.mouse}>
+                        {receiptList.receiptTime}</TableCell>
                       <TableCell
                         onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }} className={classes.mouseRemark}>
-                          {receiptList.remark}</TableCell>
+                        {receiptList.remark}</TableCell>
                       {receiptList.state == 'complete' ?
                         <TableCell></TableCell>
                         : <TableCell
