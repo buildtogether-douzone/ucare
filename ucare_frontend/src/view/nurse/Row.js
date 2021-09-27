@@ -45,7 +45,27 @@ const useRowStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     marginBottom: theme.spacing(1),
     marginTop: theme.spacing(2)
-  }
+  },
+
+  mouse: {
+    '&:hover': {
+      textDecoration: "underline",
+      textUnderlinePosition: "under"
+    },
+    cursor: 'pointer', 
+    textAlign: 'center', 
+    padding: '10px'
+  }, 
+  mouseRemark: {
+    '&:hover': {
+      textDecoration: "underline",
+      textUnderlinePosition: "under"
+    },
+    cursor: 'pointer', 
+    padding: '10px'
+  }, 
+
+
 }));
 
 
@@ -664,19 +684,18 @@ const Row = React.forwardRef((props, ref) => {
                     <TableRow key={receiptList.receiptNo} >
                       <TableCell />
                       <TableCell
-                        onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
-                        style={{ cursor: 'pointer', textAlign: 'center', padding: '10px' }} component="th" scope="row">{receiptList.no}</TableCell>
-                      <TableCell onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
-                        style={{ cursor: 'pointer', textAlign: 'center', padding: '10px' }}>{receiptList.receiptNo}</TableCell>
+                        style={{ textAlign: 'center', padding: '10px' }} component="th" scope="row">{receiptList.no}</TableCell>
+                      <TableCell onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }} className={classes.mouse}>
+                        {receiptList.receiptNo}</TableCell>
                       <TableCell
-                        onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
-                        style={{ cursor: 'pointer', textAlign: 'center', padding: '10px' }}>{receiptList.receiptDt}</TableCell>
+                        onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }} className={classes.mouse}>
+                          {receiptList.receiptDt}</TableCell>
                       <TableCell
-                        onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
-                        style={{ cursor: 'pointer', textAlign: 'center', padding: '10px' }}>{receiptList.receiptTime}</TableCell>
+                        onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}  className={classes.mouse}>
+                          {receiptList.receiptTime}</TableCell>
                       <TableCell
-                        onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }}
-                        style={{ cursor: 'pointer', padding: '10px' }}>{receiptList.remark}</TableCell>
+                        onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }} className={classes.mouseRemark}>
+                          {receiptList.remark}</TableCell>
                       {receiptList.state == 'complete' ?
                         <TableCell></TableCell>
                         : <TableCell

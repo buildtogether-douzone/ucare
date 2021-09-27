@@ -153,7 +153,7 @@ export default function NewPatient() {
     setAddress('');
     setDetailAddress('');
     setEmail('');
-    setInsurance('');
+    setInsurance('Y');
     setRemark('');
   };
 
