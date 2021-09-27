@@ -61,6 +61,11 @@ export default function Reservation() {
         insNo: window.sessionStorage.getItem('user_no')
     }
 
+    const onReset = () => {
+        setSelectedPatient(emptyItem);
+        setSelectedTime(emptyTime);
+    };
+
     const retrieveAll = (e) => {
         patientService.retrieveAll()
             .then(res => {
@@ -157,7 +162,14 @@ export default function Reservation() {
     }
 
     const create = (reservation) => {
-        console.log(reservation)
+
+        if (selectedPatient.name == '') {
+            alert("환자를 선택해주세요.");
+            return;
+        } else if (selectedTime.time == '') {
+            alert("예약 시간을 선택해주세요.");
+            return;
+        }
         reservationService.create(reservation)
             .then(res => {
                 let _time = {
@@ -165,14 +177,16 @@ export default function Reservation() {
                     time: reservation.revTime
                 }
                 console.log(reservation.patientNo + '님의 정보가 성공적으로 등록되었습니다.');
-                timeService.updateTime(_time);
-                alert(`${reservation.name}님이 예약되었습니다.`)
-                setReload(!reload);
+                timeService.updateTime(_time).then(res => {
+                    retrieveTime();
+                    alert(`${reservation.name}님이 예약되었습니다.`)
+                });
             })
             .catch(err => {
                 console.log('create() 에러', err);
             });
-
+            setReload(!reload);
+            onReset();
     };
 
     return (
