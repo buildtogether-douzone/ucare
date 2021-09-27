@@ -10,7 +10,7 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Editor } from 'primereact/editor';
 import boardService from '../../service/boardService';
-import '../../assets/scss/BoardTable.scss';
+import styles from  '../../assets/scss/BoardTable.scss';
 
 const Board = React.forwardRef((props, ref) => {
 
@@ -174,7 +174,7 @@ const Board = React.forwardRef((props, ref) => {
 
     const coltemplate = (rowData) => {
         return <div>
-            <a  onClick={()=>rowColumnClick(rowData)}>{rowData.title}</a>
+            <a className={styles.board_button} onClick={()=>rowColumnClick(rowData)}>{rowData.title}</a>
         </div>;
     }
 

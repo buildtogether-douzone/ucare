@@ -5,6 +5,7 @@
         }
     }
 
+
     .p-progressbar {
         height: .5rem;
         background-color: #D8DADC;
@@ -345,4 +346,13 @@
             }
         }
     }
+}
+
+.board_button{
+    &:hover {
+      text-decoration: underline;
+      text-underline-position: under;
+      color: #660099;
+    }
+
 }
