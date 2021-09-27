@@ -27,6 +27,7 @@ export default function Reservation() {
     let emptyTime = {
         patientNo: null,
         timeNo: null,
+        time: '',
         name: '',
         ssn: '',
         telNo: ''
@@ -116,7 +117,7 @@ export default function Reservation() {
     }
 
     const onTimeChange = (e) => {
-        setSelectedTime(e.value);
+        if(e.value != null) setSelectedTime(e.value);
     }
 
     const monthNavigatorTemplate = (e) => {

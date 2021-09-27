@@ -30,6 +30,7 @@ module.exports = (env) => ({
     },
     devtool: "eval-source-map",
     devServer: {
+        disableHostCheck: true,
         contentBase: path.resolve('ucare_frontend/public'),
         watchContentBase: true,
         host: "0.0.0.0",
