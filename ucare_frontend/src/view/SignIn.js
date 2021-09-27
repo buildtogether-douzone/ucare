@@ -96,6 +96,8 @@ export default function SignInSide({ history }) {
         sessionStorage.setItem('user_no', decoded.userNo);
         sessionStorage.setItem('role', decoded.role);
         localStorage.setItem("authorization", res.headers.authorization);
+        check ? (localStorage.setItem('id', id), localStorage.setItem('checked', true)) :
+                (localStorage.removeItem('id'), localStorage.removeItem('checked', false))
         
         history.push(decoded.role=='관리자'? '/admin/main' :
                      decoded.role=='의사' ? '/doctor/main' :
@@ -111,8 +113,7 @@ export default function SignInSide({ history }) {
   }
 
   const remember = (e) => {
-      e.target.checked ? (localStorage.setItem('id', id), localStorage.setItem('checked', true), setCheck(true) ): 
-                          (localStorage.removeItem('id'), localStorage.removeItem('checked', false), setCheck(false));
+      e.target.checked ? setCheck(true) : setCheck(false);
   }
 
   return (
