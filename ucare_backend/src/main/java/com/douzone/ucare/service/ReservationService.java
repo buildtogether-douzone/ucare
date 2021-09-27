@@ -23,6 +23,10 @@ public class ReservationService {
 		return reservationRepository.retrieveAll();
 	}
 	
+	public int update(Long revNo) {
+		return reservationRepository.update(revNo);
+	}
+	
 	public int delete(Long revNo) {
 	return reservationRepository.delete(revNo);
 	}

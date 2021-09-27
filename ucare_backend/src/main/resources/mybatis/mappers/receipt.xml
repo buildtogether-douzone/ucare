@@ -14,7 +14,6 @@
 				user_no, 
 				patient_no, 
 				accept_yn,
-				overlap,
 				state,
 				diagnosis_time
 			)
@@ -28,7 +27,6 @@
 			(SELECT user_no FROM ucare.user WHERE id = #{userId } ),
 			#{patientNo },
 			'N',
-			'true',
 			'careWait',
 			(SELECT MIN(time) FROM ucare.time WHERE date = TO_DATE(TO_CHAR(now(), 'YYYY-MM-DD'), 'YYYY-MM-DD') AND status = false)
 		)
