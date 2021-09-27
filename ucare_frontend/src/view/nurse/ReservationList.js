@@ -11,6 +11,7 @@ import { Dialog } from 'primereact/dialog';
 import reservationService from '../../service/reservationService';
 import timeService from '../../service/timeService'
 import receiptService from '../../service/receiptService';
+import SockJsClient from 'react-stomp';
 
 import { useRecoilState } from 'recoil';
 import { reloadState } from '../../recoil/atom/nurseAtom';
@@ -40,6 +41,7 @@ export default function ReservationList() {
     const [itemDialog, setItemDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState('');
     const dt = useRef(null);
+    const $websocket = useRef(null);
 
     const [reload, setReload] = useRecoilState(reloadState);
 
@@ -132,7 +134,12 @@ export default function ReservationList() {
         receiptService.createRev(receipt)
           .then(res => {
             console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
-              //window.location.reload();
+            $websocket.current.sendMessage('/Doctor');
+            $websocket.current.sendMessage('/Nurse');
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
           })
           .catch(err => {
             console.log('create() 에러', err);
@@ -245,6 +252,11 @@ export default function ReservationList() {
 
     return (
         <div className="datatable-filter-demo">
+            <SockJsClient
+                url="http://localhost:8080/ucare_backend/start"
+                topics={['/topics/reservation']}
+                onMessage={msg => { console.log(msg); }}
+                ref={$websocket} />
             <div className="card">
                 <DataTable ref={dt} value={reservations} paginator rows={10}
                     header={header} className="p-datatable-customers"

@@ -323,7 +323,7 @@ const Row = React.forwardRef((props, ref) => {
       <SockJsClient
         url="http://localhost:8080/ucare_backend/start"
         topics={['/topics/nurse']}
-        onMessage={msg => { console.log(msg); }}
+        onMessage={msg => { null }}
         ref={$websocket} />
       <TableRow className={classes.rowStyle}>
         <TableCell style={{ textAlign: 'center', padding: '10px' }}>
