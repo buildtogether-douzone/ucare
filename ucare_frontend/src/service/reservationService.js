@@ -11,6 +11,10 @@ class reservationService {
     return axios.get(RESERVATION_API_BASE_URL + '/retrieveAll', { headers: { Authorization: localStorage.getItem("authorization") }});
   }
 
+  update(data){
+    return axios.put(RESERVATION_API_BASE_URL + '/update/' + data, null, { headers: { Authorization: localStorage.getItem("authorization") }})
+  }
+
   delete(revNo) {
     return axios.delete(RESERVATION_API_BASE_URL + '/delete/' + revNo, { headers: { Authorization: localStorage.getItem("authorization") }});
   }

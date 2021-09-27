@@ -19,7 +19,7 @@
 		)
 	</insert>
 	
-		<select id="retrieveAll" resultType="reservationvo" >
+	<select id="retrieveAll" resultType="reservationvo" >
 		SELECT 
 			A.rev_no AS revNo, 
 			A.rev_date AS revDate,
@@ -34,10 +34,18 @@
 				ucare.reservation A
 			INNER JOIN ucare.patient B ON
 				A.patient_no = B.patient_no
+			WHERE receipt_yn = false
 			ORDER BY A.rev_no DESC
 	</select>
 	
-		<delete id="delete" parameterType="Long">
+	<update id="update" parameterType="Long">
+			UPDATE  ucare.reservation
+			   SET 
+			   		receipt_yn = true
+			WHERE rev_no = #{revNo }
+	</update>
+	
+	<delete id="delete" parameterType="Long">
 		DELETE
 		  FROM ucare.reservation
 		 WHERE rev_no = #{revNo }

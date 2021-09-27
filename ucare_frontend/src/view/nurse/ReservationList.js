@@ -20,6 +20,7 @@ export default function ReservationList() {
 
     let emptyItem = {
         patientNo: null,
+        revNo: null,
         name: '',
         insurance: ''
     };
@@ -40,6 +41,7 @@ export default function ReservationList() {
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [itemDialog, setItemDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState('');
+    const [value, setValue] = useState('');
     const dt = useRef(null);
     const $websocket = useRef(null);
 
@@ -60,6 +62,17 @@ export default function ReservationList() {
         retrieveAll();
         dt.current.filter(date, 'revDate', 'custom');
     }, [reload]);
+
+    useEffect(() => {
+        reservationService.retrieveAll()
+            .then(res => {
+                console.log('success!!');
+                setReservations(res.data);
+            })
+            .catch(err => {
+                console.log('retrieveAll() Error!', err);
+        });
+    }, [value])
 
     const filterDate = (value, filter) => {
         if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
@@ -134,12 +147,18 @@ export default function ReservationList() {
         receiptService.createRev(receipt)
           .then(res => {
             console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
-            $websocket.current.sendMessage('/Doctor');
-            $websocket.current.sendMessage('/Nurse');
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
+            reservationService.update(reservation.revNo)
+                .then(res => {
+                    $websocket.current.sendMessage('/Doctor');
+                    $websocket.current.sendMessage('/Nurse');
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+                })
+                .catch(err => {
+                    console.log('update() 에러', err);
+                });
           })
           .catch(err => {
             console.log('create() 에러', err);
@@ -254,8 +273,8 @@ export default function ReservationList() {
         <div className="datatable-filter-demo">
             <SockJsClient
                 url="http://localhost:8080/ucare_backend/start"
-                topics={['/topics/reservation']}
-                onMessage={msg => { console.log(msg); }}
+                topics={['/topics/nurse']}
+                onMessage={msg => { setValue(msg) }}
                 ref={$websocket} />
             <div className="card">
                 <DataTable ref={dt} value={reservations} paginator rows={10}
