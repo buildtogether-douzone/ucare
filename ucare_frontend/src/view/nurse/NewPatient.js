@@ -141,7 +141,7 @@ export default function NewPatient() {
   const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
   const hasNotValidError = () =>
-    regex.test(email) ? false : true; 
+    email != '' ? (regex.test(email) ? false : true) : false; 
 
 
   const onReset = () => {
