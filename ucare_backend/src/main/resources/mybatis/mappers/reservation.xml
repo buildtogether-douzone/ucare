@@ -38,11 +38,24 @@
 			ORDER BY A.rev_no DESC
 	</select>
 	
+	<select id="retrieveByDuplication" resultType="reservationvo" >
+		SELECT 
+			rev_no AS revNo, 
+			rev_date AS revDate,
+			rev_time AS revTime,
+			ins_dt AS insDt,
+			patient_no AS patientNo
+		FROM
+			ucare.reservation
+		WHERE rev_date = TO_DATE(#{revDate }, 'YYYY-MM-DD')
+		  AND patient_no = #{patientNo }
+	</select>
+	
 	<update id="update" parameterType="Long">
-			UPDATE  ucare.reservation
-			   SET 
-			   		receipt_yn = true
-			WHERE rev_no = #{revNo }
+		UPDATE ucare.reservation
+			SET 
+			  receipt_yn = true
+		WHERE rev_no = #{revNo }
 	</update>
 	
 	<delete id="delete" parameterType="Long">

@@ -122,7 +122,7 @@ export default function Reservation() {
     }
 
     const onTimeChange = (e) => {
-        if(e.value != null) setSelectedTime(e.value);
+        if (e.value != null) setSelectedTime(e.value);
     }
 
     const monthNavigatorTemplate = (e) => {
@@ -139,14 +139,7 @@ export default function Reservation() {
         if (dateFormat(today) > dateFormat(event.target.value)) {
             toast.current.show({ severity: 'error', summary: '알림', detail: '금일 이후 날짜를 선택해주세요.', life: 3000 });
             setDate(today);
-            timeService.retrieveAll(dateFormat(today))
-                .then(res => {
-                    console.log('success!!');
-                    setTime(res.data);
-                })
-                .catch(err => {
-                    console.log('retrieve() Error!', err);
-                });
+            setTime([]);
         }
         else {
             setDate(event.target.value);
@@ -162,31 +155,35 @@ export default function Reservation() {
     }
 
     const create = (reservation) => {
-
         if (selectedPatient.name == '') {
-            alert("환자를 선택해주세요.");
+            toast.current.show({ severity: 'error', summary: '알림', detail: '환자를 선택해주세요.', life: 3000 });
             return;
         } else if (selectedTime.time == '') {
-            alert("예약 시간을 선택해주세요.");
+            toast.current.show({ severity: 'error', summary: '알림', detail: '예약시간을 선택해주세요.', life: 3000 });
             return;
         }
         reservationService.create(reservation)
             .then(res => {
-                let _time = {
-                    date: reservation.revDate,
-                    time: reservation.revTime
+                if(res.data != 0) {
+                    let _time = {
+                        date: reservation.revDate,
+                        time: reservation.revTime
+                    }
+
+                    console.log(reservation.patientNo + '님의 정보가 성공적으로 등록되었습니다.');
+                    timeService.updateTime(_time).then(res => {
+                        retrieveTime();
+                        toast.current.show({ severity: 'success', summary: '알림', detail: `${reservation.name}님이 예약되었습니다.`, life: 3000 });
+                    });
                 }
-                console.log(reservation.patientNo + '님의 정보가 성공적으로 등록되었습니다.');
-                timeService.updateTime(_time).then(res => {
-                    retrieveTime();
-                    alert(`${reservation.name}님이 예약되었습니다.`)
-                });
+                else
+                    toast.current.show({ severity: 'error', summary: '알림', detail: '이미 금일 예약된 환자입니다.', life: 3000 });
             })
             .catch(err => {
                 console.log('create() 에러', err);
             });
-            setReload(!reload);
-            onReset();
+        setReload(!reload);
+        onReset();
     };
 
     return (
@@ -238,7 +235,6 @@ export default function Reservation() {
                     </Card>
                 </div>
             </div>
-
         </div>
     )
 }

@@ -16,7 +16,12 @@ public class ReservationService {
 	private ReservationRepository reservationRepository;
 
 	public int create(ReservationVo reservation) {
-		return reservationRepository.create(reservation);
+		List<ReservationVo> list = reservationRepository.retrieveByDuplication(reservation);
+		
+		if(list.size() != 0) 
+			return 0;
+		else 
+			return reservationRepository.create(reservation);
 	}
 
 	public List<ReservationVo> retrieveAll() {
@@ -28,7 +33,7 @@ public class ReservationService {
 	}
 	
 	public int delete(Long revNo) {
-	return reservationRepository.delete(revNo);
+		return reservationRepository.delete(revNo);
 	}
 
 }
