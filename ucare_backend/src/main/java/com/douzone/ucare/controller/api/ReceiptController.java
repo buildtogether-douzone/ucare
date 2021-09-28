@@ -47,8 +47,4 @@ public class ReceiptController {
 		return new ResponseEntity<>(receiptService.createRev(receipt), HttpStatus.OK);
 	}
 	
-	@GetMapping("/retrieveOverlap/{receiptOverlap}")
-	public ResponseEntity<?> retrieveOverlap(@PathVariable("receiptOverlap") ReceiptVo receipt) {
-		return new ResponseEntity<>(receiptService.retrieveOverlap(receipt), HttpStatus.OK);
-	}
 }

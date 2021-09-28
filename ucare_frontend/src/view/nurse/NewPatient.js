@@ -84,6 +84,7 @@ export default function NewPatient() {
   const [visitDate, setVisitDate] = useState('');
   const [remark, setRemark] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [count, setCount] = useState('');
   const [reload, setReload] = useRecoilState(reloadState);
 
   useEffect(() => {
@@ -123,6 +124,11 @@ export default function NewPatient() {
       setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
     }
   }, [ssn, telNo, gender, age])
+  
+  const nameRegex = /^[가-힣]{2,15}$/;
+  const nameValidError = () =>
+    name != '' ? (nameRegex.test(name) ? false : true) : false; 
+
 
   const telNoChange = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
@@ -130,17 +136,16 @@ export default function NewPatient() {
       setTelNo(e.target.value);
     }
   };
-
+  
   const ssnChange = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
     if (regex.test(e.target.value)) {
       setSSN(e.target.value);
     }
   };
-
+  
   const regex = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
-
-  const hasNotValidError = () =>
+  const hasNotValidError = () => 
     email != '' ? (regex.test(email) ? false : true) : false; 
 
 
@@ -169,7 +174,11 @@ export default function NewPatient() {
     } else if (telNo == '') {
       alert("연락처를 입력해주세요.")
       return;
-    }
+    };
+
+    let data = {
+      ssn: ssn
+    };
 
     let patient = {
       name: name,
@@ -187,16 +196,27 @@ export default function NewPatient() {
       userId: window.sessionStorage.getItem('user')
     }
 
+    patientService.ssnOverlap(data)
+      .then(res => {
+        if (res.data != 1) {
     patientService.create(patient)
       .then(res => {
         console.log(patient.name + '님의 정보가 성공적으로 등록되었습니다.');
         alert(`${patient.name}님이 등록되었습니다.`)
         //window.location.reload();
-        setReload(!reload);
       })
       .catch(err => {
         console.log('create() 에러', err);
       });
+        } else {
+          alert("주민등록번호를 다시 입력해주세요.");
+        }
+      })
+      .catch(err => {
+        console.log('check() 에러', err);
+      }); 
+      
+      setReload(!reload);
       onReset();
   };
 
@@ -251,6 +271,10 @@ export default function NewPatient() {
                 autoComplete="name"
                 value={name}
                 onChange={(e) => { setName(e.target.value) }}
+                error={nameValidError()}
+                helperText={
+                  nameValidError() ? "특수문자,영어,숫자는 사용할수 없습니다." : null
+                }
               />
             </Grid>
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>

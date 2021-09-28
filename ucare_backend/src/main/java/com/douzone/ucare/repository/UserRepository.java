@@ -51,6 +51,7 @@ public class UserRepository {
 	public UserVo findUser(String username) {
 		return sqlSession.selectOne("user.findUser", username);
 	}
+	
 	public List<UserVo> retrieveAll() {
 		return sqlSession.selectList("user.retrieveAll");
 	}

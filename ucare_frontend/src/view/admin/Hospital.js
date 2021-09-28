@@ -70,15 +70,17 @@ export default function Hospital() {
     const [imageURL, setImageURL] = useState('');
     const [file, setFile] = useState('');
 
+    const regex = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
+
     useEffect(() => {
         hospitalService.fetchHospitalInfo()
             .then(res => {
                 setHospitalName(res.data.hospitalName);
                 setHeadName(res.data.headName);
                 setAddress(res.data.address);
-                setTelNo(res.data.telNo);
                 setBasicPrice(res.data.basicPrice);
                 setSiteAddress(res.data.siteAddress);
+                setTelNo(res.data.telNo);
                 setEmail(res.data.email);
                 setFaxNo(res.data.faxNo);
                 setHeadSpeak(res.data.headSpeak);
@@ -88,6 +90,15 @@ export default function Hospital() {
                 console.log('fetchHospitalInfo error', err);
             });
     }, []);
+
+    useEffect(() => {
+        if (telNo.length === 10) {
+            setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
+          }
+        if (telNo.length === 13) {
+            setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+          }
+    }, [telNo])
 
     const handleFileOnChange = (e) => {
         e.preventDefault();
@@ -127,6 +138,13 @@ export default function Hospital() {
           console.log('save hospital data() 에러', err);
         });
     };
+
+    const telNoChange = (e) => {
+        const regex = /^[0-9\b -]{0,13}$/;
+        if (regex.test(e.target.value)) {
+          setTelNo(e.target.value);
+        }
+      }
 
     return (
         <React.Fragment>
@@ -170,7 +188,7 @@ export default function Hospital() {
                         placeholder="병원 전화번호" 
                         className={classes.textStyle}
                         value={telNo || ''} 
-                        onChange={(e) => setTelNo(e.target.value)}/>
+                        onChange={telNoChange}/>
                 </div>
                 <div className={classes.Line}>
                     <div className={classes.addon}>

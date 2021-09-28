@@ -39,7 +39,4 @@ public class ReceiptService {
 		return receiptRepository.createRev(receipt);
 	}
 	
-	public List<ReceiptVo> retrieveOverlap(ReceiptVo receipt) {
-		return receiptRepository.retrieveOverlap(receipt);
-	}
 }

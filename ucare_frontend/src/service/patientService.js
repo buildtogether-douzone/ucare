@@ -22,6 +22,10 @@ class patientService {
   updateDiagnosis(data){
     return axios.put(PATIENT_API_BASE_URL + '/updateDiagnosis', data, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
+
+  ssnOverlap(data){
+    return axios.post(PATIENT_API_BASE_URL + '/ssnOverlap', data, { headers: { Authorization: localStorage.getItem("authorization") }});
+  }
 }
 
 export default new patientService();

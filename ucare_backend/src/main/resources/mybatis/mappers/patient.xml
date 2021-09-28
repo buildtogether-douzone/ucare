@@ -109,4 +109,10 @@
 		 WHERE disease_no = #{diseaseNo }
 	</delete>
 	
+	<select id="ssnOverlap" parameterType="patientvo" resultType="int">
+	   	SELECT count(ssn) AS ssnCount
+	   		FROM ucare.patient
+	   	WHERE ssn = #{ssn }
+	</select>
+	
 </mapper>
