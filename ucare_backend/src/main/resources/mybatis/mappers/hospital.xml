@@ -3,7 +3,6 @@
 <mapper namespace="hospital">
 	
 	<select id="findAll" resultType="hospitalvo" >
-		<![CDATA[
 			SELECT
 				hospital_no AS hospitalNo,
 				hospital_nm AS hospitalName,
@@ -17,7 +16,6 @@
 				fax_no AS faxNo,
 				hd_speak AS headSpeak	
 			 From ucare.hospital
-		]]>
 	</select>
 	
 	<update id="update" parameterType="hospitalvo">

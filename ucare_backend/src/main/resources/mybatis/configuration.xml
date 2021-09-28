@@ -30,6 +30,7 @@
 		<mapper resource="mybatis/mappers/holiday.xml" />
 		<mapper resource="mybatis/mappers/time.xml" />
 		<mapper resource="mybatis/mappers/diagnosis.xml" />
+		<mapper resource="mybatis/mappers/prescription.xml" />
 		<mapper resource="mybatis/mappers/reservation.xml" />
 		<mapper resource="mybatis/mappers/message.xml" />
 	</mappers>

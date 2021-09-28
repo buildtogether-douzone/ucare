@@ -17,6 +17,7 @@ public class ReceiptVo {
 	private Long no;
 	private String state;
 	private String diagnosisTime;
+	private String cureYN;
 	private String overlap;
 
 	public Long getNo() {
@@ -115,12 +116,26 @@ public class ReceiptVo {
 	public void setDiagnosisTime(String diagnosisTime) {
 		this.diagnosisTime = diagnosisTime;
 	}
+	public String getCureYN() {
+		return cureYN;
+	}
+	public void setCureYN(String cureYN) {
+		this.cureYN = cureYN;
+	}
 	public String getOverlap() {
 		return overlap;
 	}
 	public void setOverlap(String overlap) {
 		this.overlap = overlap;
 	}
-
 	
+	@Override
+	public String toString() {
+		return "ReceiptVo [receiptNo=" + receiptNo + ", receiptDt=" + receiptDt + ", receiptTime=" + receiptTime
+				+ ", accept=" + accept + ", bp=" + bp + ", bs=" + bs + ", remark=" + remark + ", insDt=" + insDt
+				+ ", uptNo=" + uptNo + ", uptDt=" + uptDt + ", patientNo=" + patientNo + ", userId=" + userId
+				+ ", name=" + name + ", no=" + no + ", state=" + state + ", diagnosisTime=" + diagnosisTime
+				+ ", cureYN=" + cureYN + ", overlap=" + overlap + "]";
+	}
+
 }

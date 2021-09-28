@@ -5,6 +5,7 @@ import { Calendar } from 'primereact/calendar';
 import { Divider } from 'primereact/divider';
 import { Menu } from 'primereact/menu';
 import { TabView, TabPanel } from 'primereact/tabview';
+import { InputText } from "primereact/inputtext";
 
 import { forwardRef } from 'react';
 import Grid from '@material-ui/core/Grid';
@@ -26,6 +27,9 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Alert from '@material-ui/lab/Alert';
+import PersonIcon from '@material-ui/icons/Person';
+import NoteAddIcon from '@material-ui/icons/NoteAdd';
+import { makeStyles } from '@material-ui/styles';
 
 import { useRecoilState } from 'recoil';
 import { reloadState } from '../../recoil/atom/nurseAtom';
@@ -37,6 +41,7 @@ import hospitalService from '../../service/hospitalService';
 import patientService from '../../service/patientService';
 import diagnosisService from '../../service/diagnosisService';
 import receiptService from '../../service/receiptService';
+import prescriptionService from '../../service/prescriptionService';
 
 import styles from '../../assets/scss/DataScroller.scss';
 
@@ -59,6 +64,48 @@ const tableIcons = {
     ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
+
+const useStyles = makeStyles({
+    textStyle: {
+        height: '50px',
+        width: '300px',
+        marginBottom: '20px'
+    },
+    addon: {
+        backgroundColor: "#DFDFDF",
+        borderBottomLeftRadius: 10,
+        borderTopLeftRadius: 10,
+        textAlign: 'center',
+        paddingTop: '12px',
+        width: '15%',
+        marginBottom: '20px'
+    },
+    image: {
+        display: 'block',
+        top: 80,
+        right: 80,
+        float: 'left',
+        marginBottom: '40px',
+        marginRight: '80px'
+    },
+    profile: {
+        display: 'block',
+        width: '200px',
+        height: '230px',
+        border: '1px solid #AAAAAA',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: '100%, 100%',
+        backgroundPosition: 'center',
+        overflow: 'hidden',
+    },
+    textfiled: {
+        width: '100%'
+    },
+    Line:{
+        display:'flex',
+        flexDirection:'row'
+    }
+})
 
 export default function Prescription() {
 
@@ -100,6 +147,7 @@ export default function Prescription() {
         medicineNm: ''
     }
 
+    const classes = useStyles();
     const [items, setItems] = useState([]);
     const [item, setItem] = useState(emptyItem);
     const [patientItem, setPatientItem] = useState(emptyPatientItem);
@@ -172,24 +220,13 @@ export default function Prescription() {
     ];
 
     useEffect(() => {
-        hospitalService.fetchHospitalInfo()
-            .then(res => {
-                setHospitalItem(res.data);
-            })
-            .catch(err => {
-                console.log('retrieve() Error!', err);
-            });
-        statusService.retrieve(dateFormat(date))
+        prescriptionService.retrieveCureYN(dateFormat(date))
             .then(res => {
                 console.log('success!!');
 
                 for (var i = 0; i < res.data.length; i++) {
-                    if (res.data[i].state === 'care') {
-                        res.data[i].value = '진료중';
-                    } else if (res.data[i].state === 'careWait') {
-                        res.data[i].value = '진료대기중';
-                    } else if (res.data[i].state === 'wait') {
-                        res.data[i].value = '수납대기중';
+                    if (res.data[i].cureYN === 'true') {
+                        res.data[i].value = '처방대기중';
                     } else {
                         res.data[i].value = '완료';
                     }
@@ -202,24 +239,13 @@ export default function Prescription() {
     }, []);
 
     useEffect(() => {
-        hospitalService.fetchHospitalInfo()
-            .then(res => {
-                setHospitalItem(res.data);
-            })
-            .catch(err => {
-                console.log('retrieve() Error!', err);
-            });
-        statusService.retrieve(dateFormat(date))
+        prescriptionService.retrieveCureYN(dateFormat(date))
             .then(res => {
                 console.log('success!!');
 
                 for (var i = 0; i < res.data.length; i++) {
-                    if (res.data[i].state === 'care') {
-                        res.data[i].value = '진료중';
-                    } else if (res.data[i].state === 'careWait') {
-                        res.data[i].value = '진료대기중';
-                    } else if (res.data[i].state === 'wait') {
-                        res.data[i].value = '수납대기중';
+                    if (res.data[i].cureYN === 'true') {
+                        res.data[i].value = '처방대기중';
                     } else {
                         res.data[i].value = '완료';
                     }
@@ -293,19 +319,33 @@ export default function Prescription() {
         return year + '-' + month + '-' + day;
     }
 
-    const menuToggle = (e, data) => {
-        if (data.state === 'wait' || data.state === 'care') {
-            calculatePrice(data);
+    const menuControl = (e, data) => {
+        console.log(data);
+        if (data.cureYN === 'true') {
+            patientService.retrieve(data.patientNo)
+            .then(res => {
+                setPatientItem(res.data);
+                diagnosisService.retrieveByReceiptNo(data.receiptNo)
+                    .then(res => {
+                        setDiagnosisItem(res.data);
+                    })
+                    .catch(err => {
+                        console.log('retrieveByReceiptNo() Error!', err);
+                    })
+            })
+            .catch(err => {
+                console.log('retrieve() Error!', err);
+            });
         }
-        else if (data.state === 'complete')
-            alert("수납완료된 건입니다.");
+        else if (data.cureYN === 'complete')
+            alert("처방완료된 환자입니다.");
         else
             menu.current.toggle(e, setItem(data));
     }
 
     const itemTemplate = (data) => {
         return (
-            <div className={styles.product_item} onContextMenu={(e) => { e.preventDefault(); menuToggle(e, data); }} aria-controls="popup_menu" aria-haspopup>
+            <div className={styles.product_item} onContextMenu={(e) => { menuControl(e, data) }} aria-controls="popup_menu" aria-haspopup>
                 <div className={styles.product_detail}>
                     <div className={styles.product_name}>{data.name}</div>
                     <div className={styles.product_description}>{data.diagnosisTime}</div>
@@ -330,7 +370,7 @@ export default function Prescription() {
     }
 
     const onDateChange = (event) => {
-        statusService.retrieve(dateFormat(event.value))
+        prescriptionService.retrieve(dateFormat(event.value))
             .then(res => {
                 console.log('success!!');
                 setItems(res.data);
@@ -373,14 +413,14 @@ export default function Prescription() {
                                     <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                                 </div>
                             </TabPanel>
-                            <TabPanel header={"처방대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"}>
+                            <TabPanel header={"처방대기" + "(" + items.filter(val => val.cureYN === 'true').length + ")"}>
                                 <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                    <DataScroller value={items.filter(val => val.cureYN === 'true')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                                 </div>
                             </TabPanel>
-                            <TabPanel header={"처방완료" + "(" + items.filter(val => val.state === 'complete').length + ")"}>
+                            <TabPanel header={"처방완료" + "(" + items.filter(val => val.cureYN === 'complete').length + ")"}>
                                 <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items.filter(val => val.state === 'complete')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                    <DataScroller value={items.filter(val => val.cureYN === 'complete')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                                 </div>
                             </TabPanel>
                         </TabView>
@@ -396,6 +436,24 @@ export default function Prescription() {
                                         })}
                                     </Alert>
                                 }
+                            </div>
+                            <div className={classes.Line}>
+                                <div className={classes.addon}>
+                                    <PersonIcon style={{ fontSize: "25px", color: "#616161" }} />
+                                </div>
+                                <InputText
+                                    placeholder="환자명"
+                                    className={classes.textStyle}
+                                    value={patientItem.name}/>
+                            </div>
+                            <div className={classes.Line}>
+                                <div className={classes.addon}>
+                                    <NoteAddIcon style={{ fontSize: "25px", color: "#616161" }} />
+                                </div>
+                                <InputText
+                                    placeholder="질병"
+                                    className={classes.textStyle}
+                                    value={diagnosisItem.diseaseNm}/>
                             </div>
                             <MaterialTable
                                 title="처방"

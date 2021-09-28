@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.douzone.ucare.service.PatientService;
 import com.douzone.ucare.vo.PatientVo;
-import com.douzone.ucare.vo.UserVo;
-
-import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api/patient")
