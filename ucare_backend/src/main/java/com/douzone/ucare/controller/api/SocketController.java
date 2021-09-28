@@ -29,6 +29,11 @@ public class SocketController {
 		webSocket.convertAndSend("/topics/nurse" , Math.random()); 
 	}
 	
+	@MessageMapping("/Reservation") 
+	public void sendToReservation() { 
+		webSocket.convertAndSend("/topics/reservation" , Math.random()); 
+	}
+	
 	@MessageMapping("/Message") 
 	public void sendMessage(String receiveUser) {
 		webSocket.convertAndSend("/topics/message/" + receiveUser , Math.random());
