@@ -115,13 +115,4 @@
 		 WHERE receipt_no = #{receiptNo }    
 	</delete>
 	
-	<select id="retrieveOverlap" parameterType="receiptvo" resultType="receiptvo" >
-			SELECT
-				overlap AS overlap
-			FROM
-				ucare.receipt
-			WHERE receipt_dt = TO_DATE(#{receiptDt },'YYYY-MM-DD')
-			AND patient_no = #{patientNo }
-	</select>
-	
 </mapper>

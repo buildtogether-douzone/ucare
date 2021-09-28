@@ -37,10 +37,7 @@ public class ReceiptRepository {
 	public int createRev(ReceiptVo receipt) {
 		return sqlSession.insert("receipt.createRev", receipt);
 	}
-	
-	public List<ReceiptVo> retrieveOverlap(ReceiptVo receipt) {
-		return sqlSession.selectList("receipt.retrieveOverlap", receipt);
-	}
+
 }
 
 

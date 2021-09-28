@@ -23,6 +23,7 @@ public class PatientVo {
 	private String uptNo;
 	private String uptDt;
 	private String userId;
+	private int ssnCount;
 	
 	public Long getPatientNo() {
 		return patientNo;
@@ -155,6 +156,12 @@ public class PatientVo {
 	}
 	public void setDetailAddress(String detailAddress) {
 		this.detailAddress = detailAddress;
+	}
+	public int getSsnCount() {
+		return ssnCount;
+	}
+	public void setSsnCount(int ssnCount) {
+		this.ssnCount = ssnCount;
 	}
 	
 	

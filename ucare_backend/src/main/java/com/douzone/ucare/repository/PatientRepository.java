@@ -34,6 +34,10 @@ public class PatientRepository {
 		return sqlSession.update("patient.updateDiagnosis", patient);
 	}
 	
+	public int ssnOverlap(PatientVo patient) {
+		return sqlSession.selectOne("patient.ssnOverlap", patient);
+	}
+	
 }
 
 
