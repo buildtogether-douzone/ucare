@@ -125,7 +125,7 @@ export default function NewPatient() {
     }
   }, [ssn, telNo, gender, age])
   
-  const nameRegex = /^[가-힣]{2,15}$/;
+  const nameRegex = /^[가-힣a-zA-Z]+$/; 
   const nameValidError = () =>
     name != '' ? (nameRegex.test(name) ? false : true) : false; 
 
@@ -144,7 +144,7 @@ export default function NewPatient() {
     }
   };
   
-  const regex = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
+  const regex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
   const hasNotValidError = () => 
     email != '' ? (regex.test(email) ? false : true) : false; 
 
@@ -273,7 +273,7 @@ export default function NewPatient() {
                 onChange={(e) => { setName(e.target.value) }}
                 error={nameValidError()}
                 helperText={
-                  nameValidError() ? "특수문자,영어,숫자는 사용할수 없습니다." : null
+                  nameValidError() ? "특수문자, 숫자, 띄어쓰기는 사용할수 없습니다." : null
                 }
               />
             </Grid>
