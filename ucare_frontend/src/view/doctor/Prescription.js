@@ -102,7 +102,6 @@ export default function Prescription() {
 
     const [items, setItems] = useState([]);
     const [item, setItem] = useState(emptyItem);
-    const [hospitalItem, setHospitalItem] = useState(emptyHospitalItem);
     const [patientItem, setPatientItem] = useState(emptyPatientItem);
     const [diagnosisItem, setDiagnosisItem] = useState(emptyDiagnosisItem);
     const [price, setPrice] = useState('');
