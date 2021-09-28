@@ -317,7 +317,7 @@ const Board = React.forwardRef((props, ref) => {
                     <Editor headerTemplate={head} style={{ height: '320px' }} value={item.contents} onTextChange={(e) => onInputTextChange(e, 'contents')} readOnly={true}/>
                 </div>
                 <div className="p-field">
-                    파일 다운로드: <a href={item.url} download>{URLName}</a>
+                    파일 다운로드: <a href={item.url} download={URLName}>{URLName}</a>
                 </div>
             </Dialog>
 
