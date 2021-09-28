@@ -226,7 +226,7 @@ export default function ReservationList() {
                     time: reservation.revTime
                 }
                 setDeleteItemDialog(false);
-                //window.location.reload();
+                $websocket.current.sendMessage('/Reservation');
                 timeService.updateDelete(_time);
                 setReload(!reload);
             })

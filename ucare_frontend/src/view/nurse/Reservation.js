@@ -12,6 +12,7 @@ import patientService from '../../service/patientService';
 import reservationService from '../../service/reservationService';
 import ReservationList from './ReservationList';
 
+import SockJsClient from 'react-stomp';
 import { useRecoilState } from 'recoil';
 import { reloadState } from '../../recoil/atom/nurseAtom';
 
@@ -50,8 +51,10 @@ export default function Reservation() {
     const [date, setDate] = useState(new Date());
 
     const [reload, setReload] = useRecoilState(reloadState);
+    const [value, setValue] = useState('');
 
     const toast = useRef(null);
+    const $websocket = useRef(null);
 
     let reservation = {
         patientNo: selectedPatient.patientNo,
@@ -92,6 +95,10 @@ export default function Reservation() {
         retrieveAll();
         retrieveTime();
     }, []);
+
+    useEffect(() => {
+        retrieveTime();
+    }, [value])
 
     const onPatientChange = (e) => {
         setSelectedPatient(e.value);
@@ -188,6 +195,11 @@ export default function Reservation() {
 
     return (
         <div className="p-grid" style={{ margin: '10px' }}>
+            <SockJsClient
+                url="http://localhost:8080/ucare_backend/start"
+                topics={['/topics/reservation']}
+                onMessage={msg => { setValue(msg) }}
+                ref={$websocket} />
             <Toast ref={toast} />
             <div className="p-col-12 p-lg-6">
                 <div className="card p-fluid">
