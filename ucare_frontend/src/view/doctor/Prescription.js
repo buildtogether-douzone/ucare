@@ -58,7 +58,7 @@ const tableIcons = {
     SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
     ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-  };
+};
 
 export default function Prescription() {
 
@@ -70,19 +70,6 @@ export default function Prescription() {
         diagnosisTime: '',
         value: ''
     };
-
-    let emptyHospitalItem = {
-        hospitalNo: null,
-        address: '',
-        basicPrice: null,
-        email: '',
-        faxNo: '',
-        headName: '',
-        hospitalName: '',
-        image: '',
-        siteAddress: '',
-        telNo: ''
-    }
 
     let emptyPatientItem = {
         patientNo: null,
@@ -125,16 +112,17 @@ export default function Prescription() {
     const [receiptCompleteDialog, setReceiptCompleteDialog] = useState(false);
 
     var columns = [
-        {title: "PatientNo", field: "patientNo", hidden: true},
-        {title: "No.", field: "rowNo", editable: 'never'},
-        {title: "처방약", field: "medicineNm", editable: 'never'},
-        {title: "투여량", field: "dosage", editable: 'never'},
-        {title: "투약일수", field: "dosingDay", lookup: { 관리자: '관리자', 의사: '의사', 간호사: '간호사' }},
-        {title: "용법", field: "usage", lookup: { true: '사용', false: '미사용' }}
-      ]
-      const [data, setData] = useState([]); //table data
-      const [iserror, setIserror] = useState(false);
-      const [errorMessages, setErrorMessages] = useState([]);
+        { title: "PatientNo", field: "patientNo", hidden: true },
+        { title: "No.", field: "rowNo", editable: 'never' },
+        { title: "처방약", field: "medicineNm", editable: 'never' },
+        { title: "투여량", field: "dosage", editable: 'never' },
+        { title: "투약일수", field: "dosingDay", lookup: { 관리자: '관리자', 의사: '의사', 간호사: '간호사' } },
+        { title: "용법", field: "usage", lookup: { true: '사용', false: '미사용' } }
+    ]
+
+    const [data, setData] = useState([]); //table data
+    const [iserror, setIserror] = useState(false);
+    const [errorMessages, setErrorMessages] = useState([]);
 
     const [reload, setReload] = useRecoilState(reloadState);
     const [value, setValue] = useState('');
@@ -244,48 +232,6 @@ export default function Prescription() {
             });
     }, [reload, value]);
 
-    const calculatePrice = (data) => {
-        let resultPrice = hospitalItem.basicPrice;
-
-        diagnosisService.retrieveByReceiptNo(data.receiptNo)
-            .then(res => {
-                console.log('success!!');
-                setDiagnosisItem(res.data);
-
-                if (res.data.cureYN === 'true')
-                    resultPrice += 10000;
-
-                patientService.retrieve(data.patientNo)
-                    .then(res => {
-                        console.log('success!!');
-                        setPatientItem(res.data);
-
-                        if (res.data.age < 7 || res.data.age >= 65)
-                            resultPrice -= 2000;
-
-                        if (data.diagnosisTime >= '09:00:00' && data.diagnosisTime < '12:00:00')
-                            resultPrice *= 0.9;
-
-                        if (data.diagnosisTime > '18:00:00' && data.diagnosisTime < '24:00:00')
-                            resultPrice *= 1.1;
-
-                        if (res.data.insurance === "Y") {
-                            setInsurancePrice(resultPrice * 0.25);
-                            resultPrice *= 0.75;
-                        }
-
-                        setItem(data);
-                        setPrice(resultPrice);
-                    })
-                    .catch(err => {
-                        console.log('retrieve() Error!', err);
-                    });
-            })
-            .catch(err => {
-                console.log('retrieve() Error!', err);
-            });
-    }
-
     const receiptComplete = () => {
         let _items = [...items];
         let _item = { ...item };
@@ -360,7 +306,7 @@ export default function Prescription() {
 
     const itemTemplate = (data) => {
         return (
-            <div className={styles.product_item} onContextMenu={(e) => { e.preventDefault(); menuToggle(e, data);}} aria-controls="popup_menu" aria-haspopup>
+            <div className={styles.product_item} onContextMenu={(e) => { e.preventDefault(); menuToggle(e, data); }} aria-controls="popup_menu" aria-haspopup>
                 <div className={styles.product_detail}>
                     <div className={styles.product_name}>{data.name}</div>
                     <div className={styles.product_description}>{data.diagnosisTime}</div>
@@ -422,23 +368,23 @@ export default function Prescription() {
             <div className="card">
                 <div className="p-grid">
                     <div className="p-col-5">
-                    <TabView style={{ justifyContent: 'center', padding: '20px' }}>
-                        <TabPanel header={"전체" + "(" + items.length + ")"}>
-                            <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
-                            </div>
-                        </TabPanel>
-                        <TabPanel header={"처방대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"}>
-                            <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
-                            </div>
-                        </TabPanel>
-                        <TabPanel header={"처방완료" + "(" + items.filter(val => val.state === 'complete').length + ")"}>
-                            <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                <DataScroller value={items.filter(val => val.state === 'complete')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
-                            </div>
-                        </TabPanel>
-                    </TabView>
+                        <TabView style={{ justifyContent: 'center', padding: '20px' }}>
+                            <TabPanel header={"전체" + "(" + items.length + ")"}>
+                                <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                    <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                </div>
+                            </TabPanel>
+                            <TabPanel header={"처방대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"}>
+                                <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                    <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                </div>
+                            </TabPanel>
+                            <TabPanel header={"처방완료" + "(" + items.filter(val => val.state === 'complete').length + ")"}>
+                                <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                    <DataScroller value={items.filter(val => val.state === 'complete')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                </div>
+                            </TabPanel>
+                        </TabView>
                     </div>
                     <Divider layout="vertical" />
                     <div className="p-col-6">
