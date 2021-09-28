@@ -278,7 +278,6 @@ const Row = React.forwardRef((props, ref) => {
 
     receiptService.create(receipt)
       .then(res => {
-        console.log(res);
         if (res.data != 0) {
           console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
           timeService.update(dateFormat(date)).then(res => {

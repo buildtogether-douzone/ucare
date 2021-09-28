@@ -12,6 +12,7 @@ import Paper from '@material-ui/core/Paper';
 import patientService from '../../service/patientService';
 import SearchBar from "material-ui-search-bar";
 import Grid from '@material-ui/core/Grid';
+import SearchIcon from '@material-ui/icons/Search';
 import Row from './Row';
 import PatientPage from './PatientPage';
 import NewPatient from './NewPatient';
@@ -22,6 +23,7 @@ import { reloadState } from '../../recoil/atom/nurseAtom';
 const useStyles2 = makeStyles((theme) => ({
   table: {
     minWidth: 500,
+    minHeight: 700
   },
   paper: {
     marginTop: theme.spacing(3),
@@ -39,6 +41,7 @@ export default function PatientList() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [search, setSearch] = useState('');
+  const [searchBar, setSearchBar] = useState(false);
 
   const [reload, setReload] = useRecoilState(reloadState);
 
@@ -82,20 +85,21 @@ export default function PatientList() {
       </Grid>
       <Grid item xs={7}>
         <div className={classes.paper}>
-          <SearchBar
-            value={search}
-            onChange={(value) => setSearch(value)}
-            onCancelSearch={() => setSearch('')}
-            style={{
-              margin: '0 0 10px auto',
-              maxWidth: 800,
-            }}
-          />
+          {searchBar ?
+            <SearchBar
+              value={search}
+              onChange={(value) => setSearch(value)}
+              onCancelSearch={() => setSearch('')}
+              style={{
+                margin: '0 0 10px auto',
+                maxWidth: 800,
+              }}
+            /> : null}
           <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="collapsible table">
               <TableHead>
                 <TableRow style={{ backgroundColor: '#DFDFDF' }}>
-                  <TableCell style={{ width: '10%', padding: '10px' }} />
+                  <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }} onClick={() => setSearchBar(!searchBar)}><SearchIcon style={{ fontSize: "25px", color: "#616161" }} /></TableCell>
                   <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }}>환자번호</TableCell>
                   <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }}>이름</TableCell>
                   <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }}>성별/나이</TableCell>
