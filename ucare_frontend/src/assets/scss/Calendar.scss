@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-body {
+.body {
   font-family: NanumSquare, '나눔 스퀘어', sans-serif;
 }
 
@@ -33,6 +33,7 @@ body {
 
 .nav_btn {
   border: none;
+  float: right;
   font-size: 16px;
   background-color: transparent;
   padding: 1%;
@@ -49,6 +50,7 @@ body {
   position: relative;
   height: 130px;
   padding: 5px;
+  padding-top: 20%;
   text-align: center;
 }
 
@@ -101,6 +103,7 @@ em.text {
   position: relative;
   height: 130px;
   padding: 5px;
+  padding-top: 20%;
   text-align: center;
   color: #e7e7e7;
 }

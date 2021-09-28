@@ -173,14 +173,14 @@ export default function CalHoliday() {
   }
 
   return (
-    <div style={{ padding: '10%' }}>
+    <div style={{ padding: '1%' }}>
       {reload}
-        <Button label="저장" icon="pi pi-check" style={{ float: 'right' }} className="p-button-text" onClick={() => { saveItems() }}  />
       <table className={styles.calendar}>
         <caption>
+          <Button label="저장" icon="pi pi-check" style={{ float: 'right', marginRight: '5%' }} className="p-button-text" onClick={() => { saveItems() }}  />
+          <button className={styles.nav_btn} style={{ marginRight: '32%' }} onClick={() => { addMonth() }}>&gt;</button>
+          <span style={{ padding: '1%', float:'right' }}>{today.format('YYYY 년 MM 월')}</span>
           <button className={styles.nav_btn} onClick={() => { subtractMonth() }}>&lt;</button>
-          <span style={{ padding: '1%' }}>{today.format('YYYY 년 MM 월')}</span>
-          <button className={styles.nav_btn} onClick={() => { addMonth() }}>&gt;</button>
         </caption>
         <thead>
           <tr>
