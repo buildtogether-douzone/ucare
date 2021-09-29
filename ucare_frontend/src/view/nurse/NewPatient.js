@@ -240,6 +240,7 @@ export default function NewPatient() {
         setCheckSSN(true);
         alert(`${patient.name}님이 등록되었습니다.`)
         //window.location.reload();
+        setReload(!reload);
       })
       .catch(err => {
         console.log('create() 에러', err);
@@ -252,7 +253,6 @@ export default function NewPatient() {
         console.log('check() 에러', err);
       }); 
       
-      setReload(!reload);
       onReset();
   };
 
