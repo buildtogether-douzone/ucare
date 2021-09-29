@@ -9,6 +9,7 @@ import { TabView, TabPanel } from 'primereact/tabview';
 import { Checkbox } from 'primereact/checkbox';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { MultiSelect } from 'primereact/multiselect';
+import { Toast } from 'primereact/toast';
 
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
@@ -57,6 +58,7 @@ export default function DoctorDiagnosis() {
     const [reload, setReload] = useState('');
 
     const menu = useRef(null);
+    const toast = useRef(null);
     const $websocket = useRef(null);
 
     const options = [
@@ -310,6 +312,15 @@ export default function DoctorDiagnosis() {
     );
 
     const saveDiagnosis = () => {
+        if(patient.patientNo === null) {
+            toast.current.show({ severity: 'error', summary: '알림', detail: '환자정보를 선택해주세요.', life: 3000 });
+            return;
+        }
+        if(diseaseItem.length === 0) {
+            toast.current.show({ severity: 'error', summary: '알림', detail: '병명을 입력해주세요.', life: 3000 });
+            return;
+        }
+
         let diagnosisItem = {
             cureYN: cureYN,
             diagnosisMemo: memo,
@@ -459,6 +470,7 @@ export default function DoctorDiagnosis() {
                 topics={['/topics/doctor']}
                 onMessage={msg => { setReload(msg) }}
                 ref={$websocket} />
+            <Toast ref={toast} />
             <div className="card">
                 <div className="p-grid">
                     <div className="p-col-12 p-md-6 p-lg-4">

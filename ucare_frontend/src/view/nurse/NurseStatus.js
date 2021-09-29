@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { DataScroller } from 'primereact/datascroller';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
-import { Divider } from 'primereact/divider';
 import { Menu } from 'primereact/menu';
 import { Dialog } from 'primereact/dialog';
 import { Panel } from 'primereact/panel';

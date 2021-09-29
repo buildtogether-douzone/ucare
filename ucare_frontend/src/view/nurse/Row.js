@@ -363,7 +363,7 @@ const Row = React.forwardRef((props, ref) => {
         topics={['/topics/nurse']}
         onMessage={msg => { null }}
         ref={$websocket} />
-        <Toast ref={toast} />
+      <Toast ref={toast} />
       <TableRow className={classes.rowStyle}>
         <TableCell style={{ textAlign: 'center', padding: '10px' }}>
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
