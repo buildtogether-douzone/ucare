@@ -148,7 +148,7 @@ export default function ReservationList() {
         receiptService.createRev(receipt)
           .then(res => {
             console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
-            reservationService.update(reservation.revNo)
+            reservationService.delete(reservation.revNo)
                 .then(res => {
                     $websocket.current.sendMessage('/Doctor');
                     $websocket.current.sendMessage('/Nurse');
@@ -158,7 +158,7 @@ export default function ReservationList() {
                     });
                 })
                 .catch(err => {
-                    console.log('update() 에러', err);
+                    console.log('delete() 에러', err);
                 });
           })
           .catch(err => {

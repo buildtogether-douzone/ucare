@@ -275,6 +275,7 @@ export default function NurseStatus() {
                 setItems(_items);
                 setItem(emptyItem);
                 setDeleteItemDialog(false);
+                $websocket.current.sendMessage('/Reservation');
             })
             .catch(err => {
                 console.log('delete() Error!', err);
