@@ -7,6 +7,7 @@ import RemoveTwoToneIcon from '@material-ui/icons/RemoveTwoTone';;
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
 import EventNoteIcon from '@material-ui/icons/EventNote';
+import ReceiptIcon from '@material-ui/icons/Receipt';
 
 const DoctorList = React.forwardRef((props, ref) => {
     return (
@@ -27,7 +28,7 @@ const DoctorList = React.forwardRef((props, ref) => {
             <ListItem button onClick={(e) => {  location.href='/#/doctor/main' ;
                                                 ref.current !== null && ref.current.scrollToSlide(1); }}>
                 <ListItemIcon>
-                    <PeopleIcon />
+                    <ReceiptIcon />
                 </ListItemIcon>
                 <ListItemText primary="처방" />
             </ListItem>
