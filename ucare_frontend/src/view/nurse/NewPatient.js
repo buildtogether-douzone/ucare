@@ -127,6 +127,9 @@ export default function NewPatient() {
   const nameValidError = () =>
     name != '' ? (nameRegex.test(name) ? false : true) : false; 
 
+  const telNoRegex = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+  const telNoValidError = () =>
+  telNo != '' ? (telNoRegex.test(telNo) ? false : true) : false; 
 
   const telNoChange = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
@@ -364,6 +367,10 @@ export default function NewPatient() {
                 name="telNo"
                 value={telNo}
                 onChange={telNoChange}
+                error={telNoValidError()}
+                helperText={
+                  telNoValidError() ? "휴대폰 번호를 확인해 주세요." : null
+                }
               />
             </Grid>
 
