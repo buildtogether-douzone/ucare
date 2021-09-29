@@ -25,6 +25,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
+import { Toast } from 'primereact/toast';
 
 import { useRecoilState } from 'recoil';
 import { reloadState } from '../../recoil/atom/nurseAtom';
@@ -101,6 +102,8 @@ const Row = React.forwardRef((props, ref) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const [reload, setReload] = useRecoilState(reloadState);
+
+  const toast = useRef(null);
   const $websocket = useRef(null);
 
   // yyyy-MM-dd 포맷으로 반환
@@ -305,7 +308,7 @@ const Row = React.forwardRef((props, ref) => {
             });
         }
         else
-          alert("이미 금일 접수 또는 예약된 환자입니다.");
+          toast.current.show({ severity: 'error', summary: '알림', detail: '금일 접수 또는 예약된 환자입니다.', life: 3000 });
       })
       .catch(err => {
         console.log('create() 에러', err);
@@ -360,6 +363,7 @@ const Row = React.forwardRef((props, ref) => {
         topics={['/topics/nurse']}
         onMessage={msg => { null }}
         ref={$websocket} />
+        <Toast ref={toast} />
       <TableRow className={classes.rowStyle}>
         <TableCell style={{ textAlign: 'center', padding: '10px' }}>
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>

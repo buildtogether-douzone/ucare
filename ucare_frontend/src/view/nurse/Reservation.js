@@ -184,7 +184,7 @@ export default function Reservation() {
                     });
                 }
                 else
-                    toast.current.show({ severity: 'error', summary: '알림', detail: '이미 금일 접수 또는 예약된 환자입니다.', life: 3000 });
+                    toast.current.show({ severity: 'error', summary: '알림', detail: '금일 접수 또는 예약된 환자입니다.', life: 3000 });
             })
             .catch(err => {
                 console.log('create() 에러', err);
