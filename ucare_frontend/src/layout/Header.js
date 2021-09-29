@@ -332,7 +332,7 @@ const Header = ({ open, drawerManage }) => {
   const actionBodyTemplate = (rowData) => {
     return (
       <React.Fragment>
-        <PrimeButton icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteItem(rowData)} />
+        <PrimeButton style={{color: '#1C91FB'}} icon="pi pi-trash" className="p-button-rounded p-button-warning p-button-text" onClick={() => confirmDeleteItem(rowData)} />
       </React.Fragment>
     );
   }
@@ -465,18 +465,18 @@ const Header = ({ open, drawerManage }) => {
               massageState ?
                 <DataTable value={messages} selectionMode="single" paginator rows={5}
                   selection={selectedMessage} onSelectionChange={(e) => setSelectedMessage(e.value)} dataKey="msgNo">
-                  <Column field="name" header="보낸사람" />
-                  <Column field="title" header="제목" body={coltemplate} />
-                  <Column field="msgDate" header="날짜" />
-                  <Column field="status" header="상태" />
-                  <Column field="delete" body={actionBodyTemplate} />
+                  <Column style={{ textAlign: 'center', width: '20%', padding: '8px' }} field="name" header="보낸사람" />
+                  <Column style={{ textAlign: 'center', width: '40%', padding: '8px' }} field="title" header="제목" body={coltemplate} />
+                  <Column style={{ textAlign: 'center', width: '20%', padding: '8px' }} field="msgDate" header="날짜" />
+                  <Column style={{ textAlign: 'center', width: '10%', padding: '8px' }} field="status" header="상태" />
+                  <Column style={{ textAlign: 'center', width: '10%', padding: '8px' }} field="delete" body={actionBodyTemplate} />
                 </DataTable> :
                 <DataTable value={sendMessageItem} selectionMode="single" paginator rows={5}
                   selection={selectedMessage} onSelectionChange={(e) => setSelectedMessage(e.value)} dataKey="msgNo">
-                  <Column field="toName" header="받은사람" />
-                  <Column field="title" header="제목" body={clickColumn} />
-                  <Column field="msgDate" header="날짜" />
-                  <Column field="status" header="상태" />
+                  <Column style={{ textAlign: 'center', width: '20%', padding: '8px' }} field="toName" header="받은사람" />
+                  <Column style={{ textAlign: 'center', width: '40%', padding: '8px' }} field="title" header="제목" body={clickColumn} />
+                  <Column style={{ textAlign: 'center', width: '20%', padding: '8px' }} field="msgDate" header="날짜" />
+                  <Column style={{ textAlign: 'center', width: '20%', padding: '8px' }} field="status" header="상태" />
                 </DataTable>
             }
           </Dialog>
