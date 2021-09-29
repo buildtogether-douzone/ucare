@@ -123,7 +123,7 @@ export default function NewPatient() {
     }
   }, [telNo, gender, age])
   
-  const nameRegex = /^[가-힣a-zA-Z]+$/; 
+  const nameRegex = /^[가-힣]{2,4}$/; 
   const nameValidError = () =>
     name != '' ? (nameRegex.test(name) ? false : true) : false; 
 
@@ -179,9 +179,9 @@ export default function NewPatient() {
     }
   };
 
-  const regex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
+  const emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
   const hasNotValidError = () => 
-    email != '' ? (regex.test(email) ? false : true) : false; 
+    email != '' ? (emailRegex.test(email) ? false : true) : false; 
 
 
   const onReset = () => {
@@ -309,7 +309,7 @@ export default function NewPatient() {
                 onChange={(e) => { setName(e.target.value) }}
                 error={nameValidError()}
                 helperText={
-                  nameValidError() ? "특수문자, 숫자, 띄어쓰기는 사용할수 없습니다." : null
+                  nameValidError() ? "이름을 정확히 입력해주세요." : null
                 }
               />
             </Grid>

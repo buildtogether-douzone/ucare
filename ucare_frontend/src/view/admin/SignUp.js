@@ -118,11 +118,13 @@ export default function SignUp() {
     password != confirmPassword ? true : false; 
 
 
-  const regex = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
-
+  const emailRegex = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
   const hasNotValidError = () =>
-    email != '' ? (regex.test(email) ? false : true) : false; 
+    email != '' ? (emailRegex.test(email) ? false : true) : false; 
 
+  const nameRegex = /^[가-힣]{2,4}$/; 
+  const nameValidError = () =>
+  name != '' ? (nameRegex.test(name) ? false : true) : false; 
 
   const nameChange = (e) => {
     setName(e.target.value)
@@ -136,12 +138,46 @@ export default function SignUp() {
     setGender(e.target.value)
   }
 
-  const ssnChange = (e) => {
-    const regex = /^[0-9\b -]{0,13}$/;
-    if (regex.test(e.target.value)) {
-      setSSN(e.target.value);
+  const ssnValidError = () => {
+    var jnumArr = new Array(); // 입력 한 주민번호를 저장해줄 배열 선언
+    var jnumplus = [2,3,4,5,6,7,8,9,2,3,4,5,1]; // 주민번호 계산할때 쓰이는 배열
+    var jnumSum = 0; //objNum[i] * jnumplus[i] 더한 값
+  
+    if(ssn != ''){ // 주민번호입력 형식이 알맞은지 검사 
+      for(var i = 0; i<ssn.length;i++){ // 입력받은 주민번호 jnumArr배열에 넣기
+        jnumArr[i] = ssn.charAt(i);
+    }
+  
+    for(var i = 0; i<ssn.length-1;i++){ // 입력받은 주민번호 jnumArr배열에 넣기
+        jnumSum+=jnumArr[i]*jnumplus[i];
+    }
+    jnumSum = (11-(jnumSum % 11)) % 10; //주민번호 계산
+  
+    if(jnumSum != jnumArr[12]){ // 계산되서 나온 결과값(jnumSum)과 입력한 주민번호의 마지막이 맞지 않으면 
+      if(checkSSN)   
+        return true;
+    } else if (ssn.length === 13){
+      setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
+      setCheckSSN(false);
     }
   }
+    //형식이 올바르면 생년월일 자동으로 입력하기
+    return false;
+    };
+    
+  
+    const ssnChange = (e) => {
+      const regex = /^[0-9\b -]{0,13}$/;
+     if(regex.test(e.target.value)) {
+        setSSN(e.target.value);
+        if(ssn.length < 15) {
+          if(checkSSN == false ) {
+            setSSN(ssn.substring(0,6) + ssn.substring(7, 13));
+          }
+          setCheckSSN(true)
+        }  
+      }
+    };
 
   const addressChange = (e) => {
     setAddress(e.target.value)
@@ -150,6 +186,10 @@ export default function SignUp() {
   const detailAddressChange = (e) => {
     setDetailAddress(e.target.value)
   }
+
+  const telNoRegex = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+  const telNoValidError = () =>
+  telNo != '' ? (telNoRegex.test(telNo) ? false : true) : false; 
 
   const telNoChange = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
@@ -193,9 +233,19 @@ export default function SignUp() {
   const saveUser = (e) => {
     e.preventDefault(); // 아무 동작 안하고 버튼만 눌러도 리프레시 되는 것을 막는다.
 
-    if(password !== confirmPassword){
-      return alert('비밀번호와 비밀번호 확인은 같아야 합니다.');
-    }
+    if (name == '') {
+      alert("이름을 입력해주세요.");
+      return;
+    } else if (password !== confirmPassword) {
+      alert('비밀번호와 비밀번호 확인은 같아야 합니다.');
+      return;
+    } else if (ssn == '') {
+      alert("주민등록번호를 입력해주세요.");
+      return;
+    } else if (telNo == '') {
+      alert("연락처를 입력해주세요.");
+      return;
+    };
 
     let user = {
       id: id,
@@ -299,6 +349,10 @@ export default function SignUp() {
                 autoComplete="name"
                 value={name}
                 onChange={nameChange}
+                error={nameValidError()}
+                helperText={
+                  nameValidError() ? "이름을 정확히 입력해주세요." : null
+                }
               />
             </Grid>
 
@@ -316,6 +370,10 @@ export default function SignUp() {
                 autoComplete="ssn"
                 value={ssn}
                 onChange={ssnChange}
+                error={ssnValidError()}
+                helperText={
+                  ssnValidError() ? "주민등록번호가 올바르지 않습니다." : null
+                }
               />
             </Grid>
 
@@ -352,6 +410,10 @@ export default function SignUp() {
                 name="telNo"
                 value={telNo}
                 onChange={telNoChange}
+                error={telNoValidError()}
+                helperText={
+                  telNoValidError() ? "휴대폰 번호를 확인해 주세요." : null
+                }
               />
             </Grid>
 
