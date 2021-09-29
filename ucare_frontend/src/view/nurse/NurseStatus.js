@@ -391,7 +391,7 @@ export default function NurseStatus() {
 
             <div className="card">
                 <div className="p-grid">
-                    <div className="p-col-6">
+                    <div className="p-col-12 p-md-6 p-lg-6">
                     <TabView style={{ justifyContent: 'center', padding: '20px' }}>
                         <TabPanel header={"전체" + "(" + items.length + ")"}>
                             <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
@@ -420,8 +420,7 @@ export default function NurseStatus() {
                         </TabPanel>
                     </TabView>
                     </div>
-                    <Divider layout="vertical" />
-                    <div className="p-col-5">
+                    <div className="p-col-12 p-md-6 p-lg-6">
                         <Panel header="수납" style={{ height: '100%', justifyContent: 'center', padding: '20px' }}>
                             <div className="activity-header">
                                 <div className="p-grid">

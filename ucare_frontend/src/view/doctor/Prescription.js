@@ -28,7 +28,7 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Alert from '@material-ui/lab/Alert';
 import PersonIcon from '@material-ui/icons/Person';
-import NoteAddIcon from '@material-ui/icons/NoteAdd';
+import BlurOnIcon from '@material-ui/icons/BlurOn';
 import { makeStyles } from '@material-ui/styles';
 
 import { useRecoilState } from 'recoil';
@@ -68,7 +68,7 @@ const tableIcons = {
 const useStyles = makeStyles({
     textStyle: {
         height: '50px',
-        width: '300px',
+        width: '800px',
         marginBottom: '20px'
     },
     addon: {
@@ -77,7 +77,7 @@ const useStyles = makeStyles({
         borderTopLeftRadius: 10,
         textAlign: 'center',
         paddingTop: '12px',
-        width: '15%',
+        width: '5%',
         marginBottom: '20px'
     },
     image: {
@@ -161,10 +161,10 @@ export default function Prescription() {
     var columns = [
         { title: "PatientNo", field: "patientNo", hidden: true },
         { title: "No.", field: "rowNo", editable: 'never' },
-        { title: "처방약", field: "medicineNm", editable: 'never' },
-        { title: "투여량", field: "dosage", editable: 'never' },
-        { title: "투약일수", field: "dosingDay", lookup: { 관리자: '관리자', 의사: '의사', 간호사: '간호사' } },
-        { title: "용법", field: "usage", lookup: { true: '사용', false: '미사용' } }
+        { title: "처방약", field: "medicineNm", lookup: { 약품1: '약품1', 약품2: '약품2', 약품3: '약품3' } },
+        { title: "투여량", field: "dosage", type: 'numeric' },
+        { title: "투약일수", field: "dosingDay", type: 'numeric' },
+        { title: "용법", field: "usage", type: 'numeric' }
     ]
 
     const [data, setData] = useState([]); //table data
@@ -257,6 +257,74 @@ export default function Prescription() {
             });
     }, [reload, value]);
 
+    const handleRowAdd = (newData, oldData, resolve) => {
+        //validation
+        let errorList = []
+        // if(newData.role === ""){
+        //   errorList.push("Please enter role")
+        // }
+        // if(newData.status === ""){
+        //   errorList.push("Please enter status")
+        // }
+
+        if (errorList.length < 1) {
+            prescriptionService.create(newData)
+                .then(res => {
+                    const dataUpdate = [...data];
+                    const index = oldData.tableData.id;
+                    dataUpdate[index] = newData;
+                    setData([...dataUpdate]);
+                    resolve()
+                    setIserror(false)
+                    setErrorMessages([])
+                })
+                .catch(error => {
+                    setErrorMessages(["Update failed! Server error"])
+                    setIserror(true)
+                    resolve()
+
+                })
+        } else {
+            setErrorMessages(errorList)
+            setIserror(true)
+            resolve()
+        }
+    }
+
+    const handleRowUpdate = (newData, oldData, resolve) => {
+        //validation
+        let errorList = []
+        // if(newData.role === ""){
+        //   errorList.push("Please enter role")
+        // }
+        // if(newData.status === ""){
+        //   errorList.push("Please enter status")
+        // }
+
+        if (errorList.length < 1) {
+            prescriptionService.update(newData)
+                .then(res => {
+                    const dataUpdate = [...data];
+                    const index = oldData.tableData.id;
+                    dataUpdate[index] = newData;
+                    setData([...dataUpdate]);
+                    resolve()
+                    setIserror(false)
+                    setErrorMessages([])
+                })
+                .catch(error => {
+                    setErrorMessages(["Update failed! Server error"])
+                    setIserror(true)
+                    resolve()
+
+                })
+        } else {
+            setErrorMessages(errorList)
+            setIserror(true)
+            resolve()
+        }
+    }
+
     const receiptComplete = () => {
         let _items = [...items];
         let _item = { ...item };
@@ -345,7 +413,7 @@ export default function Prescription() {
 
     const itemTemplate = (data) => {
         return (
-            <div className={styles.product_item} onContextMenu={(e) => { menuControl(e, data) }} aria-controls="popup_menu" aria-haspopup>
+            <div className={styles.product_item} onClick={(e) => { menuControl(e, data) }} aria-controls="popup_menu" aria-haspopup>
                 <div className={styles.product_detail}>
                     <div className={styles.product_name}>{data.name}</div>
                     <div className={styles.product_description}>{data.diagnosisTime}</div>
@@ -406,7 +474,7 @@ export default function Prescription() {
 
             <div className="card">
                 <div className="p-grid">
-                    <div className="p-col-5">
+                    <div className="p-col-12 p-md-6 p-lg-6">
                         <TabView style={{ justifyContent: 'center', padding: '20px' }}>
                             <TabPanel header={"전체" + "(" + items.length + ")"}>
                                 <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
@@ -425,9 +493,8 @@ export default function Prescription() {
                             </TabPanel>
                         </TabView>
                     </div>
-                    <Divider layout="vertical" />
-                    <div className="p-col-6">
-                        <Grid item xs={12}>
+                    <div className="p-col-12 p-md-6 p-lg-6">
+                        <Grid item xs={11}>
                             <div>
                                 {iserror &&
                                     <Alert severity="error">
@@ -448,7 +515,7 @@ export default function Prescription() {
                             </div>
                             <div className={classes.Line}>
                                 <div className={classes.addon}>
-                                    <NoteAddIcon style={{ fontSize: "25px", color: "#616161" }} />
+                                    <BlurOnIcon style={{ fontSize: "25px", color: "#616161" }} />
                                 </div>
                                 <InputText
                                     placeholder="질병"
