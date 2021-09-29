@@ -121,15 +121,12 @@ export default function NewPatient() {
     if (telNo.length === 13) {
       setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
     }
-  }, [telNo, gender, age])
+  }, [ssn, telNo, gender, age])
   
-  const nameRegex = /^[가-힣]{2,4}$/; 
+  const nameRegex = /^[가-힣a-zA-Z]+$/; 
   const nameValidError = () =>
     name != '' ? (nameRegex.test(name) ? false : true) : false; 
 
-  const telNoRegex = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
-  const telNoValidError = () =>
-  telNo != '' ? (telNoRegex.test(telNo) ? false : true) : false; 
 
   const telNoChange = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
@@ -139,54 +136,50 @@ export default function NewPatient() {
   };
 
   const ssnValidError = () => {
-  var jnumArr = new Array(); // 입력 한 주민번호를 저장해줄 배열 선언
-  var jnumplus = [2,3,4,5,6,7,8,9,2,3,4,5,1]; // 주민번호 계산할때 쓰이는 배열
-  var jnumSum = 0; //objNum[i] * jnumplus[i] 더한 값
-
-  if(ssn != ''){ // 주민번호입력 형식이 알맞은지 검사 
-    for(var i = 0; i<ssn.length;i++){ // 입력받은 주민번호 jnumArr배열에 넣기
-      jnumArr[i] = ssn.charAt(i);
-  }
-
-  for(var i = 0; i<ssn.length-1;i++){ // 입력받은 주민번호 jnumArr배열에 넣기
-      jnumSum+=jnumArr[i]*jnumplus[i];
-  }
-  jnumSum = (11-(jnumSum % 11)) % 10; //주민번호 계산
-
-  if(jnumSum != jnumArr[12]){ // 계산되서 나온 결과값(jnumSum)과 입력한 주민번호의 마지막이 맞지 않으면 
-    if(checkSSN)   
-      return true;
-  } else if (ssn.length === 13){
-    setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
-    setCheckSSN(false);
-  }
-}
-  //형식이 올바르면 생년월일 자동으로 입력하기
-  return false;
-  };
+    var jnumArr = new Array(); // 입력 한 주민번호를 저장해줄 배열 선언
+    var jnumplus = [2,3,4,5,6,7,8,9,2,3,4,5,1]; // 주민번호 계산할때 쓰이는 배열
+    var jnumSum = 0; //objNum[i] * jnumplus[i] 더한 값
   
-
-  const ssnChange = (e) => {
-    const regex = /^[0-9\b -]{0,13}$/;
-   if(regex.test(e.target.value)) {
-      setSSN(e.target.value);
-      if(ssn.length < 15) {
-        if(checkSSN == false ) {
-          setSSN(ssn.substring(0,6) + ssn.substring(7, 13));
-        }
-        setCheckSSN(true)
-      }  
+    if(ssn != ''){ // 주민번호입력 형식이 알맞은지 검사 
+      for(var i = 0; i<ssn.length;i++){ // 입력받은 주민번호 jnumArr배열에 넣기
+        jnumArr[i] = ssn.charAt(i);
     }
-  };
+  
+    for(var i = 0; i<ssn.length-1;i++){ // 입력받은 주민번호 jnumArr배열에 넣기
+        jnumSum+=jnumArr[i]*jnumplus[i];
+    }
+    jnumSum = (11-(jnumSum % 11)) % 10; //주민번호 계산
+  
+    if(jnumSum != jnumArr[12]){ // 계산되서 나온 결과값(jnumSum)과 입력한 주민번호의 마지막이 맞지 않으면 
+      if(checkSSN)   
+        return true;
+    } else if (ssn.length === 13){
+      setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
+      setCheckSSN(false);
+    }
+  }
+    //형식이 올바르면 생년월일 자동으로 입력하기
+    return false;
+    };
+    
+  
+    const ssnChange = (e) => {
+      const regex = /^[0-9\b -]{0,13}$/;
+     if(regex.test(e.target.value)) {
+        setSSN(e.target.value);
+        if(ssn.length < 15) {
+          if(checkSSN == false ) {
+            setSSN(ssn.substring(0,6) + ssn.substring(7, 13));
+          }
+          setCheckSSN(true)
+        }  
+      }
+    };
 
-  const emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
+  const regex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
   const hasNotValidError = () => 
-    email != '' ? (emailRegex.test(email) ? false : true) : false; 
+    email != '' ? (regex.test(email) ? false : true) : false; 
 
-
-  const addressRegex = /^[ㄱ-ㅎ|가-힣|A-Z|a-z|0-9| |.|,|-]*$/;
-  const addressValidError = () => 
-    detailAddress != '' ? (addressRegex.test(detailAddress) ? false : true) : false; 
 
   const onReset = () => {
     setName('');
@@ -244,7 +237,6 @@ export default function NewPatient() {
         setCheckSSN(true);
         alert(`${patient.name}님이 등록되었습니다.`)
         //window.location.reload();
-        setReload(!reload);
       })
       .catch(err => {
         console.log('create() 에러', err);
@@ -257,6 +249,7 @@ export default function NewPatient() {
         console.log('check() 에러', err);
       }); 
       
+      setReload(!reload);
       onReset();
   };
 
@@ -313,7 +306,7 @@ export default function NewPatient() {
                 onChange={(e) => { setName(e.target.value) }}
                 error={nameValidError()}
                 helperText={
-                  nameValidError() ? "이름을 정확히 입력해주세요." : null
+                  nameValidError() ? "특수문자, 숫자, 띄어쓰기는 사용할수 없습니다." : null
                 }
               />
             </Grid>
@@ -333,7 +326,7 @@ export default function NewPatient() {
                 onChange={ssnChange}
                 error={ssnValidError()}
                 helperText={
-                  ssnValidError() ? "주민등록번호가 올바르지 않습니다." : null
+                  ssnValidError() ? "주민등록번호가 올바르지 않습니다.." : null
                 }
               />
             </Grid>
@@ -371,10 +364,6 @@ export default function NewPatient() {
                 name="telNo"
                 value={telNo}
                 onChange={telNoChange}
-                error={telNoValidError()}
-                helperText={
-                  telNoValidError() ? "휴대폰 번호를 확인해 주세요." : null
-                }
               />
             </Grid>
 
@@ -421,10 +410,6 @@ export default function NewPatient() {
                 autoComplete="detailAddress"
                 value={detailAddress}
                 onChange={(e) => { setDetailAddress(e.target.value) }}
-                error={addressValidError()}
-                helperText={
-                  addressValidError() ? "일부 특수문자만 사용 가능합니다." : null
-                }
               />
             </Grid>
 
@@ -472,7 +457,7 @@ export default function NewPatient() {
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
               <Typography className={classes.font} variant="body1">진료 구분</Typography>
               <FormControl component="fieldset" className={classes.radio}>
-                <RadioGroup row aria-label="diagnosis" name="diagnosis" value={diagType} >
+                <RadioGroup row aria-label="diagnosis" name="diagnosis" value={diagType} onChange={(e) => { setDiagType(e.target.value) }} >
                   <FormControlLabel
                     value="초진"
                     control={<Radio color="primary" />}
