@@ -252,8 +252,8 @@ export default function Medicine() {
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
-                <Button label="입력" icon="pi pi-plus" className="p-button-success p-mr-2" style={{ backgroundColor: '#9D9E9E', borderColor: '#9D9E9E' }} onClick={openNew} />
-                <Button label="삭제" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} style={{ backgroundColor: '#9D9E9E', borderColor: '#9D9E9E' }} disabled={!selectedItems || !selectedItems.length} />
+                <Button label="입력" icon="pi pi-plus" className="p-button-success p-mr-2" style={{ backgroundColor: '#616161', borderColor: '#616161' }} onClick={openNew} />
+                <Button label="삭제" icon="pi pi-trash" className="p-button-danger" onClick={confirmDeleteSelected} style={{ backgroundColor: '#616161', borderColor: '#616161' }} disabled={!selectedItems || !selectedItems.length} />
             </React.Fragment>
         )
     }
@@ -263,7 +263,7 @@ export default function Medicine() {
             <React.Fragment>
                 <FileUpload chooseOptions={{ label: 'Excel', icon: 'pi pi-file-excel', className: 'p-button-success' }} mode="basic" name="demo[]" auto url="https://primefaces.org/primereact/showcase/upload.php"
                         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" className="p-mr-2" onUpload={importExcel} />
-                <Button label="Excel Export" icon="pi pi-upload" className="p-button-help" style={{ backgroundColor: '#0DB2F6', borderColor: '#0DB2F6' }} onClick={exportExcel} />
+                <Button label="Excel Export" icon="pi pi-upload" onClick={exportExcel} />
             </React.Fragment>
         )
     }
