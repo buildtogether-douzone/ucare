@@ -23,7 +23,6 @@ import { reloadState } from '../../recoil/atom/nurseAtom';
 const useStyles2 = makeStyles((theme) => ({
   table: {
     minWidth: 500,
-    minHeight: 700
   },
   paper: {
     marginTop: theme.spacing(3),
@@ -99,7 +98,7 @@ export default function PatientList() {
             <Table className={classes.table} aria-label="collapsible table">
               <TableHead>
                 <TableRow style={{ backgroundColor: '#DFDFDF' }}>
-                  <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }} onClick={() => setSearchBar(!searchBar)}><SearchIcon style={{ fontSize: "25px", color: "#616161" }} /></TableCell>
+                  <TableCell style={{ width: '10%', textAlign: 'center', padding: '5px' }} onClick={() => setSearchBar(!searchBar)}><SearchIcon  style={{ marginTop: '5px', fontSize: '25px', color: '#1C91FB', cursor: 'pointer' }} /></TableCell>
                   <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }}>환자번호</TableCell>
                   <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }}>이름</TableCell>
                   <TableCell style={{ width: '10%', textAlign: 'center', padding: '10px' }}>성별/나이</TableCell>

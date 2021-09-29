@@ -184,6 +184,10 @@ export default function NewPatient() {
     email != '' ? (emailRegex.test(email) ? false : true) : false; 
 
 
+  const addressRegex = /^[ㄱ-ㅎ|가-힣|A-Z|a-z|0-9| |.|,|-]*$/;
+  const addressValidError = () => 
+    detailAddress != '' ? (addressRegex.test(detailAddress) ? false : true) : false; 
+
   const onReset = () => {
     setName('');
     setSSN('');
@@ -417,6 +421,10 @@ export default function NewPatient() {
                 autoComplete="detailAddress"
                 value={detailAddress}
                 onChange={(e) => { setDetailAddress(e.target.value) }}
+                error={addressValidError()}
+                helperText={
+                  addressValidError() ? "일부 특수문자만 사용 가능합니다." : null
+                }
               />
             </Grid>
 

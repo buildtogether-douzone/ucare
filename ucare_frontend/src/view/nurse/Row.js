@@ -39,8 +39,7 @@ const useRowStyles = makeStyles((theme) => ({
   rowStyle: {
     '& > *': {
       borderBottom: 'unset',
-    },
-    height:'5px',
+    }
   },
   font: {
     fontWeight: 'bold',
@@ -681,7 +680,7 @@ const Row = React.forwardRef((props, ref) => {
 
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0, height:'0px' }} colSpan={10}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
