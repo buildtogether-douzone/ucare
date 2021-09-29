@@ -35,7 +35,7 @@
 			INNER JOIN ucare.patient B ON
 				A.patient_no = B.patient_no
 			WHERE receipt_yn = false
-			ORDER BY A.rev_no DESC
+			ORDER BY A.rev_time
 	</select>
 	
 	<select id="retrieveByDuplication" resultType="reservationvo" >

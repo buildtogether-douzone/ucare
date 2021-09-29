@@ -121,12 +121,15 @@ export default function NewPatient() {
     if (telNo.length === 13) {
       setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
     }
-  }, [ssn, telNo, gender, age])
+  }, [telNo, gender, age])
   
-  const nameRegex = /^[가-힣a-zA-Z]+$/; 
+  const nameRegex = /^[가-힣]{2,4}$/; 
   const nameValidError = () =>
     name != '' ? (nameRegex.test(name) ? false : true) : false; 
 
+  const telNoRegex = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+  const telNoValidError = () =>
+  telNo != '' ? (telNoRegex.test(telNo) ? false : true) : false; 
 
   const telNoChange = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
@@ -165,14 +168,20 @@ export default function NewPatient() {
 
   const ssnChange = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
-    if (regex.test(e.target.value)) {
+   if(regex.test(e.target.value)) {
       setSSN(e.target.value);
+      if(ssn.length < 15) {
+        if(checkSSN == false ) {
+          setSSN(ssn.substring(0,6) + ssn.substring(7, 13));
+        }
+        setCheckSSN(true)
+      }  
     }
   };
 
-  const regex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
+  const emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
   const hasNotValidError = () => 
-    email != '' ? (regex.test(email) ? false : true) : false; 
+    email != '' ? (emailRegex.test(email) ? false : true) : false; 
 
 
   const onReset = () => {
@@ -231,6 +240,7 @@ export default function NewPatient() {
         setCheckSSN(true);
         alert(`${patient.name}님이 등록되었습니다.`)
         //window.location.reload();
+        setReload(!reload);
       })
       .catch(err => {
         console.log('create() 에러', err);
@@ -243,7 +253,6 @@ export default function NewPatient() {
         console.log('check() 에러', err);
       }); 
       
-      setReload(!reload);
       onReset();
   };
 
@@ -300,7 +309,7 @@ export default function NewPatient() {
                 onChange={(e) => { setName(e.target.value) }}
                 error={nameValidError()}
                 helperText={
-                  nameValidError() ? "특수문자, 숫자, 띄어쓰기는 사용할수 없습니다." : null
+                  nameValidError() ? "이름을 정확히 입력해주세요." : null
                 }
               />
             </Grid>
@@ -320,7 +329,7 @@ export default function NewPatient() {
                 onChange={ssnChange}
                 error={ssnValidError()}
                 helperText={
-                  ssnValidError() ? "주민등록번호가 올바르지 않습니다.." : null
+                  ssnValidError() ? "주민등록번호가 올바르지 않습니다." : null
                 }
               />
             </Grid>
@@ -358,6 +367,10 @@ export default function NewPatient() {
                 name="telNo"
                 value={telNo}
                 onChange={telNoChange}
+                error={telNoValidError()}
+                helperText={
+                  telNoValidError() ? "휴대폰 번호를 확인해 주세요." : null
+                }
               />
             </Grid>
 
@@ -451,7 +464,7 @@ export default function NewPatient() {
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
               <Typography className={classes.font} variant="body1">진료 구분</Typography>
               <FormControl component="fieldset" className={classes.radio}>
-                <RadioGroup row aria-label="diagnosis" name="diagnosis" value={diagType} onChange={(e) => { setDiagType(e.target.value) }} >
+                <RadioGroup row aria-label="diagnosis" name="diagnosis" value={diagType} >
                   <FormControlLabel
                     value="초진"
                     control={<Radio color="primary" />}
