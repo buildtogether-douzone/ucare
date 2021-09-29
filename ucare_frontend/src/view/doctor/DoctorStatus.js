@@ -463,22 +463,22 @@ export default function DoctorDiagnosis() {
                 <div className="p-grid">
                     <div className="p-col-12 p-md-6 p-lg-4">
                         <TabView style={{ justifyContent: 'center', padding: '20px' }}>
-                            <TabPanel header={"전체" + "(" + items.length + ")"} headerStyle={{fontSize:'25%', width:'25%'}}>
+                            <TabPanel header={"전체" + "(" + items.length + ")"} headerStyle={{width:'25%'}}>
                                 <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
                                     <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                                 </div>
                             </TabPanel>
-                            <TabPanel header={"대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"} headerStyle={{fontSize:'25%', width:'25%'}}>
+                            <TabPanel header={"대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"} headerStyle={{width:'25%'}}>
                                 <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
                                     <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                                 </div>
                             </TabPanel>
-                            <TabPanel header={"진료중" + "(" + items.filter(val => val.state === 'care').length + ")"} headerStyle={{fontSize:'25%', width:'25%'}}>
+                            <TabPanel header={"진료중" + "(" + items.filter(val => val.state === 'care').length + ")"} headerStyle={{width:'25%'}}>
                                 <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
                                     <DataScroller value={items.filter(val => val.state === 'care')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                                 </div>
                             </TabPanel>
-                            <TabPanel header={"완료" + "(" + items.filter(val => (val.state === 'complete') || (val.state === 'wait')).length + ")"} headerStyle={{fontSize:'25%', width:'25%'}}>
+                            <TabPanel header={"완료" + "(" + items.filter(val => (val.state === 'complete') || (val.state === 'wait')).length + ")"} headerStyle={{width:'25%'}}>
                                 <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
                                     <DataScroller value={items.filter(val => (val.state === 'complete') || (val.state === 'wait'))} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
                                 </div>
