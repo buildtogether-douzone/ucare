@@ -88,7 +88,7 @@
 			ORDER BY receipt_no DESC
 	</select>
 	
-	<select id="retrieveByDuplication" resultType="receiptvo" >
+	<select id="retrieveByDuplication" parameterType="Long" resultType="receiptvo" >
 		SELECT
 				receipt_no AS receiptNo,
 				bp AS bp,

@@ -22,6 +22,7 @@ export default function ReservationList() {
     let emptyItem = {
         patientNo: null,
         revNo: null,
+        revTime: '',
         name: '',
         insurance: ''
     };

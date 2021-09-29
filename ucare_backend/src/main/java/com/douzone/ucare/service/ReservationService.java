@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.douzone.ucare.repository.ReceiptRepository;
 import com.douzone.ucare.repository.ReservationRepository;
+import com.douzone.ucare.vo.ReceiptVo;
 import com.douzone.ucare.vo.ReservationVo;
 
 @Service
@@ -14,11 +16,15 @@ public class ReservationService {
 	
 	@Autowired
 	private ReservationRepository reservationRepository;
+	
+	@Autowired
+	private ReceiptRepository receiptRepository;
 
 	public int create(ReservationVo reservation) {
-		List<ReservationVo> list = reservationRepository.retrieveByDuplication(reservation);
+		List<ReservationVo> reservationList = reservationRepository.retrieveByDuplication(reservation);
+		List<ReceiptVo> receiptList = receiptRepository.retrieveByDuplication(reservation.getPatientNo());
 		
-		if(list.size() != 0) 
+		if(reservationList.size() != 0 || receiptList.size() != 0) 
 			return 0;
 		else 
 			return reservationRepository.create(reservation);

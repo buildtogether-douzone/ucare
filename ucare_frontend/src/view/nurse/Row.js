@@ -305,7 +305,7 @@ const Row = React.forwardRef((props, ref) => {
             });
         }
         else
-          alert("이미 금일 접수된 환자입니다.");
+          alert("이미 금일 접수 또는 예약된 환자입니다.");
       })
       .catch(err => {
         console.log('create() 에러', err);

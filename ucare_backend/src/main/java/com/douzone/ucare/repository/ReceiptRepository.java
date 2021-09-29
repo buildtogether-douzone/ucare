@@ -22,8 +22,8 @@ public class ReceiptRepository {
 		return sqlSession.selectList("receipt.retrieveAll", patientNo);
 	}
 	
-	public List<ReceiptVo> retrieveByDuplication(ReceiptVo receipt) {
-		return sqlSession.selectList("receipt.retrieveByDuplication", receipt);
+	public List<ReceiptVo> retrieveByDuplication(Long patientNo) {
+		return sqlSession.selectList("receipt.retrieveByDuplication", patientNo);
 	}
 	
 	public int updateState(ReceiptVo receipt) {

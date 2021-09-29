@@ -6,18 +6,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.douzone.ucare.repository.ReceiptRepository;
+import com.douzone.ucare.repository.ReservationRepository;
 import com.douzone.ucare.vo.ReceiptVo;
+import com.douzone.ucare.vo.ReservationVo;
 
 @Service
 public class ReceiptService {
 	
 	@Autowired
 	private ReceiptRepository receiptRepository;
+	
+	@Autowired
+	private ReservationRepository reservationRepository;
 
 	public int create(ReceiptVo receipt) {
-		List<ReceiptVo> list = receiptRepository.retrieveByDuplication(receipt);
+		List<ReceiptVo> receiptList = receiptRepository.retrieveByDuplication(receipt.getPatientNo());
+		List<ReservationVo> reservationList = reservationRepository.retrieveByPatientNo(receipt.getPatientNo());
 		
-		if(list.size() != 0) 
+		if(receiptList.size() != 0 || reservationList.size() != 0) 
 			return 0;
 		else 
 			return receiptRepository.create(receipt);

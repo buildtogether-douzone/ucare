@@ -51,6 +51,19 @@
 		  AND patient_no = #{patientNo }
 	</select>
 	
+	<select id="retrieveByPatientNo" parameterType="Long" resultType="reservationvo" >
+		SELECT 
+			rev_no AS revNo, 
+			rev_date AS revDate,
+			rev_time AS revTime,
+			ins_dt AS insDt,
+			patient_no AS patientNo
+		FROM
+			ucare.reservation
+		WHERE TO_CHAR(rev_date, 'YYYY-MM-DD') = TO_CHAR(now(), 'YYYY-MM-DD')
+		  AND patient_no = #{patientNo }
+	</select>
+	
 	<update id="update" parameterType="Long">
 		UPDATE ucare.reservation
 			SET 

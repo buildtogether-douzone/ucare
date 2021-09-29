@@ -27,6 +27,10 @@ public class ReservationRepository {
 		return sqlSession.selectList("reservation.retrieveByDuplication", reservation);
 	}
 	
+	public List<ReservationVo> retrieveByPatientNo(Long patientNo) {
+		return sqlSession.selectList("reservation.retrieveByPatientNo", patientNo);
+	}
+	
 	public int update(Long revNo) {
 		return sqlSession.update("reservation.update", revNo);
 	}
