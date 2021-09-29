@@ -121,7 +121,7 @@ export default function NewPatient() {
     if (telNo.length === 13) {
       setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
     }
-  }, [ssn, telNo, gender, age])
+  }, [telNo, gender, age])
   
   const nameRegex = /^[가-힣a-zA-Z]+$/; 
   const nameValidError = () =>
@@ -165,8 +165,14 @@ export default function NewPatient() {
 
   const ssnChange = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
-    if (regex.test(e.target.value)) {
+   if(regex.test(e.target.value)) {
       setSSN(e.target.value);
+      if(ssn.length < 15) {
+        if(checkSSN == false ) {
+          setSSN(ssn.substring(0,6) + ssn.substring(7, 13));
+        }
+        setCheckSSN(true)
+      }  
     }
   };
 
@@ -320,7 +326,7 @@ export default function NewPatient() {
                 onChange={ssnChange}
                 error={ssnValidError()}
                 helperText={
-                  ssnValidError() ? "주민등록번호가 올바르지 않습니다.." : null
+                  ssnValidError() ? "주민등록번호가 올바르지 않습니다." : null
                 }
               />
             </Grid>
