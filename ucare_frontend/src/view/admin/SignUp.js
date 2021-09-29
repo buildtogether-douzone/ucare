@@ -79,9 +79,10 @@ export default function SignUp() {
   const [address, setAddress] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
   const [telNo, setTelNo] = useState('');
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState('의사');
   const [remark, setRemark] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [checkSSN, setCheckSSN] = useState(true);
 
   const options = ['의사', '간호사'];
   const [value, setValue] = useState(options[0]);
@@ -165,7 +166,6 @@ export default function SignUp() {
     return false;
     };
     
-  
     const ssnChange = (e) => {
       const regex = /^[0-9\b -]{0,13}$/;
      if(regex.test(e.target.value)) {
