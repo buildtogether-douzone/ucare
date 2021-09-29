@@ -222,6 +222,10 @@ export default function DoctorDiagnosis() {
     }
 
     const menuControl = (e, data) => {
+        if(data.value === '완료' ) {
+            toast.current.show({ severity: 'error', summary: '알림', detail: '진료가 완료된 환자입니다.', life: 3000 });
+            return;
+        }
         const index = findIndexByNo(data.receiptNo);
         setItem(items[index]);
 
@@ -312,6 +316,11 @@ export default function DoctorDiagnosis() {
     );
 
     const saveDiagnosis = () => {
+        if(item.state === 'careWait') {
+            toast.current.show({ severity: 'error', summary: '알림', detail: '진료대기중인 환자입니다.', life: 3000 });
+            return;
+        }
+        
         if(patient.patientNo === null) {
             toast.current.show({ severity: 'error', summary: '알림', detail: '환자정보를 선택해주세요.', life: 3000 });
             return;

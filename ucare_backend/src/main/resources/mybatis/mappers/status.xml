@@ -24,7 +24,7 @@
 			INNER JOIN ucare.patient B ON
 				A.patient_no = B.patient_no
 			WHERE TO_CHAR(A.receipt_dt, 'YYYY-MM-DD') = #{date }
-			ORDER BY A.state ASC, A.receipt_no ASC
+			ORDER BY A.state ASC, A.diagnosis_time ASC, A.receipt_no ASC
 	</select>
 	
 	<update id="update" parameterType="receiptvo">
