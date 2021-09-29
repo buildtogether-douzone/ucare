@@ -464,7 +464,7 @@ export default function NewPatient() {
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
               <Typography className={classes.font} variant="body1">진료 구분</Typography>
               <FormControl component="fieldset" className={classes.radio}>
-                <RadioGroup row aria-label="diagnosis" name="diagnosis" value={diagType} onChange={(e) => { setDiagType(e.target.value) }} >
+                <RadioGroup row aria-label="diagnosis" name="diagnosis" value={diagType} >
                   <FormControlLabel
                     value="초진"
                     control={<Radio color="primary" />}
