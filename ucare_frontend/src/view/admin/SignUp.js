@@ -30,19 +30,18 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#FFFFFF'
   },
   form: {
-    width: '100%',
+    width: '50%',
   },
   font: {
-    width: '30%',
+    width: '25%',
     float: 'left',
     height: '100%',
     paddingTop: '12px',
     paddingLeft: '5px',
-    paddingRight: '10px',
     backgroundColor: '#E7E7E7'
   },
   input: {
-    width: '65%',
+    width: '75%',
     float: 'left',
     padding: '5px',
     backgroundColor: '#FFFFFF',
@@ -59,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     padding: theme.spacing(1),
     border: '1px solid #DFDFDF',
-    width: '100%',
+    width: '50%',
     backgroundColor: '#DFDFDF',
     borderRadius: '10px 10px 0 0',
     fontWeight: 550,
@@ -116,16 +115,16 @@ export default function SignUp() {
     password.length < 5 ? true : false;
 
   const hasNotSameError = passwordEntered =>
-    password != confirmPassword ? true : false; 
+    password != confirmPassword ? true : false;
 
 
   const emailRegex = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
   const hasNotValidError = () =>
-    email != '' ? (emailRegex.test(email) ? false : true) : false; 
+    email != '' ? (emailRegex.test(email) ? false : true) : false;
 
-  const nameRegex = /^[가-힣]{2,4}$/; 
+  const nameRegex = /^[가-힣]{2,4}$/;
   const nameValidError = () =>
-  name != '' ? (nameRegex.test(name) ? false : true) : false; 
+    name != '' ? (nameRegex.test(name) ? false : true) : false;
 
   const nameChange = (e) => {
     setName(e.target.value)
@@ -141,43 +140,43 @@ export default function SignUp() {
 
   const ssnValidError = () => {
     var jnumArr = new Array(); // 입력 한 주민번호를 저장해줄 배열 선언
-    var jnumplus = [2,3,4,5,6,7,8,9,2,3,4,5,1]; // 주민번호 계산할때 쓰이는 배열
+    var jnumplus = [2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5, 1]; // 주민번호 계산할때 쓰이는 배열
     var jnumSum = 0; //objNum[i] * jnumplus[i] 더한 값
-  
-    if(ssn != ''){ // 주민번호입력 형식이 알맞은지 검사 
-      for(var i = 0; i<ssn.length;i++){ // 입력받은 주민번호 jnumArr배열에 넣기
+
+    if (ssn != '') { // 주민번호입력 형식이 알맞은지 검사 
+      for (var i = 0; i < ssn.length; i++) { // 입력받은 주민번호 jnumArr배열에 넣기
         jnumArr[i] = ssn.charAt(i);
+      }
+
+      for (var i = 0; i < ssn.length - 1; i++) { // 입력받은 주민번호 jnumArr배열에 넣기
+        jnumSum += jnumArr[i] * jnumplus[i];
+      }
+      jnumSum = (11 - (jnumSum % 11)) % 10; //주민번호 계산
+
+      if (jnumSum != jnumArr[12]) { // 계산되서 나온 결과값(jnumSum)과 입력한 주민번호의 마지막이 맞지 않으면 
+        if (checkSSN)
+          return true;
+      } else if (ssn.length === 13) {
+        setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
+        setCheckSSN(false);
+      }
     }
-  
-    for(var i = 0; i<ssn.length-1;i++){ // 입력받은 주민번호 jnumArr배열에 넣기
-        jnumSum+=jnumArr[i]*jnumplus[i];
-    }
-    jnumSum = (11-(jnumSum % 11)) % 10; //주민번호 계산
-  
-    if(jnumSum != jnumArr[12]){ // 계산되서 나온 결과값(jnumSum)과 입력한 주민번호의 마지막이 맞지 않으면 
-      if(checkSSN)   
-        return true;
-    } else if (ssn.length === 13){
-      setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
-      setCheckSSN(false);
-    }
-  }
     //형식이 올바르면 생년월일 자동으로 입력하기
     return false;
-    };
-    
-    const ssnChange = (e) => {
-      const regex = /^[0-9\b -]{0,13}$/;
-     if(regex.test(e.target.value)) {
-        setSSN(e.target.value);
-        if(ssn.length < 15) {
-          if(checkSSN == false ) {
-            setSSN(ssn.substring(0,6) + ssn.substring(7, 13));
-          }
-          setCheckSSN(true)
-        }  
+  };
+
+  const ssnChange = (e) => {
+    const regex = /^[0-9\b -]{0,13}$/;
+    if (regex.test(e.target.value)) {
+      setSSN(e.target.value);
+      if (ssn.length < 15) {
+        if (checkSSN == false) {
+          setSSN(ssn.substring(0, 6) + ssn.substring(7, 13));
+        }
+        setCheckSSN(true)
       }
-    };
+    }
+  };
 
   const addressChange = (e) => {
     setAddress(e.target.value)
@@ -189,7 +188,7 @@ export default function SignUp() {
 
   const telNoRegex = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
   const telNoValidError = () =>
-  telNo != '' ? (telNoRegex.test(telNo) ? false : true) : false; 
+    telNo != '' ? (telNoRegex.test(telNo) ? false : true) : false;
 
   const telNoChange = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
@@ -262,12 +261,12 @@ export default function SignUp() {
     }
 
     userService.addUser(user)
-    .then( res => {
+      .then(res => {
         console.log(user.name + '님이 성공적으로 등록되었습니다.');
-    })
-    .catch( err => {
-      console.log('saveUser() 에러', err);
-    });
+      })
+      .catch(err => {
+        console.log('saveUser() 에러', err);
+      });
   }
 
   return (
@@ -278,7 +277,7 @@ export default function SignUp() {
         <form className={classes.form} noValidate>
           <Grid container>
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1" align="right">ID</Typography>
+              <Typography className={classes.font} variant="body1">ID</Typography>
               <TextField
                 style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
@@ -290,11 +289,11 @@ export default function SignUp() {
                 name="id"
                 autoComplete="id"
                 value={id}
-                onChange={ idChange }
+                onChange={idChange}
               />
             </Grid>
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1" align="right">비밀번호</Typography>
+              <Typography className={classes.font} variant="body1">비밀번호</Typography>
               <TextField
                 style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
@@ -314,7 +313,7 @@ export default function SignUp() {
             </Grid>
 
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1" align="right">비밀번호 확인</Typography>
+              <Typography className={classes.font} variant="body1">비밀번호 확인</Typography>
               <TextField
                 style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
@@ -336,7 +335,7 @@ export default function SignUp() {
             </Grid>
 
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1" align="right">이름</Typography>
+              <Typography className={classes.font} variant="body1">이름</Typography>
               <TextField
                 style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
@@ -357,7 +356,7 @@ export default function SignUp() {
             </Grid>
 
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1" align="right">주민등록번호</Typography>
+              <Typography className={classes.font} variant="body1">주민등록번호</Typography>
               <TextField
                 style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
@@ -378,7 +377,7 @@ export default function SignUp() {
             </Grid>
 
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1" align="right">성별</Typography>
+              <Typography className={classes.font} variant="body1">성별</Typography>
               <FormControl component="fieldset" className={classes.radio}>
                 <RadioGroup row aria-label="gender" name="gender" value={gender} onChange={genderChange} >
                   <FormControlLabel
@@ -398,7 +397,7 @@ export default function SignUp() {
             </Grid>
 
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1" align="right">연락처</Typography>
+              <Typography className={classes.font} variant="body1">연락처</Typography>
               <TextField
                 style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
@@ -418,7 +417,7 @@ export default function SignUp() {
             </Grid>
 
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1" align="right">주소</Typography>
+              <Typography className={classes.font} variant="body1">주소</Typography>
               <TextField
                 className={classes.input}
                 style={{ backgroundColor: '#FFFFFF', width: '58%' }}
@@ -464,7 +463,7 @@ export default function SignUp() {
             </Grid>
 
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1" align="right">이메일</Typography>
+              <Typography className={classes.font} variant="body1">이메일</Typography>
               <TextField
                 className={classes.input}
                 style={{ backgroundColor: '#FFFFFF' }}
@@ -485,7 +484,7 @@ export default function SignUp() {
             </Grid>
 
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1" align="right">역할</Typography>
+              <Typography className={classes.font} variant="body1">역할</Typography>
               <FormControl component="fieldset" className={classes.radio}>
                 <RadioGroup row aria-label="role" name="role" value={role} onChange={roleChange} >
                   <FormControlLabel
