@@ -7,6 +7,7 @@ import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dialog } from 'primereact/dialog';
+import styles from  '../../assets/scss/Reservation.scss';
 
 import reservationService from '../../service/reservationService';
 import timeService from '../../service/timeService'
@@ -104,7 +105,7 @@ export default function ReservationList() {
     const nameBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-                <span style={{cursor: 'pointer'}} className="p-column-title" onClick={()=>rowColumnClick(rowData)}>{rowData.name}</span>
+                <span className={styles.mouse} onClick={()=>rowColumnClick(rowData)}>{rowData.name}</span>
             </React.Fragment>
         );
     }

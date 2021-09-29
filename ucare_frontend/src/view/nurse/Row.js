@@ -237,7 +237,7 @@ const Row = React.forwardRef((props, ref) => {
 
   useEffect(() => {
     fetchReceipt();
-  }, []);
+  }, [reload]);
 
   const update = (e) => {
     e.preventDefault();
