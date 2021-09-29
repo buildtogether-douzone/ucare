@@ -99,7 +99,8 @@
 	<update id="updateDiagnosis" parameterType="patientvo">
 		UPDATE  ucare.patient
 		   SET 
-	   		diagnosis_type = #{diagnosis }
+	   		diagnosis_type = #{diagnosis },
+	   		visit_date = TO_CHAR(now(), 'YYYY-MM-DD')
 		WHERE patient_no = #{patientNo }
 	</update>
 	
