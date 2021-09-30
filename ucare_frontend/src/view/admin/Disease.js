@@ -88,7 +88,7 @@ export default function Disease() {
                     _items[index] = _item;
                     setItems(_items);
                     setItemDialog(false);
-                    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Updated', life: 3000 });
+                    toast.current.show({ severity: 'success', summary: 'Successful', detail: '수정되었습니다.', life: 3000 });
                 })
                 .catch(err => {
                     console.log('update() Error!', err);
@@ -103,7 +103,7 @@ export default function Disease() {
                     setItems(_items);
                     setItemDialog(false);
                     setItem(emptyItem);
-                    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Created', life: 3000 });
+                    toast.current.show({ severity: 'success', summary: 'Successful', detail: '저장되었습니다.', life: 3000 });
                 })
                 .catch(err => {
                     console.log('create() Error!', err);
@@ -129,7 +129,7 @@ export default function Disease() {
             setItems(_items);
             setDeleteItemDialog(false);
             setItem(emptyItem);
-            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
+            toast.current.show({ severity: 'success', summary: 'Successful', detail: '삭제되었습니다.', life: 3000 });
         })
         .catch(err => {
             console.log('delete() Error!', err);
@@ -177,7 +177,7 @@ export default function Disease() {
                     .then(res => {
                         success = true;
                         if((_importedData.length === (index+1)) && success === true) {
-                            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Items Created', life: 3000 });
+                            toast.current.show({ severity: 'success', summary: 'Successful', detail: '성공적으로 저장되었습니다.', life: 3000 });
                         }
                     })
                     .catch(err => {
@@ -226,7 +226,7 @@ export default function Disease() {
                     setItems(_items);
                     setDeleteItemsDialog(false);
                     setSelectedItems(null);
-                    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
+                    toast.current.show({ severity: 'success', summary: 'Successful', detail: '성공적으로 삭제되었습니다.', life: 3000 });
                 }
             })
             .catch(err => {
@@ -306,7 +306,7 @@ export default function Disease() {
             <div className="card">
                 <Toolbar className="p-mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
 
-                <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="No data" onSelectionChange={(e) => setSelectedItems(e.value)}
+                <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="데이터가 없습니다." onSelectionChange={(e) => setSelectedItems(e.value)}
                     dataKey="diseaseNo" paginator rows={5}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
@@ -346,14 +346,14 @@ export default function Disease() {
             <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {item && <span>Are you sure you want to delete <b>{item.diseaseNm}</b>?</span>}
+                    {item && <span><b>{item.diseaseNm} 삭제하시겠습니까</b>?</span>}
                 </div>
             </Dialog>
 
             <Dialog visible={deleteItemsDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemsDialogFooter} onHide={hideDeleteItemsDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {item && <span>Are you sure you want to delete the selected items?</span>}
+                    {item && <span>선택된 항목들을 삭제하시겠습니까?</span>}
                 </div>
             </Dialog>
         </div>

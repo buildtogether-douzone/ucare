@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import { Button } from 'primereact/button';
+import { Toast } from 'primereact/toast';
 
 import { GetHolidays } from '../../lib/commDate';
 import styles from '../../assets/scss/Calendar.scss';
@@ -14,6 +15,8 @@ export default function CalHoliday() {
   const today = getMoment;
   const firstWeek = today.clone().startOf('month').week();
   const lastWeek = today.clone().endOf('month').week() === 1 ? 53 : today.clone().endOf('month').week();
+
+  const toast = useRef(null);
 
   let items = [];
   let year = today.clone().startOf('year').format('YYYY');
@@ -166,6 +169,7 @@ export default function CalHoliday() {
     holidayService.update(items)
         .then(res => {
           console.log('정보가 성공적으로 전송 되었습니다.');
+          toast.current.show({ severity: 'success', summary: '알림', detail: '정보가 성공적으로 저장되었습니다.', life: 3000 });
         })
         .catch(err => {
           console.log('update holiday data() 에러', err);
@@ -174,6 +178,7 @@ export default function CalHoliday() {
 
   return (
     <div style={{ padding: '1%' }}>
+      <Toast ref={toast} />
       {reload}
       <table className={styles.calendar}>
         <caption>
