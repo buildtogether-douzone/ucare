@@ -6,6 +6,7 @@ import { Menu } from 'primereact/menu';
 import { Dialog } from 'primereact/dialog';
 import { Panel } from 'primereact/panel';
 import { TabView, TabPanel } from 'primereact/tabview';
+import { Divider } from 'primereact/divider';
 
 import { useRecoilState } from 'recoil';
 import { reloadState } from '../../recoil/atom/nurseAtom';
@@ -80,6 +81,7 @@ export default function NurseStatus() {
     const [diagnosisItem, setDiagnosisItem] = useState(emptyDiagnosisItem);
     const [price, setPrice] = useState('');
     const [insurancePrice, setInsurancePrice] = useState('');
+    const [calPrice, setCalPrice] = useState(0);
     const [date, setDate] = useState(new Date());
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [receiptCompleteDialog, setReceiptCompleteDialog] = useState(false);
@@ -210,11 +212,15 @@ export default function NurseStatus() {
                         if (res.data.age < 7 || res.data.age >= 65)
                             resultPrice -= 2000;
 
-                        if (data.diagnosisTime >= '09:00:00' && data.diagnosisTime < '12:00:00')
+                        if (data.diagnosisTime >= '09:00:00' && data.diagnosisTime < '12:00:00') {
+                            setCalPrice(-resultPrice * 0.1);
                             resultPrice *= 0.9;
+                        }
 
-                        if (data.diagnosisTime > '18:00:00' && data.diagnosisTime < '24:00:00')
+                        if (data.diagnosisTime > '18:00:00' && data.diagnosisTime < '24:00:00') {
+                            setCalPrice(resultPrice * 0.1);
                             resultPrice *= 1.1;
+                        }
 
                         if (res.data.insurance === "Y") {
                             setInsurancePrice(resultPrice * 0.25);
@@ -422,6 +428,7 @@ export default function NurseStatus() {
                     </div>
                     <div className="p-col-12 p-md-6 p-lg-6">
                         <Panel header="수납" style={{ height: '100%', justifyContent: 'center', padding: '20px' }}>
+                        {(item.state !== 'wait') &&
                             <div className="activity-header">
                                 <div className="p-grid">
                                     <div className="p-col-12" style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center' }}>
@@ -433,14 +440,28 @@ export default function NurseStatus() {
                                     </div>
                                 </div>
                             </div>
+}
                             {(item.state === 'wait') &&
                                 <ul className="activity-list">
+                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{border: "1px solid #dee2e6" , paddingLeft:"42%", backgroundColor: "#F8F9FA"}} >
+                                            <h1>{patientItem.name}님</h1>
+                                        </div>
+                                    {(patientItem.age < 7 || patientItem.age >= 65) &&
+                                    <li>
+                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                            <h3 className="activity p-m-0">기본진료비</h3>
+                                            <div className="count">5000원</div>
+                                        </div>
+                                    </li>
+                                    }
+                                    {(patientItem.age >= 7 && patientItem.age < 65) &&
                                     <li>
                                         <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
                                             <h3 className="activity p-m-0">기본진료비</h3>
                                             <div className="count">{hospitalItem.basicPrice}원</div>
                                         </div>
                                     </li>
+                                    }
                                     {(diagnosisItem.cureYN === "true") &&
                                         <li>
                                             <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
@@ -457,6 +478,23 @@ export default function NurseStatus() {
                                             </div>
                                         </li>
                                     }
+                                    {(item.diagnosisTime >= '09:00:00' && item.diagnosisTime < '12:00:00') &&
+                                    <li>
+                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                            <h3 className="activity p-m-0">할인</h3>
+                                            <div className="count">{calPrice}원</div>
+                                        </div>
+                                    </li>
+                                    }
+                                    {(item.diagnosisTime > '18:00:00' && item.diagnosisTime < '24:00:00') &&
+                                    <li>
+                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                            <h3 className="activity p-m-0">할증</h3>
+                                            <div className="count">{calPrice}원</div>
+                                        </div>
+                                    </li>
+                                    }
+                                    <Divider />
                                     {(price !== '') &&
                                         <li>
                                             <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
