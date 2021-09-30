@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,6 +18,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { Toast } from 'primereact/toast';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -86,6 +87,9 @@ export default function SignUp() {
   const options = ['의사', '간호사'];
   const [value, setValue] = useState(options[0]);
   const [inputValue, setInputValue] = useState('');
+
+  const toast = useRef(null);
+
 
   useEffect(() => {
     if (telNo.length === 10) {
@@ -233,16 +237,16 @@ export default function SignUp() {
     e.preventDefault(); // 아무 동작 안하고 버튼만 눌러도 리프레시 되는 것을 막는다.
 
     if (name == '') {
-      alert("이름을 입력해주세요.");
+      toast.current.show({ severity: 'error', summary: '알림', detail: '이름을 입력해주세요.', life: 3000 });
       return;
     } else if (password !== confirmPassword) {
-      alert('비밀번호와 비밀번호 확인은 같아야 합니다.');
+      toast.current.show({ severity: 'error', summary: '알림', detail: '비밀번호와 비밀번호 확인은 같아야 합니다.', life: 3000 });
       return;
     } else if (ssn == '') {
-      alert("주민등록번호를 입력해주세요.");
+      toast.current.show({ severity: 'error', summary: '알림', detail: '주민등록번호를 입력해주세요.', life: 3000 });
       return;
     } else if (telNo == '') {
-      alert("연락처를 입력해주세요.");
+      toast.current.show({ severity: 'error', summary: '알림', detail: '연락처를 입력해주세요.', life: 3000 });
       return;
     };
 
@@ -273,6 +277,7 @@ export default function SignUp() {
     <Container component="main">
       <CssBaseline />
       <div className={classes.paper}>
+      <Toast ref={toast} />
         <Typography variant="h6" className={classes.title}>회원가입</Typography>
         <form className={classes.form} noValidate>
           <Grid container>

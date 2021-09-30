@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Radio from '@material-ui/core/Radio';
@@ -19,6 +19,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { useRecoilState } from 'recoil';
 import { reloadState } from '../../recoil/atom/nurseAtom';
+import { Toast } from 'primereact/toast';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -87,6 +89,7 @@ export default function NewPatient() {
   const [count, setCount] = useState('');
   const [checkSSN, setCheckSSN] = useState(true);
   const [reload, setReload] = useRecoilState(reloadState);
+  const toast = useRef(null);
 
   useEffect(() => {
     const newDate = new Date();
@@ -198,13 +201,13 @@ export default function NewPatient() {
     e.preventDefault();
 
     if (name == '') {
-      alert("이름을 입력해주세요.")
+      toast.current.show({ severity: 'error', summary: '알림', detail: '이름을 입력해주세요.', life: 3000 });
       return;
     } else if (ssn == '') {
-      alert("주민등록번호를 입력해주세요.")
+      toast.current.show({ severity: 'error', summary: '알림', detail: '주민등록번호를 입력해주세요.', life: 3000 });
       return;
     } else if (telNo == '') {
-      alert("연락처를 입력해주세요.")
+      toast.current.show({ severity: 'error', summary: '알림', detail: '연락처를 입력해주세요.', life: 3000 });
       return;
     };
 
@@ -287,6 +290,7 @@ export default function NewPatient() {
     <Container component="main">
       <CssBaseline />
       <div className={classes.paper}>
+      <Toast ref={toast} />
         <Typography variant="h6" className={classes.title}>환자 등록</Typography>
         <form className={classes.form} noValidate>
           <Grid container>
