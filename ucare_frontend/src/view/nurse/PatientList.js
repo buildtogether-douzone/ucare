@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,6 +16,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Row from './Row';
 import PatientPage from './PatientPage';
 import NewPatient from './NewPatient';
+import { Toast } from 'primereact/toast';
 
 import { useRecoilState } from 'recoil';
 import { reloadState } from '../../recoil/atom/nurseAtom';
@@ -43,6 +44,8 @@ export default function PatientList() {
   const [searchBar, setSearchBar] = useState(false);
 
   const [reload, setReload] = useRecoilState(reloadState);
+
+  const toast = useRef(null);
 
   const searchableKeys = ['name', 'ssn', 'gender', 'telNo', 'address'];
 
@@ -79,6 +82,7 @@ export default function PatientList() {
 
   return (
     <Grid container>
+      <Toast ref={toast} />
       <Grid item xs={5}>
         <NewPatient />
       </Grid>
@@ -113,7 +117,7 @@ export default function PatientList() {
                   ? filteredPatients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   : filteredPatients
                 ).map((patientList) => (
-                  <Row key={patientList.patientNo} row={patientList} />
+                  <Row ref={toast} key={patientList.patientNo} row={patientList} />
                 ))}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
