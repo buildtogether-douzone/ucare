@@ -301,6 +301,7 @@ const Row = React.forwardRef((props, ref) => {
               behavior: "smooth"
             });
             $websocket.current.sendMessage('/Doctor');
+            $websocket.current.sendMessage('/Reservation');
             setReload(!reload);
           })
             .catch(err => {

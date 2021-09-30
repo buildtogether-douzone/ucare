@@ -7,6 +7,7 @@ import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dialog } from 'primereact/dialog';
+import { Toast } from 'primereact/toast';
 import styles from  '../../assets/scss/Reservation.scss';
 
 import reservationService from '../../service/reservationService';
@@ -22,6 +23,7 @@ export default function ReservationList() {
     let emptyItem = {
         patientNo: null,
         revNo: null,
+        revDate: '',
         revTime: '',
         name: '',
         insurance: ''
@@ -45,6 +47,7 @@ export default function ReservationList() {
     const [globalFilter, setGlobalFilter] = useState('');
     const [value, setValue] = useState('');
     const dt = useRef(null);
+    const toast = useRef(null);
     const $websocket = useRef(null);
 
     const [reload, setReload] = useRecoilState(reloadState);
@@ -136,6 +139,19 @@ export default function ReservationList() {
 
     const saveItem = (e) => {
         e.preventDefault();
+
+        let today = new Date();
+
+        let year = today.getFullYear(); // 년도
+        let month = ('0' + (today.getMonth() + 1)).slice(-2);  // 월
+        let date = ('0' + today.getDate()).slice(-2);  // 날짜
+
+        let todayDate = year + '-' + month + '-' + date;
+
+        if(todayDate !== reservation.revDate) {
+            toast.current.show({ severity: 'error', summary: '알림', detail: '금일 예약건만 접수 가능합니다.', life: 3000 });
+            return;
+        }
     
         let receipt = {
           remark: item.remark,
@@ -278,6 +294,7 @@ export default function ReservationList() {
                 topics={['/topics/nurse']}
                 onMessage={msg => { setValue(msg) }}
                 ref={$websocket} />
+            <Toast ref={toast} />
             <div className="card">
                 <DataTable ref={dt} value={reservations} paginator rows={10}
                     header={header} className="p-datatable-customers"
