@@ -86,7 +86,6 @@ export default function NewPatient() {
   const [visitDate, setVisitDate] = useState('');
   const [remark, setRemark] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [count, setCount] = useState('');
   const [checkSSN, setCheckSSN] = useState(true);
   const [reload, setReload] = useRecoilState(reloadState);
   const toast = useRef(null);
@@ -118,19 +117,25 @@ export default function NewPatient() {
     const monthDay = month + date;
     setAge(monthDay < ssn.substr(2, 4) ? year - ageNum - 1 : year - ageNum);
 
-    if (telNo.length === 10) {
+  }, [ssn, gender, age]);
+
+  useEffect(() => {
+    if (telNo.length === 10 ) {
       setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
     }
-    if (telNo.length === 13) {
+    if (telNo.length === 13 ) {
       setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
     }
-  }, [ssn, telNo, gender, age])
+  }, [telNo]);
   
   const nameRegex = /^[가-힣a-zA-Z]+$/; 
   const nameValidError = () =>
     name != '' ? (nameRegex.test(name) ? false : true) : false; 
 
-
+  const telNoRegex = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+  const telNoValidError = () =>
+    telNo != '' ? (telNoRegex.test(telNo) ? false : true) : false;
+    
   const telNoChange = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
     if (regex.test(e.target.value)) {
@@ -165,19 +170,18 @@ export default function NewPatient() {
     return false;
     };
     
-  
-    const ssnChange = (e) => {
-      const regex = /^[0-9\b -]{0,13}$/;
-     if(regex.test(e.target.value)) {
-        setSSN(e.target.value);
-        if(ssn.length < 15) {
-          if(checkSSN == false ) {
-            setSSN(ssn.substring(0,6) + ssn.substring(7, 13));
-          }
-          setCheckSSN(true)
-        }  
-      }
-    };
+  const ssnChange = (e) => {
+    const regex = /^[0-9\b -]{0,13}$/;
+    if(regex.test(e.target.value)) {
+      setSSN(e.target.value);
+      if(ssn.length < 15) {
+        if(checkSSN == false ) {
+          setSSN(ssn.substring(0,6) + ssn.substring(7, 13));
+        }
+        setCheckSSN(true)
+      }  
+    }
+  };
 
   const regex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
   const hasNotValidError = () => 
@@ -238,25 +242,22 @@ export default function NewPatient() {
       .then(res => {
         console.log(patient.name + '님의 정보가 성공적으로 등록되었습니다.');
         setCheckSSN(true);
-        alert(`${patient.name}님이 등록되었습니다.`)
-        //window.location.reload();
+        toast.current.show({ severity: 'success', summary: '알림', detail: `${patient.name}님이 등록되었습니다.`, life: 3000 });
+        setReload(!reload);    
+        onReset();
       })
       .catch(err => {
         console.log('create() 에러', err);
       });
         } else {
-          alert("주민등록번호를 다시 입력해주세요.");
+          toast.current.show({ severity: 'error', summary: '알림', detail: '주민등록번호를 다시 입력해주세요.', life: 3000 });
         }
       })
       .catch(err => {
         console.log('check() 에러', err);
       }); 
-      
-      setReload(!reload);
-      onReset();
+
   };
-
-
   
   const openPostCode = () => {
     setIsPopupOpen(true)
@@ -290,7 +291,7 @@ export default function NewPatient() {
     <Container component="main">
       <CssBaseline />
       <div className={classes.paper}>
-      <Toast ref={toast} />
+      <Toast ref={toast} position="top-center"/>
         <Typography variant="h6" className={classes.title}>환자 등록</Typography>
         <form className={classes.form} noValidate>
           <Grid container>
@@ -368,6 +369,10 @@ export default function NewPatient() {
                 name="telNo"
                 value={telNo}
                 onChange={telNoChange}
+                error={telNoValidError()}
+                helperText={
+                  telNoValidError() ? "휴대폰 번호를 확인해 주세요." : null
+                }
               />
             </Grid>
 
