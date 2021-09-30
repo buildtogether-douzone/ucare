@@ -244,15 +244,6 @@ export default function Disease() {
         setItem(_item);
     }
 
-    const leftToolbarTemplate = () => {
-        return (
-            <React.Fragment>
-                <Button label="입력" icon="pi pi-plus" className="p-button-success p-mr-2" style={{ backgroundColor: '#616161', borderColor: '#616161' }} onClick={openNew} />
-                <Button label="삭제" icon="pi pi-trash" className="p-button-danger" style={{ backgroundColor: '#616161', borderColor: '#616161' }} onClick={confirmDeleteSelected} disabled={!selectedItems || !selectedItems.length} />
-            </React.Fragment>
-        )
-    }
-
     const rightToolbarTemplate = () => {
         return (
             <React.Fragment>
@@ -266,8 +257,8 @@ export default function Disease() {
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning p-mr-2" style={{ backgroundColor: '#FFFFFF', borderColor: '#FFFFFF' }} onClick={() => editItem(rowData)} />
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" style={{ backgroundColor: '#FFFFFF', borderColor: '#FFFFFF' }} onClick={() => confirmDeleteItem(rowData)} />
+                <Button style={{color: '#1C91FB'}} icon="pi pi-pencil" className="p-button-rounded p-button-warning p-button-text" onClick={() => editItem(rowData)} />
+                <Button style={{color: '#1C91FB'}} icon="pi pi-trash" className="p-button-rounded p-button-warning p-button-text" onClick={() => confirmDeleteItem(rowData)} />
             </React.Fragment>
         );
     }
@@ -276,10 +267,20 @@ export default function Disease() {
         <div className="table-header">
             <span className="p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText className="p-mr-2" type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <Button label="입력" icon="pi pi-plus" className="p-button p-mr-2" style={{ backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} onClick={openNew} />
+                <Button label="선택삭제" icon="pi pi-trash" className="p-button-danger" style={{ backgroundColor: '#FFFFFF', borderColor: '#FF0000', color: '#FF0000' }} onClick={confirmDeleteSelected} disabled={!selectedItems || !selectedItems.length} />
             </span>
+            <span className="p-input-icon-left"  style={{ float: 'right '}}>
+            <FileUpload style={{ float: 'right '}} chooseOptions={{ label: 'Excel', icon: 'pi pi-file-excel', className: 'p-button-success' }} mode="basic" name="demo[]" auto url="https://primefaces.org/primereact/showcase/upload.php"
+                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" className="p-mr-2" onUpload={importExcel} />
+                <Button style={{ float: 'right '}} label="Excel Export" icon="pi pi-upload" onClick={exportExcel} />
+            </span>
+
         </div>
     );
+
+
     const itemDialogFooter = (
         <React.Fragment>
             <Button label="취소" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
@@ -304,21 +305,21 @@ export default function Disease() {
             <Toast ref={toast} />
 
             <div className="card">
-                <Toolbar className="p-mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
+                <Toolbar className="p-mb-4" right={rightToolbarTemplate}></Toolbar>
 
                 <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="No data" onSelectionChange={(e) => setSelectedItems(e.value)}
-                    dataKey="diseaseNo" paginator rows={5}
+                    dataKey="diseaseNo" paginator rows={8}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
                     globalFilter={globalFilter}
                     header={header}>
 
-                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column field="diseaseCode" header="질병코드" sortable></Column>
-                    <Column field="diseaseNm" header="병명" sortable></Column>
-                    <Column field="diseaseEngNm" header="영문명" sortable></Column>
-                    <Column field="symptom" header="증상" sortable></Column>
-                    <Column body={actionBodyTemplate}></Column>
+                    <Column style={{ textAlign: 'center', width: '10%', padding: '10px' }} selectionMode="multiple"></Column>
+                    <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="diseaseCode" header="질병코드" sortable></Column>
+                    <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="diseaseNm" header="병명" sortable></Column>
+                    <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="diseaseEngNm" header="영문명" sortable></Column>
+                    <Column style={{ textAlign: 'center', width: '35%', padding: '10px' }} field="symptom" header="증상" sortable></Column>
+                    <Column style={{ textAlign: 'center', width: '10%', padding: '5px' }} body={actionBodyTemplate}></Column>
                 </DataTable>
             </div>
 
