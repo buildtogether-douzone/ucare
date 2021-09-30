@@ -269,10 +269,10 @@ const Board = React.forwardRef((props, ref) => {
                     header={header}>
 
                     <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="boardNo" header="No"></Column>
-                    <Column style={{ textAlign: 'center', width: '30%', padding: '10px' }} field="title" header="제목" body={coltemplate}></Column>
+                    <Column style={{ textAlign: 'center', width: '35%', padding: '10px' }} field="title" header="제목" body={coltemplate}></Column>
                     <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="userId" header="작성자"></Column>
                     <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="boardDt" header="작성일"></Column>
-                    <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="hit" header="조회"></Column>
+                    <Column style={{ textAlign: 'center', width: '10%', padding: '10px' }} field="hit" header="조회"></Column>
                     {sessionStorage.getItem('role') == '관리자' && <Column style={{ textAlign: 'center', width: '10%', padding: '5px' }} body={actionBodyTemplate}></Column> }
                 </DataTable>
             </div>
