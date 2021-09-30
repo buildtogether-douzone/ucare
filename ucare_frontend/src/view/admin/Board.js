@@ -131,7 +131,7 @@ const Board = React.forwardRef((props, ref) => {
         boardService.delete(item)
             .then(res => {
                 setDeleteItemDialog(false);
-                window.location.reload();
+                setReload(!reload);
                 toast.current.show({ severity: 'success', summary: 'Successful', detail: '삭제 완료!', life: 3000 });
             })
             .catch(err => {
