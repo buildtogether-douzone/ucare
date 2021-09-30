@@ -493,7 +493,7 @@ export default function Prescription() {
                             </TabPanel>
                         </TabView>
                     </div>
-                    <div className="p-col-12 p-md-6 p-lg-6">
+                    <div className="p-col-12 p-md-6 p-lg-6" style={{ padding: '2%' }}>
                         <Grid item xs={11}>
                             <div>
                                 {iserror &&

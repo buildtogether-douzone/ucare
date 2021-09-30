@@ -38,7 +38,7 @@ export default function DoctorDiagnosis() {
         name: '',
         age: '',
         gender: '',
-        insurance_yn: '',
+        insurance: '',
         diagnosis: ''
     };
 
@@ -266,11 +266,11 @@ export default function DoctorDiagnosis() {
         return (
             <div className={styles.product_item} aria-controls="popup_menu" aria-haspopup>
                 <div className={styles.product_detail}>
-                    <div className={styles.product_name}>{data.diagnosisDate}</div>
+                    <div className={styles.product_name} style={{ fontWeight: 'bold' }}>{data.diagnosisDate}</div>
                 </div>
                 <div className={styles.product_price}>
-                    <div className={styles.product_name} style={{ fontSize: 'x-small' }}>{data.diseaseNm}</div>
-                    <div className={styles.product_description} style={{ fontSize: 'x-small' }}>{data.value}</div>
+                    <div className={styles.product_name} style={{ fontSize: 'small' }}>{data.diseaseNm}</div>
+                    <div className={styles.product_description} style={{ fontSize: 'small' }}>{data.value}</div>
                 </div>
             </div>
         );
