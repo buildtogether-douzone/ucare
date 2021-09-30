@@ -23,13 +23,13 @@ const DoctorList = React.forwardRef((props, ref) => {
                 </ListItemIcon>
                 <ListItemText primary="진료현황" />
             </ListItem>
-            <ListItem button onClick={(e) => {  location.href='/#/doctor/main' ;
+            {/* <ListItem button onClick={(e) => {  location.href='/#/doctor/main' ;
                                                 ref.current !== null && ref.current.scrollToSlide(1); }}>
                 <ListItemIcon>
                     <ReceiptIcon />
                 </ListItemIcon>
                 <ListItemText primary="처방" />
-            </ListItem>
+            </ListItem> */}
         </div>
     );
 });

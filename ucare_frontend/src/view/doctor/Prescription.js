@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { DataScroller } from 'primereact/datascroller';
 import { DataTable } from 'primereact/datatable';
+import { classNames } from 'primereact/utils';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
-import { Divider } from 'primereact/divider';
 import { Menu } from 'primereact/menu';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { InputText } from "primereact/inputtext";
+import { InputTextarea } from 'primereact/inputtextarea';
 import { Toolbar } from 'primereact/toolbar';
+import { Dialog } from 'primereact/dialog';
 
 
 import { forwardRef } from 'react';
@@ -30,6 +32,7 @@ import patientService from '../../service/patientService';
 import diagnosisService from '../../service/diagnosisService';
 import receiptService from '../../service/receiptService';
 import prescriptionService from '../../service/prescriptionService';
+import medicineService from '../../service/medicineService';
 
 import styles from '../../assets/scss/DataScroller.scss';
 
@@ -69,21 +72,20 @@ const useStyles = makeStyles({
     textfiled: {
         width: '100%'
     },
-    Line:{
-        display:'flex',
-        flexDirection:'row'
+    Line: {
+        display: 'flex',
+        flexDirection: 'row'
     }
 })
 
 export default function Prescription() {
 
-    let emptyItem = {
-        receiptNo: null,
+    let emptyPrescriptionItem = {
         patientNo: null,
-        name: '',
-        state: '',
-        diagnosisTime: '',
-        value: ''
+        medicineNm: '',
+        dosage: null,
+        dosingDay: null,
+        usage: ''
     };
 
     let emptyPatientItem = {
@@ -113,29 +115,37 @@ export default function Prescription() {
         cureYN: '',
         diseaseNm: '',
         medicineNm: ''
-    }
+    };
+
+    let emptyMedicineItem = {
+        medicineNo: null,
+        medicineCode: '',
+        medicineNm: '',
+        company: '',
+        mainIngredient: '',
+        additive: '',
+        origin: ''
+    };
 
     const classes = useStyles();
     const [items, setItems] = useState([]);
-    const [item, setItem] = useState(emptyItem);
+    const [medicineItems, setMedicineItems] = useState([]);
+    const [prescriptionitems, setPrescriptionItems] = useState([]);
+    const [prescriptionItem, setPrescriptionItem] = useState(emptyPrescriptionItem);
     const [patientItem, setPatientItem] = useState(emptyPatientItem);
     const [diagnosisItem, setDiagnosisItem] = useState(emptyDiagnosisItem);
+    const [medicineSelectedItem, setMedicineSelectedItem] = useState(emptyMedicineItem);
     const [selectedItems, setSelectedItems] = useState(null);
     const [price, setPrice] = useState('');
     const [insurancePrice, setInsurancePrice] = useState('');
     const [date, setDate] = useState(new Date());
+    const [medicineItemDialog, setMedicineItemDialog] = useState(false);
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
+    const [deleteItemsDialog, setDeleteItemsDialog] = useState(false);
     const [receiptCompleteDialog, setReceiptCompleteDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
-
-    var columns = [
-        { title: "PatientNo", field: "patientNo", hidden: true },
-        { title: "No.", field: "rowNo", editable: 'never' },
-        { title: "처방약", field: "medicineNm", lookup: { 약품1: '약품1', 약품2: '약품2', 약품3: '약품3' } },
-        { title: "투여량", field: "dosage", type: 'numeric' },
-        { title: "투약일수", field: "dosingDay", type: 'numeric' },
-        { title: "용법", field: "usage", type: 'numeric' }
-    ]
+    const [submitted, setSubmitted] = useState(false);
+    const [itemDialog, setItemDialog] = useState(false);
 
     const [data, setData] = useState([]); //table data
     const [iserror, setIserror] = useState(false);
@@ -148,48 +158,21 @@ export default function Prescription() {
     const $websocket = useRef(null);
 
     const dt = useRef(null);
+    const medicineDt = useRef(null);
 
-    const options = [
-        {
-            items: [
-                {
-                    label: '진료',
-                    icon: 'pi pi-refresh',
-                    command: () => {
-                        let _items = [...items];
-                        let _item = { ...item };
-                        const value = 'care';
-
-                        const index = findIndexByNo(item.receiptNo);
-
-                        _items[index].state = 'care';
-                        _items[index].value = '진료중';
-                        _item = _items[index];
-
-                        statusService.update(_item)
-                            .then(res => {
-                                console.log('success!!');
-                                setItems(_items);
-                                setItem(emptyItem);
-                                $websocket.current.sendMessage('/Doctor');
-                            })
-                            .catch(err => {
-                                console.log('update() Error!', err);
-                            });
-                    }
-                },
-                {
-                    label: '접수취소',
-                    icon: 'pi pi-times',
-                    command: () => {
-                        confirmDeleteItem(item);
-                    }
-                }
-            ]
-        }
-    ];
+    const retrieveMedicine = (e) => {
+        medicineService.retrieveAll()
+          .then( res => {
+            console.log('success!!');
+            setMedicineItems(res.data);
+        })
+          .catch(err => {
+            console.log('retrieveMedicine() Error!', err);
+        });
+    }
 
     useEffect(() => {
+        retrieveMedicine();
         prescriptionService.retrieveCureYN(dateFormat(date))
             .then(res => {
                 console.log('success!!');
@@ -227,97 +210,42 @@ export default function Prescription() {
             });
     }, [reload, value]);
 
-    const handleRowAdd = (newData, oldData, resolve) => {
-        //validation
-        let errorList = []
-        // if(newData.role === ""){
-        //   errorList.push("Please enter role")
-        // }
-        // if(newData.status === ""){
-        //   errorList.push("Please enter status")
-        // }
+    const saveItem = () => {
+        setSubmitted(true);
 
-        if (errorList.length < 1) {
-            prescriptionService.create(newData)
-                .then(res => {
-                    const dataUpdate = [...data];
-                    const index = oldData.tableData.id;
-                    dataUpdate[index] = newData;
-                    setData([...dataUpdate]);
-                    resolve()
-                    setIserror(false)
-                    setErrorMessages([])
-                })
-                .catch(error => {
-                    setErrorMessages(["Update failed! Server error"])
-                    setIserror(true)
-                    resolve()
+        if (item.diseaseNm.trim()) {
+            let _items = [...items];
+            let _item = { ...item };
+            if (item.diseaseNo) {
+                diseaseService.update(_item)
+                    .then(res => {
+                        const index = findIndexByNo(item.diseaseNo);
 
-                })
-        } else {
-            setErrorMessages(errorList)
-            setIserror(true)
-            resolve()
+                        _items[index] = _item;
+                        setItems(_items);
+                        setItemDialog(false);
+                        toast.current.show({ severity: 'success', summary: 'Successful', detail: '수정되었습니다.', life: 3000 });
+                    })
+                    .catch(err => {
+                        console.log('update() Error!', err);
+                    })
+            }
+            else {
+                diseaseService.create(_item)
+                    .then(res => {
+                        console.log('success!!');
+                        _item.diseaseNo = res.data;
+                        _items.unshift(_item);
+                        setItems(_items);
+                        setItemDialog(false);
+                        setItem(emptyItem);
+                        toast.current.show({ severity: 'success', summary: 'Successful', detail: '저장되었습니다.', life: 3000 });
+                    })
+                    .catch(err => {
+                        console.log('create() Error!', err);
+                    })
+            }
         }
-    }
-
-    const handleRowUpdate = (newData, oldData, resolve) => {
-        //validation
-        let errorList = []
-        // if(newData.role === ""){
-        //   errorList.push("Please enter role")
-        // }
-        // if(newData.status === ""){
-        //   errorList.push("Please enter status")
-        // }
-
-        if (errorList.length < 1) {
-            prescriptionService.update(newData)
-                .then(res => {
-                    const dataUpdate = [...data];
-                    const index = oldData.tableData.id;
-                    dataUpdate[index] = newData;
-                    setData([...dataUpdate]);
-                    resolve()
-                    setIserror(false)
-                    setErrorMessages([])
-                })
-                .catch(error => {
-                    setErrorMessages(["Update failed! Server error"])
-                    setIserror(true)
-                    resolve()
-
-                })
-        } else {
-            setErrorMessages(errorList)
-            setIserror(true)
-            resolve()
-        }
-    }
-
-    const receiptComplete = () => {
-        let _items = [...items];
-        let _item = { ...item };
-
-        const index = findIndexByNo(item.receiptNo);
-
-        _item = _items[index];
-
-        _item.state = 'complete';
-        _item.value = '완료';
-
-        _items[index] = _item;
-
-        receiptService.updateState(_item)
-            .then(res => {
-                console.log('success!!');
-                setItems(_items);
-                setItem(emptyItem);
-                hideReceiptCompleteDialog();
-            })
-            .catch(err => {
-                console.log('update() Error!', err);
-            });
     }
 
     const deleteItem = () => {
@@ -342,11 +270,6 @@ export default function Prescription() {
             });
     }
 
-    const confirmDeleteItem = (item) => {
-        setItem(item);
-        setDeleteItemDialog(true);
-    }
-
     // yyyy-MM-dd 포맷으로 반환
     const dateFormat = (date) => {
         var year = date.getFullYear();              //yyyy
@@ -358,22 +281,21 @@ export default function Prescription() {
     }
 
     const menuControl = (e, data) => {
-        console.log(data);
         if (data.cureYN === 'true') {
             patientService.retrieve(data.patientNo)
-            .then(res => {
-                setPatientItem(res.data);
-                diagnosisService.retrieveByReceiptNo(data.receiptNo)
-                    .then(res => {
-                        setDiagnosisItem(res.data);
-                    })
-                    .catch(err => {
-                        console.log('retrieveByReceiptNo() Error!', err);
-                    })
-            })
-            .catch(err => {
-                console.log('retrieve() Error!', err);
-            });
+                .then(res => {
+                    setPatientItem(res.data);
+                    diagnosisService.retrieveByReceiptNo(data.receiptNo)
+                        .then(res => {
+                            setDiagnosisItem(res.data);
+                        })
+                        .catch(err => {
+                            console.log('retrieveByReceiptNo() Error!', err);
+                        })
+                })
+                .catch(err => {
+                    console.log('retrieve() Error!', err);
+                });
         }
         else if (data.cureYN === 'complete')
             alert("처방완료된 환자입니다.");
@@ -422,6 +344,62 @@ export default function Prescription() {
         setReceiptCompleteDialog(false);
     }
 
+    const openNew = () => {
+        document.body.style.position = "relative";
+        document.body.style.overflow = "hidden";
+        setPrescriptionItem(emptyPrescriptionItem);
+        setSubmitted(false);
+        setItemDialog(true);
+    }
+
+    const confirmDeleteSelected = () => {
+        setDeleteItemsDialog(true);
+    }
+
+    const confirmDeleteItem = (item) => {
+        setPrescriptionItem(item);
+        setDeleteItemDialog(true);
+    }
+
+    const confirmMedicineItem = () => {
+        setMedicineItemDialog(true);
+    }
+
+    const hideDialog = () => {
+        document.body.style.position = "";
+        document.body.style.overflow = "";
+        setSubmitted(false);
+        setItemDialog(false);
+    }
+
+    const hideDeleteItemDialog = () => {
+        setDeleteItemDialog(false);
+    }
+
+    const hideMedicineItemDialog = () => {
+        setMedicineItemDialog(false);
+    }
+
+    const inputMedicineItemDialog = (data) => {
+        prescriptionItem.medicineNm = data.medicineNm;
+        prescriptionItem.patientNo = patientItem.patientNo;
+        setMedicineItemDialog(false);
+    }
+
+    const itemDialogFooter = (
+        <React.Fragment>
+            <Button label="취소" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+            <Button label="저장" icon="pi pi-check" className="p-button-text" onClick={saveItem} />
+        </React.Fragment>
+    );
+
+    const deleteItemDialogFooter = (
+        <React.Fragment>
+            <Button label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
+            <Button label="예" icon="pi pi-check" className="p-button-text" onClick={deleteItem} />
+        </React.Fragment>
+    );
+
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
@@ -434,7 +412,8 @@ export default function Prescription() {
     const rightToolbarTemplate = () => {
         return (
             <React.Fragment>
-
+                <Button label="입력" icon="pi pi-plus" className="p-button-success p-mr-2" style={{ backgroundColor: '#616161', borderColor: '#616161' }} onClick={openNew} />
+                <Button label="삭제" icon="pi pi-trash" className="p-button-danger" style={{ backgroundColor: '#616161', borderColor: '#616161' }} onClick={console.log()} disabled={!selectedItems || !selectedItems.length} />
             </React.Fragment>
         )
     }
@@ -442,11 +421,19 @@ export default function Prescription() {
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
-                <Button label="입력" icon="pi pi-plus" className="p-button-success p-mr-2" style={{ backgroundColor: '#616161', borderColor: '#616161' }} onClick={console.log()} />
-                <Button label="삭제" icon="pi pi-trash" className="p-button-danger" style={{ backgroundColor: '#616161', borderColor: '#616161' }} onClick={console.log()} disabled={!selectedItems || !selectedItems.length} />
+
             </React.Fragment>
         )
     }
+
+    const medicineHeader = (
+        <div className="table-header">
+            <span className="p-input-icon-left">
+                <i className="pi pi-search" />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+            </span>
+        </div>
+    );
 
     const renderHeader = () => {
         return (
@@ -507,7 +494,7 @@ export default function Prescription() {
                                 <InputText
                                     placeholder="환자명"
                                     className={classes.textStyle}
-                                    value={patientItem.name}/>
+                                    value={patientItem.name} />
                             </div>
                             <div className={classes.Line}>
                                 <div className={classes.addon}>
@@ -516,31 +503,79 @@ export default function Prescription() {
                                 <InputText
                                     placeholder="질병"
                                     className={classes.textStyle}
-                                    value={diagnosisItem.diseaseNm}/>
+                                    value={diagnosisItem.diseaseNm} />
                             </div>
                             <div className="card">
-                <Toolbar className="p-mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
+                                <Toolbar className="p-mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
 
-                <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="No data" onSelectionChange={(e) => setSelectedItems(e.value)}
-                    dataKey="diseaseNo" paginator rows={5}
-                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
-                    globalFilter={globalFilter}
-                    header={header}>
+                                <DataTable ref={dt} value={prescriptionitems} selection={selectedItems} emptyMessage="No data" onSelectionChange={(e) => setSelectedItems(e.value)}
+                                    dataKey="diseaseNo" paginator rows={5}
+                                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
+                                    globalFilter={globalFilter}>
 
-                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column field="patientNo" header="환자코드" hidden="true"></Column>
-                    <Column field="medicineNm" header="처방약"></Column>
-                    <Column field="dosage" header="투여량" sortable></Column>
-                    <Column field="dosingDay" header="투약일수" sortable></Column>
-                    <Column field="usage" header="용법"></Column>
-                    <Column body={actionBodyTemplate}></Column>
-                </DataTable>
-            </div>
+                                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+                                    <Column field="patientNo" header="환자코드" hidden="true"></Column>
+                                    <Column field="medicineNm" header="처방약"></Column>
+                                    <Column field="dosage" header="투여량" sortable></Column>
+                                    <Column field="dosingDay" header="투약일수" sortable></Column>
+                                    <Column field="usage" header="용법"></Column>
+                                    <Column body={actionBodyTemplate}></Column>
+                                </DataTable>
+                            </div>
+
+                            <Dialog visible={itemDialog} style={{ width: '450px' }} header="처방등록" modal className="p-fluid" footer={itemDialogFooter} onHide={hideDialog}>
+                                <div className="p-field">
+                                    <label htmlFor="patientNo">환자번호</label>
+                                    <InputText id="patientNo" value={prescriptionItem.patientNo} onChange={(e) => onInputChange(e, 'patientNo')} required autoFocus className={classNames({ 'p-invalid': submitted && !prescriptionItem.patientNo })} />
+                                </div>
+                                <div className="p-field">
+                                    <label htmlFor="medicineNm">처방약</label>
+                                    <InputText id="medicineNm" value={prescriptionItem.medicineNm} onChange={(e) => onInputChange(e, 'medicineNm')} onClick={confirmMedicineItem} className={classNames({ 'p-invalid': submitted && !prescriptionItem.medicineNm })} />
+                                    {submitted && !prescriptionItem.medicineNm && <small className="p-error">처방약은 필수입력입니다.</small>}
+                                </div>
+                                <div className="p-field">
+                                    <label htmlFor="dosage">투여량</label>
+                                    <InputText id="dosage" value={prescriptionItem.dosage} onChange={(e) => onInputChange(e, 'dosage')} className={classNames({ 'p-invalid': submitted && !prescriptionItem.dosage })} />
+                                </div>
+                                <div className="p-field">
+                                    <label htmlFor="dosingDay">투약일수</label>
+                                    <InputText id="dosingDay" value={prescriptionItem.dosingDay} onChange={(e) => onInputChange(e, 'dosingDay')} className={classNames({ 'p-invalid': submitted && !prescriptionItem.dosingDay })} />
+                                </div>
+                                <div className="p-field">
+                                    <label htmlFor="usage">용법</label>
+                                    <InputTextarea id="usage" value={prescriptionItem.usage} onChange={(e) => onInputChange(e, 'usage')} required rows={3} cols={20} />
+                                </div>
+                            </Dialog>
+
+                            <Dialog visible={medicineItemDialog} style={{ width: '600px', height: '500px' }} header="의약품정보" modal onHide={hideMedicineItemDialog}>
+                                <div className="card">
+                                    <DataTable ref={medicineDt} value={medicineItems} selectionMode="single" selection={medicineSelectedItem} emptyMessage="데이터가 없습니다." onSelectionChange={(e) => setMedicineSelectedItem(e.value)}
+                                        onRowDoubleClick={() => inputMedicineItemDialog(medicineSelectedItem)}
+                                        dataKey="medicineNo" paginator rows={5}
+                                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
+                                        globalFilter={globalFilter}
+                                        header={medicineHeader}>
+
+                                        <Column field="medicineCode" header="약품코드" sortable></Column>
+                                        <Column field="medicineNm" header="약품명" sortable></Column>
+                                        <Column field="company" header="제조사" ></Column>
+                                        <Column field="mainIngredient" header="주성분" ></Column>
+                                        <Column field="origin" header="수입/제조" sortable></Column>
+                                    </DataTable>
+                                </div>
+                            </Dialog>
+
+                            <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
+                                <div className="confirmation-content">
+                                    <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
+                                    {prescriptionItem && <span><b>{prescriptionItem.medicineNm} 삭제하시겠습니까</b>?</span>}
+                                </div>
+                            </Dialog>
                         </Grid>
                     </div>
                 </div>
-                <Menu model={options} popup ref={menu} id="popup_menu" />
             </div>
         </Fragment>
     );
