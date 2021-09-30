@@ -35,6 +35,7 @@ const Board = React.forwardRef((props, ref) => {
     const [globalFilter, setGlobalFilter] = useState(null);
     const [URL, setURL] = useState(null);
     const [URLName, setURLName] = useState(null);
+    const [reload, setReload] = useState(false);
     const toast = useRef(null);
     const dt = useRef(null);
 
@@ -52,6 +53,10 @@ const Board = React.forwardRef((props, ref) => {
     useEffect(() => {
         retrieveAll();
     }, []);
+
+    useEffect(() => {
+        retrieveAll();
+    }, [reload])
 
 
     const openNew = () => {
@@ -90,7 +95,7 @@ const Board = React.forwardRef((props, ref) => {
                         _items[index] = _item;
                         setItemDialog(false);
                         toast.current.show({ severity: 'success', summary: 'Successful', detail: '수정 완료!', life: 3000 });
-                        window.location.reload();
+                        setReload(!reload);
                     })
                     .catch(err => {
                         console.log('update() Error!', err);
@@ -102,7 +107,7 @@ const Board = React.forwardRef((props, ref) => {
                         console.log('success!!');
                         setItemDialog(false);
                         toast.current.show({ severity: 'success', summary: 'Successful', detail: '등록 완료!', life: 3000 });
-                        window.location.reload();
+                        setReload(!reload);
                     })
                     .catch(err => {
                         console.log('create() Error!', err);
