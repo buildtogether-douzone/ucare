@@ -296,7 +296,7 @@ export default function ReservationList() {
                 ref={$websocket} />
             <Toast ref={toast} />
             <div className="card">
-                <DataTable ref={dt} value={reservations} paginator rows={10}
+                <DataTable ref={dt} value={reservations} paginator rows={6}
                     header={header} className="p-datatable-customers"
                     globalFilter={globalFilter} emptyMessage="예약 내역이 없습니다.">
                     <Column style={{ textAlign: 'center', padding: '8px', width: '20%'}} field="name" header="이름" body={nameBodyTemplate} />
