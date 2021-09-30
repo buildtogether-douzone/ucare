@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#DFDFDF',
     borderRadius: '10px 10px 0 0',
     fontWeight: 550,
-    color: '#656565'
+    color: 'black'
   }
 }));
 

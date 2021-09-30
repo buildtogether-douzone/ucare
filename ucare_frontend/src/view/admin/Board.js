@@ -207,19 +207,11 @@ const Board = React.forwardRef((props, ref) => {
         setViewDialog(false);
     }
 
-    const leftToolbarTemplate = () => {
-        return (
-            <React.Fragment>
-                {sessionStorage.getItem('role') == '관리자' && <Button label="글쓰기" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={openNew} />}
-            </React.Fragment>
-        )
-    }
-
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" onClick={() => editItem(rowData)} />
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteItem(rowData)} />
+                <Button style={{color: '#1C91FB'}} icon="pi pi-pencil" className="p-button-rounded p-button-warning p-button-text" onClick={() => editItem(rowData)} />
+                <Button style={{color: '#1C91FB'}} icon="pi pi-trash" className="p-button-rounded p-button-warning p-button-text" onClick={() => confirmDeleteItem(rowData)} />
             </React.Fragment>
         );
     }
@@ -230,6 +222,9 @@ const Board = React.forwardRef((props, ref) => {
                 <i className="pi pi-search" />
                 <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
             </span>
+            <div style={{float: 'right'}}>
+                {sessionStorage.getItem('role') == '관리자' && <Button label="글쓰기" icon="pi pi-plus" className="p-button" onClick={openNew} />}
+            </div>
         </div>
     );
     const itemDialogFooter = (
@@ -266,21 +261,19 @@ const Board = React.forwardRef((props, ref) => {
             <Toast ref={toast} />
 
             <div className="card">
-                <Toolbar className="p-mb-4" left={leftToolbarTemplate}></Toolbar>
-
                 <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="No data" onSelectionChange={(e) => setSelectedItems(e.value)}
-                    dataKey="boardNo" paginator rows={7}
+                    dataKey="boardNo" paginator rows={9}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
                     globalFilter={globalFilter}
                     header={header}>
 
-                    <Column style={{ textAlign: 'center' }} field="boardNo" header="No"></Column>
-                    <Column style={{ textAlign: 'center', cursor: 'pointer'}} field="title" header="제목" body={coltemplate}></Column>
-                    <Column style={{ textAlign: 'center' }} field="userId" header="작성자"></Column>
-                    <Column style={{ textAlign: 'center' }} field="boardDt" header="작성일"></Column>
-                    <Column style={{ textAlign: 'center' }} field="hit" header="조회"></Column>
-                    {sessionStorage.getItem('role') == '관리자' && <Column style={{ textAlign: 'center' }} body={actionBodyTemplate}></Column> }
+                    <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="boardNo" header="No"></Column>
+                    <Column style={{ textAlign: 'center', width: '35%', padding: '10px' }} field="title" header="제목" body={coltemplate}></Column>
+                    <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="userId" header="작성자"></Column>
+                    <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="boardDt" header="작성일"></Column>
+                    <Column style={{ textAlign: 'center', width: '10%', padding: '10px' }} field="hit" header="조회"></Column>
+                    {sessionStorage.getItem('role') == '관리자' && <Column style={{ textAlign: 'center', width: '10%', padding: '5px' }} body={actionBodyTemplate}></Column> }
                 </DataTable>
             </div>
 
