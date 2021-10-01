@@ -9,6 +9,9 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import userService from '../service/userService';
 import SiteLayout from '../layout/SiteLayout';
 
+import { useRecoilState } from 'recoil';
+import { reloadProfile } from '../recoil/atom/profileAtom';
+
 
 const useStyles = makeStyles((theme) => ({
 
@@ -68,6 +71,8 @@ export default function Profile() {
   const [file, setFile] = useState('');
   const [previewURL, setPreviewURL] = useState('');
   const [imageURL, setImageURL] = useState('');
+
+  const [reload, setReload] = useRecoilState(reloadProfile);
 
   useEffect(() => {
     let user = {
@@ -149,6 +154,7 @@ export default function Profile() {
     userService.updateUser(formData)
       .then(res => {
         console.log(user.name + '님의 정보가 성공적으로 수정되었습니다.');
+        setReload(!reload);
       })
       .catch(err => {
         console.log('updateUser() 에러', err);

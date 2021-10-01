@@ -27,6 +27,9 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import UserService from '../service/userService';
 import MessageService from '../service/messageService';
 
+import { useRecoilState } from 'recoil';
+import { reloadProfile } from '../recoil/atom/profileAtom';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -110,6 +113,8 @@ const Header = ({ open, drawerManage }) => {
   const [sendMessageItem, setSendMessageItem] = useState(null);
   const [massageState, setMassageSatate] = useState(true);
 
+  const [profileUpdate, setProfileUpdate] = useRecoilState(reloadProfile);
+
   const $websocket = useRef(null);
   const isMounted = useRef(false);
 
@@ -176,11 +181,30 @@ const Header = ({ open, drawerManage }) => {
         setName(res.data.name);
         setURL(res.data.image);
         setEmail(res.data.email)
-      })
-      .catch(err => {
+     .catch(err => {
+       })
         console.log('fetchUser() 에러', err);
       });
   }, []);
+
+  useEffect(() => {
+    let user = {
+      id: sessionStorage.getItem('user')
+    };
+
+    isMounted.current = true;
+    setUserID(sessionStorage.getItem('user'));
+
+    userService.fetchUserByID(user)
+      .then(res => {
+        setName(res.data.name);
+        setURL(res.data.image);
+        setEmail(res.data.email)
+     .catch(err => {
+       })
+        console.log('fetchUser() 에러', err);
+      });
+  }, [profileUpdate]);
 
   useEffect(() => {
     MessageService.retrieveAll(sessionStorage.getItem('user'))
