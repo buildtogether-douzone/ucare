@@ -181,8 +181,8 @@ const Header = ({ open, drawerManage }) => {
         setName(res.data.name);
         setURL(res.data.image);
         setEmail(res.data.email)
-     .catch(err => {
        })
+      .catch(err => {
         console.log('fetchUser() 에러', err);
       });
   }, []);
@@ -200,8 +200,8 @@ const Header = ({ open, drawerManage }) => {
         setName(res.data.name);
         setURL(res.data.image);
         setEmail(res.data.email)
-     .catch(err => {
        })
+      .catch(err => {
         console.log('fetchUser() 에러', err);
       });
   }, [profileUpdate]);
