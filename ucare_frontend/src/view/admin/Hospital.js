@@ -16,6 +16,7 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Card } from 'primereact/card';
 import hospitalService from '../../service/hospitalService';
 import styles from  '../../assets/scss/Hospital.scss';
+import basicImg from '../../assets/image/basicImg.jpg';
 
 const useStyles = makeStyles({
     textStyle: {
@@ -233,7 +234,9 @@ export default function Hospital() {
                             </div>
                             <div className="p-col-12 p-lg-6">
                                 <div className={styles.profile_img}>
-                                    <img className={styles.profile_img_img} src={previewURL} alt="../../assets/image/profile.jpg"/>
+                                {previewURL != null ? 
+                                <img className={styles.profile_img_img} src={previewURL} />
+                                : <img className={styles.profile_img_img} src={basicImg} />}
                                 </div>
                                 <Button
                                     className={classes.button}
@@ -249,15 +252,13 @@ export default function Hospital() {
                                     <input id={"file-input"} style={{ display: 'none' }} type="file" name="imageFile" onChange={handleFileOnChange} />
                                 </Button>
                                     <div className="p-field" style={{ marginTop: '2%' }}>
-                                        <span className="p-input-icon-left">
-                                            <InputTextarea
-                                                placeholder="병원장 인사말" 
-                                                autoResize
-                                                rows={9}
-                                                cols={30} 
-                                                value={headSpeak || ''}
-                                                onChange={(e) => setHeadSpeak(e.target.value)} />
-                                        </span>
+                                        <InputTextarea
+                                            placeholder="병원장 인사말" 
+                                            autoResize
+                                            rows={9}
+                                            cols={30} 
+                                            value={headSpeak || ''}
+                                            onChange={(e) => setHeadSpeak(e.target.value)} />
                                     </div>
                                 </div>
                             </div>
