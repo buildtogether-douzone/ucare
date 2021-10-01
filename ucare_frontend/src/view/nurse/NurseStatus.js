@@ -7,7 +7,7 @@ import { Dialog } from 'primereact/dialog';
 import { Panel } from 'primereact/panel';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Divider } from 'primereact/divider';
-
+import { Card } from 'primereact/card';
 import { useRecoilState } from 'recoil';
 import { reloadState } from '../../recoil/atom/nurseAtom';
 import SockJsClient from 'react-stomp';
@@ -394,11 +394,10 @@ export default function NurseStatus() {
                 topics={['/topics/nurse']}
                 onMessage={msg => { setValue(msg) }}
                 ref={$websocket} />
-
-            <div className="card">
+            <div className="card" style={{ margin: '20px' }}>
                 <div className="p-grid">
                     <div className="p-col-12 p-md-6 p-lg-6">
-                    <TabView style={{ justifyContent: 'center', padding: '20px' }}>
+                    <TabView>
                         <TabPanel header={"전체" + "(" + items.length + ")"}>
                             <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
                                 <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
@@ -427,7 +426,9 @@ export default function NurseStatus() {
                     </TabView>
                     </div>
                     <div className="p-col-12 p-md-6 p-lg-6">
-                        <Panel header="수납" style={{ height: '100%', justifyContent: 'center', padding: '20px' }}>
+                    <Card>
+                        <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>수납</span>
+                        <Divider />
                         {(item.state !== 'wait') &&
                             <div className="activity-header">
                                 <div className="p-grid">
@@ -508,7 +509,7 @@ export default function NurseStatus() {
                                     </div>
                                 </ul>
                             }
-                        </Panel>
+                        </Card>
                     </div>
                 </div>
                 <Menu model={options} popup ref={menu} id="popup_menu" />

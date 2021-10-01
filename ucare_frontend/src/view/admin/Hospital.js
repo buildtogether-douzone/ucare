@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import HomeIcon from '@material-ui/icons/Home';
-import BusinessIcon from '@material-ui/icons/Business';
-import PersonIcon from '@material-ui/icons/Person';
-import PhoneIcon from '@material-ui/icons/Phone';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import LanguageIcon from '@material-ui/icons/Language';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
-import PrintIcon from '@material-ui/icons/Print';
 import { Button, TextField } from '@material-ui/core';
 import { Button as Buttons } from 'primereact/button';
 import { makeStyles } from '@material-ui/styles';
@@ -17,6 +9,7 @@ import { Card } from 'primereact/card';
 import hospitalService from '../../service/hospitalService';
 import styles from  '../../assets/scss/Hospital.scss';
 import basicImg from '../../assets/image/basicImg.jpg';
+import { Divider } from 'primereact/divider';
 
 const useStyles = makeStyles({
     textStyle: {
@@ -156,8 +149,10 @@ export default function Hospital() {
             <div className="p-grid" style={{ margin: '10px' }}>
                 <div className="p-col-12">
                     <div className="card p-fluid">
-                        <Card title="병원 정보">
-                            <div className="p-grid">
+                        <Card>
+                            <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>병원 정보</span>
+                            <Divider />
+                        <div className="p-grid">
                         <div className="p-col-12 p-lg-6">
                             <div className="p-field">
                                 <span className="p-input-icon-left">

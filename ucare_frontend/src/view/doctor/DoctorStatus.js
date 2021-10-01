@@ -10,7 +10,8 @@ import { Checkbox } from 'primereact/checkbox';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { MultiSelect } from 'primereact/multiselect';
 import { Toast } from 'primereact/toast';
-
+import { Divider } from 'primereact/divider';
+import { Card } from 'primereact/card';
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
 import patientService from '../../service/patientService';
@@ -481,7 +482,7 @@ export default function DoctorDiagnosis() {
                 onMessage={msg => { setReload(msg) }}
                 ref={$websocket} />
             <Toast ref={toast} />
-            <div className="card">
+            <div className="card" style={{ margin: '20px' }}>
                 <div className="p-grid">
                     <div className="p-col-12 p-md-6 p-lg-4">
                         <TabView style={{ justifyContent: 'center', padding: '20px' }}>
@@ -508,46 +509,48 @@ export default function DoctorDiagnosis() {
                         </TabView>
                     </div>
                     <div className="p-col-12 p-md-6 p-lg-4">
-                        <div className="card p-fluid">
-                            <Panel header="환자정보" style={{ height: '100%', justifyContent: 'center', padding: '20px' }}>
-                                <div className="activity-header">
-                                    <div className="p-grid">
-                                        <div className="p-col-6">
-                                            <span style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center' }}>{patient.name}{patient.name && '/'}{patient.gender}</span>
-                                        </div>
-                                        <div className="p-col-6" style={{ textAlign: 'right' }}>
-                                        </div>
+                        <Card>
+                            <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>환자 정보</span>
+                            <Divider />
+                            <div className="activity-header">
+                                <div className="p-grid">
+                                    <div className="p-col-6">
+                                        <span style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center' }}>{patient.name}{patient.name && '/'}{patient.gender}</span>
+                                    </div>
+                                    <div className="p-col-6" style={{ textAlign: 'right' }}>
                                     </div>
                                 </div>
+                            </div>
 
-                                <ul className="activity-list">
-                                    <li>
-                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                            <h5 className="activity p-m-0">보험여부</h5>
-                                            <div className="count">{patient.insurance}</div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                            <h5 className="activity p-m-0">진료구분</h5>
-                                            <div className="count">{patient.diagnosis}</div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </Panel>
-                        </div>
-                        <div className="card p-fluid">
-                            <Panel header="과거병력" style={{ height: '100%', justifyContent: 'center', padding: '20px' }}>
-                                <div className="activity-header">
-                                    <div className="datascroller">
-                                        <DataScroller value={pastDiagnosis} itemTemplate={pastDiagnosisTemplate} rows={5} inline scrollHeight="300px" />
+                            <ul className="activity-list">
+                                <li>
+                                    <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                        <h5 className="activity p-m-0">보험여부</h5>
+                                        <div className="count">{patient.insurance}</div>
                                     </div>
+                                </li>
+                                <li>
+                                    <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                        <h5 className="activity p-m-0">진료구분</h5>
+                                        <div className="count">{patient.diagnosis}</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </Card>
+                        <Card style={{ marginTop: '20px'}}>
+                            <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>과거 병력</span>
+                            <Divider />
+                            <div className="activity-header">
+                                <div className="datascroller">
+                                    <DataScroller value={pastDiagnosis} itemTemplate={pastDiagnosisTemplate} rows={5} inline scrollHeight="300px" />
                                 </div>
-                            </Panel>
-                        </div>
+                            </div>
+                        </Card>
                     </div>
                     <div className="p-col-12 p-md-6 p-lg-4">
-                        <Panel header="진료" style={{ height: '100%', justifyContent: 'center', padding: '20px' }}>
+                        <Card>
+                            <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>진료</span>
+                            <Divider />
                             <div className="card p-fluid">
                                 <div className="p-field p-grid">
                                     <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">병명</label>
@@ -578,7 +581,7 @@ export default function DoctorDiagnosis() {
                             <div>
                                 <Button type="button" label="진료완료" onClick={saveDiagnosis} style={{ marginTop: '20px' }} />
                             </div>
-                        </Panel>
+                        </Card>
                     </div>
                 </div>
                 <Menu model={options} popup ref={menu} id="popup_menu" />

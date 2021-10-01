@@ -296,7 +296,7 @@ export default function NewPatient() {
         <form className={classes.form} noValidate>
           <Grid container>
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">이름</Typography>
+              <Typography className={classes.font} variant="body1">이름<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <TextField
                 style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
@@ -316,7 +316,7 @@ export default function NewPatient() {
               />
             </Grid>
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">주민등록번호</Typography>
+              <Typography className={classes.font} variant="body1">주민등록번호<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <TextField
                 style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
@@ -357,7 +357,7 @@ export default function NewPatient() {
             </Grid>
 
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">연락처</Typography>
+              <Typography className={classes.font} variant="body1">연락처<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <TextField
                 style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
@@ -377,7 +377,7 @@ export default function NewPatient() {
             </Grid>
 
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">주소</Typography>
+              <Typography className={classes.font} variant="body1">주소<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <TextField
                 className={classes.input}
                 style={{ backgroundColor: '#FFFFFF', width: '58%' }}
@@ -444,7 +444,7 @@ export default function NewPatient() {
             </Grid>
 
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">보험 여부</Typography>
+              <Typography className={classes.font} variant="body1">보험 여부<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <FormControl component="fieldset" className={classes.radio}>
                 <RadioGroup row aria-label="insurance" name="insurance" value={insurance} onChange={(e) => { setInsurance(e.target.value) }} >
                   <FormControlLabel
@@ -464,7 +464,7 @@ export default function NewPatient() {
             </Grid>
 
             <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">진료 구분</Typography>
+              <Typography className={classes.font} variant="body1">진료 구분<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <FormControl component="fieldset" className={classes.radio}>
                 <RadioGroup row aria-label="diagnosis" name="diagnosis" value={diagType} onChange={(e) => { setDiagType(e.target.value) }} >
                   <FormControlLabel

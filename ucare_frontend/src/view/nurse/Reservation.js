@@ -6,7 +6,7 @@ import { Card } from 'primereact/card';
 import { Calendar } from 'primereact/calendar';
 import { ListBox } from 'primereact/listbox';
 import { Toast } from 'primereact/toast';
-
+import { Divider } from 'primereact/divider';
 import timeService from '../../service/timeService';
 import patientService from '../../service/patientService';
 import reservationService from '../../service/reservationService';
@@ -210,7 +210,9 @@ export default function Reservation() {
             </div>
             <div className="p-col-12 p-lg-4">
                 <div className="card p-fluid">
-                    <Card title="예약">
+                    <Card>
+                        <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>예약</span>
+                        <Divider />
                         <div className="p-field">
                             <label htmlFor="name">이름/주민등록번호</label>
                             <Dropdown value={selectedPatient} options={items} onChange={onPatientChange} optionLabel="name" filter filterBy="name" placeholder="이름"
@@ -240,6 +242,7 @@ export default function Reservation() {
                     <Card>
                         <div className="p-field">
                             <label htmlFor="time">시간</label>
+                            <Divider />
                             {time != '' ?
                                 <ListBox value={selectedTime} options={time} onChange={(e) => onTimeChange(e)} optionLabel="time" listStyle={{ maxHeight: '375px' }} />
                                 : <div className="p-mb-3 p-text-left">예약 가능한 시간이 없습니다.</div>}

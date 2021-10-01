@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { forwardRef } from 'react';
 import Grid from '@material-ui/core/Grid';
-
+import { Card } from 'primereact/card';
+import { Divider } from 'primereact/divider';
 import MaterialTable from "material-table";
+import { Paper } from '@material-ui/core';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -108,29 +110,35 @@ export default function Setting() {
   }
 
   return (
-          <Grid item xs={12}>
-          <div>
-            {iserror && 
-              <Alert severity="error">
-                  {errorMessages.map((msg, i) => {
-                      return <div key={i}>{msg}</div>
-                  })}
-              </Alert>
-            }       
-          </div>
-            <MaterialTable
-              title="사용자 직책 및 상태 관리"
-              columns={columns}
-              data={data}
-              icons={tableIcons}
-              editable={{
-                onRowUpdate: (newData, oldData) =>
-                  new Promise((resolve) => {
-                      handleRowUpdate(newData, oldData, resolve);
-                      
-                  }),
-              }}
-            />
-          </Grid>
+        <Card>
+          <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>사용자 직책 및 상태 관리</span>
+          <Divider />
+            <Grid item xs={12}>
+            <div>
+              {iserror && 
+                <Alert severity="error">
+                    {errorMessages.map((msg, i) => {
+                        return <div key={i}>{msg}</div>
+                    })}
+                </Alert>
+              }       
+            </div>
+              <MaterialTable
+                columns={columns}
+                data={data}
+                icons={tableIcons}
+                editable={{
+                  onRowUpdate: (newData, oldData) =>
+                    new Promise((resolve) => {
+                        handleRowUpdate(newData, oldData, resolve);
+                        
+                    }),
+                }}
+                components={{
+                  Container: props => <Paper {...props} elevation={0}/>
+                }}
+              />
+            </Grid>
+        </Card>
   );
 }

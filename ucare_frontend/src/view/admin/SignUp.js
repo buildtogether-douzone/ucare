@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -10,8 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import userService from '../../service/userService';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import Container from '@material-ui/core/Container';
-
+import { Card } from 'primereact/card';
 import SearchIcon from '@material-ui/icons/Search';
 import DaumPostcode from "react-daum-postcode";
 import Dialog from '@material-ui/core/Dialog';
@@ -19,27 +17,25 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Toast } from 'primereact/toast';
+import { Divider } from 'primereact/divider';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    border: '1px solid white',
-    backgroundColor: '#FFFFFF'
+    alignItems: 'center'
   },
   form: {
     width: '50%',
+    position: 'absoute'
   },
   font: {
     width: '25%',
     float: 'left',
     height: '100%',
     paddingTop: '12px',
-    paddingLeft: '5px',
-    backgroundColor: '#E7E7E7'
+    paddingLeft: '10px',
+    backgroundColor: '#F4F4F4'
   },
   input: {
     width: '75%',
@@ -273,18 +269,22 @@ export default function SignUp() {
       });
   }
 
+
   return (
-    <Container component="main">
-      <CssBaseline />
-      <div className={classes.paper}>
+    <React.Fragment>
+    <div className="p-grid" style={{ margin: '10px' }}>
+    <div className="p-col-12">
+        <div className="card p-fluid">
+            <Card>
+            <div className={classes.paper}>
+              <span style={{ color: '#1C91FB', fontSize: '20px' }}>회원 등록</span>
+            <Divider />
       <Toast ref={toast} />
-        <Typography variant="h6" className={classes.title}>회원가입</Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate sty>
           <Grid container>
-            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">ID</Typography>
+            <Grid item xs={12} style={{ borderTop: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1">ID<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <TextField
-                style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
                 variant="outlined"
                 required
@@ -297,10 +297,9 @@ export default function SignUp() {
                 onChange={idChange}
               />
             </Grid>
-            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">비밀번호</Typography>
+            <Grid item xs={12} style={{ borderTop: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1">비밀번호<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <TextField
-                style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
                 variant="outlined"
                 required
@@ -317,10 +316,9 @@ export default function SignUp() {
               />
             </Grid>
 
-            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">비밀번호 확인</Typography>
+            <Grid item xs={12} style={{ borderTop: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1">비밀번호 확인<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <TextField
-                style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
                 variant="outlined"
                 required
@@ -339,10 +337,9 @@ export default function SignUp() {
               />
             </Grid>
 
-            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">이름</Typography>
+            <Grid item xs={12} style={{ borderTop: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1">이름<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <TextField
-                style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
                 variant="outlined"
                 required
@@ -360,10 +357,9 @@ export default function SignUp() {
               />
             </Grid>
 
-            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">주민등록번호</Typography>
+            <Grid item xs={12} style={{ borderTop: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1">주민등록번호<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <TextField
-                style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
                 variant="outlined"
                 required
@@ -381,7 +377,7 @@ export default function SignUp() {
               />
             </Grid>
 
-            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
+            <Grid item xs={12} style={{ borderTop: '1px solid #D6D6D6' }}>
               <Typography className={classes.font} variant="body1">성별</Typography>
               <FormControl component="fieldset" className={classes.radio}>
                 <RadioGroup row aria-label="gender" name="gender" value={gender} onChange={genderChange} >
@@ -401,10 +397,9 @@ export default function SignUp() {
               </FormControl>
             </Grid>
 
-            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">연락처</Typography>
+            <Grid item xs={12} style={{ borderTop: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1">연락처<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <TextField
-                style={{ backgroundColor: '#FFFFFF' }}
                 className={classes.input}
                 variant="outlined"
                 required
@@ -421,11 +416,11 @@ export default function SignUp() {
               />
             </Grid>
 
-            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">주소</Typography>
+            <Grid item xs={12} style={{ borderTop: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1">주소<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <TextField
                 className={classes.input}
-                style={{ backgroundColor: '#FFFFFF', width: '58%' }}
+                style={{ width: '68%' }}
                 variant="outlined"
                 required
                 size="small"
@@ -435,7 +430,7 @@ export default function SignUp() {
                 value={address}
                 onChange={addressChange}
               />
-              <SearchIcon onClick={openPostCode} style={{ fontSize: '30px', marginTop: '10px', cursor: 'pointer' }} />
+              <SearchIcon onClick={openPostCode} style={{ fontSize: '33px', marginTop: '10px', cursor: 'pointer', color: '#1C91FB' }} />
               <Dialog
                 open={isPopupOpen}
                 onClose={closePostCode}
@@ -456,7 +451,6 @@ export default function SignUp() {
               </Dialog>
               <TextField
                 className={classes.input}
-                style={{ backgroundColor: '#FFFFFF' }}
                 variant="outlined"
                 size="small"
                 id="detailAddress"
@@ -467,11 +461,10 @@ export default function SignUp() {
               />
             </Grid>
 
-            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">이메일</Typography>
+            <Grid item xs={12} style={{ borderTop: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1">이메일<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <TextField
                 className={classes.input}
-                style={{ backgroundColor: '#FFFFFF' }}
                 variant="outlined"
                 required
                 fullWidth
@@ -488,8 +481,8 @@ export default function SignUp() {
               />
             </Grid>
 
-            <Grid item xs={12} style={{ border: '1px solid #D6D6D6' }}>
-              <Typography className={classes.font} variant="body1">역할</Typography>
+            <Grid item xs={12} style={{ borderTop: '1px solid #D6D6D6', borderBottom: '1px solid #D6D6D6' }}>
+              <Typography className={classes.font} variant="body1">역할<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
               <FormControl component="fieldset" className={classes.radio}>
                 <RadioGroup row aria-label="role" name="role" value={role} onChange={roleChange} >
                   <FormControlLabel
@@ -509,9 +502,8 @@ export default function SignUp() {
             </Grid>
 
           </Grid>
-
           <Button
-            style={{ backgroundColor: '#616161', float: 'right', margin: '5px' }}
+            style={{ backgroundColor: '#1C91FB', float: 'right', border: '1px solid #1C91FB', margin: '6px', }}
             variant="contained"
             color="primary"
             size="medium"
@@ -520,8 +512,12 @@ export default function SignUp() {
           >
             등록하기
           </Button>
-        </form>
+          </form>
+          </div>
+          </Card>
+          </div>
+          </div>
       </div>
-    </Container>
+      </React.Fragment>
   );
 }
