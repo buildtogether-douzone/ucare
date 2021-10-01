@@ -102,7 +102,7 @@ export default function SignInSide({ history }) {
                      decoded.role=='의사' ? '/doctor/main' :
                      decoded.role=='간호사' && '/nurse/main');
       } else if(decoded.status == "false"){
-        toast.current.show({severity:'error', summary: '알림', detail:'정지된 사용자 입니다.', life: 3000});
+        toast.current.show({severity:'error', summary: '알림', detail:'현재 비활성화된 계정입니다.', life: 3000});
       } else {
         toast.current.show({severity:'error', summary: '알림', detail:'로그인 정보가 없습니다.', life: 3000});
       }
