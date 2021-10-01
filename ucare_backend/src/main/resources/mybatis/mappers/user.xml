@@ -42,7 +42,8 @@
 			   name,
 			   password,
 			   role,
-			   user_no as userNo
+			   user_no as userNo,
+			   status
 		FROM ucare.user
 		WHERE id = #{username }
 	</select>

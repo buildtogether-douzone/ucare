@@ -89,7 +89,7 @@ export default function SignInSide({ history }) {
       token = token.replace('Bearer','');
       let decoded = jwt(token);
       
-      if(decoded) {
+      if(decoded.status == "true") {
         console.log(decoded.username + '님이 성공적으로 로그인하였습니다.');
         sessionStorage.setItem('user', decoded.id);
         sessionStorage.setItem('user_no', decoded.userNo);
@@ -101,8 +101,10 @@ export default function SignInSide({ history }) {
         history.push(decoded.role=='관리자'? '/admin/main' :
                      decoded.role=='의사' ? '/doctor/main' :
                      decoded.role=='간호사' && '/nurse/main');
+      } else if(decoded.status == "false"){
+        toast.current.show({severity:'error', summary: '알림', detail:'정지된 사용자 입니다.', life: 3000});
       } else {
-        console.log('로그인 정보가 없습니다.');
+        toast.current.show({severity:'error', summary: '알림', detail:'로그인 정보가 없습니다.', life: 3000});
       }
     })
     .catch( err => {
