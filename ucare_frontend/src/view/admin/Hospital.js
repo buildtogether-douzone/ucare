@@ -239,14 +239,13 @@ export default function Hospital() {
                                 : <img className={styles.profile_img_img} src={basicImg} />}
                                 </div>
                                 <Button
-                                    className={classes.button}
-                                    variant="contained"
-                                    color="default"
+                                    style={{ border: '1px solid #1C91FB' }}
+                                    variant="outlined"
                                     size="small"
                                     component="label"
-                                    startIcon={
-                                        <span>
-                                            <CloudUploadIcon style={{ padding: '5px 0 0 0' }} /><span style={{ padding: '0 0 0px 2px' }}>Upload</span>
+                                    startIcon={ 
+                                        <span style={{ padding: 0}}>
+                                            <CloudUploadIcon style={{ padding: '8px 0 0 0', color: '#1C91FB' }} /><span style={{ padding: '0 0 0px 2px', color: '#1C91FB' }}>병원장 사진</span>
                                         </span>
                                     }>
                                     <input id={"file-input"} style={{ display: 'none' }} type="file" name="imageFile" onChange={handleFileOnChange} />
