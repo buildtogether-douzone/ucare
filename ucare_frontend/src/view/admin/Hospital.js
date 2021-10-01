@@ -238,7 +238,7 @@ export default function Hospital() {
                             </div>
                             <div className="p-col-12 p-lg-6">
                         <div style={{ overflow: 'hidden' }}>
-                            <h2>병원장 사진</h2>
+                        <label htmlFor="ssn">주민등록번호</label>
                             <div className={classes.image} >
                                 <div className={classes.profile}
                                     style={previewURL == null ?
