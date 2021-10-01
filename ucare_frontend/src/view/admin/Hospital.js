@@ -153,6 +153,7 @@ export default function Hospital() {
                 <div className="p-col-12">
                     <div className="card p-fluid">
                         <Card title="병원 정보">
+                            <div className="p-grid">
                         <div className="p-col-12 p-lg-6">
                             <div className="p-field">
                                 <span className="p-input-icon-left">
@@ -235,7 +236,7 @@ export default function Hospital() {
                                 등록
                             </Button>
                             </div>
-                            <div className="p-col-12 p-lg-4">
+                            <div className="p-col-12 p-lg-6">
                         <div style={{ overflow: 'hidden' }}>
                             <h2>병원장 사진</h2>
                             <div className={classes.image} >
@@ -259,13 +260,16 @@ export default function Hospital() {
                             </div>
                         </div>
                         <div >
+                            <h2>병원장 인사말</h2>
                             <TextField
+                                className={classes.textfiled}
                                 label="내용"
                                 variant="outlined"
                                 multiline
                                 rows={7}
                                 value={headSpeak || ''}
                                 onChange={(e) => setHeadSpeak(e.target.value)} />
+                        </div>
                         </div>
                         </div>
                     </Card>
