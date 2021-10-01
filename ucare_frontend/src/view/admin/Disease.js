@@ -88,7 +88,7 @@ export default function Disease() {
                     _items[index] = _item;
                     setItems(_items);
                     setItemDialog(false);
-                    toast.current.show({ severity: 'success', summary: 'Successful', detail: '수정되었습니다.', life: 3000 });
+                    toast.current.show({ severity: 'success', summary: '알림', detail: '수정 완료!', life: 3000 });
                 })
                 .catch(err => {
                     console.log('update() Error!', err);
@@ -103,7 +103,7 @@ export default function Disease() {
                     setItems(_items);
                     setItemDialog(false);
                     setItem(emptyItem);
-                    toast.current.show({ severity: 'success', summary: 'Successful', detail: '저장되었습니다.', life: 3000 });
+                    toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료!', life: 3000 });
                 })
                 .catch(err => {
                     console.log('create() Error!', err);
@@ -129,7 +129,7 @@ export default function Disease() {
             setItems(_items);
             setDeleteItemDialog(false);
             setItem(emptyItem);
-            toast.current.show({ severity: 'success', summary: 'Successful', detail: '삭제되었습니다.', life: 3000 });
+            toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료!', life: 3000 });
         })
         .catch(err => {
             console.log('delete() Error!', err);
@@ -177,7 +177,7 @@ export default function Disease() {
                     .then(res => {
                         success = true;
                         if((_importedData.length === (index+1)) && success === true) {
-                            toast.current.show({ severity: 'success', summary: 'Successful', detail: '성공적으로 저장되었습니다.', life: 3000 });
+                            toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료!', life: 3000 });
                         }
                     })
                     .catch(err => {
@@ -226,7 +226,7 @@ export default function Disease() {
                     setItems(_items);
                     setDeleteItemsDialog(false);
                     setSelectedItems(null);
-                    toast.current.show({ severity: 'success', summary: 'Successful', detail: '성공적으로 삭제되었습니다.', life: 3000 });
+                    toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료!', life: 3000 });
                 }
             })
             .catch(err => {
@@ -244,30 +244,11 @@ export default function Disease() {
         setItem(_item);
     }
 
-    const leftToolbarTemplate = () => {
-        return (
-            <React.Fragment>
-                <Button label="입력" icon="pi pi-plus" className="p-button-success p-mr-2" style={{ backgroundColor: '#616161', borderColor: '#616161' }} onClick={openNew} />
-                <Button label="삭제" icon="pi pi-trash" className="p-button-danger" style={{ backgroundColor: '#616161', borderColor: '#616161' }} onClick={confirmDeleteSelected} disabled={!selectedItems || !selectedItems.length} />
-            </React.Fragment>
-        )
-    }
-
-    const rightToolbarTemplate = () => {
-        return (
-            <React.Fragment>
-                <FileUpload chooseOptions={{ label: 'Excel', icon: 'pi pi-file-excel', className: 'p-button-success' }} mode="basic" name="demo[]" auto url="https://primefaces.org/primereact/showcase/upload.php"
-                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" className="p-mr-2" onUpload={importExcel} />
-                <Button label="Excel Export" icon="pi pi-upload" onClick={exportExcel} />
-            </React.Fragment>
-        )
-    }
-
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning p-mr-2" style={{ backgroundColor: '#FFFFFF', borderColor: '#FFFFFF' }} onClick={() => editItem(rowData)} />
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" style={{ backgroundColor: '#FFFFFF', borderColor: '#FFFFFF' }} onClick={() => confirmDeleteItem(rowData)} />
+                <Button style={{color: '#1C91FB'}} icon="pi pi-pencil" className="p-button-rounded p-button-warning p-button-text" onClick={() => editItem(rowData)} />
+                <Button style={{color: '#1C91FB'}} icon="pi pi-trash" className="p-button-rounded p-button-warning p-button-text" onClick={() => confirmDeleteItem(rowData)} />
             </React.Fragment>
         );
     }
@@ -276,10 +257,20 @@ export default function Disease() {
         <div className="table-header">
             <span className="p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText className="p-mr-2" type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <Button label="입력" icon="pi pi-plus" className="p-button p-mr-2" style={{ backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} onClick={openNew} />
+                <Button label="선택삭제" icon="pi pi-trash" className="p-button-danger" style={{ backgroundColor: '#FFFFFF', borderColor: '#FF0000', color: '#FF0000' }} onClick={confirmDeleteSelected} disabled={!selectedItems || !selectedItems.length} />
             </span>
+            <span className="p-input-icon-left"  style={{ float: 'right' }}>
+            <Button style={{ float: 'right', backgroundColor: '#FFFFFF', borderColor: '#82AF72', color: '#82AF72' }} label="Excel Export" icon="pi pi-upload" onClick={exportExcel} />
+            <FileUpload style={{ float: 'right' }} chooseOptions={{ label: 'Excel', icon: 'pi pi-file-excel', className: 'p-button-success' }} mode="basic" name="demo[]" auto url="https://primefaces.org/primereact/showcase/upload.php"
+                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" className="p-mr-2" onUpload={importExcel} />
+            </span>
+
         </div>
     );
+
+
     const itemDialogFooter = (
         <React.Fragment>
             <Button label="취소" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
@@ -301,24 +292,22 @@ export default function Disease() {
 
     return (
         <div className="datatable-crud">
-            <Toast ref={toast} />
+            <Toast ref={toast} position="top-center"/>
 
             <div className="card">
-                <Toolbar className="p-mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
-
-                <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="데이터가 없습니다." onSelectionChange={(e) => setSelectedItems(e.value)}
-                    dataKey="diseaseNo" paginator rows={5}
+                <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="질병 정보가 없습니다." onSelectionChange={(e) => setSelectedItems(e.value)}
+                    dataKey="diseaseNo" paginator rows={8}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
                     globalFilter={globalFilter}
                     header={header}>
 
-                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column field="diseaseCode" header="질병코드" sortable></Column>
-                    <Column field="diseaseNm" header="병명" sortable></Column>
-                    <Column field="diseaseEngNm" header="영문명" sortable></Column>
-                    <Column field="symptom" header="증상" sortable></Column>
-                    <Column body={actionBodyTemplate}></Column>
+                    <Column style={{ textAlign: 'center', width: '8%', padding: '10px' }} selectionMode="multiple"></Column>
+                    <Column style={{ textAlign: 'center', width: '10%', padding: '10px' }} field="diseaseCode" header="질병코드" sortable></Column>
+                    <Column style={{ textAlign: 'center', width: '24%', padding: '10px' }} field="diseaseNm" header="병명" sortable></Column>
+                    <Column style={{ textAlign: 'center', width: '24%', padding: '10px' }} field="diseaseEngNm" header="영문명" sortable></Column>
+                    <Column style={{ textAlign: 'center', width: '24%', padding: '10px' }} field="symptom" header="증상" sortable></Column>
+                    <Column style={{ textAlign: 'center', width: '10%', padding: '5px' }} body={actionBodyTemplate}></Column>
                 </DataTable>
             </div>
 
@@ -346,14 +335,14 @@ export default function Disease() {
             <Dialog visible={deleteItemDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemDialogFooter} onHide={hideDeleteItemDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {item && <span><b>{item.diseaseNm} 삭제하시겠습니까</b>?</span>}
+                    {item && <span><b>{item.diseaseNm}</b>을 삭제하시겠습니까?</span>}
                 </div>
             </Dialog>
 
             <Dialog visible={deleteItemsDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemsDialogFooter} onHide={hideDeleteItemsDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem'}} />
-                    {item && <span>선택된 항목들을 삭제하시겠습니까?</span>}
+                    {item && <span>선택 항목을 삭제하시겠습니까?</span>}
                 </div>
             </Dialog>
         </div>
