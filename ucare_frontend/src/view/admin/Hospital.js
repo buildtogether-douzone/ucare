@@ -9,10 +9,13 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import PrintIcon from '@material-ui/icons/Print';
 import { Button, TextField } from '@material-ui/core';
+import { Button as Buttons } from 'primereact/button';
 import { makeStyles } from '@material-ui/styles';
 import { InputText } from "primereact/inputtext";
+import { InputTextarea } from 'primereact/inputtextarea';
 import { Card } from 'primereact/card';
 import hospitalService from '../../service/hospitalService';
+import styles from  '../../assets/scss/Hospital.scss';
 
 const useStyles = makeStyles({
     textStyle: {
@@ -53,7 +56,7 @@ const useStyles = makeStyles({
     Line:{
         display:'flex',
         flexDirection:'row'
-    }
+    },
 })
 
 export default function Hospital() {
@@ -227,28 +230,16 @@ export default function Hospital() {
                                         onChange={(e) => setFaxNo(e.target.value)}/>
                                 </span>
                             </div>
-                            <Button
-                                style={{ backgroundColor:'#1C91FB', border: '1px solid #1C91FB' }}
-                                variant="contained"
-                                color="primary"
-                                type="submit"
-                                onClick={saveInfo}>
-                                등록
-                            </Button>
                             </div>
                             <div className="p-col-12 p-lg-6">
-                        <div style={{ overflow: 'hidden' }}>
-                        <label htmlFor="ssn">주민등록번호</label>
-                            <div className={classes.image} >
-                                <div className={classes.profile}
-                                    style={previewURL == null ?
-                                        { backgroundImage: `url(${require("../../assets/image/profile.jpg")})` }
-                                        : { backgroundImage: `url(${previewURL})` }
-                                    } />
+                                <div className={styles.profile_img}>
+                                    <img className={styles.profile_img_img} src={previewURL} alt="../../assets/image/profile.jpg"/>
+                                </div>
                                 <Button
                                     className={classes.button}
                                     variant="contained"
                                     color="default"
+                                    size="small"
                                     component="label"
                                     startIcon={
                                         <span>
@@ -257,23 +248,29 @@ export default function Hospital() {
                                     }>
                                     <input id={"file-input"} style={{ display: 'none' }} type="file" name="imageFile" onChange={handleFileOnChange} />
                                 </Button>
+                                    <div className="p-field" style={{ marginTop: '2%' }}>
+                                        <span className="p-input-icon-left">
+                                            <InputTextarea
+                                                placeholder="병원장 인사말" 
+                                                autoResize
+                                                rows={9}
+                                                cols={30} 
+                                                value={headSpeak || ''}
+                                                onChange={(e) => setHeadSpeak(e.target.value)} />
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div >
-                            <h2>병원장 인사말</h2>
-                            <TextField
-                                className={classes.textfiled}
-                                label="내용"
-                                variant="outlined"
-                                multiline
-                                rows={7}
-                                value={headSpeak || ''}
-                                onChange={(e) => setHeadSpeak(e.target.value)} />
-                        </div>
-                        </div>
-                        </div>
-                    </Card>
-                </div>
+                            <div style={{ display: 'block', textAlign:'center' }}>
+                                <Buttons
+                                style={{ width: '50%', backgroundColor: '#1C91FB', color: 'white' }} 
+                                label="등록" 
+                                className="p-button-outlined" 
+                                type="submit" 
+                                onClick={saveInfo} />
+                            </div>
+                        </Card>
+                    </div>
                 </div>
             </div>
         </React.Fragment>
