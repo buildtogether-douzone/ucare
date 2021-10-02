@@ -6,8 +6,7 @@
 
 .calendar {
   caption {
-    margin: 10px;
-    font-weight: bold;
+    margin-bottom: 3%;
   }
 
   border-collapse: collapse;
@@ -16,13 +15,14 @@
   border-bottom: 1px solid #e4e4e4;
   margin: 0 auto;
   width: 100%;
-  font-size: 20px;
+  font-size: 16px;
   border: none;
 
   th, td {
     border-top: 1px solid #e4e4e4;
     border-left: 1px solid #e4e4e4;
     border: none;
+    text-align: left;
   }
 }
 
@@ -34,12 +34,11 @@
 .nav_btn {
   border: none;
   float: right;
-  font-size: 16px;
+  font-size: 30px;
   background-color: transparent;
-  padding: 1%;
   cursor: pointer;
   font-weight: bold;
-  border: 1px solid #e4e4e4;
+  color: #1C91FB;
 }
 
 .date {
@@ -48,10 +47,8 @@
 
 .inner {
   position: relative;
-  height: 130px;
+  height: 100px;
   padding: 5px;
-  padding-top: 20%;
-  text-align: center;
 }
 
 .dimmed {

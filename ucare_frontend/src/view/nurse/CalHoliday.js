@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
-
+import { Card } from 'primereact/card';
 import { GetHolidays } from '../../lib/commDate';
 import styles from '../../assets/scss/Calendar.scss';
 import holidayService from '../../service/holidayService';
@@ -177,31 +177,33 @@ export default function CalHoliday() {
   }
 
   return (
-    <div style={{ padding: '1%' }}>
+    <div style={{ padding: '1%', textAlign: 'center', width: '100%' }}>
       <Toast ref={toast} />
       {reload}
-      <table className={styles.calendar}>
-        <caption>
-          <Button label="저장" icon="pi pi-check" style={{ float: 'right', marginRight: '5%', opacity: '70%' }} className="p-button-sm" onClick={() => { saveItems() }}  />
+      <div style={{width: '90%', display: 'inline-block', margin: '1%' }}>
+          <Button style={{ float: 'right' }} label="저장" icon="pi pi-check"  className="p-button-sm" onClick={() => { saveItems() }}  />
           <button className={styles.nav_btn} style={{ marginRight: '32%' }} onClick={() => { addMonth() }}>&gt;</button>
-          <span style={{ padding: '1%', float:'right' }}>{today.format('YYYY 년 MM 월')}</span>
+          <span style={{ paddingRight: '5%', paddingLeft: '5%', float:'right', fontSize: '26px' }}>{today.format('YYYY년 MM월')}</span>
           <button className={styles.nav_btn} onClick={() => { subtractMonth() }}>&lt;</button>
-        </caption>
+      </div>
+      <Card style={{width: '90%', display: 'inline-block', marginBottom: '3%' }}>
+      <table className={styles.calendar}>
         <thead>
           <tr>
-            <th scope="col" style={{ color: '#f44e4e' }}>일</th>
-            <th scope="col">월</th>
-            <th scope="col">화</th>
-            <th scope="col">수</th>
-            <th scope="col">목</th>
-            <th scope="col">금</th>
-            <th scope="col" style={{ color: '#00c' }}>토</th>
+            <th scope="col" style={{ color: '#f44e4e', textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Sun</th>
+            <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Mon</th>
+            <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Tue</th>
+            <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Wed</th>
+            <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Thu</th>
+            <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Fri</th>
+            <th scope="col" style={{ color: '#2A32FB', textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Sat</th>
           </tr>
         </thead>
         <tbody>
           {calendarArr()}
         </tbody>
       </table>
+      </Card>
     </div>
   );
 }
