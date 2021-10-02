@@ -39,7 +39,7 @@ export default function PatientList() {
   const classes = useStyles2();
   const [patient, setPatient] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(12);
   const [search, setSearch] = useState('');
   const [searchBar, setSearchBar] = useState(false);
 
@@ -128,7 +128,7 @@ export default function PatientList() {
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                    rowsPerPageOptions={[5, 10, 15, 25, { label: 'All', value: -1 }]}
+                    rowsPerPageOptions={[5, 10, 12, 15, 25, { label: 'All', value: -1 }]}
                     colSpan={8}
                     count={patient.length}
                     rowsPerPage={rowsPerPage}
