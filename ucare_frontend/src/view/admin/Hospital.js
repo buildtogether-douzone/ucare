@@ -90,12 +90,14 @@ export default function Hospital() {
     }, []);
 
     useEffect(() => {
-        if (telNo.length === 10) {
-            setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
-          }
-        if (telNo.length === 13) {
-            setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
-          }
+        if(typeof telNo === "string") {
+            if (telNo.length === 10) {
+                setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
+            }
+            if (telNo.length === 13) {
+                setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+            }
+        }
     }, [telNo])
 
     const handleFileOnChange = (e) => {
