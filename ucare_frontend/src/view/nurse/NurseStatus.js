@@ -449,14 +449,15 @@ export default function NurseStatus() {
                                     </div>
                                 </div>
                             </div>
-}
+}                          <div style={{ display: 'block', textAlign:'center' }}> 
                             {(item.state === 'wait') &&
-                                <ul className="activity-list">
-                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{border: "1px solid #dee2e6", backgroundColor: "#F8F9FA"}} >
+                                <ul className="activity-list" style={{ padding: 0}}>
+                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{padding: 0 , border: "1px solid #dee2e6", backgroundColor: "#F8F9FA", justifyContent: 'center' }} >
                                             <h1>{patientItem.name}님</h1>
                                         </div>
+                                    <div style={{ padding: '30px' }}>
                                     {(patientItem.age < 7 || patientItem.age >= 65) &&
-                                    <li>
+                                    <li style={{ listStyle: 'none' }}>
                                         <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
                                             <h3 className="activity p-m-0">기본진료비</h3>
                                             <div className="count">5000원</div>
@@ -464,7 +465,7 @@ export default function NurseStatus() {
                                     </li>
                                     }
                                     {(patientItem.age >= 7 && patientItem.age < 65) &&
-                                    <li>
+                                    <li style={{ listStyle: 'none' }}>
                                         <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
                                             <h3 className="activity p-m-0">기본진료비</h3>
                                             <div className="count">{hospitalItem.basicPrice}원</div>
@@ -472,7 +473,7 @@ export default function NurseStatus() {
                                     </li>
                                     }
                                     {(diagnosisItem.cureYN === "true") &&
-                                        <li>
+                                        <li style={{ listStyle: 'none' }}>
                                             <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
                                                 <h3 className="activity p-m-0">치료</h3>
                                                 <div className="count">10000원</div>
@@ -480,7 +481,7 @@ export default function NurseStatus() {
                                         </li>
                                     }
                                     {(patientItem.insurance === "Y") &&
-                                        <li>
+                                        <li style={{ listStyle: 'none' }}>
                                             <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
                                                 <h3 className="activity p-m-0">보험</h3>
                                                 <div className="count">-{insurancePrice}원</div>
@@ -488,7 +489,7 @@ export default function NurseStatus() {
                                         </li>
                                     }
                                     {(item.diagnosisTime >= '09:00:00' && item.diagnosisTime < '12:00:00') &&
-                                    <li>
+                                    <li style={{ listStyle: 'none' }}>
                                         <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
                                             <h3 className="activity p-m-0">할인</h3>
                                             <div className="count">{calPrice}원</div>
@@ -496,7 +497,7 @@ export default function NurseStatus() {
                                     </li>
                                     }
                                     {(item.diagnosisTime > '18:00:00' && item.diagnosisTime < '24:00:00') &&
-                                    <li>
+                                    <li style={{ listStyle: 'none' }}>
                                         <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
                                             <h3 className="activity p-m-0">할증</h3>
                                             <div className="count">{calPrice}원</div>
@@ -505,7 +506,7 @@ export default function NurseStatus() {
                                     }
                                     <Divider />
                                     {(price !== '') &&
-                                        <li>
+                                        <li style={{ listStyle: 'none' }}>
                                             <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
                                                 <h3 className="activity p-m-0">총</h3>
                                                 <div className="count">{price}원</div>
@@ -513,10 +514,12 @@ export default function NurseStatus() {
                                         </li>
                                     }
                                     <div>
-                                        <Button type="button" label="수납완료" onClick={confirmReceiptComplete} className="p-button-rounded" style={{ width: '100%', marginTop: '20px' }} />
+                                        <Button type="button" label="수납완료" onClick={confirmReceiptComplete} className="p-button" style={{ width: '100%', marginTop: '20px' }} />
                                     </div>
+                                </div>
                                 </ul>
                             }
+                            </div>
                         </Card>
                     </div>
                 </div>
