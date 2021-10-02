@@ -460,7 +460,7 @@ export default function NurseStatus() {
                                     <li style={{ listStyle: 'none' }}>
                                         <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
                                             <h3 className="activity p-m-0">기본진료비</h3>
-                                            <div className="count">5000원</div>
+                                            <div className="count" style={{ fontSize: '20px'}}>5000원</div>
                                         </div>
                                     </li>
                                     }
@@ -468,53 +468,53 @@ export default function NurseStatus() {
                                     <li style={{ listStyle: 'none' }}>
                                         <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
                                             <h3 className="activity p-m-0">기본진료비</h3>
-                                            <div className="count">{hospitalItem.basicPrice}원</div>
+                                            <div className="count" style={{ fontSize: '20px'}}>{hospitalItem.basicPrice}원</div>
                                         </div>
                                     </li>
                                     }
                                     {(diagnosisItem.cureYN === "true") &&
                                         <li style={{ listStyle: 'none' }}>
-                                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '3rem' }}>
                                                 <h3 className="activity p-m-0">치료</h3>
-                                                <div className="count">10000원</div>
+                                                <div className="count" style={{ fontSize: '20px'}}>10000원</div>
                                             </div>
                                         </li>
                                     }
                                     {(patientItem.insurance === "Y") &&
                                         <li style={{ listStyle: 'none' }}>
-                                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '3rem' }}>
                                                 <h3 className="activity p-m-0">보험</h3>
-                                                <div className="count">-{insurancePrice}원</div>
+                                                <div className="count" style={{ fontSize: '20px'}}>-{insurancePrice}원</div>
                                             </div>
                                         </li>
                                     }
                                     {(item.diagnosisTime >= '09:00:00' && item.diagnosisTime < '12:00:00') &&
                                     <li style={{ listStyle: 'none' }}>
-                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '3rem' }}>
                                             <h3 className="activity p-m-0">할인</h3>
-                                            <div className="count">{calPrice}원</div>
+                                            <div className="count" style={{ fontSize: '20px'}}>{calPrice}원</div>
                                         </div>
                                     </li>
                                     }
                                     {(item.diagnosisTime > '18:00:00' && item.diagnosisTime < '24:00:00') &&
                                     <li style={{ listStyle: 'none' }}>
-                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '3rem' }}>
                                             <h3 className="activity p-m-0">할증</h3>
-                                            <div className="count">{calPrice}원</div>
+                                            <div className="count" style={{ fontSize: '20px'}}>{calPrice}원</div>
                                         </div>
                                     </li>
                                     }
-                                    <Divider />
+                                    <Divider style={{ marginTop: '3rem' }} />
                                     {(price !== '') &&
                                         <li style={{ listStyle: 'none' }}>
-                                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '2rem' }}>
                                                 <h3 className="activity p-m-0">총</h3>
-                                                <div className="count">{price}원</div>
+                                                <div className="count" style={{ fontSize: '20px'}}>{price}원</div>
                                             </div>
                                         </li>
                                     }
                                     <div>
-                                        <Button type="button" label="수납완료" onClick={confirmReceiptComplete} className="p-button" style={{ width: '100%', marginTop: '20px' }} />
+                                        <Button type="button" label="수납완료" onClick={confirmReceiptComplete} className="p-button" style={{ width: '100%', marginTop: '30px' }} />
                                     </div>
                                 </div>
                                 </ul>
