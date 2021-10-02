@@ -194,39 +194,40 @@ export default function Reservation() {
     };
 
     return (
-        <div className="p-grid" style={{ margin: '10px' }}>
-            <SockJsClient
+        <div className="card" style={{ margin: '20px', height: '85%' }}>
+        <div className="p-grid" style={{ height: '100%' }}>
+        <SockJsClient
                 url="http://localhost:8080/ucare_backend/start"
                 topics={['/topics/reservation']}
                 onMessage={msg => { setValue(msg) }}
                 ref={$websocket} />
             <Toast ref={toast} />
             <div className="p-col-12 p-lg-6">
-                <div className="card p-fluid">
-                    <Card>
+                <div className="card p-fluid" style={{ height: '100%' }}>
+                <Card style={{ height: '100%' }}>
                         <ReservationList />
-                    </Card>
+                </Card>
                 </div>
             </div>
             <div className="p-col-12 p-lg-4">
-                <div className="card p-fluid">
-                    <Card>
+                    <div className="card p-fluid" style={{ height: '100%' }}>
+                    <Card style={{ height: '100%' }}>
                         <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>예약</span>
                         <Divider />
-                        <div className="p-field">
+                        <div className="p-field" style={{ marginTop: '2rem' }}>
                             <label htmlFor="name">이름/주민등록번호</label>
                             <Dropdown value={selectedPatient} options={items} onChange={onPatientChange} optionLabel="name" filter filterBy="name" placeholder="이름"
                                 valueTemplate={selectedPatientTemplate} itemTemplate={patientOptionTemplate} />
                         </div>
-                        <div className="p-field">
+                        <div className="p-field" style={{ marginTop: '2rem' }}>
                             <label htmlFor="ssn">주민등록번호</label>
                             <InputText id="ssn" type="text" value={selectedPatient.ssn} placeholder="주민등록번호" />
                         </div>
-                        <div className="p-field">
+                        <div className="p-field" style={{ marginTop: '2rem' }}>
                             <label htmlFor="tel">연락처</label>
                             <InputText id="tel" type="text" value={selectedPatient.telNo} placeholder="연락처" />
                         </div>
-                        <div className="p-field">
+                        <div className="p-field" style={{ marginTop: '2rem' }}>
                             <label htmlFor="navigatorstemplate">날짜</label>
                             <Calendar id="navigatorstemplate" dateFormat="yy/mm/dd" value={date} onChange={(e) => onDateChange(e)} monthNavigator yearNavigator yearRange="2010:2030"
                                 monthNavigatorTemplate={monthNavigatorTemplate} yearNavigatorTemplate={yearNavigatorTemplate} />
@@ -234,22 +235,23 @@ export default function Reservation() {
 
                         <Button style={{ marginTop: '16px', backgroundColor: '#1C91FB', color: 'white' }} label="예약" className="p-button-outlined" type="submit" onClick={(e) => create(reservation)} />
                     </Card>
-                </div>
+                    </div>
             </div>
 
             <div className="p-col-12 p-lg-2">
-                <div className="card p-fluid">
-                    <Card>
+                    <div className="card p-fluid" style={{ height: '100%' }}>
+                    <Card style={{ height: '100%' }}>
                         <div className="p-field">
-                            <label htmlFor="time">시간</label>
+                            <label htmlFor="time" style={{ display: 'block', textAlign:'center' }}>시간</label>
                             <Divider />
                             {time != '' ?
-                                <ListBox value={selectedTime} options={time} onChange={(e) => onTimeChange(e)} optionLabel="time" listStyle={{ maxHeight: '375px' }} />
-                                : <div className="p-mb-3 p-text-left">예약 가능한 시간이 없습니다.</div>}
+                                <ListBox value={selectedTime} options={time} onChange={(e) => onTimeChange(e)} optionLabel="time" listStyle={{ maxHeight: '465px' }} />
+                                : <span style={{ fontSize: '20px', display: 'block', textAlign: 'center', paddingTop: '80%' }}>예약 가능한 시간이 없습니다.</span>}
                         </div>
                     </Card>
-                </div>
+                    </div>
             </div>
+        </div>
         </div>
     )
 }

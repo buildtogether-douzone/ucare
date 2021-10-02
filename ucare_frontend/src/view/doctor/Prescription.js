@@ -11,8 +11,8 @@ import { InputText } from "primereact/inputtext";
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Toolbar } from 'primereact/toolbar';
 import { Dialog } from 'primereact/dialog';
-
-
+import { Card } from 'primereact/card';
+import { Divider } from 'primereact/divider';
 import { forwardRef } from 'react';
 import Grid from '@material-ui/core/Grid';
 
@@ -425,6 +425,16 @@ export default function Prescription() {
             </React.Fragment>
         )
     }
+    const tableHeader = (
+        <div className="table-header">
+            <span className="p-input-icon-left">
+            </span>
+            <span className="p-input-icon-left" style={{ float: 'right' }}>
+                <Button label="선택삭제" icon="pi pi-trash" className="p-button-danger" style={{ float: 'right', backgroundColor: '#FFFFFF', borderColor: '#FF0000', color: '#FF0000'  }} onClick={console.log()} disabled={!selectedItems || !selectedItems.length} /> 
+                <Button label="입력" icon="pi pi-plus" className="p-button-success p-mr-2" style={{ float: 'right', backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} onClick={openNew} />
+            </span>
+        </div>
+    );
 
     const medicineHeader = (
         <div className="table-header">
@@ -445,6 +455,18 @@ export default function Prescription() {
         );
     }
 
+    const emptyMessage = () => {
+        return (
+            <span style={{ fontSize: '20px', display: 'block', textAlign:'center', paddingTop: '25%', paddingBottom: '25%' }}>환자 내역이 없습니다.</span>
+        );
+    }
+
+    const empty = () => {
+        return (
+            <span style={{ fontSize: '20px', display: 'block', textAlign:'center', paddingTop: '5%', paddingBottom: '5%' }}>처방 내역이 없습니다.</span>
+        );
+    }
+
     const header = renderHeader();
 
     return (
@@ -454,30 +476,33 @@ export default function Prescription() {
                 topics={['/topics/nurse']}
                 onMessage={msg => { setValue(msg) }}
                 ref={$websocket} />
-
-            <div className="card">
-                <div className="p-grid">
+            <div className="card" style={{ margin: '20px', height: '85%' }}>
+            <div className="p-grid" style={{ height: '100%' }}>
                     <div className="p-col-12 p-md-6 p-lg-6">
-                        <TabView style={{ justifyContent: 'center', padding: '20px' }}>
-                            <TabPanel header={"전체" + "(" + items.length + ")"}>
+                    <Card style={{ height: '100%' }}>
+                        <TabView style={{ justifyContent: 'center' }}>
+                            <TabPanel header={"전체" + "(" + items.length + ")"} headerStyle={{width:'33%'}}>
                                 <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                    <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
                                 </div>
                             </TabPanel>
-                            <TabPanel header={"처방대기" + "(" + items.filter(val => val.cureYN === 'true').length + ")"}>
+                            <TabPanel header={"처방대기" + "(" + items.filter(val => val.cureYN === 'true').length + ")"} headerStyle={{width:'33%'}}>
                                 <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items.filter(val => val.cureYN === 'true')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                    <DataScroller value={items.filter(val => val.cureYN === 'true')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
                                 </div>
                             </TabPanel>
-                            <TabPanel header={"처방완료" + "(" + items.filter(val => val.cureYN === 'complete').length + ")"}>
+                            <TabPanel header={"처방완료" + "(" + items.filter(val => val.cureYN === 'complete').length + ")"} headerStyle={{width:'33%'}}>
                                 <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items.filter(val => val.cureYN === 'complete')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                    <DataScroller value={items.filter(val => val.cureYN === 'complete')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
                                 </div>
                             </TabPanel>
                         </TabView>
+                    </Card>
                     </div>
-                    <div className="p-col-12 p-md-6 p-lg-6" style={{ padding: '2%' }}>
-                        <Grid item xs={11}>
+                    <div className="p-col-12 p-md-6 p-lg-6">
+                    <Card style={{ height: '100%' }}>
+                        <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>처방</span>
+                        <Divider />
                             <div>
                                 {iserror &&
                                     <Alert severity="error">
@@ -506,21 +531,20 @@ export default function Prescription() {
                                     value={diagnosisItem.diseaseNm} />
                             </div>
                             <div className="card">
-                                <Toolbar className="p-mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
-
-                                <DataTable ref={dt} value={prescriptionitems} selection={selectedItems} emptyMessage="No data" onSelectionChange={(e) => setSelectedItems(e.value)}
+                                <DataTable ref={dt} value={prescriptionitems} selection={selectedItems} emptyMessage={empty} onSelectionChange={(e) => setSelectedItems(e.value)}
                                     dataKey="diseaseNo" paginator rows={5}
                                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
-                                    globalFilter={globalFilter}>
+                                    globalFilter={globalFilter}
+                                    header={tableHeader}>
 
-                                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                                    <Column field="patientNo" header="환자코드" hidden="true"></Column>
-                                    <Column field="medicineNm" header="처방약"></Column>
-                                    <Column field="dosage" header="투여량" sortable></Column>
-                                    <Column field="dosingDay" header="투약일수" sortable></Column>
-                                    <Column field="usage" header="용법"></Column>
-                                    <Column body={actionBodyTemplate}></Column>
+                                    <Column style={{ textAlign: 'right', width: '5%', padding: '10px' }} selectionMode="multiple"></Column>
+                                    <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="patientNo" header="환자코드" hidden="true"></Column>
+                                    <Column style={{ textAlign: 'center', width: '20%', padding: '10px' }} field="medicineNm" header="처방약"></Column>
+                                    <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="dosage" header="투여량" sortable></Column>
+                                    <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="dosingDay" header="투약일수" sortable></Column>
+                                    <Column style={{ textAlign: 'center', width: '20%', padding: '10px' }} field="usage" header="용법"></Column>
+                                    <Column style={{ textAlign: 'center', width: '10%', padding: '5px' }} body={actionBodyTemplate}></Column>
                                 </DataTable>
                             </div>
 
@@ -573,7 +597,7 @@ export default function Prescription() {
                                     {prescriptionItem && <span><b>{prescriptionItem.medicineNm} 삭제하시겠습니까</b>?</span>}
                                 </div>
                             </Dialog>
-                        </Grid>
+                        </Card>
                     </div>
                 </div>
             </div>

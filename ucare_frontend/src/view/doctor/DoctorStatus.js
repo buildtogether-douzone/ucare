@@ -4,7 +4,6 @@ import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import { Menu } from 'primereact/menu';
 import { Dialog } from 'primereact/dialog';
-import { Panel } from 'primereact/panel';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Checkbox } from 'primereact/checkbox';
 import { InputTextarea } from 'primereact/inputtextarea';
@@ -468,6 +467,18 @@ export default function DoctorDiagnosis() {
         );
     }
 
+    const emptyMessage = () => {
+        return (
+            <span style={{ fontSize: '20px', display: 'block', textAlign: 'center', paddingTop: '40%', paddingBottom: '40%' }}>환자 내역이 없습니다.</span>
+        );
+    }
+
+    const empty = () => {
+        return (
+            <span style={{ fontSize: '20px', display: 'block', textAlign: 'center', paddingTop: '20%', paddingBottom: '20%' }}>과거 병력이 없습니다.</span>
+        );
+    }
+
     const handleClickSendTo = () => {
         $websocket.current.sendMessage('/Nurse');
     };
@@ -482,34 +493,36 @@ export default function DoctorDiagnosis() {
                 onMessage={msg => { setReload(msg) }}
                 ref={$websocket} />
             <Toast ref={toast} />
-            <div className="card" style={{ margin: '20px' }}>
-                <div className="p-grid">
+            <div className="card" style={{ margin: '20px', height: '85%' }}>
+                <div className="p-grid" style={{ height: '100%' }}>
                     <div className="p-col-12 p-md-6 p-lg-4">
-                        <TabView style={{ justifyContent: 'center', padding: '20px' }}>
+                    <Card style={{ height: '100%' }}>
+                        <TabView>
                             <TabPanel header={"전체" + "(" + items.length + ")"} headerStyle={{width:'25%'}}>
                                 <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                    <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header}  emptyMessage={emptyMessage}/>
                                 </div>
                             </TabPanel>
                             <TabPanel header={"대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"} headerStyle={{width:'25%'}}>
                                 <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                    <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage}/>
                                 </div>
                             </TabPanel>
                             <TabPanel header={"진료중" + "(" + items.filter(val => val.state === 'care').length + ")"} headerStyle={{width:'25%'}}>
                                 <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items.filter(val => val.state === 'care')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                    <DataScroller value={items.filter(val => val.state === 'care')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header}  emptyMessage={emptyMessage}/>
                                 </div>
                             </TabPanel>
                             <TabPanel header={"완료" + "(" + items.filter(val => (val.state === 'complete') || (val.state === 'wait')).length + ")"} headerStyle={{width:'25%'}}>
                                 <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items.filter(val => (val.state === 'complete') || (val.state === 'wait'))} itemTemplate={itemTemplate} rows={10} inline scrollHeight="500px" header={header} />
+                                    <DataScroller value={items.filter(val => (val.state === 'complete') || (val.state === 'wait'))} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage}/>
                                 </div>
                             </TabPanel>
                         </TabView>
+                        </Card>
                     </div>
                     <div className="p-col-12 p-md-6 p-lg-4">
-                        <Card>
+                    <Card style={{ height: '40%' }}>
                             <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>환자 정보</span>
                             <Divider />
                             <div className="activity-header">
@@ -537,18 +550,18 @@ export default function DoctorDiagnosis() {
                                 </li>
                             </ul>
                         </Card>
-                        <Card style={{ marginTop: '20px'}}>
+                        <Card style={{ height: '58%', marginTop: '10px'}}>
                             <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>과거 병력</span>
                             <Divider />
                             <div className="activity-header">
                                 <div className="datascroller">
-                                    <DataScroller value={pastDiagnosis} itemTemplate={pastDiagnosisTemplate} rows={5} inline scrollHeight="300px" />
+                                    <DataScroller value={pastDiagnosis} itemTemplate={pastDiagnosisTemplate} rows={5} inline scrollHeight="300px" emptyMessage={empty} />
                                 </div>
                             </div>
                         </Card>
                     </div>
                     <div className="p-col-12 p-md-6 p-lg-4">
-                        <Card>
+                        <Card style={{ height: '100%' }}>
                             <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>진료</span>
                             <Divider />
                             <div className="card p-fluid">

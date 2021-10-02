@@ -5,7 +5,6 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
-import { Toolbar } from 'primereact/toolbar';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Editor } from 'primereact/editor';
@@ -264,8 +263,8 @@ const Board = React.forwardRef((props, ref) => {
     return (
         <div className="datatable-crud">
             <Toast ref={toast} />
-
-            <div className="card">
+            <div className="card" style={{ paddingBottom: '2%'}}>
+                <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center', marginTop: '20PX', marginBottom: '20px' }}>공지사항</span>
                 <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="No data" onSelectionChange={(e) => setSelectedItems(e.value)}
                     dataKey="boardNo" paginator rows={9}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"

@@ -232,6 +232,12 @@ export default function ReservationList() {
         );
     }
 
+    const emptyMessage = () => {
+        return (
+            <span style={{ fontSize: '20px', display: 'block', textAlign:'center', paddingTop: '20%', paddingBottom: '20%' }}>예약 내역이 없습니다.</span>
+        );
+    }
+
     const hideDeleteItemDialog = () => {
         setDeleteItemDialog(false);
     }
@@ -298,7 +304,7 @@ export default function ReservationList() {
             <div className="card">
                 <DataTable ref={dt} value={reservations} paginator rows={6}
                     header={header} className="p-datatable-customers"
-                    globalFilter={globalFilter} emptyMessage="예약 내역이 없습니다.">
+                    globalFilter={globalFilter} emptyMessage={emptyMessage}>
                     <Column style={{ textAlign: 'center', padding: '8px', width: '20%'}} field="name" header="이름" body={nameBodyTemplate} />
                     <Column style={{ textAlign: 'center', padding: '8px', width: '25%' }} field="ssn" filterField="ssn" header="주민등록번호" body={ssnBodyTemplate} />
                     <Column style={{ textAlign: 'center', padding: '8px', width: '20%' }} field="revTime" header="예약시간" body={timeBodyTemplate} />

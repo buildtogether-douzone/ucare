@@ -293,12 +293,18 @@ export default function Medicine() {
         </React.Fragment>
     );
 
+    const emptyMessage = () => {
+        return (
+            <span style={{ fontSize: '20px', display: 'block', textAlign:'center', paddingTop: '30%', paddingBottom: '30%' }}>약품 정보가 없습니다.</span>
+        );
+    }
+
     return (
         <div className="datatable-crud">
             <Toast ref={toast} position="top-center"/>
 
             <div className="card">
-                <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="약품 정보가 없습니다." onSelectionChange={(e) => setSelectedItems(e.value)}
+                <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage={emptyMessage} onSelectionChange={(e) => setSelectedItems(e.value)}
                     dataKey="medicineNo" paginator rows={6}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
