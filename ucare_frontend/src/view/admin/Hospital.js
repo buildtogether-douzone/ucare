@@ -230,23 +230,25 @@ export default function Hospital() {
                             </div>
                             </div>
                             <div className="p-col-12 p-lg-6">
-                                <div className={styles.profile_img}>
+                            <div style={{ display: 'block', textAlign:'center' }}>
+                                <div className={styles.profile_img} style={{ margin: '0 auto'}}>
                                 {previewURL != null ? 
                                 <img className={styles.profile_img_img} src={previewURL} />
                                 : <img className={styles.profile_img_img} src={basicImg} />}
                                 </div>
                                 <Button
-                                    style={{ border: '1px solid #1C91FB' }}
+                                    style={{ border: '1px solid #1C91FB', marginTop: '10px', height: '35px' }}
                                     variant="outlined"
                                     size="small"
                                     component="label"
                                     startIcon={ 
-                                        <span style={{ padding: 0}}>
-                                            <CloudUploadIcon style={{ padding: '8px 0 0 0', color: '#1C91FB' }} /><span style={{ padding: '0 0 0px 2px', color: '#1C91FB' }}>병원장 사진</span>
+                                        <span style={{ padding: 0 }}>
+                                            <CloudUploadIcon style={{ padding: '8px 0 0 0', color: '#1C91FB' }} /><span style={{ padding: '0 0 0px 2px', color: '#1C91FB', fontSize: '16px' }}>병원장 사진</span>
                                         </span>
                                     }>
                                     <input id={"file-input"} style={{ display: 'none' }} type="file" name="imageFile" onChange={handleFileOnChange} />
                                 </Button>
+                                </div>
                                     <div className="p-field" style={{ marginTop: '2%' }}>
                                         <InputTextarea
                                             placeholder="병원장 인사말" 

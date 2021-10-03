@@ -8,9 +8,11 @@ import Grid from '@material-ui/core/Grid';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import userService from '../service/userService';
 import SiteLayout from '../layout/SiteLayout';
-
+import basicImg from '../assets/image/basicImg.jpg';
 import { useRecoilState } from 'recoil';
 import { reloadProfile } from '../recoil/atom/profileAtom';
+import { Card } from 'primereact/card';
+import { Divider } from 'primereact/divider';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -54,7 +56,18 @@ const useStyles = makeStyles((theme) => ({
     display: 'block',
     width: '200px',
     height: '40px'
-  }
+},
+  profile_img: {
+    width: '160px',
+    height: '160px',
+    borderRadius: '70%',
+    overflow: 'hidden'
+},
+  profile_img_img: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover'
+}
 
 }));
 
@@ -174,17 +187,17 @@ export default function Profile() {
 
   return (
     <SiteLayout >
-      <div style={{marginLeft: '10%', marginTop:'2%'}}>
-        <Typography component="h1" variant="h4">
-            프로필 수정
-        </Typography>
-      </div>
-      <div className={classes.image} >
-        <div className={classes.profile}
-          style={previewURL == null ? 
-            { backgroundImage: `url(${require("../assets/image/profile.jpg")})` } 
-              : { backgroundImage: `url(${previewURL})` }
-        } />
+      <div className="card" style={{ margin: '20px', height: '85%' }}>
+      <Card style={{ height: '100%' }}>
+      <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>프로필 수정</span>
+      <Divider />
+      <div className="p-grid">
+          <div className="p-field">
+      <div className={classes.profile_img} >
+        {previewURL != null ? 
+          <img className={classes.profile_img_img} src={previewURL} />
+          : <img className={classes.profile_img_img} src={basicImg} />}
+        </div>
         <Button
           className={classes.button}
           variant="contained"
@@ -197,14 +210,11 @@ export default function Profile() {
           }>
           <input id={"file-input"} style={{ display: 'none' }} type="file" name="imageFile" onChange={handleFileOnChange} />
         </Button>
-      </div>
-      <form className={classes.paper} noValidate>
-        <Grid container spacing={1}>
-          <Grid item xs={12}>
+      <form noValidate>
             <Typography className={classes.font} variant="body1">이름</Typography>
             <TextField
-              style={{ backgroundColor: '#FFFFFF' }}
               variant="outlined"
+              size="small"
               required
               fullWidth
               id="name"
@@ -213,12 +223,10 @@ export default function Profile() {
               value={name}
               onChange={(e) => { setName(e.target.value) }}
             />
-          </Grid>
-          <Grid item xs={12}>
             <Typography className={classes.font} variant="body1">비밀번호</Typography>
             <TextField
-              style={{ backgroundColor: '#FFFFFF' }}
               variant="outlined"
+              size="small"
               required
               fullWidth
               type="password"
@@ -230,13 +238,11 @@ export default function Profile() {
               value={password}
               onChange={(e) => { setPassword(e.target.value) }}
             />
-          </Grid>
 
-          <Grid item xs={12}>
             <Typography className={classes.font} variant="body1">비밀번호 확인</Typography>
             <TextField
-              style={{ backgroundColor: '#FFFFFF' }}
               variant="outlined"
+              size="small"
               required
               fullWidth
               type="password"
@@ -251,14 +257,12 @@ export default function Profile() {
               value={confirmPassword}
               onChange={(e) => { setConfirmPassword(e.target.value) }}
             />
-          </Grid>
           
 
-          <Grid item xs={12}>
             <Typography className={classes.font} variant="body1">전화번호</Typography>
             <TextField
-              style={{ backgroundColor: '#FFFFFF' }}
               variant="outlined"
+              size="small"
               required
               fullWidth
               id="telNo"
@@ -266,13 +270,11 @@ export default function Profile() {
               value={telNo}
               onChange={telNoChange}
             />
-          </Grid>
 
-          <Grid item xs={12}>
             <Typography className={classes.font} variant="body1">이메일</Typography>
             <TextField
-              style={{ backgroundColor: '#FFFFFF' }}
               variant="outlined"
+              size="small"
               required
               fullWidth
               id="email"
@@ -285,12 +287,11 @@ export default function Profile() {
               value={email}
               onChange={(e) => { setEmail(e.target.value) }}
             />
-          </Grid>
-          <Grid item xs={12}>
             <Typography className={classes.font} variant="body1">주소</Typography>
             <TextField
-              style={{ width: '85%', backgroundColor: '#FFFFFF' }}
+              style={{ width: '85%' }}
               variant="outlined"
+              size="small"
               required
               fullWidth
               id="address"
@@ -300,12 +301,11 @@ export default function Profile() {
               onChange={(e) => { setAddress(e.target.value) }}
             />
             <SearchIcon style={{ fontSize: '45', width: '15%' }} />
-          </Grid>
 
 
-          <Grid item xs={12}>
             <Typography className={classes.font} variant="body1">생년월일</Typography>
             <TextField
+              size="small"
               fullWidth
               id="date"
               type="date"
@@ -315,8 +315,6 @@ export default function Profile() {
                 shrink: true,
               }}
             />
-          </Grid>
-
           <Button
             style={{ width: '100%', marginTop: '5%' }}
             variant="contained"
@@ -328,8 +326,11 @@ export default function Profile() {
           >
             변경하기
           </Button>
-        </Grid>
       </form>
+      </div>
+      </div>
+      </Card>
+      </div>
     </SiteLayout>
   );
 }
