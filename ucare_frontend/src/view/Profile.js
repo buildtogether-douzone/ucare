@@ -22,16 +22,11 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(5),
     width: '50% '
   },
-  paper: {
-    width: '30%',
-    float: 'left',
-    marginTop:'1%',
-    alignItems: 'center',
-  },
   font: {
+    fontSize: '16px',
     fontWeight: 'bold',
-    marginBottom: theme.spacing(1),
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1)
   },
   image: {
     display: 'block',
@@ -187,30 +182,33 @@ export default function Profile() {
 
   return (
     <SiteLayout >
-      <div className="card" style={{ margin: '20px', height: '85%' }}>
-      <Card style={{ height: '100%' }}>
+      <div className="p-grid" style={{ margin: '20px' }}>
+      <div className="p-col-12">
+      <div className="card p-fluid">
+      <Card>
       <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>프로필 수정</span>
       <Divider />
-      <div className="p-grid">
-          <div className="p-field">
-      <div className={classes.profile_img} >
+      <div className="p-grid" >
+          <div className="p-col-12 p-lg-6" style={{ margin: '0 auto' }}>
+        <div style={{ display: 'block', textAlign:'center' }}>
+      <div className={classes.profile_img} style={{ margin: '0 auto' }}>
         {previewURL != null ? 
           <img className={classes.profile_img_img} src={previewURL} />
           : <img className={classes.profile_img_img} src={basicImg} />}
         </div>
         <Button
-          className={classes.button}
-          variant="contained"
-          color="default"
+          style={{ border: '1px solid #1C91FB', marginTop: '10px', height: '35px' }}
+          variant="outlined"
+          size="small"
           component="label"
           startIcon={
             <span>
-              <CloudUploadIcon style={{ padding: '5px 0 0 0' }} /><span style={{ padding: '0 0 0px 2px' }}>Upload</span>
+              <CloudUploadIcon style={{ padding: '8px 0 0 0', color: '#1C91FB' }} /><span style={{ padding: '0 0 0px 2px', color: '#1C91FB', fontSize: '16px' }}>프로필 사진</span>
             </span>
           }>
           <input id={"file-input"} style={{ display: 'none' }} type="file" name="imageFile" onChange={handleFileOnChange} />
         </Button>
-      <form noValidate>
+        </div>
             <Typography className={classes.font} variant="body1">이름</Typography>
             <TextField
               variant="outlined"
@@ -289,7 +287,7 @@ export default function Profile() {
             />
             <Typography className={classes.font} variant="body1">주소</Typography>
             <TextField
-              style={{ width: '85%' }}
+              style={{ width: '90%' }}
               variant="outlined"
               size="small"
               required
@@ -300,11 +298,22 @@ export default function Profile() {
               value={address}
               onChange={(e) => { setAddress(e.target.value) }}
             />
-            <SearchIcon style={{ fontSize: '45', width: '15%' }} />
-
+            <SearchIcon style={{ width: '10%', fontSize: '38px', color: '#1C91FB', cursor: 'pointer' }} />
+            <TextField
+                style={{ marginTop: '10px'}}
+                variant="outlined"
+                size="small"
+                fullWidth
+                id="detailAddress"
+                name="detailAddress"
+                autoComplete="detailAddress"
+                // value={detailAddress}
+                // onChange={(e) => { setDetailAddress(e.target.value) }}
+              />
 
             <Typography className={classes.font} variant="body1">생년월일</Typography>
             <TextField
+              variant="outlined"
               size="small"
               fullWidth
               id="date"
@@ -316,20 +325,19 @@ export default function Profile() {
               }}
             />
           <Button
-            style={{ width: '100%', marginTop: '5%' }}
-            variant="contained"
-            color="primary"
+            style={{ width: '100%', border: 'solid #1C91FB', marginTop: '5%', backgroundColor: '#1C91FB', color: 'white' }}
+            variant="outlined"
             href="/Home"
             type="submit"
             onClick={saveUpdate}
-            disableElevation
-          >
-            변경하기
+            disableElevation>
+            수정하기
           </Button>
-      </form>
       </div>
       </div>
       </Card>
+      </div>
+      </div>
       </div>
     </SiteLayout>
   );
