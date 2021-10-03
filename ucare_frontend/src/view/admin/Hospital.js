@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { Button, TextField } from '@material-ui/core';
 import { Button as Buttons } from 'primereact/button';
@@ -9,6 +9,7 @@ import { Card } from 'primereact/card';
 import hospitalService from '../../service/hospitalService';
 import styles from  '../../assets/scss/Hospital.scss';
 import basicImg from '../../assets/image/basicImg.jpg';
+import { Toast } from 'primereact/toast';
 import { Divider } from 'primereact/divider';
 
 const useStyles = makeStyles({
@@ -67,6 +68,8 @@ export default function Hospital() {
     const [previewURL, setPreviewURL] = useState('');
     const [imageURL, setImageURL] = useState('');
     const [file, setFile] = useState('');
+
+    const toast = useRef(null);
 
     const regex = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
 
@@ -132,7 +135,8 @@ export default function Hospital() {
 
         hospitalService.updateData(formData)
         .then(res => {
-          console.log('정보가 성공적으로 전송 되었습니다.');
+          console.log('success!!');
+          toast.current.show({ severity: 'success', summary: '알림', detail: '정보가 등록되었습니다.', life: 3000 });
         })
         .catch(err => {
           console.log('save hospital data() 에러', err);
@@ -148,6 +152,7 @@ export default function Hospital() {
 
     return (
         <React.Fragment>
+            <Toast ref={toast} />
             <div className="p-grid" style={{ margin: '10px' }}>
                 <div className="p-col-12">
                     <div className="card p-fluid">

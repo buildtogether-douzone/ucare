@@ -306,18 +306,22 @@ export default function NurseStatus() {
     }
 
     const menuToggle = (e, data) => {
-        if (data.state === 'wait' || data.state === 'care') {
-            calculatePrice(data);
-        }
-        else if (data.state === 'complete')
-            alert("수납완료된 건입니다.");
+        if (data.state === 'wait' || data.state === 'care' || data.state === 'complete')
+            return;
         else
             menu.current.toggle(e, setItem(data));
     }
 
+    const clickEvent = (e, data) => {
+        if (data.state === 'wait' || data.state === 'care' || data.state === 'complete')
+            calculatePrice(data);
+        else
+            return;
+    }
+
     const itemTemplate = (data) => {
         return (
-            <div className={styles.product_item} onContextMenu={(e) => { e.preventDefault(); menuToggle(e, data);}} aria-controls="popup_menu" aria-haspopup>
+            <div className={styles.product_item} onClick={(e) => clickEvent(e, data)} onContextMenu={(e) => { e.preventDefault(); menuToggle(e, data); }} aria-controls="popup_menu" aria-haspopup>
                 <div className={styles.product_detail}>
                     <div className={styles.product_name}>{data.name}</div>
                     <div className={styles.product_description}>{data.diagnosisTime}</div>
@@ -387,7 +391,7 @@ export default function NurseStatus() {
 
     const emptyMessage = () => {
         return (
-            <span style={{ fontSize: '20px', display: 'block', textAlign:'center', paddingTop: '20%', paddingBottom: '20%' }}>환자 내역이 없습니다.</span>
+            <span style={{ fontSize: '20px', display: 'block', textAlign: 'center', paddingTop: '20%', paddingBottom: '20%' }}>환자 내역이 없습니다.</span>
         );
     }
 
@@ -403,122 +407,125 @@ export default function NurseStatus() {
             <div className="card" style={{ margin: '20px', height: '85%' }}>
                 <div className="p-grid" style={{ height: '100%' }}>
                     <div className="p-col-12 p-md-6 p-lg-6">
-                    <Card style={{ height: '100%' }}>
-                    <TabView>
-                        <TabPanel header={"전체" + "(" + items.length + ")"} headerStyle={{width:'25%'}}>
-                            <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage}/>
-                            </div>
-                        </TabPanel>
-                        <TabPanel header={"대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"} headerStyle={{width:'25%'}}>
-                            <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage}/>
-                            </div>
-                        </TabPanel>
-                        <TabPanel header={"진료중" + "(" + items.filter(val => val.state === 'care').length + ")"} headerStyle={{width:'25%'}}>
-                            <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                <DataScroller value={items.filter(val => val.state === 'care')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage}/>
-                            </div>
-                        </TabPanel>
-                        <TabPanel header={"수납대기" + "(" + items.filter(val => val.state === 'wait').length + ")"} headerStyle={{width:'25%'}}>
-                            <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                <DataScroller value={items.filter(val => val.state === 'wait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage}/>
-                            </div>
-                        </TabPanel>
-                        <TabPanel header={"완료" + "(" + items.filter(val => val.state === 'complete').length + ")"} headerStyle={{width:'25%'}}>
-                            <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                <DataScroller value={items.filter(val => val.state === 'complete')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage}/>
-                            </div>
-                        </TabPanel>
-                    </TabView>
-                    </Card>
+                        <Card style={{ height: '100%' }}>
+                            <TabView>
+                                <TabPanel header={"전체" + "(" + items.length + ")"} headerStyle={{ width: '25%' }}>
+                                    <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                        <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
+                                    </div>
+                                </TabPanel>
+                                <TabPanel header={"대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"} headerStyle={{ width: '25%' }}>
+                                    <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                        <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
+                                    </div>
+                                </TabPanel>
+                                <TabPanel header={"진료중" + "(" + items.filter(val => val.state === 'care').length + ")"} headerStyle={{ width: '25%' }}>
+                                    <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                        <DataScroller value={items.filter(val => val.state === 'care')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
+                                    </div>
+                                </TabPanel>
+                                <TabPanel header={"수납대기" + "(" + items.filter(val => val.state === 'wait').length + ")"} headerStyle={{ width: '25%' }}>
+                                    <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                        <DataScroller value={items.filter(val => val.state === 'wait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
+                                    </div>
+                                </TabPanel>
+                                <TabPanel header={"완료" + "(" + items.filter(val => val.state === 'complete').length + ")"} headerStyle={{ width: '25%' }}>
+                                    <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                        <DataScroller value={items.filter(val => val.state === 'complete')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
+                                    </div>
+                                </TabPanel>
+                            </TabView>
+                        </Card>
                     </div>
                     <div className="p-col-12 p-md-6 p-lg-6">
-                    <Card style={{ height: '100%' }}>
-                        <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>수납</span>
-                        <Divider />
-                        {(item.state !== 'wait') &&
-                            <div className="activity-header">
-                                <div className="p-grid">
-                                    <div className="p-col-12" style={{ fontSize: '20px', textAlign: 'center', paddingTop: '30%', paddingBottom: '30%' }}>
-                                        <span>
-                                            {(item.state === 'careWait' || item.state === 'care' || item.state === '') && <span>진료가 완료된 후 수납계산이 가능합니다.</span>}
-                                        </span>
-                                    </div>
-                                    <div className="p-col-6" style={{ textAlign: 'right' }}>
+                        <Card style={{ height: '100%' }}>
+                            <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign: 'center' }}>수납</span>
+                            <Divider />
+                            {((item.state !== 'wait') && (item.state !== 'complete')) &&
+                                <div className="activity-header">
+                                    <div className="p-grid">
+                                        <div className="p-col-12" style={{ fontSize: '20px', textAlign: 'center', paddingTop: '30%', paddingBottom: '30%' }}>
+                                            <span>
+                                                {(item.state === 'careWait' || item.state === 'care' || item.state === '') && <span>진료가 완료된 후 수납계산이 가능합니다.</span>}
+                                            </span>
+                                        </div>
+                                        <div className="p-col-6" style={{ textAlign: 'right' }}>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-}                          <div style={{ display: 'block', textAlign:'center' }}> 
-                            {(item.state === 'wait') &&
-                                <ul className="activity-list" style={{ padding: 0}}>
-                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{padding: 0 , border: "1px solid #dee2e6", backgroundColor: "#F8F9FA", justifyContent: 'center' }} >
+                            }
+                            <div style={{ display: 'block', textAlign: 'center' }}>
+                                {((item.state === 'wait') || (item.state === 'complete')) &&
+                                    <ul className="activity-list" style={{ padding: 0 }}>
+                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ padding: 0, border: "1px solid #dee2e6", backgroundColor: "#F8F9FA", justifyContent: 'center' }} >
                                             <h1>{patientItem.name}님</h1>
                                         </div>
-                                    <div style={{ padding: '30px' }}>
-                                    {(patientItem.age < 7 || patientItem.age >= 65) &&
-                                    <li style={{ listStyle: 'none' }}>
-                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                            <h3 className="activity p-m-0">기본진료비</h3>
-                                            <div className="count" style={{ fontSize: '20px'}}>5000원</div>
+                                        <div style={{ padding: '30px' }}>
+                                            {(patientItem.age < 7 || patientItem.age >= 65) &&
+                                                <li style={{ listStyle: 'none' }}>
+                                                    <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                                        <h3 className="activity p-m-0">기본진료비</h3>
+                                                        <div className="count" style={{ fontSize: '20px' }}>5000원</div>
+                                                    </div>
+                                                </li>
+                                            }
+                                            {(patientItem.age >= 7 && patientItem.age < 65) &&
+                                                <li style={{ listStyle: 'none' }}>
+                                                    <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                                        <h3 className="activity p-m-0">기본진료비</h3>
+                                                        <div className="count" style={{ fontSize: '20px' }}>{hospitalItem.basicPrice}원</div>
+                                                    </div>
+                                                </li>
+                                            }
+                                            {(diagnosisItem.cureYN === "true") &&
+                                                <li style={{ listStyle: 'none' }}>
+                                                    <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '3rem' }}>
+                                                        <h3 className="activity p-m-0">치료</h3>
+                                                        <div className="count" style={{ fontSize: '20px' }}>10000원</div>
+                                                    </div>
+                                                </li>
+                                            }
+                                            {(patientItem.insurance === "Y") &&
+                                                <li style={{ listStyle: 'none' }}>
+                                                    <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '3rem' }}>
+                                                        <h3 className="activity p-m-0">보험</h3>
+                                                        <div className="count" style={{ fontSize: '20px' }}>-{insurancePrice}원</div>
+                                                    </div>
+                                                </li>
+                                            }
+                                            {(item.diagnosisTime >= '09:00:00' && item.diagnosisTime < '12:00:00') &&
+                                                <li style={{ listStyle: 'none' }}>
+                                                    <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '3rem' }}>
+                                                        <h3 className="activity p-m-0">할인</h3>
+                                                        <div className="count" style={{ fontSize: '20px' }}>{calPrice}원</div>
+                                                    </div>
+                                                </li>
+                                            }
+                                            {(item.diagnosisTime > '18:00:00' && item.diagnosisTime < '24:00:00') &&
+                                                <li style={{ listStyle: 'none' }}>
+                                                    <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '3rem' }}>
+                                                        <h3 className="activity p-m-0">할증</h3>
+                                                        <div className="count" style={{ fontSize: '20px' }}>{calPrice}원</div>
+                                                    </div>
+                                                </li>
+                                            }
+                                            <Divider style={{ marginTop: '3rem' }} />
+                                            {(price !== '') &&
+                                                <li style={{ listStyle: 'none' }}>
+                                                    <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '2rem' }}>
+                                                        <h3 className="activity p-m-0">총</h3>
+                                                        <div className="count" style={{ fontSize: '20px' }}>{price}원</div>
+                                                    </div>
+                                                </li>
+                                            }
+                                            {(item.state !== 'complete') &&
+                                                <div>
+                                                    <Button type="button" label="수납완료" onClick={confirmReceiptComplete} className="p-button" style={{ width: '100%', marginTop: '30px' }} />
+                                                </div>
+                                            }
                                         </div>
-                                    </li>
-                                    }
-                                    {(patientItem.age >= 7 && patientItem.age < 65) &&
-                                    <li style={{ listStyle: 'none' }}>
-                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                            <h3 className="activity p-m-0">기본진료비</h3>
-                                            <div className="count" style={{ fontSize: '20px'}}>{hospitalItem.basicPrice}원</div>
-                                        </div>
-                                    </li>
-                                    }
-                                    {(diagnosisItem.cureYN === "true") &&
-                                        <li style={{ listStyle: 'none' }}>
-                                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '3rem' }}>
-                                                <h3 className="activity p-m-0">치료</h3>
-                                                <div className="count" style={{ fontSize: '20px'}}>10000원</div>
-                                            </div>
-                                        </li>
-                                    }
-                                    {(patientItem.insurance === "Y") &&
-                                        <li style={{ listStyle: 'none' }}>
-                                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '3rem' }}>
-                                                <h3 className="activity p-m-0">보험</h3>
-                                                <div className="count" style={{ fontSize: '20px'}}>-{insurancePrice}원</div>
-                                            </div>
-                                        </li>
-                                    }
-                                    {(item.diagnosisTime >= '09:00:00' && item.diagnosisTime < '12:00:00') &&
-                                    <li style={{ listStyle: 'none' }}>
-                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '3rem' }}>
-                                            <h3 className="activity p-m-0">할인</h3>
-                                            <div className="count" style={{ fontSize: '20px'}}>{calPrice}원</div>
-                                        </div>
-                                    </li>
-                                    }
-                                    {(item.diagnosisTime > '18:00:00' && item.diagnosisTime < '24:00:00') &&
-                                    <li style={{ listStyle: 'none' }}>
-                                        <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '3rem' }}>
-                                            <h3 className="activity p-m-0">할증</h3>
-                                            <div className="count" style={{ fontSize: '20px'}}>{calPrice}원</div>
-                                        </div>
-                                    </li>
-                                    }
-                                    <Divider style={{ marginTop: '3rem' }} />
-                                    {(price !== '') &&
-                                        <li style={{ listStyle: 'none' }}>
-                                            <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '2rem' }}>
-                                                <h3 className="activity p-m-0">총</h3>
-                                                <div className="count" style={{ fontSize: '20px'}}>{price}원</div>
-                                            </div>
-                                        </li>
-                                    }
-                                    <div>
-                                        <Button type="button" label="수납완료" onClick={confirmReceiptComplete} className="p-button" style={{ width: '100%', marginTop: '30px' }} />
-                                    </div>
-                                </div>
-                                </ul>
-                            }
+                                    </ul>
+                                }
                             </div>
                         </Card>
                     </div>

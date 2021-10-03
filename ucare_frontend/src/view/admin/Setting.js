@@ -124,6 +124,7 @@ export default function Setting() {
               }       
             </div>
               <MaterialTable
+                title=""
                 columns={columns}
                 data={data}
                 icons={tableIcons}
