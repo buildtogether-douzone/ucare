@@ -5,16 +5,16 @@ import { classNames } from 'primereact/utils';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
-import { Menu } from 'primereact/menu';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from 'primereact/inputtextarea';
-import { Toolbar } from 'primereact/toolbar';
 import { Dialog } from 'primereact/dialog';
+import { Toast } from 'primereact/toast';
 import { Card } from 'primereact/card';
 import { Divider } from 'primereact/divider';
+
+
 import { forwardRef } from 'react';
-import Grid from '@material-ui/core/Grid';
 
 import Alert from '@material-ui/lab/Alert';
 import PersonIcon from '@material-ui/icons/Person';
@@ -25,12 +25,8 @@ import { useRecoilState } from 'recoil';
 import { reloadState } from '../../recoil/atom/nurseAtom';
 import SockJsClient from 'react-stomp';
 
-import statusService from '../../service/statusService';
-import timeService from '../../service/timeService';
-import hospitalService from '../../service/hospitalService';
 import patientService from '../../service/patientService';
 import diagnosisService from '../../service/diagnosisService';
-import receiptService from '../../service/receiptService';
 import prescriptionService from '../../service/prescriptionService';
 import medicineService from '../../service/medicineService';
 
@@ -81,6 +77,8 @@ const useStyles = makeStyles({
 export default function Prescription() {
 
     let emptyPrescriptionItem = {
+        prescriptionNo: null,
+        diagnosisNo: null,
         patientNo: null,
         medicineNm: '',
         dosage: null,
@@ -130,19 +128,16 @@ export default function Prescription() {
     const classes = useStyles();
     const [items, setItems] = useState([]);
     const [medicineItems, setMedicineItems] = useState([]);
-    const [prescriptionitems, setPrescriptionItems] = useState([]);
+    const [prescriptionItems, setPrescriptionItems] = useState([]);
     const [prescriptionItem, setPrescriptionItem] = useState(emptyPrescriptionItem);
     const [patientItem, setPatientItem] = useState(emptyPatientItem);
     const [diagnosisItem, setDiagnosisItem] = useState(emptyDiagnosisItem);
     const [medicineSelectedItem, setMedicineSelectedItem] = useState(emptyMedicineItem);
     const [selectedItems, setSelectedItems] = useState(null);
-    const [price, setPrice] = useState('');
-    const [insurancePrice, setInsurancePrice] = useState('');
     const [date, setDate] = useState(new Date());
     const [medicineItemDialog, setMedicineItemDialog] = useState(false);
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [deleteItemsDialog, setDeleteItemsDialog] = useState(false);
-    const [receiptCompleteDialog, setReceiptCompleteDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [itemDialog, setItemDialog] = useState(false);
@@ -155,20 +150,21 @@ export default function Prescription() {
     const [value, setValue] = useState('');
 
     const menu = useRef(null);
-    const $websocket = useRef(null);
+    const toast = useRef(null);
 
     const dt = useRef(null);
     const medicineDt = useRef(null);
+    const $websocket = useRef(null);
 
     const retrieveMedicine = (e) => {
         medicineService.retrieveAll()
-          .then( res => {
-            console.log('success!!');
-            setMedicineItems(res.data);
-        })
-          .catch(err => {
-            console.log('retrieveMedicine() Error!', err);
-        });
+            .then(res => {
+                console.log('success!!');
+                setMedicineItems(res.data);
+            })
+            .catch(err => {
+                console.log('retrieveMedicine() Error!', err);
+            });
     }
 
     useEffect(() => {
@@ -213,61 +209,70 @@ export default function Prescription() {
     const saveItem = () => {
         setSubmitted(true);
 
-        if (item.diseaseNm.trim()) {
-            let _items = [...items];
-            let _item = { ...item };
-            if (item.diseaseNo) {
-                diseaseService.update(_item)
-                    .then(res => {
-                        const index = findIndexByNo(item.diseaseNo);
+        let _items = [...prescriptionItems];
+        let _item = { ...prescriptionItem };
+        console.log(_item);
+        if (prescriptionItem.prescriptionNo) {
+            prescriptionService.update(_item)
+                .then(res => {
+                    const index = findIndexByPrescriptionNo(prescriptionItem.prescriptionNo);
 
-                        _items[index] = _item;
-                        setItems(_items);
-                        setItemDialog(false);
-                        toast.current.show({ severity: 'success', summary: 'Successful', detail: '수정되었습니다.', life: 3000 });
-                    })
-                    .catch(err => {
-                        console.log('update() Error!', err);
-                    })
-            }
-            else {
-                diseaseService.create(_item)
-                    .then(res => {
-                        console.log('success!!');
-                        _item.diseaseNo = res.data;
-                        _items.unshift(_item);
-                        setItems(_items);
-                        setItemDialog(false);
-                        setItem(emptyItem);
-                        toast.current.show({ severity: 'success', summary: 'Successful', detail: '저장되었습니다.', life: 3000 });
-                    })
-                    .catch(err => {
-                        console.log('create() Error!', err);
-                    })
-            }
+                    _items[index] = _item;
+                    setPrescriptionItems(_items);
+                    setItemDialog(false);
+                    toast.current.show({ severity: 'success', summary: 'Successful', detail: '수정되었습니다.', life: 3000 });
+                })
+                .catch(err => {
+                    console.log('update() Error!', err);
+                })
+        }
+        else {
+            prescriptionService.create(_item)
+                .then(res => {
+                    console.log('success!!');
+                    _item.prescriptionNo = res.data;
+                    _items.unshift(_item);
+                    setPrescriptionItems(_items);
+                    setItemDialog(false);
+                    setPrescriptionItem(emptyPrescriptionItem);
+                    toast.current.show({ severity: 'success', summary: 'Successful', detail: '저장되었습니다.', life: 3000 });
+                })
+                .catch(err => {
+                    console.log('create() Error!', err);
+                })
         }
     }
 
     const deleteItem = () => {
-        let _items = [...items];
-        let _item = { ...item };
+        let _items = [...prescriptionItems];
+        let _item = { ...prescriptionItem };
 
-        const index = findIndexByNo(item.receiptNo);
+        const index = findIndexByPrescriptionNo(prescriptionItem.prescriptionNo);
 
         _item = _items[index];
 
-        statusService.delete(_item.receiptNo)
+        prescriptionService.deleteByPrescriptionNo(_item.prescriptionNo)
             .then(res => {
                 console.log('success!!');
-                timeService.updateByCancel(_item);
-                let _items = items.filter(item => item.receiptNo !== _item.receiptNo);
-                setItems(_items);
-                setItem(emptyItem);
+                let _items = prescriptionItems.filter(prescriptionItem => prescriptionItem.prescriptionNo !== _item.prescriptionNo);
+                setPrescriptionItems(_items);
+                setPrescriptionItem(emptyPrescriptionItem);
                 setDeleteItemDialog(false);
+                toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료!', life: 3000 });
             })
             .catch(err => {
                 console.log('delete() Error!', err);
             });
+    }
+
+    const editItem = (item) => {
+        setPrescriptionItem({ ...item });
+        setItemDialog(true);
+    }
+
+    const confirmDeleteItem = (item) => {
+        setPrescriptionItem(item);
+        setDeleteItemDialog(true);
     }
 
     // yyyy-MM-dd 포맷으로 반환
@@ -288,6 +293,14 @@ export default function Prescription() {
                     diagnosisService.retrieveByReceiptNo(data.receiptNo)
                         .then(res => {
                             setDiagnosisItem(res.data);
+                            prescriptionService.retrieveByDiagnosisNo(res.data.diagnosisNo)
+                                .then(res => {
+                                    console.log('success!!');
+                                    setPrescriptionItems(res.data);
+                                })
+                                .catch(err => {
+                                    console.log('retrieveByDiagnosisNo() Error!', err);
+                                })
                         })
                         .catch(err => {
                             console.log('retrieveByReceiptNo() Error!', err);
@@ -317,10 +330,10 @@ export default function Prescription() {
         );
     }
 
-    const findIndexByNo = (receiptNo) => {
+    const findIndexByPrescriptionNo = (prescriptionNo) => {
         let index = -1;
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].receiptNo === receiptNo) {
+        for (let i = 0; i < prescriptionItems.length; i++) {
+            if (prescriptionItems[i].prescriptionNo === prescriptionNo) {
                 index = i;
                 break;
             }
@@ -340,25 +353,38 @@ export default function Prescription() {
             });
     }
 
-    const hideReceiptCompleteDialog = () => {
-        setReceiptCompleteDialog(false);
-    }
-
     const openNew = () => {
         document.body.style.position = "relative";
         document.body.style.overflow = "hidden";
-        setPrescriptionItem(emptyPrescriptionItem);
+        prescriptionItem.diagnosisNo = diagnosisItem.diagnosisNo;
+        prescriptionItem.patientNo = patientItem.patientNo;
         setSubmitted(false);
         setItemDialog(true);
     }
 
-    const confirmDeleteSelected = () => {
-        setDeleteItemsDialog(true);
+    const deleteSelectedItems = () => {
+        let success;
+        selectedItems.map((item, index) => (
+            prescriptionService.deleteByPrescriptionNo(item.prescriptionNo)
+                .then(res => {
+                    success = true;
+                    if ((selectedItems.length === (index + 1)) && success === true) {
+                        let _items = prescriptionItems.filter(val => !selectedItems.includes(val));
+                        setPrescriptionItems(_items);
+                        setDeleteItemsDialog(false);
+                        setSelectedItems(null);
+                        toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료!', life: 3000 });
+                    }
+                })
+                .catch(err => {
+                    success = false;
+                    console.log('selectedDelete() Error!', err);
+                })
+        ))
     }
 
-    const confirmDeleteItem = (item) => {
-        setPrescriptionItem(item);
-        setDeleteItemDialog(true);
+    const confirmDeleteSelected = () => {
+        setDeleteItemsDialog(true);
     }
 
     const confirmMedicineItem = () => {
@@ -370,10 +396,15 @@ export default function Prescription() {
         document.body.style.overflow = "";
         setSubmitted(false);
         setItemDialog(false);
+        setPrescriptionItem(emptyPrescriptionItem);
     }
 
     const hideDeleteItemDialog = () => {
         setDeleteItemDialog(false);
+    }
+
+    const hideDeleteItemsDialog = () => {
+        setDeleteItemsDialog(false);
     }
 
     const hideMedicineItemDialog = () => {
@@ -382,7 +413,6 @@ export default function Prescription() {
 
     const inputMedicineItemDialog = (data) => {
         prescriptionItem.medicineNm = data.medicineNm;
-        prescriptionItem.patientNo = patientItem.patientNo;
         setMedicineItemDialog(false);
     }
 
@@ -400,37 +430,36 @@ export default function Prescription() {
         </React.Fragment>
     );
 
+    const deleteItemsDialogFooter = (
+        <React.Fragment>
+            <Button label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemsDialog} />
+            <Button label="예" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedItems} />
+        </React.Fragment>
+    );
+
+    const onInputChange = (e, name) => {
+        const val = (e.target && e.target.value) || '';
+        let _item = { ...prescriptionItem };
+        _item[`${name}`] = val;
+
+        setPrescriptionItem(_item);
+    }
+
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning p-mr-2" style={{ backgroundColor: '#FFFFFF', borderColor: '#FFFFFF' }} onClick={console.log()} />
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" style={{ backgroundColor: '#FFFFFF', borderColor: '#FFFFFF' }} onClick={console.log()} />
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning p-mr-2" style={{ backgroundColor: '#FFFFFF', borderColor: '#FFFFFF' }} onClick={() => editItem(rowData)} />
+                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" style={{ backgroundColor: '#FFFFFF', borderColor: '#FFFFFF' }} onClick={() => confirmDeleteItem(rowData)} />
             </React.Fragment>
         );
     }
 
-    const rightToolbarTemplate = () => {
-        return (
-            <React.Fragment>
-                <Button label="입력" icon="pi pi-plus" className="p-button-success p-mr-2" style={{ backgroundColor: '#616161', borderColor: '#616161' }} onClick={openNew} />
-                <Button label="삭제" icon="pi pi-trash" className="p-button-danger" style={{ backgroundColor: '#616161', borderColor: '#616161' }} onClick={console.log()} disabled={!selectedItems || !selectedItems.length} />
-            </React.Fragment>
-        )
-    }
-
-    const leftToolbarTemplate = () => {
-        return (
-            <React.Fragment>
-
-            </React.Fragment>
-        )
-    }
     const tableHeader = (
         <div className="table-header">
             <span className="p-input-icon-left">
             </span>
             <span className="p-input-icon-left" style={{ float: 'right' }}>
-                <Button label="선택삭제" icon="pi pi-trash" className="p-button-danger" style={{ float: 'right', backgroundColor: '#FFFFFF', borderColor: '#FF0000', color: '#FF0000'  }} onClick={console.log()} disabled={!selectedItems || !selectedItems.length} /> 
+                <Button label="선택삭제" icon="pi pi-trash" className="p-button-danger" style={{ float: 'right', backgroundColor: '#FFFFFF', borderColor: '#FF0000', color: '#FF0000' }} onClick={confirmDeleteSelected} disabled={!selectedItems || !selectedItems.length} />
                 <Button label="입력" icon="pi pi-plus" className="p-button-success p-mr-2" style={{ float: 'right', backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} onClick={openNew} />
             </span>
         </div>
@@ -457,13 +486,13 @@ export default function Prescription() {
 
     const emptyMessage = () => {
         return (
-            <span style={{ fontSize: '20px', display: 'block', textAlign:'center', paddingTop: '25%', paddingBottom: '25%' }}>환자 내역이 없습니다.</span>
+            <span style={{ fontSize: '20px', display: 'block', textAlign: 'center', paddingTop: '25%', paddingBottom: '25%' }}>환자 내역이 없습니다.</span>
         );
     }
 
     const empty = () => {
         return (
-            <span style={{ fontSize: '20px', display: 'block', textAlign:'center', paddingTop: '5%', paddingBottom: '5%' }}>처방 내역이 없습니다.</span>
+            <span style={{ fontSize: '20px', display: 'block', textAlign: 'center', paddingTop: '5%', paddingBottom: '5%' }}>처방 내역이 없습니다.</span>
         );
     }
 
@@ -476,33 +505,35 @@ export default function Prescription() {
                 topics={['/topics/nurse']}
                 onMessage={msg => { setValue(msg) }}
                 ref={$websocket} />
+            <Toast ref={toast} position="top-center" />
+
             <div className="card" style={{ margin: '20px', height: '85%' }}>
-            <div className="p-grid" style={{ height: '100%' }}>
-                    <div className="p-col-12 p-md-6 p-lg-6">
-                    <Card style={{ height: '100%' }}>
-                        <TabView style={{ justifyContent: 'center' }}>
-                            <TabPanel header={"전체" + "(" + items.length + ")"} headerStyle={{width:'33%'}}>
-                                <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
-                                </div>
-                            </TabPanel>
-                            <TabPanel header={"처방대기" + "(" + items.filter(val => val.cureYN === 'true').length + ")"} headerStyle={{width:'33%'}}>
-                                <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items.filter(val => val.cureYN === 'true')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
-                                </div>
-                            </TabPanel>
-                            <TabPanel header={"처방완료" + "(" + items.filter(val => val.cureYN === 'complete').length + ")"} headerStyle={{width:'33%'}}>
-                                <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items.filter(val => val.cureYN === 'complete')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
-                                </div>
-                            </TabPanel>
-                        </TabView>
-                    </Card>
+                <div className="p-grid" style={{ height: '100%' }}>
+                    <div className="p-col-12 p-md-4 p-lg-4">
+                        <Card style={{ height: '100%' }}>
+                            <TabView style={{ justifyContent: 'center' }}>
+                                <TabPanel header={"전체" + "(" + items.length + ")"} headerStyle={{ width: '33%' }}>
+                                    <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                        <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
+                                    </div>
+                                </TabPanel>
+                                <TabPanel header={"처방대기" + "(" + items.filter(val => val.cureYN === 'true').length + ")"} headerStyle={{ width: '33%' }}>
+                                    <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                        <DataScroller value={items.filter(val => val.cureYN === 'true')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
+                                    </div>
+                                </TabPanel>
+                                <TabPanel header={"처방완료" + "(" + items.filter(val => val.cureYN === 'complete').length + ")"} headerStyle={{ width: '33%' }}>
+                                    <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                        <DataScroller value={items.filter(val => val.cureYN === 'complete')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
+                                    </div>
+                                </TabPanel>
+                            </TabView>
+                        </Card>
                     </div>
-                    <div className="p-col-12 p-md-6 p-lg-6">
-                    <Card style={{ height: '100%' }}>
-                        <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>처방</span>
-                        <Divider />
+                    <div className="p-col-12 p-md-8 p-lg-8">
+                        <Card style={{ height: '100%' }}>
+                            <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign: 'center' }}>처방</span>
+                            <Divider />
                             <div>
                                 {iserror &&
                                     <Alert severity="error">
@@ -531,7 +562,7 @@ export default function Prescription() {
                                     value={diagnosisItem.diseaseNm} />
                             </div>
                             <div className="card">
-                                <DataTable ref={dt} value={prescriptionitems} selection={selectedItems} emptyMessage={empty} onSelectionChange={(e) => setSelectedItems(e.value)}
+                                <DataTable ref={dt} value={prescriptionItems} selection={selectedItems} emptyMessage={empty} onSelectionChange={(e) => setSelectedItems(e.value)}
                                     dataKey="diseaseNo" paginator rows={5}
                                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
@@ -550,8 +581,12 @@ export default function Prescription() {
 
                             <Dialog visible={itemDialog} style={{ width: '450px' }} header="처방등록" modal className="p-fluid" footer={itemDialogFooter} onHide={hideDialog}>
                                 <div className="p-field">
+                                    <label htmlFor="diagnosisNo">진료번호</label>
+                                    <InputText id="diagnosisNo" value={prescriptionItem.diagnosisNo} readOnly={true} onChange={(e) => onInputChange(e, 'diagnosisNo')} required autoFocus className={classNames({ 'p-invalid': submitted && !prescriptionItem.diagnosisNo })} />
+                                </div>
+                                <div className="p-field">
                                     <label htmlFor="patientNo">환자번호</label>
-                                    <InputText id="patientNo" value={prescriptionItem.patientNo} onChange={(e) => onInputChange(e, 'patientNo')} required autoFocus className={classNames({ 'p-invalid': submitted && !prescriptionItem.patientNo })} />
+                                    <InputText id="patientNo" value={prescriptionItem.patientNo} readOnly={true} onChange={(e) => onInputChange(e, 'patientNo')} required autoFocus className={classNames({ 'p-invalid': submitted && !prescriptionItem.patientNo })} />
                                 </div>
                                 <div className="p-field">
                                     <label htmlFor="medicineNm">처방약</label>
@@ -595,6 +630,13 @@ export default function Prescription() {
                                 <div className="confirmation-content">
                                     <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
                                     {prescriptionItem && <span><b>{prescriptionItem.medicineNm} 삭제하시겠습니까</b>?</span>}
+                                </div>
+                            </Dialog>
+
+                            <Dialog visible={deleteItemsDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteItemsDialogFooter} onHide={hideDeleteItemsDialog}>
+                                <div className="confirmation-content">
+                                    <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
+                                    {prescriptionItem && <span>선택 항목을 삭제하시겠습니까?</span>}
                                 </div>
                             </Dialog>
                         </Card>

@@ -13,6 +13,7 @@
 		<typeAlias type="com.douzone.ucare.vo.HolidayVo" alias="holidayvo"/>
 		<typeAlias type="com.douzone.ucare.vo.TimeVo" alias="timevo"/>
 		<typeAlias type="com.douzone.ucare.vo.DiagnosisVo" alias="diagnosisvo"/>
+		<typeAlias type="com.douzone.ucare.vo.PrescriptionVo" alias="prescriptionvo"/>
 		<typeAlias type="com.douzone.ucare.vo.ReservationVo" alias="reservationvo"/>
 		<typeAlias type="com.douzone.ucare.vo.MessageVo" alias="messagevo"/>
     </typeAliases>	

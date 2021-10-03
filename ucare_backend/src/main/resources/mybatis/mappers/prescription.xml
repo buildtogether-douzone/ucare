@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="prescription">	
+<mapper namespace="prescription">
+
+	<insert id="create" parameterType="prescriptionvo">
+		INSERT
+			INTO ucare.prescription
+			(
+				diagnosis_no, 
+				patient_no, 
+				medicine_nm, 
+				dosage,
+				dosing_day,
+				usage
+			)
+		VALUES(
+			#{diagnosisNo },
+			#{patientNo },
+			#{medicineNm },
+			#{dosage },
+			#{dosingDay },
+			#{usage }
+		)
+	</insert>
 	
 	<select id="retrieveCureYN" parameterType="string" resultType="receiptvo" >
 			SELECT
@@ -32,5 +53,34 @@
 			  AND C.cure_yn = 'true'
 			ORDER BY A.receipt_no ASC
 	</select>
+	
+	<select id="retrieveByDiagnosisNo" parameterType="Long" resultType="prescriptionvo" >
+			SELECT
+				prescription_no AS prescriptionNo,
+				diagnosis_no AS diagnosisNo,
+				patient_no AS patientNo,
+				medicine_nm AS medicineNm,
+				dosage,
+				dosing_day AS dosingDay,
+				usage
+			FROM ucare.prescription
+			WHERE diagnosis_no = #{diagnosisNo }
+	</select>
+	
+	<update id="update" parameterType="prescriptionvo">
+			UPDATE  ucare.prescription
+			   SET 
+			   		medicine_nm = #{medicineNm },
+			   		dosage = #{dosage },
+			   		dosing_day = #{dosingDay },
+			   		usage = #{usage }
+			WHERE prescription_no = #{prescriptionNo }
+	</update>
+	
+	<delete id="deleteByPrescriptionNo" parameterType="Long">
+		DELETE
+		  FROM ucare.prescription
+		 WHERE prescription_no = #{prescriptionNo }
+	</delete>
 	
 </mapper>
