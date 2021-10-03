@@ -13,7 +13,6 @@ import { Toast } from 'primereact/toast';
 import { Card } from 'primereact/card';
 import { Divider } from 'primereact/divider';
 
-
 import { forwardRef } from 'react';
 
 import Alert from '@material-ui/lab/Alert';
@@ -142,7 +141,6 @@ export default function Prescription() {
     const [submitted, setSubmitted] = useState(false);
     const [itemDialog, setItemDialog] = useState(false);
 
-    const [data, setData] = useState([]); //table data
     const [iserror, setIserror] = useState(false);
     const [errorMessages, setErrorMessages] = useState([]);
 
@@ -582,15 +580,15 @@ export default function Prescription() {
                             <Dialog visible={itemDialog} style={{ width: '450px' }} header="처방등록" modal className="p-fluid" footer={itemDialogFooter} onHide={hideDialog}>
                                 <div className="p-field">
                                     <label htmlFor="diagnosisNo">진료번호</label>
-                                    <InputText id="diagnosisNo" value={prescriptionItem.diagnosisNo} readOnly={true} onChange={(e) => onInputChange(e, 'diagnosisNo')} required autoFocus className={classNames({ 'p-invalid': submitted && !prescriptionItem.diagnosisNo })} />
+                                    <InputText id="diagnosisNo" value={prescriptionItem.diagnosisNo} readOnly={true} onChange={(e) => onInputChange(e, 'diagnosisNo')} className={classNames({ 'p-invalid': submitted && !prescriptionItem.diagnosisNo })} />
                                 </div>
                                 <div className="p-field">
                                     <label htmlFor="patientNo">환자번호</label>
-                                    <InputText id="patientNo" value={prescriptionItem.patientNo} readOnly={true} onChange={(e) => onInputChange(e, 'patientNo')} required autoFocus className={classNames({ 'p-invalid': submitted && !prescriptionItem.patientNo })} />
+                                    <InputText id="patientNo" value={prescriptionItem.patientNo} readOnly={true} onChange={(e) => onInputChange(e, 'patientNo')} className={classNames({ 'p-invalid': submitted && !prescriptionItem.patientNo })} />
                                 </div>
                                 <div className="p-field">
                                     <label htmlFor="medicineNm">처방약</label>
-                                    <InputText id="medicineNm" value={prescriptionItem.medicineNm} onChange={(e) => onInputChange(e, 'medicineNm')} onClick={confirmMedicineItem} className={classNames({ 'p-invalid': submitted && !prescriptionItem.medicineNm })} />
+                                    <InputText id="medicineNm" value={prescriptionItem.medicineNm} onChange={(e) => onInputChange(e, 'medicineNm')} onClick={confirmMedicineItem} required autoFocus className={classNames({ 'p-invalid': submitted && !prescriptionItem.medicineNm })} />
                                     {submitted && !prescriptionItem.medicineNm && <small className="p-error">처방약은 필수입력입니다.</small>}
                                 </div>
                                 <div className="p-field">

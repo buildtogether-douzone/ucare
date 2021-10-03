@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { DataScroller } from 'primereact/datascroller';
+import { DataTable } from 'primereact/datatable';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import { Menu } from 'primereact/menu';
@@ -7,17 +8,18 @@ import { Dialog } from 'primereact/dialog';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Checkbox } from 'primereact/checkbox';
 import { InputTextarea } from 'primereact/inputtextarea';
-import { MultiSelect } from 'primereact/multiselect';
 import { Toast } from 'primereact/toast';
 import { Divider } from 'primereact/divider';
 import { Card } from 'primereact/card';
+import { Column } from 'primereact/column';
+import { InputText } from "primereact/inputtext";
+
 import statusService from '../../service/statusService';
 import timeService from '../../service/timeService';
 import patientService from '../../service/patientService';
 import receiptService from '../../service/receiptService';
 import diagnosisService from '../../service/diagnosisService';
 import diseaseService from '../../service/diseaseService';
-import medicineService from '../../service/medicineService';
 
 import styles from '../../assets/scss/DataScroller.scss';
 
@@ -31,6 +33,14 @@ export default function DoctorDiagnosis() {
         state: '',
         diagnosisTime: '',
         value: ''
+    };
+
+    let emptyDiseaseItem = {
+        diseaseNo: null,
+        diseaseCode: '',
+        diseaseNm: '',
+        diseaseEngNm: '',
+        symptom: ''
     };
 
     let emptyPatient = {
@@ -50,14 +60,16 @@ export default function DoctorDiagnosis() {
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [diseaseItem, setDiseaseItem] = useState([]);
     const [diseaseItems, setDiseaseItems] = useState([]);
-    const [medicineItem, setMedicineItem] = useState([]);
-    const [medicineItems, setMedicineItems] = useState([]);
     const [memo, setMemo] = useState('');
     const [cureYN, setCureYN] = useState('');
+    const [diseaseItemDialog, setDiseaseItemDialog] = useState(false);
+    const [diseaseSelectedItem, setDiseaseSelectedItem] = useState(emptyDiseaseItem);
+    const [globalFilter, setGlobalFilter] = useState(null);
 
     const [reload, setReload] = useState('');
 
     const menu = useRef(null);
+    const diseaseDt = useRef(null);
     const toast = useRef(null);
     const $websocket = useRef(null);
 
@@ -131,15 +143,6 @@ export default function DoctorDiagnosis() {
                 console.log('retrieveDisease() Error!', err);
             });
 
-        medicineService.retrieveAll()
-            .then(res => {
-                console.log('success!!');
-                setMedicineItems(res.data);
-            })
-            .catch(err => {
-                console.log('retrieveMedicine() Error!', err);
-            });
-
     }, []);
 
     useEffect(() => {
@@ -171,15 +174,6 @@ export default function DoctorDiagnosis() {
             })
             .catch(err => {
                 console.log('retrieveDisease() Error!', err);
-            });
-
-        medicineService.retrieveAll()
-            .then(res => {
-                console.log('success!!');
-                setMedicineItems(res.data);
-            })
-            .catch(err => {
-                console.log('retrieveMedicine() Error!', err);
             });
 
     }, [reload]);
@@ -304,6 +298,19 @@ export default function DoctorDiagnosis() {
         setDeleteItemDialog(false);
     }
 
+    const hideDiseaseItemDialog = () => {
+        setDiseaseItemDialog(false);
+    }
+
+    const inputDiseaseItemDialog = (data) => {
+        diseaseSelectedItem.diseaseNm = data.diseaseNm;
+        setDiseaseItemDialog(false);
+    }
+
+    const confirmDiseaseItem = () => {
+        setDiseaseItemDialog(true);
+    }
+
     const deleteItemDialogFooter = (
         <React.Fragment>
             <Button label="아니오" icon="pi pi-times" className="p-button-text" onClick={hideDeleteItemDialog} />
@@ -312,21 +319,21 @@ export default function DoctorDiagnosis() {
     );
 
     const saveDiagnosis = () => {
-        if(item.state === 'careWait') {
+        if (item.state === 'careWait') {
             toast.current.show({ severity: 'error', summary: '알림', detail: '진료대기중인 환자입니다.', life: 3000 });
             return;
         }
 
-        if(item.value === '완료' ) {
+        if (item.value === '완료') {
             toast.current.show({ severity: 'error', summary: '알림', detail: '진료가 완료된 환자입니다.', life: 3000 });
             return;
         }
-        
-        if(patient.patientNo === null) {
+
+        if (patient.patientNo === null) {
             toast.current.show({ severity: 'error', summary: '알림', detail: '환자정보를 선택해주세요.', life: 3000 });
             return;
         }
-        if(diseaseItem.length === 0) {
+        if (diseaseSelectedItem.diseaseNm === '') {
             toast.current.show({ severity: 'error', summary: '알림', detail: '병명을 입력해주세요.', life: 3000 });
             return;
         }
@@ -342,29 +349,18 @@ export default function DoctorDiagnosis() {
         };
 
         let _diseaseNm = '';
-        for (var i = 0; i < diseaseItem.length; i++) {
-            if (i == 0) _diseaseNm = diseaseItem[i].diseaseNm;
-            else _diseaseNm = _diseaseNm + ',' + diseaseItem[i].diseaseNm;
-        }
-
-        let _medicineNm = '';
-        for (var i = 0; i < medicineItem.length; i++) {
-            if (i == 0) _medicineNm = medicineItem[i].medicineNm;
-            else _medicineNm = _medicineNm + ',' + medicineItem[i].medicineNm;
-        }
+        _diseaseNm = diseaseSelectedItem.diseaseNm;
 
         diagnosisItem.diseaseNm = _diseaseNm;
-        diagnosisItem.medicineNm = _medicineNm;
 
         diagnosisService.create(diagnosisItem)
             .then(res => {
                 console.log('success!!');
                 setDiseaseItem(null);
-                setMedicineItem(null);
                 setCureYN('');
                 setMemo('');
                 setDiseaseItem([]);
-                setMedicineItem([]);
+                setDiseaseSelectedItem(emptyDiseaseItem);
 
                 let _patientItem = patient;
                 _patientItem.diagnosis = '재진';
@@ -397,66 +393,6 @@ export default function DoctorDiagnosis() {
             });
     }
 
-    const diseaseTemplate = (option) => {
-        return (
-            <div className="country-item">
-                <div>{option.diseaseNm}</div>
-            </div>
-        );
-    }
-
-    const selectedDiseaseTemplate = (option) => {
-        if (option) {
-            return (
-                <div className="country-item country-item-value">
-                    <div>{option.diseaseNm}</div>
-                </div>
-            );
-        }
-
-        return "Select Disease";
-    }
-
-    const diseasePanelFooterTemplate = () => {
-        const selectedItems = diseaseItem;
-        const length = selectedItems ? selectedItems.length : 0;
-        return (
-            <div className="p-py-2 p-px-3">
-                <b>{length}</b> item{length > 1 ? 's' : ''} selected.
-            </div>
-        );
-    }
-
-    const medicineTemplate = (option) => {
-        return (
-            <div className="country-item">
-                <div>{option.medicineNm}</div>
-            </div>
-        );
-    }
-
-    const selectedMedicineTemplate = (option) => {
-        if (option) {
-            return (
-                <div className="country-item country-item-value">
-                    <div>{option.medicineNm}</div>
-                </div>
-            );
-        }
-
-        return "Select Medicine";
-    }
-
-    const medicinePanelFooterTemplate = () => {
-        const selectedItems = medicineItem;
-        const length = selectedItems ? selectedItems.length : 0;
-        return (
-            <div className="p-py-2 p-px-3">
-                <b>{length}</b> item{length > 1 ? 's' : ''} selected.
-            </div>
-        );
-    }
-
     const renderHeader = () => {
         return (
             <div className="p-grid p-nogutter">
@@ -483,6 +419,15 @@ export default function DoctorDiagnosis() {
         $websocket.current.sendMessage('/Nurse');
     };
 
+    const diseaseHeader = (
+        <div className="table-header">
+            <span className="p-input-icon-left">
+                <i className="pi pi-search" />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+            </span>
+        </div>
+    );
+
     const header = renderHeader();
 
     return (
@@ -496,34 +441,34 @@ export default function DoctorDiagnosis() {
             <div className="card" style={{ margin: '20px', height: '85%' }}>
                 <div className="p-grid" style={{ height: '100%' }}>
                     <div className="p-col-12 p-md-6 p-lg-4">
-                    <Card style={{ height: '100%' }}>
-                        <TabView>
-                            <TabPanel header={"전체" + "(" + items.length + ")"} headerStyle={{width:'25%'}}>
-                                <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header}  emptyMessage={emptyMessage}/>
-                                </div>
-                            </TabPanel>
-                            <TabPanel header={"대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"} headerStyle={{width:'25%'}}>
-                                <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage}/>
-                                </div>
-                            </TabPanel>
-                            <TabPanel header={"진료중" + "(" + items.filter(val => val.state === 'care').length + ")"} headerStyle={{width:'25%'}}>
-                                <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items.filter(val => val.state === 'care')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header}  emptyMessage={emptyMessage}/>
-                                </div>
-                            </TabPanel>
-                            <TabPanel header={"완료" + "(" + items.filter(val => (val.state === 'complete') || (val.state === 'wait')).length + ")"} headerStyle={{width:'25%'}}>
-                                <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                    <DataScroller value={items.filter(val => (val.state === 'complete') || (val.state === 'wait'))} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage}/>
-                                </div>
-                            </TabPanel>
-                        </TabView>
+                        <Card style={{ height: '100%' }}>
+                            <TabView>
+                                <TabPanel header={"전체" + "(" + items.length + ")"} headerStyle={{ width: '25%' }}>
+                                    <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                        <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
+                                    </div>
+                                </TabPanel>
+                                <TabPanel header={"대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"} headerStyle={{ width: '25%' }}>
+                                    <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                        <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
+                                    </div>
+                                </TabPanel>
+                                <TabPanel header={"진료중" + "(" + items.filter(val => val.state === 'care').length + ")"} headerStyle={{ width: '25%' }}>
+                                    <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                        <DataScroller value={items.filter(val => val.state === 'care')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
+                                    </div>
+                                </TabPanel>
+                                <TabPanel header={"완료" + "(" + items.filter(val => (val.state === 'complete') || (val.state === 'wait')).length + ")"} headerStyle={{ width: '25%' }}>
+                                    <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
+                                        <DataScroller value={items.filter(val => (val.state === 'complete') || (val.state === 'wait'))} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
+                                    </div>
+                                </TabPanel>
+                            </TabView>
                         </Card>
                     </div>
                     <div className="p-col-12 p-md-6 p-lg-4">
-                    <Card style={{ height: '40%' }}>
-                            <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>환자 정보</span>
+                        <Card style={{ height: '40%' }}>
+                            <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign: 'center' }}>환자 정보</span>
                             <Divider />
                             <div className="activity-header">
                                 <div className="p-grid">
@@ -550,8 +495,8 @@ export default function DoctorDiagnosis() {
                                 </li>
                             </ul>
                         </Card>
-                        <Card style={{ height: '58%', marginTop: '10px'}}>
-                            <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>과거 병력</span>
+                        <Card style={{ height: '58%', marginTop: '10px' }}>
+                            <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign: 'center' }}>과거 병력</span>
                             <Divider />
                             <div className="activity-header">
                                 <div className="datascroller">
@@ -562,28 +507,22 @@ export default function DoctorDiagnosis() {
                     </div>
                     <div className="p-col-12 p-md-6 p-lg-4">
                         <Card style={{ height: '100%' }}>
-                            <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>진료</span>
+                            <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign: 'center' }}>진료</span>
                             <Divider />
                             <div className="card p-fluid">
                                 <div className="p-field p-grid">
                                     <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">병명</label>
                                     <div className="p-col-12 p-md-10">
-                                        <MultiSelect value={diseaseItem} options={diseaseItems} onChange={(e) => setDiseaseItem(e.value)} optionLabel="diseaseNm" placeholder="Select disease" filter className="multiselect-custom"
-                                            itemTemplate={diseaseTemplate} selectedItemTemplate={selectedDiseaseTemplate} panelFooterTemplate={diseasePanelFooterTemplate} />
+                                    <InputText id="diseaseNm" value={diseaseSelectedItem.diseaseNm} onClick={confirmDiseaseItem} placeholder="질병" />
+                                        {/* <MultiSelect value={diseaseItem} options={diseaseItems} onChange={(e) => setDiseaseItem(e.value)} optionLabel="diseaseNm" placeholder="Select disease" filter className="multiselect-custom"
+                                            itemTemplate={diseaseTemplate} selectedItemTemplate={selectedDiseaseTemplate} panelFooterTemplate={diseasePanelFooterTemplate} /> */}
                                     </div>
                                 </div>
                                 <div className="p-field p-grid">
                                     <label htmlFor="care" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">처방</label>
                                     <div className="p-col-12 p-md-10">
                                         <Checkbox onChange={e => setCureYN(e.checked)} checked={cureYN}></Checkbox>
-                                        <label htmlFor="checkOption1">치료</label>
-                                    </div>
-                                </div>
-                                <div className="p-field p-grid">
-                                    <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">처방약</label>
-                                    <div className="p-col-12 p-md-10">
-                                        <MultiSelect value={medicineItem} options={medicineItems} onChange={(e) => setMedicineItem(e.value)} optionLabel="medicineNm" placeholder="Select medicine" filter className="multiselect-custom"
-                                            itemTemplate={medicineTemplate} selectedItemTemplate={selectedMedicineTemplate} panelFooterTemplate={medicinePanelFooterTemplate} />
+                                        <label htmlFor="checkOption1"> 치료</label>
                                     </div>
                                 </div>
                             </div>
@@ -592,7 +531,7 @@ export default function DoctorDiagnosis() {
                                 <InputTextarea value={memo} onChange={(e) => setMemo(e.target.value)} rows={5} cols={30} autoResize />
                             </div>
                             <div>
-                                <Button type="button" label="진료완료" onClick={saveDiagnosis} style={{ marginTop: '20px' }} />
+                                <Button type="button" label="진료완료" onClick={saveDiagnosis} style={{ width: '100%', marginTop: '30px' }} />
                             </div>
                         </Card>
                     </div>
@@ -603,6 +542,24 @@ export default function DoctorDiagnosis() {
                     <div className="confirmation-content">
                         <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
                         {item && <span><b>접수를 취소하시겠습니까?</b></span>}
+                    </div>
+                </Dialog>
+
+                <Dialog visible={diseaseItemDialog} style={{ width: '600px', height: '500px' }} header="질병정보" modal onHide={hideDiseaseItemDialog}>
+                    <div className="card">
+                        <DataTable ref={diseaseDt} value={diseaseItems} selectionMode="single" selection={diseaseSelectedItem} emptyMessage="데이터가 없습니다." onSelectionChange={(e) => setDiseaseSelectedItem(e.value)}
+                            onRowDoubleClick={() => inputDiseaseItemDialog(diseaseSelectedItem)}
+                            dataKey="diseaseNo" paginator rows={8}
+                            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
+                            globalFilter={globalFilter}
+                            header={diseaseHeader}>
+
+                            <Column style={{ textAlign: 'center', width: '10%', padding: '10px' }} field="diseaseCode" header="질병코드" sortable></Column>
+                            <Column style={{ textAlign: 'center', width: '24%', padding: '10px' }} field="diseaseNm" header="병명" sortable></Column>
+                            <Column style={{ textAlign: 'center', width: '24%', padding: '10px' }} field="diseaseEngNm" header="영문명" sortable></Column>
+                            <Column style={{ textAlign: 'center', width: '24%', padding: '10px' }} field="symptom" header="증상" sortable></Column>
+                        </DataTable>
                     </div>
                 </Dialog>
             </div>
