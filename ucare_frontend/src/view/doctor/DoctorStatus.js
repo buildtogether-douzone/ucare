@@ -302,8 +302,7 @@ export default function DoctorDiagnosis() {
         setDiseaseItemDialog(false);
     }
 
-    const inputDiseaseItemDialog = (data) => {
-        diseaseSelectedItem.diseaseNm = data.diseaseNm;
+    const inputDiseaseItemDialog = () => {
         setDiseaseItemDialog(false);
     }
 
@@ -513,9 +512,7 @@ export default function DoctorDiagnosis() {
                                 <div className="p-field p-grid">
                                     <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">병명</label>
                                     <div className="p-col-12 p-md-10">
-                                    <InputText id="diseaseNm" value={diseaseSelectedItem.diseaseNm} onClick={confirmDiseaseItem} placeholder="질병" />
-                                        {/* <MultiSelect value={diseaseItem} options={diseaseItems} onChange={(e) => setDiseaseItem(e.value)} optionLabel="diseaseNm" placeholder="Select disease" filter className="multiselect-custom"
-                                            itemTemplate={diseaseTemplate} selectedItemTemplate={selectedDiseaseTemplate} panelFooterTemplate={diseasePanelFooterTemplate} /> */}
+                                        <InputText id="diseaseNm" value={diseaseSelectedItem.diseaseNm} onClick={confirmDiseaseItem} placeholder="질병" />
                                     </div>
                                 </div>
                                 <div className="p-field p-grid">
@@ -548,7 +545,7 @@ export default function DoctorDiagnosis() {
                 <Dialog visible={diseaseItemDialog} style={{ width: '600px', height: '500px' }} header="질병정보" modal onHide={hideDiseaseItemDialog}>
                     <div className="card">
                         <DataTable ref={diseaseDt} value={diseaseItems} selectionMode="single" selection={diseaseSelectedItem} emptyMessage="데이터가 없습니다." onSelectionChange={(e) => setDiseaseSelectedItem(e.value)}
-                            onRowDoubleClick={() => inputDiseaseItemDialog(diseaseSelectedItem)}
+                            onRowDoubleClick={inputDiseaseItemDialog}
                             dataKey="diseaseNo" paginator rows={8}
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
