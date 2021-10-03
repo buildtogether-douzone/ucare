@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { DataScroller } from 'primereact/datascroller';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import { Menu } from 'primereact/menu';
@@ -7,6 +9,12 @@ import { Dialog } from 'primereact/dialog';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Divider } from 'primereact/divider';
 import { Card } from 'primereact/card';
+import { InputText } from "primereact/inputtext";
+import { makeStyles } from '@material-ui/styles';
+import PersonIcon from '@material-ui/icons/Person';
+import BlurOnIcon from '@material-ui/icons/BlurOn';
+
+import { useReactToPrint } from 'react-to-print';
 import { useRecoilState } from 'recoil';
 import { reloadState } from '../../recoil/atom/nurseAtom';
 import SockJsClient from 'react-stomp';
@@ -17,8 +25,51 @@ import hospitalService from '../../service/hospitalService';
 import patientService from '../../service/patientService';
 import diagnosisService from '../../service/diagnosisService';
 import receiptService from '../../service/receiptService';
+import prescriptionService from '../../service/prescriptionService';
 
 import styles from '../../assets/scss/DataScroller.scss';
+
+const useStyles = makeStyles({
+    textStyle: {
+        height: '50px',
+        width: '800px',
+        marginBottom: '20px'
+    },
+    addon: {
+        backgroundColor: "#DFDFDF",
+        borderBottomLeftRadius: 10,
+        borderTopLeftRadius: 10,
+        textAlign: 'center',
+        paddingTop: '12px',
+        width: '5%',
+        marginBottom: '20px'
+    },
+    image: {
+        display: 'block',
+        top: 80,
+        right: 80,
+        float: 'left',
+        marginBottom: '40px',
+        marginRight: '80px'
+    },
+    profile: {
+        display: 'block',
+        width: '200px',
+        height: '230px',
+        border: '1px solid #AAAAAA',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: '100%, 100%',
+        backgroundPosition: 'center',
+        overflow: 'hidden',
+    },
+    textfiled: {
+        width: '100%'
+    },
+    Line: {
+        display: 'flex',
+        flexDirection: 'row'
+    }
+});
 
 export default function NurseStatus() {
 
@@ -71,8 +122,9 @@ export default function NurseStatus() {
         cureYN: '',
         diseaseNm: '',
         medicineNm: ''
-    }
+    };
 
+    const classes = useStyles();
     const [items, setItems] = useState([]);
     const [item, setItem] = useState(emptyItem);
     const [hospitalItem, setHospitalItem] = useState(emptyHospitalItem);
@@ -85,10 +137,12 @@ export default function NurseStatus() {
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [receiptCompleteDialog, setReceiptCompleteDialog] = useState(false);
     const [activeIndex, setActiveIndex] = useState(1);
+    const [prescriptionItems, setPrescriptionItems] = useState([]);
 
     const [reload, setReload] = useRecoilState(reloadState);
     const [value, setValue] = useState('');
 
+    const componentRef = useRef();
     const menu = useRef(null);
     const $websocket = useRef(null);
 
@@ -199,6 +253,15 @@ export default function NurseStatus() {
             .then(res => {
                 console.log('success!!');
                 setDiagnosisItem(res.data);
+
+                prescriptionService.retrieveByDiagnosisNo(res.data.diagnosisNo)
+                    .then(res => {
+                        console.log('success!!');
+                        setPrescriptionItems(res.data);
+                    })
+                    .catch(err => {
+                        console.log('retrieveByDiagnosisNo() Error!', err);
+                    })
 
                 if (res.data.cureYN === 'true')
                     resultPrice += 10000;
@@ -388,6 +451,9 @@ export default function NurseStatus() {
         );
     }
 
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current
+    });
 
     const emptyMessage = () => {
         return (
@@ -523,6 +589,11 @@ export default function NurseStatus() {
                                                     <Button type="button" label="수납완료" onClick={confirmReceiptComplete} className="p-button" style={{ width: '100%', marginTop: '30px' }} />
                                                 </div>
                                             }
+                                            {(item.state === 'complete') &&
+                                                <div>
+                                                    <Button type="button" label="처방전 출력" onClick={handlePrint} className="p-button" style={{ width: '100%', marginTop: '30px' }} />
+                                                </div>
+                                            }
                                         </div>
                                     </ul>
                                 }
@@ -545,6 +616,44 @@ export default function NurseStatus() {
                         {item && <span><b>수납을 완료하시겠습니까?</b></span>}
                     </div>
                 </Dialog>
+                <div style={{ display: 'none' }}>
+                    <div id="printPdf" ref={componentRef}>
+                        <Card style={{ height: '100%' }}>
+                            <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign: 'center' }}>처방</span>
+                            <Divider />
+                            <div className={classes.Line}>
+                                <div className={classes.addon}>
+                                    <PersonIcon style={{ fontSize: "25px", color: "#616161" }} />
+                                </div>
+                                <InputText
+                                    placeholder="환자명"
+                                    className={classes.textStyle}
+                                    value={patientItem.name} />
+                            </div>
+                            <div className={classes.Line}>
+                                <div className={classes.addon}>
+                                    <BlurOnIcon style={{ fontSize: "25px", color: "#616161" }} />
+                                </div>
+                                <InputText
+                                    placeholder="질병"
+                                    className={classes.textStyle}
+                                    value={diagnosisItem.diseaseNm} />
+                            </div>
+                            <div className="card">
+                                <DataTable value={prescriptionItems}
+                                    dataKey="diseaseNo" paginator rows={10}
+                                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items">
+
+                                    <Column style={{ textAlign: 'center', width: '20%', padding: '10px' }} field="medicineNm" header="처방약"></Column>
+                                    <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="dosage" header="투여량" ></Column>
+                                    <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="dosingDay" header="투약일수" ></Column>
+                                    <Column style={{ textAlign: 'center', width: '20%', padding: '10px' }} field="usage" header="용법"></Column>
+                                </DataTable>
+                            </div>
+                        </Card>
+                    </div>
+                </div>
             </div>
         </Fragment>
     );
