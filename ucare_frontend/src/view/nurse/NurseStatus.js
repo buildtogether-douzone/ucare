@@ -136,7 +136,6 @@ export default function NurseStatus() {
     const [date, setDate] = useState(new Date());
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [receiptCompleteDialog, setReceiptCompleteDialog] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(1);
     const [prescriptionItems, setPrescriptionItems] = useState([]);
 
     const [reload, setReload] = useRecoilState(reloadState);
