@@ -7,6 +7,7 @@ import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { InputText } from "primereact/inputtext";
+import { InputNumber } from 'primereact/inputnumber';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
@@ -341,7 +342,7 @@ export default function Prescription() {
     }
 
     const onDateChange = (event) => {
-        prescriptionService.retrieve(dateFormat(event.value))
+        prescriptionService.retrieveCureYN(dateFormat(event.value))
             .then(res => {
                 console.log('success!!');
                 setItems(res.data);
@@ -593,11 +594,11 @@ export default function Prescription() {
                                 </div>
                                 <div className="p-field">
                                     <label htmlFor="dosage">투여량</label>
-                                    <InputText id="dosage" value={prescriptionItem.dosage} onChange={(e) => onInputChange(e, 'dosage')} className={classNames({ 'p-invalid': submitted && !prescriptionItem.dosage })} />
+                                    <InputNumber id="dosage" value={prescriptionItem.dosage} onValueChange={(e) => onInputChange(e, 'dosage')} className={classNames({ 'p-invalid': submitted && !prescriptionItem.dosage })} />
                                 </div>
                                 <div className="p-field">
                                     <label htmlFor="dosingDay">투약일수</label>
-                                    <InputText id="dosingDay" value={prescriptionItem.dosingDay} onChange={(e) => onInputChange(e, 'dosingDay')} className={classNames({ 'p-invalid': submitted && !prescriptionItem.dosingDay })} />
+                                    <InputNumber id="dosingDay" value={prescriptionItem.dosingDay} onValueChange={(e) => onInputChange(e, 'dosingDay')} className={classNames({ 'p-invalid': submitted && !prescriptionItem.dosingDay })} />
                                 </div>
                                 <div className="p-field">
                                     <label htmlFor="usage">용법</label>

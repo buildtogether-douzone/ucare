@@ -226,7 +226,7 @@ export default function DoctorDiagnosis() {
                 diagnosisService.retrieveByPatientNo(res.data.patientNo)
                     .then(res => {
                         for (var i = 0; i < res.data.length; i++) {
-                            if (res.data[i].cureYN === 'true')
+                            if ((res.data[i].cureYN === 'true') || (res.data[i].cureYN === 'complete'))
                                 res.data[i].value = '치료';
                             else
                                 res.data[i].value = '치료X';
