@@ -56,5 +56,12 @@
 		FROM ucare.diagnosis
 		WHERE receipt_no = #{receiptNo }
 	</select>
+	
+	<update id="updateByDiagnosisNo" parameterType="diagnosisvo">
+		UPDATE  ucare.diagnosis
+			SET 
+			   	cure_yn = 'complete'
+		WHERE diagnosis_no = #{diagnosisNo }
+	</update>
 
 </mapper>

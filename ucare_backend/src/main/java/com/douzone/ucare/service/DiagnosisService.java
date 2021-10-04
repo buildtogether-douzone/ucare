@@ -25,4 +25,8 @@ public class DiagnosisService {
 	public DiagnosisVo retrieveByReceiptNo(Long receiptNo) {
 		return DiagnosisRepository.retrieveByReceiptNo(receiptNo);
 	}
+	
+	public int updateByDiagnosisNo(DiagnosisVo data) {
+		return DiagnosisRepository.updateByDiagnosisNo(data);
+	}
 }

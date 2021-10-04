@@ -135,6 +135,7 @@ export default function Prescription() {
     const [medicineSelectedItem, setMedicineSelectedItem] = useState(emptyMedicineItem);
     const [selectedItems, setSelectedItems] = useState(null);
     const [date, setDate] = useState(new Date());
+    const [prescriptionItemsDialog, setPrescriptionItemsDialog] = useState(false);
     const [medicineItemDialog, setMedicineItemDialog] = useState(false);
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [deleteItemsDialog, setDeleteItemsDialog] = useState(false);
@@ -175,7 +176,7 @@ export default function Prescription() {
                 for (var i = 0; i < res.data.length; i++) {
                     if (res.data[i].cureYN === 'true') {
                         res.data[i].value = '처방대기중';
-                    } else {
+                    } else if (res.data[i].cureYN === 'complete') {
                         res.data[i].value = '완료';
                     }
                 }
@@ -194,7 +195,7 @@ export default function Prescription() {
                 for (var i = 0; i < res.data.length; i++) {
                     if (res.data[i].cureYN === 'true') {
                         res.data[i].value = '처방대기중';
-                    } else {
+                    } else if (res.data[i].cureYN === 'complete') {
                         res.data[i].value = '완료';
                     }
                 }
@@ -264,6 +265,18 @@ export default function Prescription() {
             });
     }
 
+    const completePrescription = () => {
+        diagnosisService.updateByDiagnosisNo(diagnosisItem)
+            .then(res => {
+                console.log('success!!');
+                setPrescriptionItemsDialog(false);
+                setReload(!reload);
+            })
+            .catch(err => {
+                console.log('update() Error!', err);
+            });
+    }
+
     const editItem = (item) => {
         setPrescriptionItem({ ...item });
         setItemDialog(true);
@@ -310,9 +323,7 @@ export default function Prescription() {
                 });
         }
         else if (data.cureYN === 'complete')
-            alert("처방완료된 환자입니다.");
-        else
-            menu.current.toggle(e, setItem(data));
+            toast.current.show({ severity: 'error', summary: '알림', detail: '처방완료된 환자입니다.', life: 3000 });
     }
 
     const itemTemplate = (data) => {
@@ -345,6 +356,15 @@ export default function Prescription() {
         prescriptionService.retrieveCureYN(dateFormat(event.value))
             .then(res => {
                 console.log('success!!');
+
+                for (var i = 0; i < res.data.length; i++) {
+                    if (res.data[i].cureYN === 'true') {
+                        res.data[i].value = '처방대기중';
+                    } else if (res.data[i].cureYN === 'complete') {
+                        res.data[i].value = '완료';
+                    }
+                }
+                
                 setItems(res.data);
             })
             .catch(err => {
@@ -382,6 +402,10 @@ export default function Prescription() {
         ))
     }
 
+    const confirmPrescriptionItems = () => {
+        setPrescriptionItemsDialog(true);
+    }
+
     const confirmDeleteSelected = () => {
         setDeleteItemsDialog(true);
     }
@@ -396,6 +420,10 @@ export default function Prescription() {
         setSubmitted(false);
         setItemDialog(false);
         setPrescriptionItem(emptyPrescriptionItem);
+    }
+
+    const hidePrescriptionItemsDialog = () => {
+        setPrescriptionItemsDialog(false);
     }
 
     const hideDeleteItemDialog = () => {
@@ -419,6 +447,13 @@ export default function Prescription() {
         <React.Fragment>
             <Button label="취소" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
             <Button label="저장" icon="pi pi-check" className="p-button-text" onClick={saveItem} />
+        </React.Fragment>
+    );
+
+    const prescriptionItemsDialogFooter = (
+        <React.Fragment>
+            <Button label="아니오" icon="pi pi-times" className="p-button-text" onClick={hidePrescriptionItemsDialog} />
+            <Button label="예" icon="pi pi-check" className="p-button-text" onClick={completePrescription} />
         </React.Fragment>
     );
 
@@ -456,9 +491,10 @@ export default function Prescription() {
     const tableHeader = (
         <div className="table-header">
             <span className="p-input-icon-left">
+                <Button label="처방완료" icon="pi pi-check" className="p-button-sm" style={{ backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} onClick={confirmPrescriptionItems} />
             </span>
             <span className="p-input-icon-left" style={{ float: 'right' }}>
-                <Button label="선택삭제" icon="pi pi-trash" className="p-button-danger" style={{ float: 'right', backgroundColor: '#FFFFFF', borderColor: '#FF0000', color: '#FF0000' }} onClick={confirmDeleteSelected} disabled={!selectedItems || !selectedItems.length} />
+                <Button label="선택삭제" icon="pi pi-trash" className="p-button-danger p-mr-2" style={{ float: 'right', backgroundColor: '#FFFFFF', borderColor: '#FF0000', color: '#FF0000' }} onClick={confirmDeleteSelected} disabled={!selectedItems || !selectedItems.length} />
                 <Button label="입력" icon="pi pi-plus" className="p-button-success p-mr-2" style={{ float: 'right', backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} onClick={openNew} />
             </span>
         </div>
@@ -622,6 +658,13 @@ export default function Prescription() {
                                         <Column field="mainIngredient" header="주성분" ></Column>
                                         <Column field="origin" header="수입/제조" sortable></Column>
                                     </DataTable>
+                                </div>
+                            </Dialog>
+
+                            <Dialog visible={prescriptionItemsDialog} style={{ width: '450px' }} header="Confirm" modal footer={prescriptionItemsDialogFooter} onHide={hidePrescriptionItemsDialog}>
+                                <div className="confirmation-content">
+                                    <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem' }} />
+                                    {prescriptionItems && <span><b>처방하시겠습니까</b>?</span>}
                                 </div>
                             </Dialog>
 

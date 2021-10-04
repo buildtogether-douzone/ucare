@@ -13,6 +13,10 @@ class diagnosisService {
   retrieveByReceiptNo(receiptNo){
     return axios.get(DIAGNOSIS_API_BASE_URL + '/retrieveByReceiptNo/' + receiptNo, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
+
+  updateByDiagnosisNo(data){
+    return axios.put(DIAGNOSIS_API_BASE_URL + '/updateByDiagnosisNo', data, { headers: { Authorization: localStorage.getItem("authorization") }});
+  }
 }
 
 export default new diagnosisService();

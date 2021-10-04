@@ -181,7 +181,7 @@ export default function CalHoliday() {
       <Toast ref={toast} />
       {reload}
       <div style={{width: '90%', display: 'inline-block', margin: '1%' }}>
-          <Button style={{ float: 'right' }} label="저장" icon="pi pi-check"  className="p-button-sm" onClick={() => { saveItems() }}  />
+          <Button style={{ float: 'right', backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} label="저장" icon="pi pi-check"  className="p-button-sm" onClick={saveItems}  />
           <button className={styles.nav_btn} style={{ marginRight: '32%' }} onClick={() => { addMonth() }}>&gt;</button>
           <span style={{ paddingRight: '5%', paddingLeft: '5%', float:'right', fontSize: '26px' }}>{today.format('YYYY년 MM월')}</span>
           <button className={styles.nav_btn} onClick={() => { subtractMonth() }}>&lt;</button>

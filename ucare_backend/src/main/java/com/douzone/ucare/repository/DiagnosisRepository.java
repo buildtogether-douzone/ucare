@@ -25,4 +25,8 @@ public class DiagnosisRepository {
 	public DiagnosisVo retrieveByReceiptNo(Long receiptNo) {
 		return sqlSession.selectOne("diagnosis.retrieveByReceiptNo", receiptNo);
 	}
+	
+	public int updateByDiagnosisNo(DiagnosisVo data) {
+		return sqlSession.update("diagnosis.updateByDiagnosisNo", data);
+	}
 }
