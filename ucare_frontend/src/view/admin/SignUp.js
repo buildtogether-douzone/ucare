@@ -279,7 +279,7 @@ export default function SignUp() {
             <div className={classes.paper}>
               <span style={{ color: '#1C91FB', fontSize: '20px' }}>회원 등록</span>
             <Divider />
-      <Toast ref={toast} />
+          <Toast ref={toast} position="top-center"/>
         <form className={classes.form} noValidate sty>
           <Grid container>
             <Grid item xs={12} style={{ borderTop: '1px solid #D6D6D6' }}>
