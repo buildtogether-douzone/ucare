@@ -7,6 +7,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
+import { Button as Buttons } from 'primereact/button';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -511,27 +512,20 @@ export default function NewPatient() {
             </Grid>
 
           </Grid>
-
-          <Button
-            style={{ margin: '8px', backgroundColor: '#1C91FB', border: '1px solid #1C91FB', float: 'right' }}
-            variant="contained"
-            color="primary"
-            size="small"
-            type="submit"
-            onClick={create}
-            disableElevation>
-            등록
-          </Button>
-          <Button
-            style={{ margin: '9px', color: '#1C91FB', border: '1px solid #1C91FB', float: 'right' }}
-            variant="outlined"
-            color="primary"
-            size="small"
-            type="button"
-            onClick={onReset}
-            disableElevation>
-            취소
-          </Button>
+          <div style={{ display: 'block', textAlign:'center' }}>
+            <Buttons
+              style={{ width: '30%', margin: '10px', color: '#1C91FB' }}
+              label="취소" 
+              className="p-button-outlined" 
+              type="submit" 
+              onClick={onReset} />
+            <Buttons
+              style={{  width: '30%', margin: '11px', backgroundColor: '#1C91FB', color: 'white' }}
+              label="등록" 
+              className="p-button-outlined" 
+              type="submit" 
+              onClick={create} />
+          </div>
         </form>
       </div>
     </Container>

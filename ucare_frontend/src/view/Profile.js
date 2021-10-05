@@ -410,11 +410,10 @@ export default function Profile() {
           <Button
             style={{ width: '100%', border: 'solid #1C91FB', marginTop: '5%', backgroundColor: '#1C91FB', color: 'white' }}
             variant="outlined"
-            href="/Home"
             type="submit"
             onClick={saveUpdate}
             disableElevation>
-            수정하기
+            수정
           </Button>
       </div>
       </div>

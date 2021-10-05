@@ -110,7 +110,8 @@ export default function Setting() {
   }
 
   return (
-        <Card>
+      <div style={{ height: '90%',  margin: '20px' }}>
+        <Card style={{ height: '100%' }}>
           <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center' }}>사용자 직책 및 상태 관리</span>
           <Divider />
             <Grid item xs={12}>
@@ -141,5 +142,6 @@ export default function Setting() {
               />
             </Grid>
         </Card>
+      </div>
   );
 }

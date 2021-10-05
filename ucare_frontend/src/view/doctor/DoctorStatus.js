@@ -542,7 +542,7 @@ export default function DoctorDiagnosis() {
                     </div>
                 </Dialog>
 
-                <Dialog visible={diseaseItemDialog} style={{ width: '600px', height: '500px' }} header="질병정보" modal onHide={hideDiseaseItemDialog}>
+                <Dialog visible={diseaseItemDialog} style={{ width: '80%' }} header="질병정보" modal onHide={hideDiseaseItemDialog}>
                     <div className="card">
                         <DataTable ref={diseaseDt} value={diseaseItems} selectionMode="single" selection={diseaseSelectedItem} emptyMessage="데이터가 없습니다." onSelectionChange={(e) => setDiseaseSelectedItem(e.value)}
                             onRowDoubleClick={inputDiseaseItemDialog}

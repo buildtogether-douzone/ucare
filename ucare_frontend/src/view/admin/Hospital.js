@@ -171,7 +171,7 @@ export default function Hospital() {
                                 </span>
                             </div>
                             <div className="p-field">
-                                <span className="p-input-icon-left">
+                                <span className="p-input-icon-left" style={{ marginTop: '1.5rem' }}>
                                     <i className="pi pi-user" />
                                     <InputText 
                                         placeholder="병원장명" 
@@ -180,7 +180,7 @@ export default function Hospital() {
                                 </span>
                             </div>
                             <div className="p-field">
-                                <span className="p-input-icon-left">
+                                <span className="p-input-icon-left" style={{ marginTop: '1.5rem' }}>
                                     <i className="pi pi-map-marker" />
                                     <InputText 
                                         placeholder="병원 주소" 
@@ -189,7 +189,7 @@ export default function Hospital() {
                                 </span>
                             </div>
                             <div className="p-field">
-                                <span className="p-input-icon-left">
+                                <span className="p-input-icon-left" style={{ marginTop: '1.5rem' }}>
                                     <i className="pi pi-phone" />
                                     <InputText 
                                         placeholder="병원 전화번호" 
@@ -198,7 +198,7 @@ export default function Hospital() {
                                 </span>
                             </div>
                             <div className="p-field">
-                                <span className="p-input-icon-left">
+                                <span className="p-input-icon-left" style={{ marginTop: '1.5rem' }}>
                                     <i className="pi pi-dollar" />
                                     <InputText 
                                         placeholder="기본 진료비" 
@@ -207,7 +207,7 @@ export default function Hospital() {
                                 </span>
                             </div>
                             <div className="p-field">
-                                <span className="p-input-icon-left">
+                                <span className="p-input-icon-left" style={{ marginTop: '1.5rem' }}>
                                     <i className="pi pi-globe" />
                                     <InputText 
                                         placeholder="사이트 주소" 
@@ -216,7 +216,7 @@ export default function Hospital() {
                                 </span>
                             </div>
                             <div className="p-field">
-                                <span className="p-input-icon-left">
+                                <span className="p-input-icon-left" style={{ marginTop: '1.5rem' }}>
                                 <i className="pi pi-envelope" />
                                     <InputText 
                                         placeholder="이메일 주소" 
@@ -225,7 +225,7 @@ export default function Hospital() {
                                 </span>
                             </div>
                             <div className="p-field">
-                                <span className="p-input-icon-left">
+                                <span className="p-input-icon-left" style={{ marginTop: '1.5rem' }}>
                                     <i className="pi pi-print" />
                                     <InputText 
                                         placeholder="팩스 번호" 
@@ -254,11 +254,11 @@ export default function Hospital() {
                                     <input id={"file-input"} style={{ display: 'none' }} type="file" name="imageFile" onChange={handleFileOnChange} />
                                 </Button>
                                 </div>
-                                    <div className="p-field" style={{ marginTop: '2%' }}>
+                                    <div className="p-field" style={{ marginTop: '2%' }} style={{ marginTop: '1.5rem' }}>
                                         <InputTextarea
                                             placeholder="병원장 인사말" 
                                             autoResize
-                                            rows={9}
+                                            rows={11}
                                             cols={30} 
                                             value={headSpeak || ''}
                                             onChange={(e) => setHeadSpeak(e.target.value)} />
