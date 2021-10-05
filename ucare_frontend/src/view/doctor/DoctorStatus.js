@@ -472,7 +472,7 @@ export default function DoctorDiagnosis() {
                             <div className="activity-header">
                                 <div className="p-grid">
                                     <div className="p-col-6">
-                                        <span style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center' }}>{patient.name}{patient.name && '/'}{patient.gender}</span>
+                                        <span style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center', marginLeft: '20px' }}>{patient.name}{patient.name && '/'}{patient.gender}</span>
                                     </div>
                                     <div className="p-col-6" style={{ textAlign: 'right' }}>
                                     </div>
@@ -482,14 +482,14 @@ export default function DoctorDiagnosis() {
                             <ul className="activity-list">
                                 <li>
                                     <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                        <h5 className="activity p-m-0">보험여부</h5>
-                                        <div className="count">{patient.insurance}</div>
+                                        <label htmlFor="insurance">보혐 여부</label>
+                                        <div className="count" style={{ marginRight: '3rem' }}>{patient.insurance}</div>
                                     </div>
                                 </li>
                                 <li>
                                     <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                        <h5 className="activity p-m-0">진료구분</h5>
-                                        <div className="count">{patient.diagnosis}</div>
+                                    <label htmlFor="diagnosis">진료 구분</label>
+                                        <div className="count" style={{ marginRight: '3rem' }}>{patient.diagnosis}</div>
                                     </div>
                                 </li>
                             </ul>
@@ -509,23 +509,25 @@ export default function DoctorDiagnosis() {
                             <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign: 'center' }}>진료</span>
                             <Divider />
                             <div className="card p-fluid">
-                                <div className="p-field p-grid">
+                                <div className="p-field p-grid" style={{ marginTop: '2rem' }}>
                                     <label htmlFor="name3" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">병명</label>
                                     <div className="p-col-12 p-md-10">
                                         <InputText id="diseaseNm" value={diseaseSelectedItem.diseaseNm} onClick={confirmDiseaseItem} placeholder="질병" />
                                     </div>
                                 </div>
-                                <div className="p-field p-grid">
+                                <div className="p-field p-grid" style={{ marginTop: '2rem' }}>
                                     <label htmlFor="care" className="p-col-12 p-mb-2 p-md-2 p-mb-md-0">처방</label>
                                     <div className="p-col-12 p-md-10">
                                         <Checkbox onChange={e => setCureYN(e.checked)} checked={cureYN}></Checkbox>
-                                        <label htmlFor="checkOption1"> 치료</label>
+                                        <label style={{ marginLeft: '5px' }} htmlFor="checkOption1"> 치료</label>
                                     </div>
                                 </div>
                             </div>
-                            <div className="card">
-                                <h5>진료메모</h5>
-                                <InputTextarea value={memo} onChange={(e) => setMemo(e.target.value)} rows={5} cols={30} autoResize />
+                            <div className="card p-fluid" style={{ marginTop: '2rem' }}>
+                                <label htmlFor="memo">진료 메모</label>
+                                <div className="p-field" style={{ marginTop: '2%' }} style={{ marginTop: '1.5rem' }}>
+                                <InputTextarea value={memo} onChange={(e) => setMemo(e.target.value)} rows={8} cols={30} autoResize />
+                            </div>
                             </div>
                             <div>
                                 <Button type="button" label="진료완료" onClick={saveDiagnosis} style={{ width: '100%', marginTop: '30px' }} />

@@ -35,7 +35,7 @@ import styles from '../../assets/scss/DataScroller.scss';
 const useStyles = makeStyles({
     textStyle: {
         height: '50px',
-        width: '800px',
+        width: '900px',
         marginBottom: '20px'
     },
     addon: {

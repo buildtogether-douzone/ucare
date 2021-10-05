@@ -26,7 +26,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import UserService from '../service/userService';
 import MessageService from '../service/messageService';
-
+import basicImg from '../assets/image/basicImg.jpg';
 import { useRecoilState } from 'recoil';
 import { reloadProfile } from '../recoil/atom/profileAtom';
 
@@ -67,8 +67,19 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     float: 'left',
-    width: '200px',
-    height: '179px'
+    width: '180px',
+    height: '197px'
+  },
+  profile_img: {
+    width: '120px',
+    height: '120px',
+    borderRadius: '70%',
+    overflow: 'hidden'
+  },
+  profile_img_img: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover'
   }
 }));
 
@@ -543,23 +554,29 @@ const Header = ({ open, drawerManage }) => {
           />
 
           <Menu
+            style={{ marginTop: '48px' }}
             id="simple-menu"
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleClose}
             MenuListProps={{ onMouseLeave: handleClose }}
           >
-            <div className={classes.image} style={URL == null ?
-              { backgroundImage: `url(${require("../assets/image/profile.jpg")})`, backgroundSize: '100% 100%' } :
-              { backgroundImage: `url(${URL})`, backgroundSize: '100% 100%' }}>
-            </div>
-            <Typography style={{ fontSize: '20px' }}>
+          <div className={classes.image} style={{ display: 'block', textAlign:'center' }}>
+            <div className={classes.profile_img} style={{ margin: '0 auto' }}>
+              {URL != null ? 
+                <img className={classes.profile_img_img} src={URL} />
+                : <img className={classes.profile_img_img} src={basicImg} />}
+              </div>
+            <Typography style={{ fontSize: '16px', marginTop: '20px' }}>
               {name}님
             </Typography>
-            <Typography style={{ fontSize: '20px' }}>
+            <Typography style={{ fontSize: '16px' }}>
               {email}
             </Typography>
-            <MenuItem onClick={() => { location.href = '/#/profile' }}>회원정보 수정</MenuItem>
+            </div>
+            <div style={{ display: 'block', textAlign:'center' }}>
+              <MenuItem style={{ fontSize: '16px', justifyContent: 'center', color: '#1C91FB' }} onClick={() => { location.href = '/#/profile' }}>회원정보 수정</MenuItem>
+            </div>
           </Menu>
 
           <Button
