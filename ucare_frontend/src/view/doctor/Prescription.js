@@ -605,12 +605,12 @@ export default function Prescription() {
                                     header={tableHeader}>
 
                                     <Column style={{ textAlign: 'right', width: '5%', padding: '10px' }} selectionMode="multiple"></Column>
-                                    <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="patientNo" header="환자코드" hidden="true"></Column>
+                                    <Column style={{ textAlign: 'center', width: '12%', padding: '10px' }} field="patientNo" header="환자코드" hidden="true"></Column>
                                     <Column style={{ textAlign: 'center', width: '20%', padding: '10px' }} field="medicineNm" header="처방약"></Column>
-                                    <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="dosage" header="투여량" sortable></Column>
+                                    <Column style={{ textAlign: 'center', width: '13%', padding: '10px' }} field="dosage" header="투여량" sortable></Column>
                                     <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="dosingDay" header="투약일수" sortable></Column>
                                     <Column style={{ textAlign: 'center', width: '20%', padding: '10px' }} field="usage" header="용법"></Column>
-                                    <Column style={{ textAlign: 'center', width: '10%', padding: '5px' }} body={actionBodyTemplate}></Column>
+                                    <Column style={{ textAlign: 'center', width: '15%', padding: '5px' }} body={actionBodyTemplate}></Column>
                                 </DataTable>
                             </div>
 
@@ -642,7 +642,7 @@ export default function Prescription() {
                                 </div>
                             </Dialog>
 
-                            <Dialog visible={medicineItemDialog} style={{ width: '600px', height: '500px' }} header="의약품정보" modal onHide={hideMedicineItemDialog}>
+                            <Dialog visible={medicineItemDialog} style={{ width: '80%' }} header="의약품정보" modal onHide={hideMedicineItemDialog}>
                                 <div className="card">
                                     <DataTable ref={medicineDt} value={medicineItems} selectionMode="single" selection={medicineSelectedItem} emptyMessage="데이터가 없습니다." onSelectionChange={(e) => setMedicineSelectedItem(e.value)}
                                         onRowDoubleClick={() => inputMedicineItemDialog(medicineSelectedItem)}

@@ -165,69 +165,77 @@ export default function Hospital() {
                                 <span className="p-input-icon-left">
                                     <i className="pi pi-home" />
                                     <InputText 
+                                        style={{ height: '50px' }}
                                         placeholder="병원명" 
                                         value={hospitalName || ''} 
                                         onChange={(e) => setHospitalName(e.target.value)}  />
                                 </span>
                             </div>
                             <div className="p-field">
-                                <span className="p-input-icon-left" style={{ marginTop: '1.5rem' }}>
+                                <span className="p-input-icon-left" style={{ marginTop: '1.2rem' }}>
                                     <i className="pi pi-user" />
                                     <InputText 
+                                        style={{ height: '50px' }}
                                         placeholder="병원장명" 
                                         value={headName || ''}
                                         onChange={(e) => setHeadName(e.target.value)}/>
                                 </span>
                             </div>
                             <div className="p-field">
-                                <span className="p-input-icon-left" style={{ marginTop: '1.5rem' }}>
+                                <span className="p-input-icon-left" style={{ marginTop: '1.2rem' }}>
                                     <i className="pi pi-map-marker" />
                                     <InputText 
+                                        style={{ height: '50px' }}
                                         placeholder="병원 주소" 
                                         value={address || ''}
                                         onChange={(e) => setAddress(e.target.value)}/>
                                 </span>
                             </div>
                             <div className="p-field">
-                                <span className="p-input-icon-left" style={{ marginTop: '1.5rem' }}>
+                                <span className="p-input-icon-left" style={{ marginTop: '1.2rem' }}>
                                     <i className="pi pi-phone" />
                                     <InputText 
+                                        style={{ height: '50px' }}
                                         placeholder="병원 전화번호" 
                                         value={telNo || ''} 
                                         onChange={telNoChange}/>
                                 </span>
                             </div>
                             <div className="p-field">
-                                <span className="p-input-icon-left" style={{ marginTop: '1.5rem' }}>
+                                <span className="p-input-icon-left" style={{ marginTop: '1.2rem' }}>
                                     <i className="pi pi-dollar" />
                                     <InputText 
+                                        style={{ height: '50px' }}
                                         placeholder="기본 진료비" 
                                         value={ basicPrice || '' }
                                         onChange={(e) => setBasicPrice(e.target.value)}/>
                                 </span>
                             </div>
                             <div className="p-field">
-                                <span className="p-input-icon-left" style={{ marginTop: '1.5rem' }}>
+                                <span className="p-input-icon-left" style={{ marginTop: '1.2rem' }}>
                                     <i className="pi pi-globe" />
                                     <InputText 
+                                        style={{ height: '50px' }}
                                         placeholder="사이트 주소" 
                                         value={ siteAddress || '' }
                                         onChange={(e) => setSiteAddress(e.target.value)}/>
                                 </span>
                             </div>
                             <div className="p-field">
-                                <span className="p-input-icon-left" style={{ marginTop: '1.5rem' }}>
+                                <span className="p-input-icon-left" style={{ marginTop: '1.2rem' }}>
                                 <i className="pi pi-envelope" />
                                     <InputText 
+                                        style={{ height: '50px' }}
                                         placeholder="이메일 주소" 
                                         value={ email || '' }
                                         onChange={(e) => setEmail(e.target.value)}/>
                                 </span>
                             </div>
                             <div className="p-field">
-                                <span className="p-input-icon-left" style={{ marginTop: '1.5rem' }}>
+                                <span className="p-input-icon-left" style={{ marginTop: '1.2rem' }}>
                                     <i className="pi pi-print" />
                                     <InputText 
+                                        style={{ height: '50px' }}
                                         placeholder="팩스 번호" 
                                         value={ faxNo || '' }
                                         onChange={(e) => setFaxNo(e.target.value)}/>
@@ -242,7 +250,7 @@ export default function Hospital() {
                                 : <img className={styles.profile_img_img} src={basicImg} />}
                                 </div>
                                 <Button
-                                    style={{ border: '1px solid #1C91FB', marginTop: '10px', height: '35px' }}
+                                    style={{ border: '1px solid #1C91FB', marginTop: '15px', height: '35px' }}
                                     variant="outlined"
                                     size="small"
                                     component="label"
@@ -258,7 +266,7 @@ export default function Hospital() {
                                         <InputTextarea
                                             placeholder="병원장 인사말" 
                                             autoResize
-                                            rows={11}
+                                            rows={13}
                                             cols={30} 
                                             value={headSpeak || ''}
                                             onChange={(e) => setHeadSpeak(e.target.value)} />

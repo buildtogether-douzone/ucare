@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import { Button as Buttons } from 'primereact/button';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -502,16 +503,14 @@ export default function SignUp() {
             </Grid>
 
           </Grid>
-          <Button
-            style={{ backgroundColor: '#1C91FB', float: 'right', border: '1px solid #1C91FB', margin: '6px', }}
-            variant="contained"
-            color="primary"
-            size="medium"
-            type="submit"
-            onClick={saveUser}
-          >
-            등록하기
-          </Button>
+          <div style={{ display: 'block', textAlign:'center' }}>
+            <Buttons
+              style={{ backgroundColor: '#1C91FB', color: 'white', marginTop: '20px' }}
+              label="등록" 
+              className="p-button-outlined" 
+              type="submit" 
+              onClick={saveUser} />
+          </div>
           </form>
           </div>
           </Card>
