@@ -375,7 +375,7 @@ export default function NurseStatus() {
     }
 
     const clickEvent = (e, data) => {
-        if (data.state === 'wait' || data.state === 'care' || data.state === 'complete')
+        if (data.state === 'wait' || data.state === 'complete')
             calculatePrice(data);
         else
             return;
@@ -389,7 +389,14 @@ export default function NurseStatus() {
                     <div className={styles.product_description}>{data.diagnosisTime}</div>
                 </div>
                 <div className={styles.product_price}>
-                    <div className={styles.product_name}>{data.value}</div>
+                    { data.value == "완료" ?
+                        <div style={{ color: '#8E8E8E' }}>{data.value}</div> :
+                    data.value == "진료중" ?
+                        <div style={{ color: '#FFA040' }}>{data.value}</div> :
+                    data.value == "진료대기중" ?
+                        <div style={{ color: '#1C91FB' }}>{data.value}</div> :
+                        <div style={{ color: '#FF0000' }}>{data.value}</div>
+                    }
                 </div>
             </div>
         );
