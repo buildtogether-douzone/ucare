@@ -16,6 +16,8 @@ export default function CalHoliday() {
   const firstWeek = today.clone().startOf('month').week();
   const lastWeek = today.clone().endOf('month').week() === 1 ? 53 : today.clone().endOf('month').week();
 
+  const WEEKDAY = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+
   const toast = useRef(null);
 
   let items = [];
@@ -53,7 +55,10 @@ export default function CalHoliday() {
 
   const changeHoliday = (date) => {
     let index = findIndexByDate(date);
+    let dayOfWeek = WEEKDAY[new Date(date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3')).getDay()];
 
+    if(dayOfWeek === 'SAT' || dayOfWeek === 'SUN') return;
+    
     let data = items[index].holiday;
     let deleteDateIndex = holidays.findIndex((holiday) => holiday == date);
     items[index].holiday = !data;
@@ -67,8 +72,6 @@ export default function CalHoliday() {
   }
 
   const calendarArr = () => {
-
-    const WEEKDAY = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
     let result = [];
     let week = firstWeek;
