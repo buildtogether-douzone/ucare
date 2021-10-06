@@ -334,7 +334,10 @@ export default function Prescription() {
                     <div className={styles.product_description}>{data.diagnosisTime}</div>
                 </div>
                 <div className={styles.product_price}>
-                    <div className={styles.product_name}>{data.value}</div>
+                    { data.value == "완료" ?
+                        <div style={{ color: '#8E8E8E' }}>{data.value}</div> :
+                        <div style={{ color: '#1C91FB' }}>{data.value}</div>
+                    }
                 </div>
             </div>
         );
