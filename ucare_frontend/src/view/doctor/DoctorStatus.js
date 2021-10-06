@@ -477,11 +477,8 @@ export default function DoctorDiagnosis() {
                             <div className="activity-header">
                                 <div className="p-grid">
                                     <div className="p-col-6">
-<<<<<<< HEAD
                                         <span style={{ fontSize: '18px', fontWeight: 'bold', textAlign: 'center', marginLeft: '20px' }}>{patient.name}{patient.name && ''}{patient.gender && '/'}{patient.age}</span>
-=======
                                         <span style={{ fontSize: '18px', fontWeight: 'bold', textAlign: 'center', marginLeft: '20px' }}>{patient.name}{patient.name && '('}{patient.gender}{patient.gender && '/'}{patient.age}{patient.age && '세)'}</span>
->>>>>>> 438931e3b02115dac5c580786d70fdd1d3c1006a
                                     </div>
                                     <div className="p-col-6" style={{ textAlign: 'right' }}>
                                     </div>
