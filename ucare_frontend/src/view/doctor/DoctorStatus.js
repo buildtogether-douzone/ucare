@@ -477,7 +477,7 @@ export default function DoctorDiagnosis() {
                             <div className="activity-header">
                                 <div className="p-grid">
                                     <div className="p-col-6">
-                                        <span style={{ fontSize: '18px', fontWeight: 'bold', textAlign: 'center', marginLeft: '20px' }}>{patient.name}{patient.name && '('}{`${patient.gender}/${patient.age})`}</span>
+                                        <span style={{ fontSize: '18px', fontWeight: 'bold', textAlign: 'center', marginLeft: '20px' }}>{patient.name}{patient.name && '('}{patient.gender}{patient.gender && '/'}{patient.age}{patient.age && '세)'}</span>
                                     </div>
                                     <div className="p-col-6" style={{ textAlign: 'right' }}>
                                     </div>
@@ -487,7 +487,7 @@ export default function DoctorDiagnosis() {
                             <ul className="activity-list">
                                 <li>
                                     <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
-                                        <label htmlFor="insurance">보혐 여부</label>
+                                        <label htmlFor="insurance">보험 여부</label>
                                         <div className="count" style={{ marginRight: '3rem' }}>{patient.insurance}</div>
                                     </div>
                                 </li>
