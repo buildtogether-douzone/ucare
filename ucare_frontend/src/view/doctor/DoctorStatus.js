@@ -250,7 +250,12 @@ export default function DoctorDiagnosis() {
                     <div className={styles.product_description}>{data.diagnosisTime}</div>
                 </div>
                 <div className={styles.product_price}>
-                    <div className={styles.product_name}>{data.value}</div>
+                    {   data.value == "완료" ?
+                        <div className={styles.product_name}>{data.value}</div> :
+                        data.value == "진료중" ?
+                        <div className={styles.product_name}>{data.value}</div> :
+                        <div className={styles.product_name}>{data.value}</div>
+                    }
                 </div>
             </div>
         );
