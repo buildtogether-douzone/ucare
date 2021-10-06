@@ -5,7 +5,6 @@ import { Column } from 'primereact/column';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
 import { FileUpload } from 'primereact/fileupload';
-import { Toolbar } from 'primereact/toolbar';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 
@@ -51,10 +50,6 @@ export default function Medicine() {
     useEffect(() => {
         retrieveMedicine();
     }, []);
-
-    const formatCurrency = (value) => {
-        return value.toLocaleString("ko-KR", { style: 'currency', currency: 'KRW'}); 
-    }
 
     const openNew = () => {
         document.body.style.position = "relative";
@@ -130,11 +125,9 @@ export default function Medicine() {
     const deleteItem = () => {
         medicineService.delete(item.medicineNo)
         .then(res => {
-            let _items = items.filter(val => val.medicineNo !== item.medicineNo);
-            setItems(_items);
             setDeleteItemDialog(false);
-            setItem(emptyItem);
             toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료!', life: 3000 });
+            retrieveMedicine();
         })
         .catch(err => {
             console.log('delete() Error!', err);
@@ -183,6 +176,7 @@ export default function Medicine() {
                         success = true;
                         if((_importedData.length === (index+1)) && success === true) {
                             toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료!', life: 3000 });
+                            retrieveMedicine();
                         }
                     })
                     .catch(err => {
@@ -227,15 +221,14 @@ export default function Medicine() {
             .then(res => {
                 success = true;
                 if((selectedItems.length === (index+1)) && success === true) {
-                    let _items = items.filter(val => !selectedItems.includes(val));
-                    setItems(_items);
                     setDeleteItemsDialog(false);
-                    setSelectedItems(null);
                     toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료!', life: 3000 });
+                    retrieveMedicine();
                 }
             })
             .catch(err => {
                 success = false;
+                setDeleteItemsDialog(false);
                 console.log('selectedDelete() Error!', err);
             })
         ))

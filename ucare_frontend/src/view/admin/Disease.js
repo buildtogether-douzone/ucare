@@ -5,7 +5,6 @@ import { Column } from 'primereact/column';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
 import { FileUpload } from 'primereact/fileupload';
-import { Toolbar } from 'primereact/toolbar';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -125,11 +124,9 @@ export default function Disease() {
     const deleteItem = () => {
         diseaseService.delete(item.diseaseNo)
         .then(res => {
-            let _items = items.filter(val => val.diseaseNo !== item.diseaseNo);
-            setItems(_items);
             setDeleteItemDialog(false);
-            setItem(emptyItem);
             toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료!', life: 3000 });
+            retrieveDisease();
         })
         .catch(err => {
             console.log('delete() Error!', err);
@@ -178,6 +175,7 @@ export default function Disease() {
                         success = true;
                         if((_importedData.length === (index+1)) && success === true) {
                             toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료!', life: 3000 });
+                            retrieveDisease();
                         }
                     })
                     .catch(err => {
@@ -221,16 +219,15 @@ export default function Disease() {
             diseaseService.delete(item.diseaseNo)
             .then(res => {
                 success = true;
-                if((selectedItems.length === (index+1)) && success === true) {
-                    let _items = items.filter(val => !selectedItems.includes(val));
-                    setItems(_items);
+                if(selectedItems.length === (index+1) && success === true) {
                     setDeleteItemsDialog(false);
-                    setSelectedItems(null);
                     toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료!', life: 3000 });
+                    retrieveDisease();
                 }
             })
             .catch(err => {
                 success = false;
+                setDeleteItemsDialog(false);
                 console.log('selectedDelete() Error!', err);
             })
         ))
