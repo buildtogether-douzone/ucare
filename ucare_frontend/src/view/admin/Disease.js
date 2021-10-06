@@ -222,6 +222,7 @@ export default function Disease() {
                 if(selectedItems.length === (index+1) && success === true) {
                     setDeleteItemsDialog(false);
                     toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료!', life: 3000 });
+                    retrieveDisease();
                 }
             })
             .catch(err => {

@@ -221,11 +221,9 @@ export default function Medicine() {
             .then(res => {
                 success = true;
                 if((selectedItems.length === (index+1)) && success === true) {
-                    let _items = items.filter(val => !selectedItems.includes(val));
-                    setItems(_items);
                     setDeleteItemsDialog(false);
-                    setSelectedItems(null);
                     toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료!', life: 3000 });
+                    retrieveMedicine();
                 }
             })
             .catch(err => {
