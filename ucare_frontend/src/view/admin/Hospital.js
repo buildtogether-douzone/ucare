@@ -162,7 +162,7 @@ export default function Hospital() {
                         <div className="p-grid">
                         <div className="p-col-12 p-lg-6">
                             <div className="p-field">
-                                <span className="p-input-icon-left">
+                                <span className="p-input-icon-left" style={{ marginTop: '1.2rem' }}>
                                     <i className="pi pi-home" />
                                     <InputText 
                                         style={{ height: '50px' }}
@@ -243,7 +243,7 @@ export default function Hospital() {
                             </div>
                             </div>
                             <div className="p-col-12 p-lg-6">
-                            <div style={{ display: 'block', textAlign:'center' }}>
+                            <div style={{ display: 'block', textAlign:'center', marginTop: '1.2rem' }}>
                                 <div className={styles.profile_img} style={{ margin: '0 auto'}}>
                                 {previewURL != null ? 
                                 <img className={styles.profile_img_img} src={previewURL} />
@@ -262,7 +262,7 @@ export default function Hospital() {
                                     <input id={"file-input"} style={{ display: 'none' }} type="file" name="imageFile" onChange={handleFileOnChange} />
                                 </Button>
                                 </div>
-                                    <div className="p-field" style={{ marginTop: '2%' }} style={{ marginTop: '1.5rem' }}>
+                                    <div className="p-field" style={{ marginTop: '2%' }} style={{ marginTop: '1.6rem' }}>
                                         <InputTextarea
                                             placeholder="병원장 인사말" 
                                             autoResize
@@ -275,7 +275,7 @@ export default function Hospital() {
                             </div>
                             <div style={{ display: 'block', textAlign:'center' }}>
                                 <Buttons
-                                style={{ width: '50%', backgroundColor: '#1C91FB', color: 'white' }} 
+                                style={{ width: '50%', backgroundColor: '#1C91FB', color: 'white', marginTop: '1rem', marginBottom: '1rem' }} 
                                 label="등록" 
                                 className="p-button-outlined" 
                                 type="submit" 

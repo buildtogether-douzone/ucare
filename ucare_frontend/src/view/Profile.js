@@ -408,7 +408,7 @@ export default function Profile() {
               }}
             />
           <Button
-            style={{ width: '100%', border: 'solid #1C91FB', marginTop: '5%', backgroundColor: '#1C91FB', color: 'white' }}
+            style={{ width: '100%', border: 'solid #1C91FB', marginTop: '5%', marginBottom: '5%', backgroundColor: '#1C91FB', color: 'white' }}
             variant="outlined"
             type="submit"
             onClick={saveUpdate}

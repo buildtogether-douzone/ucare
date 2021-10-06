@@ -264,9 +264,9 @@ const Board = React.forwardRef((props, ref) => {
         <div className="datatable-crud">
             <Toast ref={toast} />
             <div className="card" style={{ paddingBottom: '2%'}}>
-                <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center', marginTop: '20PX', marginBottom: '20px' }}>공지사항</span>
+                <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center', marginTop: '35PX', marginBottom: '20px' }}>공지사항</span>
                 <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="No data" onSelectionChange={(e) => setSelectedItems(e.value)}
-                    dataKey="boardNo" paginator rows={9}
+                    dataKey="boardNo" paginator rows={12}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
                     globalFilter={globalFilter}

@@ -28,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: '50%',
-    position: 'absoute'
+    position: 'absoute',
+    marginTop: '1.2rem'
   },
   font: {
     width: '25%',
@@ -281,7 +282,7 @@ export default function SignUp() {
               <span style={{ color: '#1C91FB', fontSize: '20px' }}>회원 등록</span>
             <Divider />
           <Toast ref={toast} position="top-center"/>
-        <form className={classes.form} noValidate sty>
+        <form className={classes.form} noValidate>
           <Grid container>
             <Grid item xs={12} style={{ borderTop: '1px solid #D6D6D6' }}>
               <Typography className={classes.font} variant="body1">ID<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Typography>
@@ -505,7 +506,7 @@ export default function SignUp() {
           </Grid>
           <div style={{ display: 'block', textAlign:'center' }}>
             <Buttons
-              style={{ backgroundColor: '#1C91FB', color: 'white', marginTop: '20px' }}
+              style={{ backgroundColor: '#1C91FB', color: 'white', marginTop: '1.4rem', marginBottom: '1rem' }}
               label="등록" 
               className="p-button-outlined" 
               type="submit" 

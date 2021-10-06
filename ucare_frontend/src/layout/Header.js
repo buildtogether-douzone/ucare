@@ -80,6 +80,14 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '100%',
     objectFit: 'cover'
+  },
+  hover: {
+    "&:hover": {
+      textDecoration: 'underline',
+      textUnderlinePosition: 'under',
+      color: '#660099',
+      cursor: 'pointer'
+    }
   }
 }));
 
@@ -459,7 +467,19 @@ const Header = ({ open, drawerManage }) => {
 
   const hideViewDialog = () => {
     setViewDialog(false);
-  }
+  };
+
+  const emptySendMessage = () => {
+    return (
+        <span style={{ fontSize: '20px', display: 'block', textAlign: 'center' }}>보낸 쪽지함이 비었습니다.</span>
+    );
+  };
+
+  const emptyReceiveMessage = () => {
+    return (
+        <span style={{ fontSize: '20px', display: 'block', textAlign: 'center' }}>받은 쪽지함이 비었습니다.</span>
+    );
+  };
 
   return (
     <Fragment>
@@ -499,17 +519,17 @@ const Header = ({ open, drawerManage }) => {
             {
               massageState ?
                 <DataTable value={messages} selectionMode="single" paginator rows={5}
-                  selection={selectedMessage} onSelectionChange={(e) => setSelectedMessage(e.value)} dataKey="msgNo">
+                  selection={selectedMessage} onSelectionChange={(e) => setSelectedMessage(e.value)} dataKey="msgNo" emptyMessage={emptyReceiveMessage}>
                   <Column style={{ textAlign: 'center', width: '20%', padding: '8px' }} field="name" header="보낸사람" />
-                  <Column style={{ textAlign: 'center', width: '40%', padding: '8px' }} field="title" header="제목" body={coltemplate} />
+                  <Column className={classes.hover} style={{ textAlign: 'center', width: '40%', padding: '8px' }} field="title" header="제목" body={coltemplate} />
                   <Column style={{ textAlign: 'center', width: '20%', padding: '8px' }} field="msgDate" header="날짜" />
                   <Column style={{ textAlign: 'center', width: '10%', padding: '8px' }} field="status" header="상태" />
                   <Column style={{ textAlign: 'center', width: '10%', padding: '8px' }} field="delete" body={actionBodyTemplate} />
                 </DataTable> :
                 <DataTable value={sendMessageItem} selectionMode="single" paginator rows={5}
-                  selection={selectedMessage} onSelectionChange={(e) => setSelectedMessage(e.value)} dataKey="msgNo">
+                  selection={selectedMessage} onSelectionChange={(e) => setSelectedMessage(e.value)} dataKey="msgNo"  emptyMessage={emptySendMessage}>
                   <Column style={{ textAlign: 'center', width: '20%', padding: '8px' }} field="toName" header="받은사람" />
-                  <Column style={{ textAlign: 'center', width: '40%', padding: '8px' }} field="title" header="제목" body={clickColumn} />
+                  <Column className={classes.hover} style={{ textAlign: 'center', width: '40%', padding: '8px' }} field="title" header="제목" body={clickColumn} />
                   <Column style={{ textAlign: 'center', width: '20%', padding: '8px' }} field="msgDate" header="날짜" />
                   <Column style={{ textAlign: 'center', width: '20%', padding: '8px' }} field="status" header="상태" />
                 </DataTable>

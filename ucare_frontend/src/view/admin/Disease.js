@@ -292,7 +292,7 @@ export default function Disease() {
 
     const emptyMessage = () => {
         return (
-            <span style={{ fontSize: '20px', display: 'block', textAlign:'center', paddingTop: '30%', paddingBottom: '30%' }}>질병 정보가 없습니다.</span>
+            <span style={{ fontSize: '20px', display: 'block', textAlign:'center', paddingTop: '20%', paddingBottom: '20%' }}>질병 정보가 없습니다.</span>
         );
     }
 
@@ -302,7 +302,7 @@ export default function Disease() {
 
             <div className="card">
                 <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage={emptyMessage} onSelectionChange={(e) => setSelectedItems(e.value)}
-                    dataKey="diseaseNo" paginator rows={8}
+                    dataKey="diseaseNo" paginator rows={7}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
                     globalFilter={globalFilter}
