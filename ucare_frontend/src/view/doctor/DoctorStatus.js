@@ -471,39 +471,33 @@ export default function DoctorDiagnosis() {
                         </Card>
                     </div>
                     <div className="p-col-12 p-md-6 p-lg-4">
-                        <Card style={{ height: '40%' }}>
+                        <Card style={{ height: '35%' }}>
                             <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign: 'center' }}>환자 정보</span>
                             <Divider />
                             <div className="activity-header">
                                 <div className="p-grid">
-                                    <div className="p-col-6">
-<<<<<<< HEAD
-                                        <span style={{ fontSize: '18px', fontWeight: 'bold', textAlign: 'center', marginLeft: '20px' }}>{patient.name}{patient.name && ''}{patient.gender && '/'}{patient.age}</span>
-=======
-                                        <span style={{ fontSize: '18px', fontWeight: 'bold', textAlign: 'center', marginLeft: '20px' }}>{patient.name}{patient.name && '('}{patient.gender}{patient.gender && '/'}{patient.age}{patient.age && '세)'}</span>
->>>>>>> 438931e3b02115dac5c580786d70fdd1d3c1006a
-                                    </div>
-                                    <div className="p-col-6" style={{ textAlign: 'right' }}>
+                                    <div className="p-col-12" style={{ display: 'center', textAlign: 'center', marginTop: '1em' }}>
+                                        <span style={{ fontSize: '18px', fontWeight: 'bold' }}>{patient.name}{patient.name && '('}{patient.gender}{patient.gender && '/'}{patient.age}{patient.age && '세)'}</span>
                                     </div>
                                 </div>
                             </div>
 
                             <ul className="activity-list">
-                                <li>
-                                    <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+                                <div className="p-grid" style={{ marginTop: '1em' }}>
+                                    <div className="p-col-6">
                                         <label htmlFor="insurance">보험 여부</label>
-                                        <div className="count" style={{ marginRight: '3rem' }}>{patient.insurance}</div>
+                                        <label style={{ marginLeft: '2rem' , color: '#1C91FB' }}>{patient.insurance}</label>
                                     </div>
-                                </li>
-                                <li>
-                                    <div className="p-d-flex p-jc-between p-ai-center p-mb-3">
+
+
+                                    <div className="p-col-6">
                                     <label htmlFor="diagnosis">진료 구분</label>
-                                        <div className="count" style={{ marginRight: '3rem' }}>{patient.diagnosis}</div>
+                                        <label style={{ marginLeft: '2rem' , color: '#1C91FB' }}>{patient.diagnosis}</label>
                                     </div>
-                                </li>
+                                </div>
                             </ul>
                         </Card>
-                        <Card style={{ height: '58%', marginTop: '10px' }}>
+                        <Card style={{ height: '63%', marginTop: '10px' }}>
                             <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign: 'center' }}>과거 병력</span>
                             <Divider />
                             <div className="activity-header">
