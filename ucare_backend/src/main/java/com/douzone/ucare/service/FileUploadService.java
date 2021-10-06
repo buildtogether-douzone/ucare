@@ -11,8 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileUploadService {
-	private static final String SAVE_PATH = new File("src\\main\\webapp\\assets\\uploads-images").getAbsolutePath();
-	private static final String URL_BASE = "/ucare_backend/assets/uploads-images"; 
+	private static final String SAVE_PATH = new File("src" + File.separator +  "main" + File.separator + "webapp" + File.separator + "assets" + File.separator + "uploads-images").getAbsolutePath();
+	private static final String URL_BASE = File.separator + "ucare_backend" + File.separator + "assets" + File.separator + "uploads-images"; 
 	
 	public String restore(MultipartFile file) {
 		String url = null;
@@ -32,11 +32,11 @@ public class FileUploadService {
 			System.out.println("##########" + saveFilename );
 			
 			byte[] data = file.getBytes();
-			OutputStream os = new FileOutputStream(SAVE_PATH + "/" + saveFilename);
+			OutputStream os = new FileOutputStream(SAVE_PATH + File.separator + saveFilename);
 			os.write(data);
 			os.close();
 			
-			url = URL_BASE + "/" + saveFilename;
+			url = URL_BASE + File.separator + saveFilename;
 		} catch (IOException e) {
 			throw new RuntimeException("file upload error:" + e);
 		}
