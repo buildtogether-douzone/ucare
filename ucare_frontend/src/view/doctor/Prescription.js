@@ -645,7 +645,7 @@ export default function Prescription() {
                                 </div>
                             </Dialog>
 
-                            <Dialog visible={medicineItemDialog} style={{ width: '80%' }} header="의약품정보" modal onHide={hideMedicineItemDialog}>
+                            <Dialog visible={medicineItemDialog} style={{ width: '55%', height: '70%' }} header="의약품정보" modal onHide={hideMedicineItemDialog}>
                                 <div className="card">
                                     <DataTable ref={medicineDt} value={medicineItems} selectionMode="single" selection={medicineSelectedItem} emptyMessage="데이터가 없습니다." onSelectionChange={(e) => setMedicineSelectedItem(e.value)}
                                         onRowDoubleClick={() => inputMedicineItemDialog(medicineSelectedItem)}
