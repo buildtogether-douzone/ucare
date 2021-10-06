@@ -554,7 +554,7 @@ const Header = ({ open, drawerManage }) => {
           />
 
           <Menu
-            style={{ marginTop: '48px' }}
+            style={{ marginTop: '48px', marginLeft: '-15px' }}
             id="simple-menu"
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
