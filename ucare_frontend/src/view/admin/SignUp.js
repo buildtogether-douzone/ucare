@@ -20,6 +20,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { Toast } from 'primereact/toast';
 import { Divider } from 'primereact/divider';
 
+import { useRecoilState } from 'recoil';
+import { reloadState } from '../../recoil/atom/adminAtom';
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     display: 'flex',
@@ -82,9 +85,9 @@ export default function SignUp() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [checkSSN, setCheckSSN] = useState(true);
 
+  const [reload, setReload] = useRecoilState(reloadState);
+
   const options = ['의사', '간호사'];
-  const [value, setValue] = useState(options[0]);
-  const [inputValue, setInputValue] = useState('');
 
   const toast = useRef(null);
 
@@ -136,6 +139,21 @@ export default function SignUp() {
   const genderChange = (e) => {
     setGender(e.target.value)
   }
+
+  const onReset = () => {
+    setId('');
+    setPassword('');
+    setConfirmPassword('');
+    setName('');
+    setGender('female');
+    setSSN('');
+    setEmail('');
+    setAddress('');
+    setDetailAddress('');
+    setTelNo('');
+    setRole('의사');
+    setRemark('');
+  };
 
   const ssnValidError = () => {
     var jnumArr = new Array(); // 입력 한 주민번호를 저장해줄 배열 선언
@@ -222,9 +240,6 @@ export default function SignUp() {
       }
       fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
     }
-    console.log(data)
-    console.log(fullAddress)
-    console.log(data.zonecode)
     setAddress(fullAddress);
     closePostCode();
   }
@@ -263,7 +278,10 @@ export default function SignUp() {
     userService.addUser(user)
       .then(res => {
         console.log(user.name + '님이 성공적으로 등록되었습니다.');
+        onReset();
+        setReload(!reload);
         toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료되었습니다.', life: 3000 });
+
       })
       .catch(err => {
         console.log('saveUser() 에러', err);

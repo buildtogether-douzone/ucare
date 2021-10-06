@@ -23,6 +23,9 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 import Alert from '@material-ui/lab/Alert';
 import adminService from '../../service/adminService';
 
+import { useRecoilState } from 'recoil';
+import { reloadState } from '../../recoil/atom/adminAtom';
+
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
   Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -55,6 +58,8 @@ export default function Setting() {
   ]
   const [data, setData] = useState([]); //table data
 
+  const [reload, setReload] = useRecoilState(reloadState);
+
   //for error handling
   const [iserror, setIserror] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
@@ -62,6 +67,10 @@ export default function Setting() {
   useEffect(() => { 
     retrieveAll();
   }, [])
+
+  useEffect(() => { 
+    retrieveAll();
+  }, [reload])
 
   const retrieveAll = (e) => {
     adminService.retrieveAll()

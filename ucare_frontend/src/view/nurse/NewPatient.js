@@ -22,8 +22,6 @@ import { useRecoilState } from 'recoil';
 import { reloadState } from '../../recoil/atom/nurseAtom';
 import { Toast } from 'primereact/toast';
 
-
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(3),
@@ -70,7 +68,6 @@ const useStyles = makeStyles((theme) => ({
     color: 'black'
   }
 }));
-
 
 export default function NewPatient() {
   const classes = useStyles();
@@ -281,9 +278,6 @@ export default function NewPatient() {
       }
       fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
     }
-    console.log(data)
-    console.log(fullAddress)
-    console.log(data.zonecode)
     setAddress(fullAddress);
     closePostCode();
   }
