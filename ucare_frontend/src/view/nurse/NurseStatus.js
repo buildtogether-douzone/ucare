@@ -262,7 +262,7 @@ export default function NurseStatus() {
                         console.log('retrieveByDiagnosisNo() Error!', err);
                     })
 
-                if (res.data.cureYN === 'true')
+                if (res.data.cureYN === 'true' || res.data.cureYN === 'complete' )
                     resultPrice += 10000;
 
                 patientService.retrieve(data.patientNo)
@@ -549,7 +549,7 @@ export default function NurseStatus() {
                                                     </div>
                                                 </li>
                                             }
-                                            {(diagnosisItem.cureYN === "true") &&
+                                            {(diagnosisItem.cureYN === "true" || diagnosisItem.cureYN === "complete") &&
                                                 <li style={{ listStyle: 'none' }}>
                                                     <div className="p-d-flex p-jc-between p-ai-center p-mb-3" style={{ marginTop: '3rem' }}>
                                                         <h3 className="activity p-m-0">치료</h3>
@@ -595,7 +595,7 @@ export default function NurseStatus() {
                                                     <Button type="button" label="수납완료" onClick={confirmReceiptComplete} className="p-button" style={{ width: '100%', marginTop: '30px' }} />
                                                 </div>
                                             }
-                                            {(item.state === 'complete') &&
+                                            {(item.state === 'complete' && diagnosisItem.cureYN === 'complete' && prescriptionItems.length !== 0) &&
                                                 <div>
                                                     <Button type="button" label="처방전 출력" onClick={handlePrint} className="p-button" style={{ width: '100%', marginTop: '30px' }} />
                                                 </div>
@@ -625,7 +625,7 @@ export default function NurseStatus() {
                 <div style={{ display: 'none' }}>
                     <div id="printPdf" ref={componentRef}>
                         <Card style={{ height: '100%' }}>
-                            <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign: 'center' }}>처방</span>
+                            <span style={{ fontSize: '20px', display: 'block', textAlign: 'center' }}>처 방 전</span>
                             <Divider />
                             <div className={classes.Line}>
                                 <div className={classes.addon}>

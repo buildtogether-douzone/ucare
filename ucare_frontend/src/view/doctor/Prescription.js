@@ -266,6 +266,10 @@ export default function Prescription() {
     }
 
     const completePrescription = () => {
+        if(prescriptionItems.length === 0) {
+            toast.current.show({ severity: 'error', summary: '알림', detail: '처방된 약이 없습니다.', life: 3000 });
+            return;
+        }
         diagnosisService.updateByDiagnosisNo(diagnosisItem)
             .then(res => {
                 console.log('success!!');
@@ -601,7 +605,7 @@ export default function Prescription() {
                             </div>
                             <div className="card">
                                 <DataTable ref={dt} value={prescriptionItems} selection={selectedItems} emptyMessage={empty} onSelectionChange={(e) => setSelectedItems(e.value)}
-                                    dataKey="diseaseNo" paginator rows={5}
+                                    dataKey="prescriptionNo" paginator rows={5}
                                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
                                     globalFilter={globalFilter}
