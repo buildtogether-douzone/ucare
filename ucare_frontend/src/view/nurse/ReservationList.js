@@ -159,12 +159,14 @@ export default function ReservationList() {
           bs: item.bs,
           diagnosisTime: reservation.revTime,
           patientNo: reservation.patientNo,
+          name: reservation.name,
           userId: sessionStorage.getItem('user')
         }
 
         receiptService.createRev(receipt)
           .then(res => {
             console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
+            toast.current.show({ severity: 'success', summary: '알림', detail: `${receipt.name}님이 접수되었습니다.`, life: 3000 });
             reservationService.delete(reservation.revNo)
                 .then(res => {
                     $websocket.current.sendMessage('/Doctor');
@@ -300,7 +302,7 @@ export default function ReservationList() {
                 topics={['/topics/nurse']}
                 onMessage={msg => { setValue(msg) }}
                 ref={$websocket} />
-            <Toast ref={toast} />
+            <Toast ref={toast} position="top-center" />
             <div className="card">
                 <DataTable ref={dt} value={reservations} paginator rows={7}
                     header={header} className="p-datatable-customers"

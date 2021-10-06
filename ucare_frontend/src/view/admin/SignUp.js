@@ -124,9 +124,9 @@ export default function SignUp() {
   const hasNotValidError = () =>
     email != '' ? (emailRegex.test(email) ? false : true) : false;
 
-  const nameRegex = /^[가-힣]{2,4}$/;
+  const nameRegex = /^[가-힣a-zA-Z]+$/; 
   const nameValidError = () =>
-    name != '' ? (nameRegex.test(name) ? false : true) : false;
+    name != '' ? (nameRegex.test(name) ? false : true) : false; 
 
   const nameChange = (e) => {
     setName(e.target.value)
@@ -142,43 +142,44 @@ export default function SignUp() {
 
   const ssnValidError = () => {
     var jnumArr = new Array(); // 입력 한 주민번호를 저장해줄 배열 선언
-    var jnumplus = [2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5, 1]; // 주민번호 계산할때 쓰이는 배열
+    var jnumplus = [2,3,4,5,6,7,8,9,2,3,4,5,1]; // 주민번호 계산할때 쓰이는 배열
     var jnumSum = 0; //objNum[i] * jnumplus[i] 더한 값
-
-    if (ssn != '') { // 주민번호입력 형식이 알맞은지 검사 
-      for (var i = 0; i < ssn.length; i++) { // 입력받은 주민번호 jnumArr배열에 넣기
+  
+    if(ssn != ''){ // 주민번호입력 형식이 알맞은지 검사 
+      for(var i = 0; i<ssn.length;i++){ // 입력받은 주민번호 jnumArr배열에 넣기
         jnumArr[i] = ssn.charAt(i);
-      }
-
-      for (var i = 0; i < ssn.length - 1; i++) { // 입력받은 주민번호 jnumArr배열에 넣기
-        jnumSum += jnumArr[i] * jnumplus[i];
-      }
-      jnumSum = (11 - (jnumSum % 11)) % 10; //주민번호 계산
-
-      if (jnumSum != jnumArr[12]) { // 계산되서 나온 결과값(jnumSum)과 입력한 주민번호의 마지막이 맞지 않으면 
-        if (checkSSN)
-          return true;
-      } else if (ssn.length === 13) {
-        setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
-        setCheckSSN(false);
-      }
     }
+  
+    for(var i = 0; i<ssn.length-1;i++){ // 입력받은 주민번호 jnumArr배열에 넣기
+        jnumSum+=jnumArr[i]*jnumplus[i];
+    }
+    jnumSum = (11-(jnumSum % 11)) % 10; //주민번호 계산
+  
+    if(jnumSum != jnumArr[12]){ // 계산되서 나온 결과값(jnumSum)과 입력한 주민번호의 마지막이 맞지 않으면 
+      if(checkSSN)   
+        return true;
+    } else if (ssn.length === 13){
+      setSSN(ssn.replace(/(\d{6})(\d{7})/, '$1-$2'));
+      setCheckSSN(false);
+    }
+  }
     //형식이 올바르면 생년월일 자동으로 입력하기
     return false;
-  };
-
+    };
+    
   const ssnChange = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
-    if (regex.test(e.target.value)) {
+    if(regex.test(e.target.value)) {
       setSSN(e.target.value);
-      if (ssn.length < 15) {
-        if (checkSSN == false) {
-          setSSN(ssn.substring(0, 6) + ssn.substring(7, 13));
+      if(ssn.length < 15) {
+        if(checkSSN == false ) {
+          setSSN(ssn.substring(0,6) + ssn.substring(7, 13));
         }
         setCheckSSN(true)
-      }
+      }  
     }
   };
+
 
   const addressChange = (e) => {
     setAddress(e.target.value)
@@ -265,6 +266,7 @@ export default function SignUp() {
     userService.addUser(user)
       .then(res => {
         console.log(user.name + '님이 성공적으로 등록되었습니다.');
+        toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료되었습니다.', life: 3000 });
       })
       .catch(err => {
         console.log('saveUser() 에러', err);
@@ -354,7 +356,7 @@ export default function SignUp() {
                 onChange={nameChange}
                 error={nameValidError()}
                 helperText={
-                  nameValidError() ? "이름을 정확히 입력해주세요." : null
+                  nameValidError() ? "특수문자, 숫자, 띄어쓰기는 사용할수 없습니다." : null
                 }
               />
             </Grid>

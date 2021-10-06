@@ -332,7 +332,7 @@ export default function NewPatient() {
                 onChange={ssnChange}
                 error={ssnValidError()}
                 helperText={
-                  ssnValidError() ? "주민등록번호가 올바르지 않습니다.." : null
+                  ssnValidError() ? "주민등록번호가 올바르지 않습니다." : null
                 }
               />
             </Grid>

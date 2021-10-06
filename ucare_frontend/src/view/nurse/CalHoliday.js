@@ -169,7 +169,7 @@ export default function CalHoliday() {
     holidayService.update(items)
         .then(res => {
           console.log('정보가 성공적으로 전송 되었습니다.');
-          toast.current.show({ severity: 'success', summary: '알림', detail: '정보가 성공적으로 저장되었습니다.', life: 3000 });
+          toast.current.show({ severity: 'success', summary: '알림', detail: '저장 완료되었습니다.', life: 3000 });
         })
         .catch(err => {
           console.log('update holiday data() 에러', err);
@@ -178,7 +178,7 @@ export default function CalHoliday() {
 
   return (
     <div style={{ padding: '1%', textAlign: 'center', width: '100%' }}>
-      <Toast ref={toast} />
+      <Toast ref={toast} position="top-center" />
       {reload}
       <div style={{width: '90%', display: 'inline-block', margin: '1%' }}>
           <Button style={{ float: 'right', backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} label="저장" icon="pi pi-check"  className="p-button-sm" onClick={saveItems}  />

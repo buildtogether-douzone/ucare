@@ -201,7 +201,7 @@ export default function Reservation() {
                 topics={['/topics/reservation']}
                 onMessage={msg => { setValue(msg) }}
                 ref={$websocket} />
-            <Toast ref={toast} />
+            <Toast ref={toast} position="top-center" />
             <div className="p-col-12 p-lg-6">
                 <div className="card p-fluid" style={{ height: '100%' }}>
                 <Card style={{ height: '100%' }}>

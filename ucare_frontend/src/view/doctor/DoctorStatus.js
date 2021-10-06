@@ -324,7 +324,7 @@ export default function DoctorDiagnosis() {
 
     const saveDiagnosis = () => {
         if (item.state === 'careWait') {
-            toast.current.show({ severity: 'error', summary: '알림', detail: '진료대기중인 환자입니다.', life: 3000 });
+            toast.current.show({ severity: 'error', summary: '알림', detail: '진료 대기중인 환자입니다.', life: 3000 });
             return;
         }
 
@@ -334,7 +334,7 @@ export default function DoctorDiagnosis() {
         }
 
         if (patient.patientNo === null) {
-            toast.current.show({ severity: 'error', summary: '알림', detail: '환자정보를 선택해주세요.', life: 3000 });
+            toast.current.show({ severity: 'error', summary: '알림', detail: '환자 정보를 선택해주세요.', life: 3000 });
             return;
         }
         if (diseaseSelectedItem.diseaseNm === '') {
@@ -441,7 +441,7 @@ export default function DoctorDiagnosis() {
                 topics={['/topics/doctor']}
                 onMessage={msg => { setReload(msg) }}
                 ref={$websocket} />
-            <Toast ref={toast} />
+            <Toast ref={toast} position="top-center"/>
             <div className="card" style={{ margin: '20px', height: '85%' }}>
                 <div className="p-grid" style={{ height: '100%' }}>
                     <div className="p-col-12 p-md-6 p-lg-4">

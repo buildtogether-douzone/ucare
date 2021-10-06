@@ -93,7 +93,7 @@ const Board = React.forwardRef((props, ref) => {
                         const index = findIndexByNo(item.boardNo);
                         _items[index] = _item;
                         setItemDialog(false);
-                        toast.current.show({ severity: 'success', summary: 'Successful', detail: '수정 완료!', life: 3000 });
+                        toast.current.show({ severity: 'success', summary: '알림', detail: '수정 완료되었습니다.', life: 3000 });
                         setReload(!reload);
                     })
                     .catch(err => {
@@ -105,7 +105,7 @@ const Board = React.forwardRef((props, ref) => {
                     .then(res => {
                         console.log('success!!');
                         setItemDialog(false);
-                        toast.current.show({ severity: 'success', summary: 'Successful', detail: '등록 완료!', life: 3000 });
+                        toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료되었습니다.', life: 3000 });
                         setReload(!reload);
                     })
                     .catch(err => {
@@ -131,7 +131,7 @@ const Board = React.forwardRef((props, ref) => {
             .then(res => {
                 setDeleteItemDialog(false);
                 setReload(!reload);
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: '삭제 완료!', life: 3000 });
+                toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료되었습니다.', life: 3000 });
             })
             .catch(err => {
                 console.log('delete() Error!', err);
@@ -262,7 +262,7 @@ const Board = React.forwardRef((props, ref) => {
 
     return (
         <div className="datatable-crud">
-            <Toast ref={toast} />
+            <Toast ref={toast} position="top-center"/>
             <div className="card" style={{ paddingBottom: '2%'}}>
                 <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center', marginTop: '35PX', marginBottom: '20px' }}>공지사항</span>
                 <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="No data" onSelectionChange={(e) => setSelectedItems(e.value)}

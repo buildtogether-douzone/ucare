@@ -286,6 +286,7 @@ const Row = React.forwardRef((props, ref) => {
       bp: bp,
       bs: bs,
       patientNo: row.patientNo,
+      name: row.name,
       userId: sessionStorage.getItem('user')
     }
 
@@ -293,6 +294,7 @@ const Row = React.forwardRef((props, ref) => {
       .then(res => {
         if (res.data != 0) {
           console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
+          ref.current.show({ severity: 'success', summary: '알림', detail: `${receipt.name}님이 접수되었습니다.`, life: 3000 });
           timeService.update(dateFormat(date)).then(res => {
             window.scrollTo({
               top: 0,

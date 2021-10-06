@@ -220,7 +220,7 @@ export default function Prescription() {
                     _items[index] = _item;
                     setPrescriptionItems(_items);
                     setItemDialog(false);
-                    toast.current.show({ severity: 'success', summary: 'Successful', detail: '수정되었습니다.', life: 3000 });
+                    toast.current.show({ severity: 'success', summary: '알림', detail: '수정 완료되었습니다.', life: 3000 });
                 })
                 .catch(err => {
                     console.log('update() Error!', err);
@@ -235,7 +235,7 @@ export default function Prescription() {
                     setPrescriptionItems(_items);
                     setItemDialog(false);
                     setPrescriptionItem(emptyPrescriptionItem);
-                    toast.current.show({ severity: 'success', summary: 'Successful', detail: '저장되었습니다.', life: 3000 });
+                    toast.current.show({ severity: 'success', summary: '알림', detail: '저장 완료되었습니다.', life: 3000 });
                 })
                 .catch(err => {
                     console.log('create() Error!', err);
@@ -258,7 +258,7 @@ export default function Prescription() {
                 setPrescriptionItems(_items);
                 setPrescriptionItem(emptyPrescriptionItem);
                 setDeleteItemDialog(false);
-                toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료!', life: 3000 });
+                toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료되었습니다.', life: 3000 });
             })
             .catch(err => {
                 console.log('delete() Error!', err);
@@ -327,7 +327,7 @@ export default function Prescription() {
                 });
         }
         else if (data.cureYN === 'complete')
-            toast.current.show({ severity: 'error', summary: '알림', detail: '처방완료된 환자입니다.', life: 3000 });
+            toast.current.show({ severity: 'error', summary: '알림', detail: '처방 완료된 환자입니다.', life: 3000 });
     }
 
     const itemTemplate = (data) => {
@@ -399,7 +399,7 @@ export default function Prescription() {
                         setPrescriptionItems(_items);
                         setDeleteItemsDialog(false);
                         setSelectedItems(null);
-                        toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료!', life: 3000 });
+                        toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료되었습니다.', life: 3000 });
                     }
                 })
                 .catch(err => {
@@ -659,11 +659,11 @@ export default function Prescription() {
                                         globalFilter={globalFilter}
                                         header={medicineHeader}>
 
-                                        <Column field="medicineCode" header="약품코드" sortable></Column>
-                                        <Column field="medicineNm" header="약품명" sortable></Column>
-                                        <Column field="company" header="제조사" ></Column>
-                                        <Column field="mainIngredient" header="주성분" ></Column>
-                                        <Column field="origin" header="수입/제조" sortable></Column>
+                                        <Column style={{ textAlign: 'center' }} field="medicineCode" header="약품코드" sortable></Column>
+                                        <Column style={{ textAlign: 'center' }} field="medicineNm" header="약품명" sortable></Column>
+                                        <Column style={{ textAlign: 'center' }} field="company" header="제조사" ></Column>
+                                        <Column style={{ textAlign: 'center' }} field="mainIngredient" header="주성분" ></Column>
+                                        <Column style={{ textAlign: 'center' }} field="origin" header="수입/제조" sortable></Column>
                                     </DataTable>
                                 </div>
                             </Dialog>

@@ -136,7 +136,7 @@ export default function Hospital() {
         hospitalService.updateData(formData)
         .then(res => {
           console.log('success!!');
-          toast.current.show({ severity: 'success', summary: '알림', detail: '정보가 등록되었습니다.', life: 3000 });
+          toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료되었습니다.', life: 3000 });
         })
         .catch(err => {
           console.log('save hospital data() 에러', err);
@@ -152,7 +152,7 @@ export default function Hospital() {
 
     return (
         <React.Fragment>
-            <Toast ref={toast} />
+            <Toast ref={toast} position="top-center" />
             <div className="p-grid" style={{ margin: '10px' }}>
                 <div className="p-col-12">
                     <div className="card p-fluid">

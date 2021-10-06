@@ -119,7 +119,7 @@ export default function SignInSide({ history }) {
 
   return (
     <Fragment>
-      <Toast ref={toast} />
+      <Toast ref={toast} position="top-center" />
     <CssBaseline />
     <Grid container component="main" className={classes.image}>
       <Grid item xs={12} sm={6} md={4} />

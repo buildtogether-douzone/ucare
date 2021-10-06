@@ -87,7 +87,7 @@ export default function Disease() {
                     _items[index] = _item;
                     setItems(_items);
                     setItemDialog(false);
-                    toast.current.show({ severity: 'success', summary: '알림', detail: '수정 완료!', life: 3000 });
+                    toast.current.show({ severity: 'success', summary: '알림', detail: '수정 완료되었습니다.', life: 3000 });
                 })
                 .catch(err => {
                     console.log('update() Error!', err);
@@ -102,7 +102,7 @@ export default function Disease() {
                     setItems(_items);
                     setItemDialog(false);
                     setItem(emptyItem);
-                    toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료!', life: 3000 });
+                    toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료되었습니다.', life: 3000 });
                 })
                 .catch(err => {
                     console.log('create() Error!', err);
@@ -125,7 +125,7 @@ export default function Disease() {
         diseaseService.delete(item.diseaseNo)
         .then(res => {
             setDeleteItemDialog(false);
-            toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료!', life: 3000 });
+            toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료되었습니다.', life: 3000 });
             retrieveDisease();
         })
         .catch(err => {
@@ -174,7 +174,7 @@ export default function Disease() {
                     .then(res => {
                         success = true;
                         if((_importedData.length === (index+1)) && success === true) {
-                            toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료!', life: 3000 });
+                            toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료되었습니다.', life: 3000 });
                             retrieveDisease();
                         }
                     })
@@ -221,7 +221,7 @@ export default function Disease() {
                 success = true;
                 if(selectedItems.length === (index+1) && success === true) {
                     setDeleteItemsDialog(false);
-                    toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료!', life: 3000 });
+                    toast.current.show({ severity: 'success', summary: '알림', detail: '삭제 완료되었습니다.', life: 3000 });
                     retrieveDisease();
                 }
             })
