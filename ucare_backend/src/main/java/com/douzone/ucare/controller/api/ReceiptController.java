@@ -47,4 +47,9 @@ public class ReceiptController {
 		return new ResponseEntity<>(receiptService.createRev(receipt), HttpStatus.OK);
 	}
 	
+	@GetMapping("/retrieveByReceiptNo/{receiptNo}")
+	public ResponseEntity<?> retrieveByReceiptNo(@PathVariable("receiptNo") Long receiptNo) {
+		return new ResponseEntity<>(receiptService.retrieveByReceiptNo(receiptNo), HttpStatus.OK);
+	}
+	
 }

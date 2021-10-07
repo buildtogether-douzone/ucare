@@ -45,4 +45,8 @@ public class ReceiptService {
 		return receiptRepository.createRev(receipt);
 	}
 	
+	public ReceiptVo retrieveByReceiptNo(Long receiptNo) {
+		return receiptRepository.retrieveByReceiptNo(receiptNo);
+	}
+	
 }

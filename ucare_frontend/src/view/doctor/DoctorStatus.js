@@ -52,6 +52,15 @@ export default function DoctorDiagnosis() {
         diagnosis: ''
     };
 
+    let emptyReceipt = {
+        receiptNo: null,
+        receiptDt: '',
+        bp: null,
+        bs: null,
+        remark: '',
+        diagnosisTime: ''
+    };
+
     const [items, setItems] = useState([]);
     const [pastDiagnosis, setPastDiagnosis] = useState([]);
     const [item, setItem] = useState(emptyItem);
@@ -64,6 +73,7 @@ export default function DoctorDiagnosis() {
     const [cureYN, setCureYN] = useState('');
     const [diseaseItemDialog, setDiseaseItemDialog] = useState(false);
     const [diseaseSelectedItem, setDiseaseSelectedItem] = useState(emptyDiseaseItem);
+    const [receiptItem, setReceiptItem] = useState(emptyReceipt);
     const [globalFilter, setGlobalFilter] = useState(null);
 
     const [reload, setReload] = useState('');
@@ -222,7 +232,15 @@ export default function DoctorDiagnosis() {
         patientService.retrieve(data.patientNo)
             .then(res => {
                 setPatient(res.data);
-                console.log(res.data);
+
+                receiptService.retrieveByReceiptNo(data.receiptNo)
+                .then(res => {
+                    setReceiptItem(res.data);
+                })
+                .catch(err => {
+                    console.log('retrieveAll() 에러', err);
+                });
+
                 diagnosisService.retrieveByPatientNo(res.data.patientNo)
                     .then(res => {
                         for (var i = 0; i < res.data.length; i++) {
@@ -471,7 +489,7 @@ export default function DoctorDiagnosis() {
                         </Card>
                     </div>
                     <div className="p-col-12 p-md-6 p-lg-4">
-                        <Card style={{ height: '35%' }}>
+                        <Card style={{ height: '45%' }}>
                             <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign: 'center' }}>환자 정보</span>
                             <Divider />
                             <div className="activity-header">
@@ -496,8 +514,30 @@ export default function DoctorDiagnosis() {
                                     </div>
                                 </div>
                             </ul>
+                            <ul className="activity-list">
+                                <div className="p-grid" style={{ marginTop: '1em' }}>
+                                    <div className="p-col-6">
+                                        <label htmlFor="bp">혈압</label>
+                                        <label style={{ marginLeft: '4rem' , color: '#1C91FB' }}>{receiptItem.bp}</label>
+                                    </div>
+
+
+                                    <div className="p-col-6">
+                                    <label htmlFor="bs">혈당</label>
+                                        <label style={{ marginLeft: '4.5rem' , color: '#1C91FB' }}>{receiptItem.bs}</label>
+                                    </div>
+                                </div>
+                            </ul>
+                            <ul className="activity-list">
+                                <div className="p-grid" style={{ marginTop: '1em' }}>
+                                    <div className="p-col-6">
+                                        <label htmlFor="remark">진료 메모</label>
+                                        <label style={{ marginLeft: '1.5rem' , color: '#1C91FB' }}>{receiptItem.remark}</label>
+                                    </div>
+                                </div>
+                            </ul>
                         </Card>
-                        <Card style={{ height: '63%', marginTop: '10px' }}>
+                        <Card style={{ height: '53%', marginTop: '10px' }}>
                             <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign: 'center' }}>과거 병력</span>
                             <Divider />
                             <div className="activity-header">

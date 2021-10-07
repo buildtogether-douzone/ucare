@@ -102,6 +102,19 @@
 			  AND patient_no = #{patientNo }
 	</select>
 	
+	<select id="retrieveByReceiptNo" parameterType="Long" resultType="receiptvo" >
+		SELECT
+				receipt_no AS receiptNo,
+				bp AS bp,
+				bs AS bs,
+				receipt_dt AS receiptDt,
+				remark AS remark,
+				state AS state,
+				diagnosis_time as diagnosisTime
+			FROM ucare.receipt 
+			WHERE receipt_no = #{receiptNo }
+	</select>
+	
 	<update id="updateState" parameterType="receiptvo">
 		UPDATE  ucare.receipt
 		   SET 

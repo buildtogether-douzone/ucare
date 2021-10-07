@@ -26,6 +26,10 @@ class receiptService {
   retrieveOverlap(receiptOverlap){
     return axios.get(RECEIPT_API_BASE_URL + '/retrieveOverlap/' + receiptOverlap, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
+
+  retrieveByReceiptNo(receiptNo){
+    return axios.get(RECEIPT_API_BASE_URL + '/retrieveByReceiptNo/' + receiptNo, { headers: { Authorization: localStorage.getItem("authorization") }});
+  }
   
 }
 

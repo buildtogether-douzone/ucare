@@ -37,6 +37,10 @@ public class ReceiptRepository {
 	public int createRev(ReceiptVo receipt) {
 		return sqlSession.insert("receipt.createRev", receipt);
 	}
+	
+	public ReceiptVo retrieveByReceiptNo(Long receiptNo) {
+		return sqlSession.selectOne("receipt.retrieveByReceiptNo", receiptNo);
+	}
 
 }
 
