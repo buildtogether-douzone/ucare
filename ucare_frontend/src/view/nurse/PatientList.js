@@ -82,7 +82,7 @@ export default function PatientList() {
 
   return (
     <Grid container>
-      <Toast ref={toast} position="top-center" />
+      <Toast ref={toast} />
       <Grid item xs={5}>
         <NewPatient />
       </Grid>

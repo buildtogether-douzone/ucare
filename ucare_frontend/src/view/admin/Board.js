@@ -257,6 +257,12 @@ const Board = React.forwardRef((props, ref) => {
         );
     }
 
+    const emptyMessage = () => {
+        return (
+            <span style={{ fontSize: '20px', display: 'block', textAlign:'center', paddingTop: '20%', paddingBottom: '20%' }}>등록된 글이 없습니다.</span>
+        );
+    };
+
     const head = renderHeader();
 
     return (
@@ -264,7 +270,7 @@ const Board = React.forwardRef((props, ref) => {
             <Toast ref={toast} position="top-center"/>
             <div className="card" style={{ paddingBottom: '2%'}}>
                 <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign:'center', marginTop: '35PX', marginBottom: '20px' }}>공지사항</span>
-                <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage="No data" onSelectionChange={(e) => setSelectedItems(e.value)}
+                <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage={emptyMessage} onSelectionChange={(e) => setSelectedItems(e.value)}
                     dataKey="boardNo" paginator rows={12}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"

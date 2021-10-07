@@ -413,7 +413,7 @@ const Row = React.forwardRef((props, ref) => {
               onChange={(e) => { setName(e.target.value) }}
               error={nameValidError()}
               helperText={
-                nameValidError() ? "특수문자, 숫자, 띄어쓰기는 사용할수 없습니다." : null
+                nameValidError() ? "특수문자, 숫자, 띄어쓰기는 사용할수 없습니다." : null 
               }
             />
             <Typography className={classes.font} variant="body1" gutterBottom>주민등록번호</Typography>
