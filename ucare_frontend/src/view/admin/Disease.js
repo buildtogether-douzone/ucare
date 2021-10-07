@@ -299,7 +299,7 @@ export default function Disease() {
 
             <div className="card">
                 <DataTable ref={dt} value={items} selection={selectedItems} emptyMessage={emptyMessage} onSelectionChange={(e) => setSelectedItems(e.value)}
-                    dataKey="diseaseNo" paginator rows={7}
+                    dataKey="diseaseNo" paginator rows={13}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
                     globalFilter={globalFilter}

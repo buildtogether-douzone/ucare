@@ -229,11 +229,11 @@ const Row = React.forwardRef((props, ref) => {
     receiptService.delete(receiptNo)
       .then(res => {
         console.log(receiptNo + '번 접수가 성공적으로 취소되었습니다.');
+        ref.current.show({ severity: 'success', summary: '알림', detail: '접수가 취소되었습니다.', life: 3000 });
       })
       .catch(err => {
         console.log('delete() 에러', err);
       });
-    alert('접수 취소 되었습니다.');
   };
 
   useEffect(() => {
@@ -244,10 +244,10 @@ const Row = React.forwardRef((props, ref) => {
     e.preventDefault();
 
     if (name == '') {
-      alert("이름을 입력해주세요.")
+      ref.current.show({ severity: 'error', summary: '알림', detail: '이름을 입력해주세요.', life: 3000 });
       return;
     } else if (telNo == '') {
-      alert("연락처를 입력해주세요.")
+      toast.current.show({ severity: 'error', summary: '알림', detail: '연락처를 입력해주세요.', life: 3000 });
       return;
     };
     
@@ -269,7 +269,7 @@ const Row = React.forwardRef((props, ref) => {
     patientService.update(patient)
       .then(res => {
         console.log(patient.name + '님의 정보가 성공적으로 수정되었습니다.');
-        window.location.reload();
+        ref.current.show({ severity: 'success', summary: '알림', detail: `${patient.name}님의 정보가 수정되었습니다.`, life: 3000 });
       })
       .catch(err => {
         console.log('updatePatient() 에러', err);

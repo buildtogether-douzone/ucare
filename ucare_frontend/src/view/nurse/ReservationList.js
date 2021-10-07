@@ -336,15 +336,15 @@ export default function ReservationList() {
                 </div>
                 <div className="p-field" style={{fontWeight: 'bold'}}>
                 <label htmlFor="bp">혈압</label>
-                <InputText value={item.bp || ''} onChange={(e) => onInputChange(e, 'bp')} />
+                <InputText value={item.bp || ''} placeholder="혈압을 입력하세요." onChange={(e) => onInputChange(e, 'bp')} />
                 </div>
                 <div className="p-field" style={{fontWeight: 'bold'}}>
                 <label htmlFor="bs">혈당</label>
-                <InputText value={item.bs || ''} onChange={(e) => onInputChange(e, 'bs')} />
+                <InputText value={item.bs || ''}  placeholder="혈당을 입력하세요." onChange={(e) => onInputChange(e, 'bs')} />
                 </div>              
                 <div className="p-field" style={{fontWeight: 'bold'}}>
                 <label htmlFor="remark">접수 메모</label>
-                <InputTextarea value={item.remark || ''} onChange={(e) => onInputChange(e, 'remark')} rows={5} cols={30} autoResize />
+                <InputTextarea value={item.remark || ''} placeholder="접수 메모를 입력하세요." onChange={(e) => onInputChange(e, 'remark')} rows={5} cols={30} autoResize />
                 </div>
 
             </Dialog>
