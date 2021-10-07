@@ -529,7 +529,7 @@ export default function DoctorDiagnosis() {
                                 </div>
                             </ul>
                             <ul className="activity-list">
-                                <div className="p-grid" style={{ marginTop: '0.5em', marginBottom: '2em' }}>
+                                <div className="p-grid" style={{ marginTop: '0.5em', marginBottom: '3rem' }}>
                                     <div className="p-col-12">
                                         <label htmlFor="remark">진료 메모</label>
                                         <label style={{ marginLeft: '1.5rem' , color: '#1C91FB' }}>{receiptItem.remark}</label>
