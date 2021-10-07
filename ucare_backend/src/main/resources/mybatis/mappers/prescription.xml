@@ -50,8 +50,7 @@
 				A.receipt_no = C.receipt_no
 			AND B.patient_no = C.patient_no
 			WHERE TO_CHAR(A.receipt_dt, 'YYYY-MM-DD') = #{date }
-			  AND C.cure_yn = 'true'
-			  OR C.cure_yn = 'complete'
+			  AND C.cure_yn != ''
 			ORDER BY A.receipt_no ASC
 	</select>
 	
