@@ -68,6 +68,7 @@ export default function Hospital() {
     const [previewURL, setPreviewURL] = useState('');
     const [imageURL, setImageURL] = useState('');
     const [file, setFile] = useState('');
+    const [changeFile, setChangeFile] = useState('X');
 
     const toast = useRef(null);
 
@@ -110,6 +111,7 @@ export default function Hospital() {
         reader.onloadend = () => {
             setFile(file);
             setPreviewURL(reader.result);
+            setChangeFile("O");
         }
         reader.readAsDataURL(file);
     }
@@ -126,7 +128,8 @@ export default function Hospital() {
             email: email,
             faxNo: faxNo,
             headSpeak: headSpeak,
-            image: imageURL
+            image: imageURL,
+            changeFile: changeFile
         }
 
         const formData = new FormData();
@@ -136,6 +139,7 @@ export default function Hospital() {
         hospitalService.updateData(formData)
         .then(res => {
           console.log('success!!');
+          setChangeFile("X");
           toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료되었습니다.', life: 3000 });
         })
         .catch(err => {

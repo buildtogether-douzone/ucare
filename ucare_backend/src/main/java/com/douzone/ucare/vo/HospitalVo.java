@@ -12,7 +12,15 @@ public class HospitalVo {
 	private String faxNo;
 	private String headSpeak;
 	private String image;
+	private String changeFile;
 	
+	
+	public String getChangeFile() {
+		return changeFile;
+	}
+	public void setChangeFile(String changeFile) {
+		this.changeFile = changeFile;
+	}
 	public long getHospitalNo() {
 		return hospitalNo;
 	}
