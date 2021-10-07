@@ -8,8 +8,10 @@ import styles from '../../assets/scss/Calendar.scss';
 import holidayService from '../../service/holidayService';
 
 export default function CalHoliday() {
+
   const [getMoment, setMoment] = useState(moment());
   const [holidays, setHolidays] = useState([]);
+  const [holidayItems, setHolidaysItems] = useState([]);
   const [reload, setReload] = useState(true);
 
   const today = getMoment;
@@ -25,9 +27,10 @@ export default function CalHoliday() {
   let tHolidays = GetHolidays(year).map((data, index) => data.toString().substring(0, 8));
 
   useEffect(() => {
+    retrieveItems(getMoment.clone().format('YYYY-MM'));
     tHolidays = GetHolidays(year).map((data, index) => data.toString().substring(0, 8));
     setHolidays(tHolidays);
-  }, [])
+  }, []);
 
   const findIndexByDate = (date) => {
     let index = -1;
@@ -43,12 +46,14 @@ export default function CalHoliday() {
 
   const subtractMonth = () => {
     setMoment(getMoment.clone().subtract(1, 'month'));
+    retrieveItems(getMoment.clone().subtract(1, 'month').format('YYYY-MM'));
     tHolidays = GetHolidays(year).map((data, index) => data.toString().substring(0, 8));
     setHolidays(tHolidays);
   }
 
   const addMonth = () => {
     setMoment(getMoment.clone().add(1, 'month'));
+    retrieveItems(getMoment.clone().add(1, 'month').format('YYYY-MM'));
     tHolidays = GetHolidays(year).map((data, index) => data.toString().substring(0, 8));
     setHolidays(tHolidays);
   }
@@ -168,7 +173,6 @@ export default function CalHoliday() {
   }
 
   const saveItems = () => {
-    console.log(items);
     holidayService.update(items)
         .then(res => {
           console.log('정보가 성공적으로 전송 되었습니다.');
@@ -176,6 +180,17 @@ export default function CalHoliday() {
         })
         .catch(err => {
           console.log('update holiday data() 에러', err);
+        });
+  }
+
+  const retrieveItems = (date) => {
+    holidayService.retrieve(date)
+        .then(res => {
+          console.log('정보가 성공적으로 조회 되었습니다.');
+          setHolidaysItems(res.data);
+        })
+        .catch(err => {
+          console.log('retrieve holiday 에러', err);
         });
   }
 
@@ -188,6 +203,10 @@ export default function CalHoliday() {
           <button className={styles.nav_btn} style={{ marginRight: '32%' }} onClick={() => { addMonth() }}>&gt;</button>
           <span style={{ paddingRight: '5%', paddingLeft: '5%', float:'right', fontSize: '26px' }}>{today.format('YYYY년 MM월')}</span>
           <button className={styles.nav_btn} onClick={() => { subtractMonth() }}>&lt;</button>
+          {(holidayItems.length !== 0) ?
+          <Button style={{ float: 'left', backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} label="저장 여부: O"  className="p-button-sm" disabled/>
+          : <Button style={{ float: 'left', backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} label="저장 여부: X"  className="p-button-sm" disabled/>
+          }
       </div>
       <Card style={{width: '90%', display: 'inline-block', marginBottom: '3%' }}>
       <table className={styles.calendar}>
