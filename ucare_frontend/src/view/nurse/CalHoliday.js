@@ -11,6 +11,7 @@ export default function CalHoliday() {
 
   const [getMoment, setMoment] = useState(moment());
   const [holidays, setHolidays] = useState([]);
+  const [dbHolidays, setDbHolidays] = useState([]);
   const [holidayItems, setHolidaysItems] = useState([]);
   const [reload, setReload] = useState(true);
 
@@ -28,9 +29,24 @@ export default function CalHoliday() {
 
   useEffect(() => {
     retrieveItems(getMoment.clone().format('YYYY-MM'));
+  }, []);
+
+  useEffect(() => {
     tHolidays = GetHolidays(year).map((data, index) => data.toString().substring(0, 8));
     setHolidays(tHolidays);
-  }, []);
+  }, [holidayItems]);
+
+  useEffect(() => {
+    for(let i = 0; i < holidayItems.length; i++) {
+      if(WEEKDAY[new Date(holidayItems[i].date).getDay()] === 'SAT' || WEEKDAY[new Date(holidayItems[i].date).getDay()] === 'SUN'){
+        continue;
+      }
+      if(holidayItems[i].holiday === true) {
+        holidays.push(holidayItems[i].date.replace(/\-/g,''));
+      }
+    }
+    setDbHolidays(holidays)
+  }, [holidays]);
 
   const findIndexByDate = (date) => {
     let index = -1;
@@ -47,15 +63,11 @@ export default function CalHoliday() {
   const subtractMonth = () => {
     setMoment(getMoment.clone().subtract(1, 'month'));
     retrieveItems(getMoment.clone().subtract(1, 'month').format('YYYY-MM'));
-    tHolidays = GetHolidays(year).map((data, index) => data.toString().substring(0, 8));
-    setHolidays(tHolidays);
   }
 
   const addMonth = () => {
     setMoment(getMoment.clone().add(1, 'month'));
     retrieveItems(getMoment.clone().add(1, 'month').format('YYYY-MM'));
-    tHolidays = GetHolidays(year).map((data, index) => data.toString().substring(0, 8));
-    setHolidays(tHolidays);
   }
 
   const changeHoliday = (date) => {
@@ -122,7 +134,7 @@ export default function CalHoliday() {
                     </div>
                   </td>
                 );
-              } else if (holidays.includes(days.format('YYYYMMDD'))) {
+              } else if (dbHolidays.includes(days.format('YYYYMMDD'))) {
                 return (
                   <td key={index} onClick={() => { changeHoliday(days.format('YYYYMMDD')) }}>
                     <div className={styles.inner}>
