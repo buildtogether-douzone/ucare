@@ -27,6 +27,7 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import UserService from '../service/userService';
 import MessageService from '../service/messageService';
 import basicImg from '../assets/image/basicImg.jpg';
+import logo from '../assets/image/logo.png';
 import { useRecoilState } from 'recoil';
 import { reloadProfile } from '../recoil/atom/profileAtom';
 
@@ -502,8 +503,9 @@ const Header = ({ open, drawerManage }) => {
           </IconButton>
           <div style={{ flexGrow: 1 }}>
             <Button
-              href="/Home"
-              style={{ padding: '0px', width: '100px', fontSize: '20px', color: '#FFFFFF' }} >U-Care</Button>
+              href="/Home" style={{marginLeft:"20px"}}>
+                <img src={logo} style={{width:'120px', height:'50px'}}/>
+              </Button>
           </div>
           <Typography style={{ fontSize: '20px' }}>
             {name}님
