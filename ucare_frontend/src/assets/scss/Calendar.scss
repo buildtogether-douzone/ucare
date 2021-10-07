@@ -49,6 +49,7 @@
   position: relative;
   height: 100px;
   padding: 5px;
+  padding-top: 35px;
 }
 
 .dimmed {
@@ -91,16 +92,16 @@ em.text {
 
 .today {
   font-weight: bold;
-  padding: 15px;
+  padding: 10px;
   background-color: #812733;
   border-radius: 10px;
 }
 
 .today_inner {
   position: relative;
-  height: 130px;
+  height: 100px;
   padding: 5px;
-  padding-top: 20%;
+  padding-top: 16%;
   text-align: center;
   color: #e7e7e7;
 }
