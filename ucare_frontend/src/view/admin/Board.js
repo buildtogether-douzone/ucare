@@ -116,7 +116,6 @@ const Board = React.forwardRef((props, ref) => {
     }
 
     const editItem = (item) => {
-        console.log(item)
         setItem({ ...item });
         setItemDialog(true);
     }
