@@ -37,12 +37,12 @@ export default function CalHoliday() {
   }, [holidayItems]);
 
   useEffect(() => {
-    for(let i = 0; i < holidayItems.length; i++) {
-      if(WEEKDAY[new Date(holidayItems[i].date).getDay()] === 'SAT' || WEEKDAY[new Date(holidayItems[i].date).getDay()] === 'SUN'){
+    for (let i = 0; i < holidayItems.length; i++) {
+      if (WEEKDAY[new Date(holidayItems[i].date).getDay()] === 'SAT' || WEEKDAY[new Date(holidayItems[i].date).getDay()] === 'SUN') {
         continue;
       }
-      if(holidayItems[i].holiday === true) {
-        holidays.push(holidayItems[i].date.replace(/\-/g,''));
+      if (holidayItems[i].holiday === true) {
+        holidays.push(holidayItems[i].date.replace(/\-/g, ''));
       }
     }
     setDbHolidays(holidays)
@@ -74,8 +74,8 @@ export default function CalHoliday() {
     let index = findIndexByDate(date);
     let dayOfWeek = WEEKDAY[new Date(date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3')).getDay()];
 
-    if(dayOfWeek === 'SAT' || dayOfWeek === 'SUN') return;
-    
+    if (dayOfWeek === 'SAT' || dayOfWeek === 'SUN') return;
+
     let data = items[index].holiday;
     let deleteDateIndex = holidays.findIndex((holiday) => holiday == date);
     items[index].holiday = !data;
@@ -186,57 +186,57 @@ export default function CalHoliday() {
 
   const saveItems = () => {
     holidayService.update(items)
-        .then(res => {
-          console.log('정보가 성공적으로 전송 되었습니다.');
-          toast.current.show({ severity: 'success', summary: '알림', detail: '저장 완료되었습니다.', life: 3000 });
-        })
-        .catch(err => {
-          console.log('update holiday data() 에러', err);
-        });
+      .then(res => {
+        console.log('정보가 성공적으로 전송 되었습니다.');
+        toast.current.show({ severity: 'success', summary: '알림', detail: '저장 완료되었습니다.', life: 3000 });
+      })
+      .catch(err => {
+        console.log('update holiday data() 에러', err);
+      });
   }
 
   const retrieveItems = (date) => {
     holidayService.retrieve(date)
-        .then(res => {
-          console.log('정보가 성공적으로 조회 되었습니다.');
-          setHolidaysItems(res.data);
-        })
-        .catch(err => {
-          console.log('retrieve holiday 에러', err);
-        });
+      .then(res => {
+        console.log('정보가 성공적으로 조회 되었습니다.');
+        setHolidaysItems(res.data);
+      })
+      .catch(err => {
+        console.log('retrieve holiday 에러', err);
+      });
   }
 
   return (
     <div style={{ padding: '1%', textAlign: 'center', width: '100%' }}>
       <Toast ref={toast} position="top-center" />
       {reload}
-      <div style={{width: '90%', display: 'inline-block', margin: '1%' }}>
-          <Button style={{ float: 'right', backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} label="저장" icon="pi pi-check"  className="p-button-sm" onClick={saveItems}  />
-          <button className={styles.nav_btn} style={{ marginRight: '32%' }} onClick={() => { addMonth() }}>&gt;</button>
-          <span style={{ paddingRight: '5%', paddingLeft: '5%', float:'right', fontSize: '26px' }}>{today.format('YYYY년 MM월')}</span>
-          <button className={styles.nav_btn} onClick={() => { subtractMonth() }}>&lt;</button>
-          {(holidayItems.length !== 0) ?
-          <Button style={{ float: 'left', backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} label="저장 여부: O"  className="p-button-sm" disabled/>
-          : <Button style={{ float: 'left', backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} label="저장 여부: X"  className="p-button-sm" disabled/>
-          }
+      <div style={{ width: '90%', display: 'inline-block', margin: '1%' }}>
+        <Button style={{ float: 'right', backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} label="저장" icon="pi pi-check" className="p-button-sm" onClick={saveItems} />
+        <button className={styles.nav_btn} style={{ marginRight: '32%' }} onClick={() => { addMonth() }}>&gt;</button>
+        <span style={{ paddingRight: '5%', paddingLeft: '5%', float: 'right', fontSize: '26px' }}>{today.format('YYYY년 MM월')}</span>
+        <button className={styles.nav_btn} onClick={() => { subtractMonth() }}>&lt;</button>
+        {(holidayItems.length !== 0) ?
+          <Button style={{ float: 'left', backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} label="저장 여부: O" className="p-button-sm" disabled />
+          : <Button style={{ float: 'left', backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB' }} label="저장 여부: X" className="p-button-sm" disabled />
+        }
       </div>
-      <Card style={{width: '90%', display: 'inline-block', marginBottom: '3%' }}>
-      <table className={styles.calendar}>
-        <thead>
-          <tr>
-            <th scope="col" style={{ color: '#f44e4e', textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Sun</th>
-            <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Mon</th>
-            <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Tue</th>
-            <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Wed</th>
-            <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Thu</th>
-            <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Fri</th>
-            <th scope="col" style={{ color: '#2A32FB', textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Sat</th>
-          </tr>
-        </thead>
-        <tbody>
-          {calendarArr()}
-        </tbody>
-      </table>
+      <Card style={{ width: '90%', display: 'inline-block', marginBottom: '3%' }}>
+        <table className={styles.calendar}>
+          <thead>
+            <tr>
+              <th scope="col" style={{ color: '#f44e4e', textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Sun</th>
+              <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Mon</th>
+              <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Tue</th>
+              <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Wed</th>
+              <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Thu</th>
+              <th scope="col" style={{ textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Fri</th>
+              <th scope="col" style={{ color: '#2A32FB', textAlign: 'center', fontSize: '18px', opacity: '80%' }}>Sat</th>
+            </tr>
+          </thead>
+          <tbody>
+            {calendarArr()}
+          </tbody>
+        </table>
       </Card>
     </div>
   );
