@@ -211,7 +211,7 @@ export default function Prescription() {
 
         let _items = [...prescriptionItems];
         let _item = { ...prescriptionItem };
-        console.log(_item);
+
         if (prescriptionItem.prescriptionNo) {
             prescriptionService.update(_item)
                 .then(res => {
@@ -612,7 +612,7 @@ export default function Prescription() {
                                     header={tableHeader}>
 
                                     <Column style={{ textAlign: 'right', width: '5%', padding: '10px' }} selectionMode="multiple"></Column>
-                                    <Column style={{ textAlign: 'center', width: '12%', padding: '10px' }} field="patientNo" header="환자코드" hidden="true"></Column>
+                                    <Column style={{ textAlign: 'center', width: '12%', padding: '10px', display: 'none' }} field="patientNo" header="환자코드"></Column>
                                     <Column style={{ textAlign: 'center', width: '20%', padding: '10px' }} field="medicineNm" header="처방약"></Column>
                                     <Column style={{ textAlign: 'center', width: '13%', padding: '10px' }} field="dosage" header="투여량" sortable></Column>
                                     <Column style={{ textAlign: 'center', width: '15%', padding: '10px' }} field="dosingDay" header="투약일수" sortable></Column>
@@ -622,11 +622,11 @@ export default function Prescription() {
                             </div>
 
                             <Dialog visible={itemDialog} style={{ width: '450px' }} header="처방등록" modal className="p-fluid" footer={itemDialogFooter} onHide={hideDialog}>
-                                <div className="p-field">
+                                <div className="p-field" style={{ display: 'none' }}>
                                     <label htmlFor="diagnosisNo">진료번호</label>
                                     <InputText id="diagnosisNo" value={prescriptionItem.diagnosisNo} readOnly={true} onChange={(e) => onInputChange(e, 'diagnosisNo')} className={classNames({ 'p-invalid': submitted && !prescriptionItem.diagnosisNo })} />
                                 </div>
-                                <div className="p-field">
+                                <div className="p-field" style={{ display: 'none' }}>
                                     <label htmlFor="patientNo">환자번호</label>
                                     <InputText id="patientNo" value={prescriptionItem.patientNo} readOnly={true} onChange={(e) => onInputChange(e, 'patientNo')} className={classNames({ 'p-invalid': submitted && !prescriptionItem.patientNo })} />
                                 </div>
