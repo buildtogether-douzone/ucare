@@ -36,7 +36,15 @@ public class UserVo {
 	private String birth;
 	@ApiModelProperty(example="사용자 사진")
 	private String image;
+	private String checkFile;
 	
+	
+	public String getCheckFile() {
+		return checkFile;
+	}
+	public void setCheckFile(String checkFile) {
+		this.checkFile = checkFile;
+	}
 	public int getRowNo() {
 		return rowNo;
 	}

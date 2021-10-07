@@ -86,6 +86,7 @@ export default function Profile() {
   const [previewURL, setPreviewURL] = useState('');
   const [imageURL, setImageURL] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [changeFile, setChangeFile] = useState('X');
 
   const [reload, setReload] = useRecoilState(reloadProfile);
   const toast = useRef(null);
@@ -177,7 +178,8 @@ export default function Profile() {
       address: address,
       detailAddress: detailAddress,
       birth: birth,
-      image: imageURL
+      image: imageURL,
+      changeFile: changeFile
     }
 
     const formData = new FormData();
@@ -187,6 +189,7 @@ export default function Profile() {
     userService.updateUser(formData)
       .then(res => {
         console.log(user.name + '님의 정보가 성공적으로 수정되었습니다.');
+        setChangeFile("X");
         toast.current.show({ severity: 'success', summary: '알림', detail: `${user.name}님의 정보가 수정되었습니다.`, life: 3000 });
         setReload(!reload);
       })
@@ -202,6 +205,7 @@ export default function Profile() {
     reader.onloadend = () => {
       setFile(file);
       setPreviewURL(reader.result);
+      setChangeFile("O");
     }
     reader.readAsDataURL(file);
   };
