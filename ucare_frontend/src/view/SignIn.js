@@ -168,8 +168,8 @@ export default function SignInSide({ history }) {
             <Button
               fullWidth
               variant="contained"
-              color="primary"
               className={classes.submit}
+              style={{ backgroundColor: '#1C91FB', color: 'white' }}
               onClick={ login }
             >
               로그인 하기
