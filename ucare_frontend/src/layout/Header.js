@@ -567,13 +567,12 @@ const Header = ({ open, drawerManage }) => {
 
           <Avatar
             className="p-mr-2"
-            style={URL == null ?
-              { backgroundImage: `url(${require("../assets/image/profile.jpg")})`, backgroundSize: 'cover' } :
-              { backgroundImage: `url(${URL})`, backgroundSize: 'cover' }}
             size="large"
             shape="circle"
             onClick={handleClick}
-          />
+          >
+            <img src={URL == null ? basicImg : URL}/>
+          </Avatar>
 
           <Menu
             style={{ marginTop: '48px', marginLeft: '-15px' }}
