@@ -35,6 +35,9 @@ U-Care
 <img src="https://github.com/buildtogether-douzone/Document/blob/main/UcareImage/SystemArchitecture.png"/>
 
 
+### Detailed Architecture
+<img src="https://github.com/buildtogether-douzone/Document/blob/main/UcareImage/DetailedArchitecture.png"/>
+
 ### Development Environment
 
 + Front-End: React
@@ -110,7 +113,7 @@ ucare
 
 + Front-End
   + PrimeReact
-  + MaterialUI
+  + Material-UI
   + Axios(fetch)
   + Moment
   + Modal
