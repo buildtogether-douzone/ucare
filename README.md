@@ -1,8 +1,8 @@
-## U-Care Project
+# U-Care Project
 
-### HIS(Healthcare Information System)
+## HIS(Healthcare Information System)
 
-#### 설치
+### Install
 
 ```bash
 $ git clone https://github.com/buildtogether-douzone/ucare.git
@@ -13,29 +13,29 @@ $ mvn clean package
 
 ---
 
-#### 팀명 
+### Team 
 
 Build Together
 
 ---
 
-####  팀원
+### Team Member 
 
-정신후(팀장), 조대헌, 김나은
+정신후(Leader), 조대헌, 김나은
 
 ---
 
-#### 프로젝트명
+### Project Title
 
 U-Care
 
 ---
 
-#### System Architecture
+### System Architecture
 <img src="https://github.com/buildtogether-douzone/Document/blob/main/UcareImage/SystemArchitecture.png"/>
 
 
-#### 개발환경
+### Development Environment
 
 + Front-End: React
 + Back-End: Spring Boot
@@ -45,7 +45,7 @@ U-Care
 
 
 
-#### 경로
+#### Path
 
 ```bash
 ucare
