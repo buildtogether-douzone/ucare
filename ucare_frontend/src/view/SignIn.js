@@ -12,6 +12,7 @@ import userService from '../service/userService';
 import Footer from '../layout/Footer';
 import jwt from 'jwt-decode';
 import { Toast } from 'primereact/toast';
+import logo from '../assets/image/ucare.png';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
@@ -125,9 +126,7 @@ export default function SignInSide({ history }) {
       <Grid item xs={12} sm={6} md={4} />
       <Grid item xs={12} sm={8} md={4} elevation={6} >
         <div className={classes.paper}>
-            <Typography component="h1" variant="h3">
-                U-Care
-            </Typography>
+            <img src={logo} style={{width:'240px', height:'110px'}}/>
             <LocalHospitalIcon color="secondary" style={{ fontSize: 80 }}/>
             <Typography component="h1" variant="h5">
                 Sign in
@@ -172,7 +171,7 @@ export default function SignInSide({ history }) {
               style={{ backgroundColor: '#1C91FB', color: 'white' }}
               onClick={ login }
             >
-              로그인 하기
+              <span><b style={{fontSize:'18px', marginRight: '5px'}}>Ucare</b> 로그인</span>
             </Button>
           </form>
         </div>
