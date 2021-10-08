@@ -31,6 +31,8 @@ U-Care
 
 ---
 
+#### System Architecture
+<img src="https://github.com/buildtogether-douzone/Document/blob/main/UcareImage/SystemArchitecture.png"/>
 
 
 #### 개발환경
