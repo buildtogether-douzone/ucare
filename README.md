@@ -2,7 +2,7 @@
 
 ## HIS(Healthcare Information System)
 
-* Install
+* ### Install
 
 ```bash
 $ git clone https://github.com/buildtogether-douzone/ucare.git
