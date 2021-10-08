@@ -321,7 +321,7 @@ const Header = ({ open, drawerManage }) => {
 
   const messageFooter = (
     <div>
-      <Button onClick={onMessage}>쪽지 쓰기</Button>
+      <PrimeButton label="쪽지 쓰기" icon="pi pi-send" style={{backgroundColor: '#FFFFFF', borderColor: '#1C91FB', color: '#1C91FB'}} onClick={onMessage}/>
     </div>
   );
 
