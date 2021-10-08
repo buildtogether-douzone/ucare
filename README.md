@@ -136,7 +136,8 @@ ucare
   + Spring-Websocket
   + Swagger
 
-
+### ERD(Entity Relation Diagram)
+<img src="https://github.com/buildtogether-douzone/Document/blob/main/UcareImage/ERD.png"/>
 
 ### DB Schema(PostgreSQL)
 ```
