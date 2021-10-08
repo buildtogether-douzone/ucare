@@ -45,7 +45,7 @@ export default function CalHoliday() {
         holidays.push(holidayItems[i].date.replace(/\-/g, ''));
       }
     }
-    setDbHolidays(holidays)
+    setDbHolidays(holidays);
   }, [holidays]);
 
   const findIndexByDate = (date) => {
@@ -187,8 +187,9 @@ export default function CalHoliday() {
   const saveItems = () => {
     holidayService.update(items)
       .then(res => {
-        console.log('정보가 성공적으로 전송 되었습니다.');
+        console.log('정보가 성공적으로 저장 되었습니다.');
         toast.current.show({ severity: 'success', summary: '알림', detail: '저장 완료되었습니다.', life: 3000 });
+        retrieveItems(today.format('YYYY-MM'));
       })
       .catch(err => {
         console.log('update holiday data() 에러', err);
