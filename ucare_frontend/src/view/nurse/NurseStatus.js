@@ -418,6 +418,19 @@ export default function NurseStatus() {
         statusService.retrieve(dateFormat(event.value))
             .then(res => {
                 console.log('success!!');
+
+                for (var i = 0; i < res.data.length; i++) {
+                    if (res.data[i].state === 'care') {
+                        res.data[i].value = '진료중';
+                    } else if (res.data[i].state === 'careWait') {
+                        res.data[i].value = '진료대기중';
+                    } else if (res.data[i].state === 'wait') {
+                        res.data[i].value = '수납대기중';
+                    } else {
+                        res.data[i].value = '완료';
+                    }
+                }
+                
                 setItems(res.data);
             })
             .catch(err => {
