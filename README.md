@@ -21,7 +21,7 @@ Build Together
 
 ### Team Member 
 
-정신후(Leader), 조대헌, 김나은
+정신후(Team Leader), 조대헌, 김나은
 
 ---
 
