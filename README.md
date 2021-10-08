@@ -13,32 +13,33 @@ $ mvn clean package
 
 ---
 
-### Team 
+* ### Team 
 
 Build Together
 
 ---
 
-### Team Member 
+* ### Team Member 
 
 정신후(Team Leader), 조대헌, 김나은
 
 ---
 
-### Project Title
+* ### Project Title
 
 U-Care
 
 ---
 
-### System Architecture
+* ### System Architecture
 <img src="https://github.com/buildtogether-douzone/Document/blob/main/UcareImage/SystemArchitecture.png"/>
 
 
-### Detailed Architecture
+* ### Detailed Architecture
 <img src="https://github.com/buildtogether-douzone/Document/blob/main/UcareImage/DetailedArchitecture.png"/>
 
-### Development Environment
+
+* ### Development Environment
 
 + Front-End: React
 + Back-End: Spring Boot
@@ -47,8 +48,7 @@ U-Care
 + PostgreSQL
 
 
-
-### Path
+* ### Path
 
 ```bash
 ucare
@@ -109,7 +109,7 @@ ucare
 
 
 
-### 사용기술
+* ### 사용기술
 
 + Front-End
   + PrimeReact
@@ -136,10 +136,10 @@ ucare
   + Spring-Websocket
   + Swagger
 
-### ERD(Entity Relation Diagram)
+* ### ERD(Entity Relation Diagram)
 <img src="https://github.com/buildtogether-douzone/Document/blob/main/UcareImage/ERD.png"/>
 
-### DB Schema(PostgreSQL)
+* ### DB Schema(PostgreSQL)
 ```
 -- ucare.batch_job_instance definition
 
