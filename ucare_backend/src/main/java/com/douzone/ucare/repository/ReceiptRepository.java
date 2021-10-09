@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.douzone.ucare.vo.ReceiptVo;
+import com.douzone.ucare.vo.ReservationVo;
 
 @Repository
 public class ReceiptRepository {
@@ -24,6 +25,10 @@ public class ReceiptRepository {
 	
 	public List<ReceiptVo> retrieveByDuplication(Long patientNo) {
 		return sqlSession.selectList("receipt.retrieveByDuplication", patientNo);
+	}
+	
+	public List<ReceiptVo> retrieveByRevDate(ReservationVo data) {
+		return sqlSession.selectList("receipt.retrieveByRevDate", data);
 	}
 	
 	public int updateState(ReceiptVo receipt) {

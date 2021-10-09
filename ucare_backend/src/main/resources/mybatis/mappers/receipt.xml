@@ -27,7 +27,7 @@
 			(SELECT user_no FROM ucare.user WHERE id = #{userId } ),
 			#{patientNo },
 			'N',
-			'careWait',
+			'init',
 			(SELECT MIN(time) FROM ucare.time WHERE date = TO_DATE(TO_CHAR(now(), 'YYYY-MM-DD'), 'YYYY-MM-DD') AND status = false)
 		)
 	</insert>
@@ -57,7 +57,7 @@
 			(SELECT user_no FROM ucare.user WHERE id = #{userId } ),
 			#{patientNo },
 			'N',
-			'careWait',
+			'init',
 			#{diagnosisTime }
 		)
 	</insert>
@@ -99,6 +99,20 @@
 				diagnosis_time as diagnosisTime
 			FROM ucare.receipt 
 			WHERE TO_CHAR(receipt_dt, 'YYYY-MM-DD') = TO_CHAR(now(), 'YYYY-MM-DD')
+			  AND patient_no = #{patientNo }
+	</select>
+	
+	<select id="retrieveByRevDate" parameterType="reservationvo" resultType="receiptvo" >
+		SELECT
+				receipt_no AS receiptNo,
+				bp AS bp,
+				bs AS bs,
+				receipt_dt AS receiptDt,
+				remark AS remark,
+				state AS state,
+				diagnosis_time as diagnosisTime
+			FROM ucare.receipt 
+			WHERE TO_CHAR(receipt_dt, 'YYYY-MM-DD') = #{revDate }
 			  AND patient_no = #{patientNo }
 	</select>
 	

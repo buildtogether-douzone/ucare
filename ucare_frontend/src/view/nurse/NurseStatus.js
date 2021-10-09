@@ -200,7 +200,7 @@ export default function NurseStatus() {
                 for (var i = 0; i < res.data.length; i++) {
                     if (res.data[i].state === 'care') {
                         res.data[i].value = '진료중';
-                    } else if (res.data[i].state === 'careWait') {
+                    } else if (res.data[i].state === 'init') {
                         res.data[i].value = '진료대기중';
                     } else if (res.data[i].state === 'wait') {
                         res.data[i].value = '수납대기중';
@@ -230,7 +230,7 @@ export default function NurseStatus() {
                 for (var i = 0; i < res.data.length; i++) {
                     if (res.data[i].state === 'care') {
                         res.data[i].value = '진료중';
-                    } else if (res.data[i].state === 'careWait') {
+                    } else if (res.data[i].state === 'init') {
                         res.data[i].value = '진료대기중';
                     } else if (res.data[i].state === 'wait') {
                         res.data[i].value = '수납대기중';
@@ -422,7 +422,7 @@ export default function NurseStatus() {
                 for (var i = 0; i < res.data.length; i++) {
                     if (res.data[i].state === 'care') {
                         res.data[i].value = '진료중';
-                    } else if (res.data[i].state === 'careWait') {
+                    } else if (res.data[i].state === 'init') {
                         res.data[i].value = '진료대기중';
                     } else if (res.data[i].state === 'wait') {
                         res.data[i].value = '수납대기중';
@@ -499,9 +499,9 @@ export default function NurseStatus() {
                                         <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
                                     </div>
                                 </TabPanel>
-                                <TabPanel header={"대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"} headerStyle={{ width: '25%' }}>
+                                <TabPanel header={"대기" + "(" + items.filter(val => val.state === 'init').length + ")"} headerStyle={{ width: '25%' }}>
                                     <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                        <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
+                                        <DataScroller value={items.filter(val => val.state === 'init')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
                                     </div>
                                 </TabPanel>
                                 <TabPanel header={"진료중" + "(" + items.filter(val => val.state === 'care').length + ")"} headerStyle={{ width: '25%' }}>
@@ -531,7 +531,7 @@ export default function NurseStatus() {
                                     <div className="p-grid">
                                         <div className="p-col-12" style={{ fontSize: '20px', textAlign: 'center', paddingTop: '30%', paddingBottom: '30%' }}>
                                             <span>
-                                                {(item.state === 'careWait' || item.state === 'care' || item.state === '') && <span>진료가 완료된 후 수납계산이 가능합니다.</span>}
+                                                {(item.state === 'init' || item.state === 'care' || item.state === '') && <span>진료가 완료된 후 수납계산이 가능합니다.</span>}
                                             </span>
                                         </div>
                                         <div className="p-col-6" style={{ textAlign: 'right' }}>

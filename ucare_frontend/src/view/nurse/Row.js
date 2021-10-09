@@ -205,11 +205,11 @@ const Row = React.forwardRef((props, ref) => {
     }
   };
 
-  const nameRegex = /^[가-힣a-zA-Z]+$/; 
+  const nameRegex = /^[가-힣a-zA-Z]+$/;
   const nameValidError = () =>
-    name != '' ? (nameRegex.test(name) ? false : true) : false; 
+    name != '' ? (nameRegex.test(name) ? false : true) : false;
 
-    
+
   const regex = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
   const hasNotValidError = emailEntered =>
     regex.test(email) ? false : true;
@@ -250,7 +250,7 @@ const Row = React.forwardRef((props, ref) => {
       toast.current.show({ severity: 'error', summary: '알림', detail: '연락처를 입력해주세요.', life: 3000 });
       return;
     };
-    
+
     let patient = {
       name: name,
       ssn: ssn,
@@ -290,29 +290,39 @@ const Row = React.forwardRef((props, ref) => {
       userId: sessionStorage.getItem('user')
     }
 
-    receiptService.create(receipt)
-      .then(res => {
-        if (res.data != 0) {
-          console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
-          ref.current.show({ severity: 'success', summary: '알림', detail: `${receipt.name}님이 접수되었습니다.`, life: 3000 });
-          timeService.update(dateFormat(date)).then(res => {
-            window.scrollTo({
-              top: 0,
-              behavior: "smooth"
-            });
-            $websocket.current.sendMessage('/Doctor');
-            $websocket.current.sendMessage('/Reservation');
-            setReload(!reload);
+    timeService.retrieveAll(dateFormat(date)).then(res => {
+      if (res.data.length !== 0) {
+        receiptService.create(receipt)
+          .then(res => {
+            if (res.data != 0) {
+              console.log(receipt.patientNo + '님이 성공적으로 접수되었습니다.');
+              ref.current.show({ severity: 'success', summary: '알림', detail: `${receipt.name}님이 접수되었습니다.`, life: 3000 });
+              timeService.update(dateFormat(date)).then(res => {
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth"
+                });
+                $websocket.current.sendMessage('/Doctor');
+                $websocket.current.sendMessage('/Reservation');
+                setReload(!reload);
+              })
+                .catch(err => {
+                  console.log('update() 에러', err);
+                });
+            }
+            else
+              ref.current.show({ severity: 'error', summary: '알림', detail: '금일 접수 또는 예약된 환자입니다.', life: 3000 });
           })
-            .catch(err => {
-              console.log('update() 에러', err);
-            });
-        }
-        else
-          ref.current.show({ severity: 'error', summary: '알림', detail: '금일 접수 또는 예약된 환자입니다.', life: 3000 });
-      })
+          .catch(err => {
+            console.log('create() 에러', err);
+          });
+      }
+      else {
+        ref.current.show({ severity: 'error', summary: '알림', detail: '접수가능한 시간이 없습니다.', life: 3000 });
+      }
+    })
       .catch(err => {
-        console.log('create() 에러', err);
+        console.log('retrieveAll() 에러', err);
       });
 
     setDialogOpen3(false);
@@ -342,9 +352,6 @@ const Row = React.forwardRef((props, ref) => {
       }
       fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
     }
-    console.log(data)
-    console.log(fullAddress)
-    console.log(data.zonecode)
     setAddress(fullAddress);
     closePostCode();
   }
@@ -413,7 +420,7 @@ const Row = React.forwardRef((props, ref) => {
               onChange={(e) => { setName(e.target.value) }}
               error={nameValidError()}
               helperText={
-                nameValidError() ? "특수문자, 숫자, 띄어쓰기는 사용할수 없습니다." : null 
+                nameValidError() ? "특수문자, 숫자, 띄어쓰기는 사용할수 없습니다." : null
               }
             />
             <Typography className={classes.font} variant="body1" gutterBottom>주민등록번호</Typography>

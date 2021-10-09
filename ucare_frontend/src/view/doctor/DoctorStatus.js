@@ -130,7 +130,7 @@ export default function DoctorDiagnosis() {
                 for (var i = 0; i < res.data.length; i++) {
                     if (res.data[i].state === 'care') {
                         res.data[i].value = '진료중';
-                    } else if (res.data[i].state === 'careWait') {
+                    } else if (res.data[i].state === 'init') {
                         res.data[i].value = '진료대기중';
                     } else if (res.data[i].state === 'wait') {
                         res.data[i].value = '완료';
@@ -163,7 +163,7 @@ export default function DoctorDiagnosis() {
                 for (var i = 0; i < res.data.length; i++) {
                     if (res.data[i].state === 'care') {
                         res.data[i].value = '진료중';
-                    } else if (res.data[i].state === 'careWait') {
+                    } else if (res.data[i].state === 'init') {
                         res.data[i].value = '진료대기중';
                     } else if (res.data[i].state === 'wait') {
                         res.data[i].value = '완료';
@@ -314,7 +314,7 @@ export default function DoctorDiagnosis() {
                 for (var i = 0; i < res.data.length; i++) {
                     if (res.data[i].state === 'care') {
                         res.data[i].value = '진료중';
-                    } else if (res.data[i].state === 'careWait') {
+                    } else if (res.data[i].state === 'init') {
                         res.data[i].value = '진료대기중';
                     } else if (res.data[i].state === 'wait') {
                         res.data[i].value = '완료';
@@ -354,7 +354,7 @@ export default function DoctorDiagnosis() {
     );
 
     const saveDiagnosis = () => {
-        if (item.state === 'careWait') {
+        if (item.state === 'init') {
             toast.current.show({ severity: 'error', summary: '알림', detail: '진료 대기중인 환자입니다.', life: 3000 });
             return;
         }
@@ -483,9 +483,9 @@ export default function DoctorDiagnosis() {
                                         <DataScroller value={items} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
                                     </div>
                                 </TabPanel>
-                                <TabPanel header={"대기" + "(" + items.filter(val => val.state === 'careWait').length + ")"} headerStyle={{ width: '25%' }}>
+                                <TabPanel header={"대기" + "(" + items.filter(val => val.state === 'init').length + ")"} headerStyle={{ width: '25%' }}>
                                     <div className={styles.datascroller} style={{ justifyContent: 'center' }}>
-                                        <DataScroller value={items.filter(val => val.state === 'careWait')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
+                                        <DataScroller value={items.filter(val => val.state === 'init')} itemTemplate={itemTemplate} rows={10} inline scrollHeight="400px" header={header} emptyMessage={emptyMessage} />
                                     </div>
                                 </TabPanel>
                                 <TabPanel header={"진료중" + "(" + items.filter(val => val.state === 'care').length + ")"} headerStyle={{ width: '25%' }}>

@@ -22,7 +22,7 @@ public class ReservationService {
 
 	public int create(ReservationVo reservation) {
 		List<ReservationVo> reservationList = reservationRepository.retrieveByDuplication(reservation);
-		List<ReceiptVo> receiptList = receiptRepository.retrieveByDuplication(reservation.getPatientNo());
+		List<ReceiptVo> receiptList = receiptRepository.retrieveByRevDate(reservation);
 		
 		if(reservationList.size() != 0 || receiptList.size() != 0) 
 			return 0;
