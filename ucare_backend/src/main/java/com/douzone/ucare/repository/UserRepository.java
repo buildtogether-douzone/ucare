@@ -47,6 +47,10 @@ public class UserRepository {
 	public UserVo fetchUser(UserVo user) {
 		return sqlSession.selectOne("user.findByID", user);
 	}
+	
+	public UserVo fetchUserBySSN(UserVo user) {
+		return sqlSession.selectOne("user.findBySSN", user);
+	}
 
 	public UserVo findUser(String username) {
 		return sqlSession.selectOne("user.findUser", username);
@@ -55,6 +59,5 @@ public class UserRepository {
 	public List<UserVo> retrieveAll() {
 		return sqlSession.selectList("user.retrieveAll");
 	}
-
 
 }

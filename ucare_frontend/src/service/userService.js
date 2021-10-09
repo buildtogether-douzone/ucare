@@ -11,6 +11,10 @@ class userService {
     return axios.post(USER_API_BASE_URL + '/fetchUser', user, { headers: { Authorization: localStorage.getItem("authorization") }});
   }
 
+  fetchUserBySSN(user){
+    return axios.post(USER_API_BASE_URL + '/fetchUserBySSN', user, { headers: { Authorization: localStorage.getItem("authorization") }});
+  }
+
   deleteUser(userID){
     return axios.delete(USER_API_BASE_URL + '/' + userID, { headers: { Authorization: localStorage.getItem("authorization") }});
   }

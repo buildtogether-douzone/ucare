@@ -39,6 +39,11 @@ public class UserController {
 	public ResponseEntity<?> fetchUser(@RequestBody UserVo user) {
 		return new ResponseEntity<>(userService.fetchUser(user), HttpStatus.OK);
 	}
+	
+	@PostMapping("/fetchUserBySSN")
+	public ResponseEntity<?> fetchUserBySSN(@RequestBody UserVo user) {
+		return new ResponseEntity<>(userService.fetchUserBySSN(user), HttpStatus.OK);
+	}
 
 	@PutMapping("/update")
 	@ApiOperation(value="사용자 정보 수정", notes="사용자 정보 수정시 실행되는 API")

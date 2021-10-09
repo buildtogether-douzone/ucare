@@ -93,13 +93,21 @@ export default function SignUp() {
 
 
   useEffect(() => {
+    const getGender = ssn.substr(7, 1)
+
+    if (getGender % 2 == 1) {
+      setGender('male');
+    } else {
+      setGender('female');
+    };
+
     if (telNo.length === 10) {
       setTelNo(telNo.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
     }
     if (telNo.length === 13) {
       setTelNo(telNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
     }
-  }, [telNo]);
+  }, [ssn, gender, telNo]);
 
   const idChange = (e) => {
     setId(e.target.value)
@@ -195,7 +203,6 @@ export default function SignUp() {
     }
   };
 
-
   const addressChange = (e) => {
     setAddress(e.target.value)
   }
@@ -275,19 +282,39 @@ export default function SignUp() {
       remark: remark
     }
 
-    userService.addUser(user)
+    userService.fetchUserByID(user)
       .then(res => {
-        console.log(user.name + '님이 성공적으로 등록되었습니다.');
-        onReset();
-        setReload(!reload);
-        toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료되었습니다.', life: 3000 });
-
+        if (res.data === '') {
+          userService.fetchUserBySSN(user)
+            .then(res => {
+              if (res.data === '') {
+                userService.addUser(user)
+                  .then(res => {
+                    console.log(user.name + '님이 성공적으로 등록되었습니다.');
+                    onReset();
+                    setReload(!reload);
+                    toast.current.show({ severity: 'success', summary: '알림', detail: '등록 완료되었습니다.', life: 3000 });
+                  })
+                  .catch(err => {
+                    console.log('saveUser() 에러', err);
+                  });
+              }
+              else {
+                toast.current.show({ severity: 'error', summary: '알림', detail: '주민등록번호가 중복입니다.', life: 3000 });
+              }
+            })
+            .catch(err => {
+              console.log('fetchUserBySSN() 에러', err);
+            });
+        }
+        else {
+          toast.current.show({ severity: 'error', summary: '알림', detail: '아이디가 중복입니다.', life: 3000 });
+        }
       })
       .catch(err => {
-        console.log('saveUser() 에러', err);
+        console.log('fetchUserByID() 에러', err);
       });
   }
-
 
   return (
     <React.Fragment>

@@ -34,13 +34,16 @@ public class UserService {
 		return userRepository.addUser(user);
 	}
 
-
 	public int updateUser(UserVo user) {
 		return userRepository.updateUser(user);
 	}
 	
 	public UserVo fetchUser(UserVo user) {
 		return userRepository.fetchUser(user);
+	}
+	
+	public UserVo fetchUserBySSN(UserVo user) {
+		return userRepository.fetchUserBySSN(user);
 	}
 	
 	public List<UserVo> retrieveAll() {

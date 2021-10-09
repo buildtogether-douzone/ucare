@@ -104,6 +104,15 @@
 		WHERE patient_no = #{patientNo }
 	</update>
 	
+	<update id="updateByDate">
+		<![CDATA[
+		UPDATE  ucare.patient
+		   SET 
+	   		diagnosis_type = '초진'
+		WHERE TO_DATE(TO_CHAR(visit_date  + INTERVAL '3 month', 'YYYY-MM-DD'), 'YYYY-MM-DD') <= TO_DATE(TO_CHAR(now(), 'YYYY-MM-DD'), 'YYYY-MM-DD')
+		]]>
+	</update>
+	
 	<delete id="delete" parameterType="int">
 		DELETE
 		  FROM ucare.disease
