@@ -502,7 +502,7 @@ export default function DoctorDiagnosis() {
                         </Card>
                     </div>
                     <div className="p-col-12 p-md-6 p-lg-4">
-                        <Card style={{ height: '45%' }}>
+                        <Card style={{ height: '48%' }}>
                             <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign: 'center' }}>환자 정보</span>
                             <Divider />
                             <div className="activity-header">
@@ -517,13 +517,13 @@ export default function DoctorDiagnosis() {
                                 <div className="p-grid" style={{ marginTop: '1em' }}>
                                     <div className="p-col-6">
                                         <label htmlFor="insurance">보험 여부</label>
-                                        <label style={{ marginLeft: '2rem' , color: '#1C91FB' }}>{patient.insurance}</label>
+                                        <label style={{ marginLeft: '1rem' , color: '#1C91FB' }}>{patient.insurance}</label>
                                     </div>
 
 
                                     <div className="p-col-6">
                                     <label htmlFor="diagnosis">진료 구분</label>
-                                        <label style={{ marginLeft: '2rem' , color: '#1C91FB' }}>{patient.diagnosis}</label>
+                                        <label style={{ marginLeft: '1rem' , color: '#1C91FB' }}>{patient.diagnosis}</label>
                                     </div>
                                 </div>
                             </ul>
@@ -531,13 +531,13 @@ export default function DoctorDiagnosis() {
                                 <div className="p-grid" style={{ marginTop: '0.5em' }}>
                                     <div className="p-col-6">
                                         <label htmlFor="bp">혈압</label>
-                                        <label style={{ marginLeft: '4rem' , color: '#1C91FB' }}>{receiptItem.bp}</label>
+                                        <label style={{ marginLeft: '3.5rem' , color: '#1C91FB' }}>{receiptItem.bp}</label>
                                     </div>
 
 
                                     <div className="p-col-6">
                                     <label htmlFor="bs">혈당</label>
-                                        <label style={{ marginLeft: '4.5rem' , color: '#1C91FB' }}>{receiptItem.bs}</label>
+                                        <label style={{ marginLeft: '3.5rem' , color: '#1C91FB' }}>{receiptItem.bs}</label>
                                     </div>
                                 </div>
                             </ul>
@@ -545,12 +545,12 @@ export default function DoctorDiagnosis() {
                                 <div className="p-grid" style={{ marginTop: '0.5em', marginBottom: '3rem' }}>
                                     <div className="p-col-12">
                                         <label htmlFor="remark">진료 메모</label>
-                                        <label style={{ marginLeft: '1.5rem' , color: '#1C91FB' }}>{receiptItem.remark}</label>
+                                        <label style={{ marginLeft: '1rem' , color: '#1C91FB' }}>{receiptItem.remark}</label>
                                     </div>
                                 </div>
                             </ul>
                         </Card>
-                        <Card style={{ height: '53%', marginTop: '10px' }}>
+                        <Card style={{ height: '50.5%', marginTop: '10px' }}>
                             <span style={{ color: '#1C91FB', fontSize: '20px', display: 'block', textAlign: 'center' }}>과거 병력</span>
                             <Divider />
                             <div className="activity-header">
