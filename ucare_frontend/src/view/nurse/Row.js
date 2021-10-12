@@ -230,6 +230,8 @@ const Row = React.forwardRef((props, ref) => {
       .then(res => {
         console.log(receiptNo + '번 접수가 성공적으로 취소되었습니다.');
         ref.current.show({ severity: 'success', summary: '알림', detail: '접수가 취소되었습니다.', life: 3000 });
+        $websocket.current.sendMessage('/Nurse');
+        setReload(!reload);
       })
       .catch(err => {
         console.log('delete() 에러', err);
@@ -726,7 +728,7 @@ const Row = React.forwardRef((props, ref) => {
                       <TableCell
                         onClick={() => { handleClickOpen(receiptList.bp, receiptList.bs, receiptList.remark) }} className={classes.mouseRemark}>
                         {receiptList.remark}</TableCell>
-                      {receiptList.state == 'complete' ?
+                      {receiptList.state !== 'init' ?
                         <TableCell></TableCell>
                         : <TableCell
                           style={{ textAlign: 'center', padding: '5px' }}>
