@@ -538,7 +538,7 @@ const Header = ({ open, drawerManage }) => {
             }
           </Dialog>
 
-          <Dialog baseZIndex={9999} visible={itemDialog} style={{ width: '40%' }} header="접수" footer={itemDialogFooter} modal className="p-fluid" onHide={hideDialog}>
+          <Dialog baseZIndex={9999} visible={itemDialog} style={{ width: '40%' }} footer={itemDialogFooter} modal className="p-fluid" onHide={hideDialog}>
             <div className="p-field">
               <label htmlFor="name">To</label>
               <Dropdown value={selectedUser} options={users} onChange={onUserChange} optionLabel="name" filter filterBy="name" placeholder="받는이"
