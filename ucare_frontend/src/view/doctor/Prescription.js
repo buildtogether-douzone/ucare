@@ -140,6 +140,7 @@ export default function Prescription() {
     const [deleteItemDialog, setDeleteItemDialog] = useState(false);
     const [deleteItemsDialog, setDeleteItemsDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
+    const [globalMedicineFilter, setGlobalMedicineFilter] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [itemDialog, setItemDialog] = useState(false);
 
@@ -511,7 +512,7 @@ export default function Prescription() {
         <div className="table-header">
             <span className="p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalMedicineFilter(e.target.value)} placeholder="Search..." />
             </span>
         </div>
     );
@@ -656,7 +657,7 @@ export default function Prescription() {
                                         dataKey="medicineNo" paginator rows={5}
                                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
-                                        globalFilter={globalFilter}
+                                        globalFilter={globalMedicineFilter}
                                         header={medicineHeader}>
 
                                         <Column style={{ textAlign: 'center' }} field="medicineCode" header="약품코드" sortable></Column>
